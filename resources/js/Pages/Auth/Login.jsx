@@ -1,97 +1,114 @@
-import { useEffect } from 'react';
-import Checkbox from '@/Components/Checkbox';
-import GuestLayout from '@/Layouts/GuestLayout';
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { useEffect } from "react";
+import Checkbox from "@/Components/Checkbox";
+import Guest from "@/Layouts/GuestLayout";
+import InputError from "@/Components/InputError";
+import InputLabel from "@/Components/InputLabel";
+import PrimaryButton from "@/Components/PrimaryButton";
+import TextInput from "@/Components/TextInput";
+import { Head, Link, useForm } from "@inertiajs/react";
 
 export default function Login({ status, canResetPassword }) {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        email: '',
-        password: '',
-        remember: false,
-    });
+  const { data, setData, post, processing, errors, reset } = useForm({
+    email: "",
+    password: "",
+    remember: false,
+  });
 
-    useEffect(() => {
-        return () => {
-            reset('password');
-        };
-    }, []);
-
-    const submit = (e) => {
-        e.preventDefault();
-
-        post(route('login'));
+  useEffect(() => {
+    return () => {
+      reset("password");
     };
+  }, []);
 
-    return (
-        <GuestLayout>
-            <Head title="Log in" />
+  const submit = (e) => {
+    e.preventDefault();
+    post(route("login"));
+  };
 
-            {status && <div className="mb-4 font-medium text-sm text-green-600">{status}</div>}
+  return (
+    <Guest
+      title="Login"
+      description="Please Login To Continue To Your Account."
+    >
+      <Head title="Log in" />
 
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="email" value="Email" />
+      {status && (
+        <div className="mb-4 font-medium text-sm text-green-600">{status}</div>
+      )}
 
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        isFocused={true}
-                        onChange={(e) => setData('email', e.target.value)}
-                    />
+      <form onSubmit={submit} className="space-y-4">
+        <div>
+          <InputLabel htmlFor="email" value="Email" />
 
-                    <InputError message={errors.email} className="mt-2" />
-                </div>
+          <TextInput
+            id="email"
+            type="email"
+            name="email"
+            value={data.email}
+            className="mt-1 block w-full"
+            autoComplete="username"
+            isFocused={true}
+            onChange={(e) => setData("email", e.target.value)}
+          />
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
+          <InputError message={errors.email} className="mt-2" />
+        </div>
 
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="current-password"
-                        onChange={(e) => setData('password', e.target.value)}
-                    />
+        <div>
+          <InputLabel htmlFor="password" value="Password" />
 
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
+          <TextInput
+            id="password"
+            type="password"
+            name="password"
+            value={data.password}
+            className="mt-1 block w-full"
+            autoComplete="current-password"
+            onChange={(e) => setData("password", e.target.value)}
+          />
 
-                <div className="block mt-4">
-                    <label className="flex items-center">
-                        <Checkbox
-                            name="remember"
-                            checked={data.remember}
-                            onChange={(e) => setData('remember', e.target.checked)}
-                        />
-                        <span className="ms-2 text-sm text-gray-600">Remember me</span>
-                    </label>
-                </div>
+          <InputError message={errors.password} className="mt-2" />
+        </div>
 
-                <div className="flex items-center justify-end mt-4">
-                    {canResetPassword && (
-                        <Link
-                            href={route('password.request')}
-                            className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                            Forgot your password?
-                        </Link>
-                    )}
+        <div className="flex items-center justify-between">
+          <label className="flex items-center">
+            <Checkbox
+              name="remember"
+              checked={data.remember}
+              onChange={(e) => setData("remember", e.target.checked)}
+            />
+            <span className="ms-2 font-lexend-medium text-black text-sm">
+              Remember Me
+            </span>
+          </label>
 
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Log in
-                    </PrimaryButton>
-                </div>
-            </form>
-        </GuestLayout>
-    );
+          {canResetPassword && (
+            <Link
+              href={route("password.request")}
+              className="font-lexend-medium text-black text-sm"
+            >
+              Forgot Your Password?
+            </Link>
+          )}
+        </div>
+
+        <div className="flex">
+          <PrimaryButton className="w-full" disabled={processing}>
+            Login
+          </PrimaryButton>
+        </div>
+        <div className="flex justify-center">
+          <p className="font-lexend text-sm flex justify-center text-gray-500">
+            Need an account?
+            <Link
+              href={route("register")}
+              className="font-lexend text-sm text-blue-500 ml-1"
+            >
+              Register
+            </Link>
+          </p>
+        </div>
+      </form>
+    </Guest>
+  );
 }
