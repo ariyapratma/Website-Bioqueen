@@ -16,7 +16,10 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', [HomeController::class, 'index']);
+// Route::get('/', [HomeController::class, 'index']);
+
+Route::get('/', [HomeController::class, 'index'])->name('index');
+
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

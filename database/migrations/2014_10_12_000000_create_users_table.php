@@ -11,22 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Tabel users
         Schema::create('users', function (Blueprint $table) {
-            if (!Schema::hasTable('users')) {
-                $table->id();
-                $table->string('name');
-                $table->string('email')->unique();
-                $table->timestamp('email_verified_at')->nullable();
-                $table->string('password');
-                $table->string('avatar')->nullable();
-                $table->rememberToken();
-                $table->timestamps();
-            }
+            $table->id(); // Primary key
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->string('avatar')->nullable(); // Kolom avatar untuk menyimpan path foto profil
+            $table->rememberToken();
+            $table->timestamps();
         });
 
+        // Tabel sessions
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
+            $table->foreignId('user_id')->nullable()->index(); // Foreign key ke tabel users
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');
@@ -39,6 +39,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        // Hapus tabel sessions dan users
         Schema::dropIfExists('sessions');
         Schema::dropIfExists('users');
     }

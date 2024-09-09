@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redirect;
+use App\Http\Requests\ProfileUpdateRequest;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 class ProfileController extends Controller
 {
@@ -27,18 +28,38 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(ProfileUpdateRequest $request): RedirectResponse
+    public function update(ProfileUpdateRequest $request)
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        // Validasi avatar jika ada
+        $request->validate([
+            'avatar' => 'nullable|image|max:1024', // Maksimal 1MB
+        ]);
+
+        if ($request->hasFile('avatar')) {
+            // Upload avatar baru
+            $avatarPath = $request->file('avatar')->store('avatars', 'public');
+
+            // Hapus avatar lama jika ada
+            if ($user->avatar) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+
+            // Simpan path avatar baru
+            $user->avatar = $avatarPath;
         }
 
-        $request->user()->save();
+        // Update nama dan email
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
 
-        return Redirect::route('profile.edit');
+        // Simpan perubahan
+        $user->save();
+
+        return redirect()->route('profile.edit')->with('status', 'Profile updated successfully');
     }
+
 
     /**
      * Delete the user's account.
