@@ -14,16 +14,16 @@ export default function HeroAddReview() {
   };
 
   return (
-    <div className="flex flex-col items-center p-4 sm:p-6 mb-24">
-      <h1 className="text-3xl md:text-5xl text-black font-lexend font-semibold mb-4 md:mb-6">
+    <div className="mb-24 flex flex-col items-center p-4 sm:p-6">
+      <h1 className="mb-4 font-lexend text-3xl font-semibold text-black md:mb-6 md:text-5xl">
         Add Your Review
       </h1>
-      <p className="text-center text-sm md:text-base font-lexend text-gray-600 mb-8 sm:mb-10 max-w-xl">
+      <p className="mb-8 max-w-xl text-center font-lexend text-sm text-gray-600 sm:mb-10 md:text-base">
         Kami yakin bahwa kepercayaan dan ulasan positif dari pelanggan adalah
         bukti nyata dari komitmen kami yang kuat terhadap kesuksesan klien.
       </p>
-      <div className="relative w-full max-w-3xl bg-white shadow-lg p-8 rounded-lg border border-gray-200">
-        <div className="absolute top-4 right-4 flex items-center">
+      <div className="relative w-full max-w-3xl rounded-lg border border-gray-200 bg-white p-8 shadow-lg">
+        <div className="absolute right-4 top-4 flex items-center">
           <Avatar
             name={data.name}
             src={data.avatar}
@@ -34,30 +34,30 @@ export default function HeroAddReview() {
         </div>
         <form className="mt-12">
           <div className="mb-6 flex flex-col items-start">
-            <label className="block text-gray-800 text-sm font-semibold mb-2">
+            <label className="mb-2 block text-sm font-semibold text-gray-800">
               Name
             </label>
             <input
               type="text"
               placeholder="Enter Your Name"
-              className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-custom-yellow"
+              className="w-full rounded-md border border-gray-300 p-4 focus:outline-none focus:ring-2 focus:ring-custom-yellow"
             />
           </div>
           <div className="mb-6 flex flex-col items-start">
-            <label className="block text-gray-800 text-sm font-semibold mb-2">
+            <label className="mb-2 block text-sm font-semibold text-gray-800">
               Message
             </label>
             <textarea
               placeholder="Enter Your Message"
-              className="w-full p-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-custom-yellow"
+              className="w-full rounded-md border border-gray-300 p-4 focus:outline-none focus:ring-2 focus:ring-custom-yellow"
               rows="4"
             ></textarea>
           </div>
           <div className="mb-6 flex flex-col items-start">
-            <label className="block text-gray-800 text-sm font-semibold mb-2">
+            <label className="mb-2 block text-sm font-semibold text-gray-800">
               Rating
             </label>
-            <div className="flex gap-1 mb-4">
+            <div className="mb-4 flex gap-1">
               {[...Array(5)].map((_, index) => (
                 <FaStar
                   key={index}
@@ -71,7 +71,7 @@ export default function HeroAddReview() {
           </div>
           <button
             type="submit"
-            className="w-full bg-custom-yellow text-white py-3 px-6 rounded-md font-semibold hover:bg-yellow-400 transition-colors"
+            className="w-full rounded-md bg-custom-yellow px-6 py-3 font-semibold text-white transition-colors hover:bg-yellow-400"
           >
             Send Review
           </button>
