@@ -16,15 +16,39 @@ export default function UpdateProfileInformation({
 
   const { data, setData, post, errors, processing, recentlySuccessful } =
     useForm({
-      _method: 'PATCH',
+      _method: "PATCH",
       name: user.name,
       email: user.email,
+      avatar: null,
     });
 
   const submit = (e) => {
     e.preventDefault();
 
-    post(route("profile.update"));
+    // Create a new FormData instance and append form data
+    const formData = new FormData();
+    formData.append("_method", "PATCH");
+    formData.append("name", data.name);
+    formData.append("email", data.email);
+    if (data.avatar) {
+      formData.append("avatar", data.avatar);
+    }
+
+    // Send the FormData using the post method
+    post(route("profile.update"), {
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      preserveScroll: true,
+      onSuccess: () => {
+        // If successful, update the avatar preview
+        if (avatarRef.current && data.avatar) {
+          const imageUrl = window.URL.createObjectURL(data.avatar);
+          avatarRef.current.src = imageUrl;
+        }
+      },
+    });
   };
 
   const avatarRef = useRef(null);
@@ -60,11 +84,14 @@ export default function UpdateProfileInformation({
       <form onSubmit={submit} className="mt-6 space-y-6 font-lexend">
         <div className="relative">
           <img
-            src={user.avatar}
+            src={
+              user.avatar ? `/storage/${user.avatar}` : "/default-avatar.png"
+            } // Perbarui path gambar
             alt={user.name}
             className="mx-auto h-20 w-20 rounded-full border border-custom-yellow"
             ref={avatarRef}
           />
+
           <label
             htmlFor="avatar"
             className="btn btn-primary absolute left-1/2 top-6 flex -translate-x-1/2 cursor-pointer items-center justify-center rounded-full bg-blue-500 p-2 text-white"
