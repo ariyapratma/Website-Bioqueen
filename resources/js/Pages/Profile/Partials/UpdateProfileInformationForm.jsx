@@ -4,6 +4,8 @@ import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
 import { Link, useForm, usePage } from "@inertiajs/react";
 import { Transition } from "@headlessui/react";
+import { FaCamera } from "react-icons/fa";
+import { useRef } from "react";
 
 export default function UpdateProfileInformation({
   mustVerifyEmail,
@@ -12,8 +14,9 @@ export default function UpdateProfileInformation({
 }) {
   const user = usePage().props.auth.user;
 
-  const { data, setData, patch, errors, processing, recentlySuccessful } =
+  const { data, setData, post, errors, processing, recentlySuccessful } =
     useForm({
+      _method: 'PATCH',
       name: user.name,
       email: user.email,
     });
@@ -21,7 +24,25 @@ export default function UpdateProfileInformation({
   const submit = (e) => {
     e.preventDefault();
 
-    patch(route("profile.update"));
+    post(route("profile.update"));
+  };
+
+  const avatarRef = useRef(null);
+
+  const ChangeAvatar = (e) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      setData("avatar", files[0]);
+
+      const imageUrl = window.URL.createObjectURL(files[0]);
+      if (avatarRef.current) {
+        avatarRef.current.src = imageUrl;
+      }
+
+      return () => {
+        window.URL.revokeObjectURL(imageUrl);
+      };
+    }
   };
 
   return (
@@ -37,6 +58,29 @@ export default function UpdateProfileInformation({
       </header>
 
       <form onSubmit={submit} className="mt-6 space-y-6 font-lexend">
+        <div className="relative">
+          <img
+            src={user.avatar}
+            alt={user.name}
+            className="mx-auto h-20 w-20 rounded-full border border-custom-yellow"
+            ref={avatarRef}
+          />
+          <label
+            htmlFor="avatar"
+            className="btn btn-primary absolute left-1/2 top-6 flex -translate-x-1/2 cursor-pointer items-center justify-center rounded-full bg-blue-500 p-2 text-white"
+            tabIndex={0}
+            style={{ zIndex: 10 }}
+          >
+            <FaCamera />
+            <input
+              type="file"
+              onChange={ChangeAvatar}
+              id="avatar"
+              className="hidden"
+            />
+          </label>
+        </div>
+
         <div>
           <InputLabel htmlFor="name" value="Name" />
 

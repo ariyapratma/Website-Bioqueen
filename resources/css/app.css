@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Global CSS */
+body,
+html {
+  overflow-x: hidden;
+}
