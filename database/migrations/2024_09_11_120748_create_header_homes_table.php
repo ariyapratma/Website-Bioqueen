@@ -14,10 +14,9 @@ return new class extends Migration
         Schema::create('header_home', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->text('description');
-            $table->string('button_text');
-            $table->string('image_url');
-            $table->string('whatsapp_link');
+            $table->text('description')->nullable(); // Update to nullable
+            $table->string('image_url')->nullable(); // Update to nullable
+            $table->string('whatsapp_link')->nullable(); // Update to nullable
             $table->timestamps();
         });
     }

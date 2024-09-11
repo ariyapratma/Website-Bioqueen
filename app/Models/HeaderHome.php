@@ -12,6 +12,9 @@ class HeaderHome extends Model
     protected $table = 'header_home';
 
     protected $fillable = [
-        'title', 'description', 'button_text', 'image_url', 'whatsapp_link'
+        'title',
+        'description',
+        'image_url',
+        'whatsapp_link'
     ];
 }
