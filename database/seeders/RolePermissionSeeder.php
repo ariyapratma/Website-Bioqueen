@@ -30,14 +30,25 @@ class RolePermissionSeeder extends Seeder
         $guestRole->givePermissionTo('view pages'); // Guest hanya bisa melihat halaman
 
         // Assign roles ke user tertentu (sesuaikan dengan user ID atau logic lain)
-        $admin = \App\Models\User::find(1);
-        if ($admin) {
-            $admin->assignRole('admin');
-        }
 
-        $user = \App\Models\User::find(2);
-        if ($user) {
-            $user->assignRole('user');
-        }
+        // Membuat user admin jika belum ada
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name' => 'Admin User',
+                'password' => bcrypt('password123') // Pastikan password ini aman dan sesuai kebutuhan
+            ]
+        );
+        $admin->assignRole('admin');
+
+        // Membuat user biasa jika belum ada
+        $user = User::firstOrCreate(
+            ['email' => 'user@example.com'],
+            [
+                'name' => 'Regular User',
+                'password' => bcrypt('password123') // Pastikan password ini aman dan sesuai kebutuhan
+            ]
+        );
+        $user->assignRole('user');
     }
 }
