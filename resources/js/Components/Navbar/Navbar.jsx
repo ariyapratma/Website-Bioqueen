@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"; // Pastikan ini sudah ada
 import { Link, usePage } from "@inertiajs/react";
 
 export default function Navbar({ user }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const { url } = usePage(); // Mengambil URL halaman saat ini
+  const { url } = usePage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -68,6 +68,19 @@ export default function Navbar({ user }) {
           )}
         </div>
 
+        {/* Avatar Section */}
+        {user && (
+          <div className="flex items-center">
+            <img
+              src={
+                user.avatar ? `/storage/${user.avatar}` : "/default-avatar.png"
+              }
+              alt={user.name}
+              className="h-10 w-10 rounded-full border border-custom-yellow"
+            />
+          </div>
+        )}
+
         {/* Mobile Menu Button */}
         <div className="flex items-center md:hidden">
           <button
@@ -124,15 +137,19 @@ export default function Navbar({ user }) {
           )}
           {/* Avatar and User Info in Mobile Menu */}
           {user && (
-            <li className="flex flex-col items-center mt-4">
+            <li className="mt-4 flex flex-col items-center">
               <img
-                className="w-10 h-10 rounded-full"
+                className="h-10 w-10 rounded-full"
                 src={user.avatar || "default-avatar.png"}
                 alt="User Avatar"
               />
               <div className="pt-2">
-                <div className="font-lexend font-medium text-base text-gray-800">{user.name}</div>
-                <div className="font-lexend font-medium text-sm text-gray-500">{user.email}</div>
+                <div className="font-lexend text-base font-medium text-gray-800">
+                  {user.name}
+                </div>
+                <div className="font-lexend text-sm font-medium text-gray-500">
+                  {user.email}
+                </div>
               </div>
             </li>
           )}

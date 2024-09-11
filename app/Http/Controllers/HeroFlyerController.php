@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HeaderHome;
 use Illuminate\Http\Request;
 
 class HeroFlyerController extends Controller
@@ -19,7 +20,8 @@ class HeroFlyerController extends Controller
      */
     public function create()
     {
-        //
+        $headerHome = HeaderHome::all();
+        return inertia('Admin/HeaderHome', ['headerHome' => $headerHome]);
     }
 
     /**
@@ -27,7 +29,8 @@ class HeroFlyerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        HeaderHome::create($request->all());
+        return redirect()->route('header-home.index');
     }
 
     /**
@@ -49,16 +52,18 @@ class HeroFlyerController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, HeaderHome $headerHome)
     {
-        //
+        $headerHome->update($request->all());
+        return redirect()->route('header-home.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(HeaderHome $headerHome)
     {
-        //
+        $headerHome->delete();
+        return redirect()->route('header-home.index');
     }
 }

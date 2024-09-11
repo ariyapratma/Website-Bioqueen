@@ -1,9 +1,12 @@
 <?php
 
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\HeroFlyerController;
+use App\Http\Controllers\HeaderHomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,21 +19,49 @@ use Inertia\Inertia;
 |
 */
 
-// Route::get('/', [HomeController::class, 'index']);
-
+// Route yang bisa diakses oleh semua pengguna (Guest, User, Admin)
 Route::get('/', [HomeController::class, 'index'])->name('index');
+Route::get('/about', function () {
+    return Inertia::render('About');
+})->name('about');
+Route::get('/contact', function () {
+    return Inertia::render('Contact');
+})->name('contact');
+Route::get('/product', function () {
+    return Inertia::render('Product');
+})->name('product');
+Route::get('/maklon', function () {
+    return Inertia::render('Maklon');
+})->name('maklon');
+
+// Route khusus untuk pengguna yang terautentikasi (auth) dan terverifikasi
+Route::middleware(['auth', 'verified'])->group(function () {
+    // Hanya Admin dan User yang bisa melakukan Order
+    Route::get('/order', function () {
+        return Inertia::render('Order');
+    })->middleware('permission:order product')->name('order');
+
+    // Hanya Admin yang bisa mengakses dashboard dan mengelola konten
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->middleware('role:admin')->name('dashboard');
+
+    Route::middleware(['auth', 'role:admin'])->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+        Route::resource('header-home', HeaderHomeController::class);
+        Route::resource('hero-flyer', HeroFlyerController::class);
+        // Tambahkan resource untuk section lainnya
+    });
 
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    Route::resource('header-home', HeaderHomeController::class);
 
-Route::middleware('auth')->group(function () {
+
+    // Profil pengguna, hanya untuk pengguna yang sudah login
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    Route::get('/home', fn() => '')->name('home.home');
 });
 
+// Route untuk autentikasi (Login, Register)
 require __DIR__ . '/auth.php';
