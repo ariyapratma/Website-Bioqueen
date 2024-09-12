@@ -1,5 +1,9 @@
-import React, { useState } from "react";
+// resources/js/Pages/CreateHeaderHome.jsx
+
+import React from "react";
 import { useForm } from "@inertiajs/react";
+import Swal from "sweetalert2";
+import { Head } from "@inertiajs/react";
 
 const CreateHeaderHome = () => {
   const { data, setData, post, processing, errors } = useForm({
@@ -11,11 +15,32 @@ const CreateHeaderHome = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    post("/header-home");
+    post("/header-home", {
+      onSuccess: () => {
+        Swal.fire({
+          title: "Success!",
+          text: "Header Home has been added successfully.",
+          icon: "success",
+          confirmButtonText: "OK",
+        }).then(() => {
+          // Optionally redirect or clear the form
+          window.location.href = "/header-home";
+        });
+      },
+      onError: () => {
+        Swal.fire({
+          title: "Error!",
+          text: "There was an error adding the Header Home.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      },
+    });
   };
 
   return (
     <div className="bg-white p-6">
+      <Head title="Add Header Home | PT Ratu Bio Indonesia" />
       <h1 className="mb-6 text-2xl font-bold">Add New Header Home</h1>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div className="mb-4">
@@ -49,7 +74,7 @@ const CreateHeaderHome = () => {
         </div>
         <div className="mb-4">
           <label htmlFor="image_url" className="block text-gray-700">
-            Image
+            Image Url
           </label>
           <input
             type="file"

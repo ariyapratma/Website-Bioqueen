@@ -1,7 +1,34 @@
-const ManageHeaderHome = ({ headerHome = [] }) => {
-  // Default value to an empty array
+// resources/js/Pages/ManageHeaderHome.jsx
+
+import React from "react";
+import { Link, Head, useForm } from "@inertiajs/react";
+import Swal from "sweetalert2";
+
+const ManageHeaderHome = ({ dataHeaderHome }) => {
+  const { delete: deleteRecord } = useForm();
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteRecord(`/header-home/${id}`, {
+          method: "DELETE",
+        });
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+      }
+    });
+  };
+
   return (
     <div className="bg-white p-6">
+      <Head title="Manage Header Home | PT Ratu Bio Indonesia" />
       <h1 className="mb-6 text-2xl font-bold">Manage Header Home</h1>
 
       <div className="mb-6">
@@ -34,27 +61,33 @@ const ManageHeaderHome = ({ headerHome = [] }) => {
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200 bg-white">
-          {headerHome.map((home) => (
-            <tr key={home.id}>
+          {dataHeaderHome.map((headerHome) => (
+            <tr key={headerHome.id}>
               <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                {home.title}
+                {headerHome.title}
               </td>
               <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                {home.description}
+                {headerHome.description}
               </td>
               <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                {home.image_url}
+                {headerHome.image_url}
               </td>
               <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                {home.whatsapp_link}
+                {headerHome.whatsapp_link}
               </td>
               <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
                 <Link
-                  href={`/header-home/${home.id}/edit`}
+                  href={`/header-home/${headerHome.id}/edit`}
                   className="text-indigo-600 hover:text-indigo-900"
                 >
                   Edit
                 </Link>
+                <button
+                  onClick={() => handleDelete(headerHome.id)}
+                  className="ml-4 text-red-600 hover:text-red-900"
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
@@ -63,3 +96,5 @@ const ManageHeaderHome = ({ headerHome = [] }) => {
     </div>
   );
 };
+
+export default ManageHeaderHome;

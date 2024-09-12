@@ -52,6 +52,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/header-home', [HeaderHomeController::class, 'store'])->name('header-home.store');
         Route::get('/header-home/{headerHome}/edit', [HeaderHomeController::class, 'edit'])->name('header-home.edit');
         Route::put('/header-home/{headerHome}', [HeaderHomeController::class, 'update'])->name('header-home.update');
+        Route::put('/header-home/{headerHome}', [HeaderHomeController::class, 'destroy'])->name('header-home.destroy');
     });
 
     // Route::middleware(['auth', 'role:admin'])->group(function () {

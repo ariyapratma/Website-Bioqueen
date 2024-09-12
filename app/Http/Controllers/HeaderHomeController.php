@@ -45,10 +45,13 @@ class HeaderHomeController extends Controller
         return redirect()->route('header-home.index');
     }
 
-    public function edit(HeaderHome $headerHome)
+    public function edit($id)
+
     {
+        // Ambil data HeaderHome berdasarkan ID
+        $headerHome = HeaderHome::findOrFail($id);
         return Inertia::render('Admin/EditHeaderHome', [
-            'headerHome' => $headerHome
+            'dataHeaderHome' => $headerHome
         ]);
     }
 
@@ -58,11 +61,13 @@ class HeaderHomeController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'image_url' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'existing_image_url' => 'nullable|string',
             'whatsapp_link' => 'nullable|string',
         ]);
 
         $data = $request->only(['title', 'description', 'whatsapp_link']);
 
+        // Handle image upload
         if ($request->hasFile('image_url')) {
             // Delete old image
             if ($headerHome->image_url && Storage::exists(str_replace('storage/', 'public/', $headerHome->image_url))) {
@@ -73,10 +78,19 @@ class HeaderHomeController extends Controller
             $filename = time() . '.' . $file->getClientOriginalExtension();
             $file->storeAs('public/header_home', $filename);
             $data['image_url'] = 'storage/header_home/' . $filename;
+        } else {
+            // Use existing image URL if no new image is uploaded
+            $data['image_url'] = $request->input('existing_image_url', $headerHome->image_url);
         }
 
         $headerHome->update($data);
 
+        return redirect()->route('header-home.index');
+    }
+
+    public function destroy(HeaderHome $headerHome)
+    {
+        $headerHome->delete();
         return redirect()->route('header-home.index');
     }
 }
