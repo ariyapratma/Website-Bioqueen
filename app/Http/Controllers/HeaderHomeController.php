@@ -11,9 +11,9 @@ class HeaderHomeController extends Controller
 {
     public function index()
     {
-        $headerHomes = HeaderHome::all();
+        $headerHome = HeaderHome::all();
         return Inertia::render('Admin/ManageHeaderHome', [
-            'headerHomes' => $headerHomes
+            'dataHeaderHome' => $headerHome
         ]);
     }
 
