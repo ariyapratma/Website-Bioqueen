@@ -1,4 +1,5 @@
-import React from "react";
+// resources/js/Pages/EditHeaderHome.jsx
+
 import { useForm } from "@inertiajs/react";
 import Swal from "sweetalert2";
 import { Head } from "@inertiajs/react";
@@ -13,12 +14,14 @@ const EditHeaderHome = ({ dataHeaderHome }) => {
   });
 
   // Handle form submission
+  // Remove manual validation for title (if not required)
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append("title", data.title);
+    formData.append("title", data.title); // Allow title to be empty
     formData.append("description", data.description);
+
     // Append existing image URL if no new image is selected
     if (!data.image_url) {
       formData.append("existing_image_url", dataHeaderHome?.image_url || "");

@@ -47,26 +47,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->middleware('role:admin')->name('dashboard');
 
     Route::middleware(['auth', 'role:admin'])->group(function () {
+        // Route HeaderHome
         Route::get('/header-home', [HeaderHomeController::class, 'index'])->name('header-home.index');
         Route::get('/header-home/create', [HeaderHomeController::class, 'create'])->name('header-home.create');
         Route::post('/header-home', [HeaderHomeController::class, 'store'])->name('header-home.store');
         Route::get('/header-home/{headerHome}/edit', [HeaderHomeController::class, 'edit'])->name('header-home.edit');
         Route::put('/header-home/{headerHome}', [HeaderHomeController::class, 'update'])->name('header-home.update');
-        Route::put('/header-home/{headerHome}', [HeaderHomeController::class, 'destroy'])->name('header-home.destroy');
+        Route::delete('/header-home/{headerHome}', [HeaderHomeController::class, 'destroy'])->name('header-home.destroy');
+
+        // Route HeroFlyer
+        Route::get('/hero-flyer', [HeroFlyerController::class, 'index'])->name('hero-flyer.index');
+        Route::get('/hero-flyer/create', [HeroFlyerController::class, 'create'])->name('hero-flyer.create');
+        Route::post('/hero-flyer', [HeroFlyerController::class, 'store'])->name('hero-flyer.store');
+        Route::get('/hero-flyer/{heroFlyer}/edit', [HeroFlyerController::class, 'edit'])->name('hero-flyer.edit');
+        Route::put('/hero-flyer/{heroFlyer}', [HeroFlyerController::class, 'update'])->name('hero-flyer.update');
+        Route::delete('/hero-flyer/{heroFlyer}', [HeroFlyerController::class, 'destroy'])->name('hero-flyer.destroy');
     });
-
-    // Route::middleware(['auth', 'role:admin'])->group(function () {
-    //     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
-    //     Route::resource('header-home', HeaderHomeController::class);
-
-
-    //     // Route::resource('hero-flyer', HeroFlyerController::class);
-    //     // Tambahkan resource untuk section lainnya
-    // });
-
-
-    Route::resource('header-home', HeaderHomeController::class);
-
 
     // Profil pengguna, hanya untuk pengguna yang sudah login
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

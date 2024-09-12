@@ -11,20 +11,17 @@ class HomeController extends Controller
 {
     public function index()
     {
-        // Mengambil data pertama dari tabel header_home
-        // $dataHeaderHome = HeaderHome::first(); // Singular, bukan plural
 
-        $headerHome = HeaderHome::first(); // Ambil data HeaderHome
+        // Mengambil data HeaderHome
+        $headerHome = HeaderHome::first();
 
         // Mengambil semua data dari tabel hero_flyer
-        $dataFlyer = HeroFlyer::all();
+        $flyerHome = HeroFlyer::all();
 
         // Kembalikan data ke view Inertia 'Home.Index'
         return Inertia::render('Home/Index', [
             'dataHeaderHome' => $headerHome,
-            // 'headerHome' => $dataHeaderHome,
-            'flyers' => $dataFlyer,
-            // Tambahkan data hero lainnya di sini jika diperlukan
+            'dataHeroFlyer' => $flyerHome,
         ]);
     }
 }

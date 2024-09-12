@@ -12,6 +12,6 @@ class HeroFlyer extends Model
     protected $table = 'hero_flyer';
 
     protected $fillable = [
-        'imageUrl',
+        'image_url',
     ];
 }

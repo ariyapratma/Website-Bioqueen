@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\HeaderHome;
+use Inertia\Inertia;
+use App\Models\HeroFlyer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class HeroFlyerController extends Controller
 {
@@ -12,7 +14,10 @@ class HeroFlyerController extends Controller
      */
     public function index()
     {
-        //
+        $flyerHome = HeroFlyer::all();
+        return Inertia::render('Admin/ManageHeroFlyer', [
+            'dataHeroFlyer' => $flyerHome
+        ]);
     }
 
     /**
@@ -20,8 +25,7 @@ class HeroFlyerController extends Controller
      */
     public function create()
     {
-        $headerHome = HeaderHome::all();
-        return inertia('Admin/HeaderHome', ['headerHome' => $headerHome]);
+        return Inertia::render('Admin/CreateHeroFlyer');
     }
 
     /**
@@ -29,41 +33,66 @@ class HeroFlyerController extends Controller
      */
     public function store(Request $request)
     {
-        HeaderHome::create($request->all());
-        return redirect()->route('header-home.index');
-    }
+        $request->validate([
+            'image_url' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        if ($request->hasFile('image_url')) {
+            $file = $request->file('image_url');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/hero_flyer', $filename);
+            $data['image_url'] = 'storage/hero_flyer/' . $filename;
+        }
+
+        HeroFlyer::create($data);
+
+        return redirect()->route('hero-flyer.index');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $flyerHome = HeroFlyer::findOrFail($id);
+        return Inertia::render('Admin/EditHeroFlyer', [
+            'dataHeroFlyer' => $flyerHome
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, HeaderHome $headerHome)
+    public function update(Request $request, HeroFlyer $flyerHome)
     {
-        $headerHome->update($request->all());
-        return redirect()->route('header-home.index');
+        $request->validate([
+            'image_url' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        if ($request->hasFile('image_url')) {
+            if ($flyerHome->image_url && Storage::exists(str_replace('storage/', 'public/', $flyerHome->image_url))) {
+                Storage::delete(str_replace('storage/', 'public/', $flyerHome->image_url));
+            }
+
+            $file = $request->file('image_url');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/hero_flyer', $filename);
+            $data['image_url'] = 'storage/hero_flyer/' . $filename;
+        } else {
+            $data['image_url'] = $request->input('existing_image_url', $flyerHome->image_url);
+        }
+
+        $flyerHome->update($data);
+
+        return redirect()->route('hero-flyer.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(HeaderHome $headerHome)
+    public function destroy(HeroFlyer $heroFlyer)
     {
-        $headerHome->delete();
-        return redirect()->route('header-home.index');
+        $heroFlyer->delete();
+        return redirect()->route('hero-flyer.index');
     }
 }

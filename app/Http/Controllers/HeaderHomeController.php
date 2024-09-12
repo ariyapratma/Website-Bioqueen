@@ -45,8 +45,15 @@ class HeaderHomeController extends Controller
         return redirect()->route('header-home.index');
     }
 
-    public function edit($id)
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
 
+    public function edit($id)
     {
         // Ambil data HeaderHome berdasarkan ID
         $headerHome = HeaderHome::findOrFail($id);
@@ -58,7 +65,7 @@ class HeaderHomeController extends Controller
     public function update(Request $request, HeaderHome $headerHome)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'image_url' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'existing_image_url' => 'nullable|string',

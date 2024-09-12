@@ -1,11 +1,10 @@
 import { Link, Head } from "@inertiajs/react";
 import Navbar from "@/Components/Navbar/Navbar";
-
 import { usePage } from "@inertiajs/react";
 
 const Welcome = ({ auth }) => {
   const { props } = usePage();
-  const { dataHeaderHome } = props;
+  const { dataHeaderHome, dataHeroFlyer } = props;
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -37,6 +36,30 @@ const Welcome = ({ auth }) => {
             >
               Konsultasikan Sekarang
             </button>
+          </div>
+        </div>
+        {/* Hero Flyer */}
+        <div className="flex w-full items-center justify-center p-6">
+          <div className="flex flex-col gap-4 sm:flex-row">
+            {dataHeroFlyer && dataHeroFlyer.length > 0 ? (
+              dataHeroFlyer.map((flyer, index) => (
+                <div
+                  key={index}
+                  className="w-full overflow-hidden bg-white shadow-lg sm:w-[500px] md:w-[600px] lg:w-[800px]"
+                >
+                  <img
+                    src={flyer.image_url}
+                    loading="lazy"
+                    alt={`Flyer ${index + 1}`}
+                    className="h-auto w-full object-cover"
+                  />
+                </div>
+              ))
+            ) : (
+              <p className="text-center font-lexend font-medium text-red-500">
+                Tidak ada flyer yang tersedia saat ini.
+              </p>
+            )}
           </div>
         </div>
       </main>
