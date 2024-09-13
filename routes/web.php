@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HeroFlyerController;
 use App\Http\Controllers\HeaderHomeController;
+use App\Http\Controllers\HeroCompanyController;
 
 /*
 |--------------------------------------------------------------------------
@@ -62,6 +63,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/hero-flyer/{heroFlyer}/edit', [HeroFlyerController::class, 'edit'])->name('hero-flyer.edit');
         Route::put('/hero-flyer/{heroFlyer}', [HeroFlyerController::class, 'update'])->name('hero-flyer.update');
         Route::delete('/hero-flyer/{heroFlyer}', [HeroFlyerController::class, 'destroy'])->name('hero-flyer.destroy');
+
+         // Route HeroCompany
+         Route::get('/hero-company', [HeroCompanyController::class, 'index'])->name('hero-company.index');
+         Route::get('/hero-company/create', [HeroCompanyController::class, 'create'])->name('hero-company.create');
+         Route::post('/hero-company', [HeroCompanyController::class, 'store'])->name('hero-company.store');
+         Route::get('/hero-company/{heroCompany}/edit', [HeroCompanyController::class, 'edit'])->name('hero-company.edit');
+         Route::put('/hero-company/{heroCompany}', [HeroCompanyController::class, 'update'])->name('hero-company.update');
+         Route::delete('/hero-company/{heroCompany}', [HeroCompanyController::class, 'destroy'])->name('hero-company.destroy');
     });
 
     // Profil pengguna, hanya untuk pengguna yang sudah login

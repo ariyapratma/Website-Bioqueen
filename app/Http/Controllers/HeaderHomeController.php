@@ -55,7 +55,6 @@ class HeaderHomeController extends Controller
 
     public function edit($id)
     {
-        // Ambil data HeaderHome berdasarkan ID
         $headerHome = HeaderHome::findOrFail($id);
         return Inertia::render('Admin/EditHeaderHome', [
             'dataHeaderHome' => $headerHome
