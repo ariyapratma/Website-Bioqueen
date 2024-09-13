@@ -1,11 +1,8 @@
-// resources/js/Pages/EditHeroCompany.jsx
-
 import { useForm } from "@inertiajs/react";
 import Swal from "sweetalert2";
 import { Head } from "@inertiajs/react";
 
 const EditHeroCompany = ({ dataHeroCompany }) => {
-  // Initialize form with default values
   const { data, setData, put, processing, errors } = useForm({
     title: dataHeroCompany?.title || "",
     description: dataHeroCompany?.description || "",
@@ -13,13 +10,11 @@ const EditHeroCompany = ({ dataHeroCompany }) => {
     youtube_link: dataHeroCompany?.youtube_link || "",
   });
 
-  // Handle form submission
-  // Remove manual validation for title (if not required)
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append("title", data.title); // Allow title to be empty
+    formData.append("title", data.title);
     formData.append("description", data.description);
 
     // Append existing image URL if no new image is selected
@@ -78,7 +73,7 @@ const EditHeroCompany = ({ dataHeroCompany }) => {
         {/* Youtube Link Field */}
         <div className="mb-4">
           <label htmlFor="youtube_link" className="block text-gray-700">
-            Youtube Link
+            YouTube Link
           </label>
           <input
             type="text"
@@ -92,8 +87,8 @@ const EditHeroCompany = ({ dataHeroCompany }) => {
           )}
         </div>
 
+        {/* Title Field */}
         <div className="mb-4">
-          {/* Title Field */}
           <label htmlFor="title" className="block text-gray-700">
             Title
           </label>
