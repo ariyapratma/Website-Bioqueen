@@ -4,10 +4,12 @@ import { usePage } from "@inertiajs/react";
 import HeaderHome from "./HeaderHome";
 import HeroFlyer from "./HeroFlyer";
 import HeroCompany from "./HeroCompany";
+import HeroWhyChooseValue from "./HeroWhyChooseValue";
+import Footer from "@/Components/Footer/Footer";
 
 const Welcome = ({ auth }) => {
   const { props } = usePage();
-  const { dataHeaderHome, dataHeroFlyer, dataHeroCompany } = props;
+  const {} = props;
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -20,7 +22,10 @@ const Welcome = ({ auth }) => {
         <HeroFlyer />
         {/* Hero Company */}
         <HeroCompany />
+        {/* Hero Why Choose Value */}
+        <HeroWhyChooseValue />
       </main>
+      <Footer />
     </div>
   );
 };

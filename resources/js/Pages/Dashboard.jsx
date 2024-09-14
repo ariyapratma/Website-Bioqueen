@@ -43,6 +43,11 @@ export default function Dashboard({ auth }) {
                     Manage Hero Company
                   </Link>
                 </li>
+                <li>
+                  <Link href="/hero-why-choose" className="text-blue-500">
+                    Manage Hero Why Choose
+                  </Link>
+                </li>
               </ul>
             </div>
           )}

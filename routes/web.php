@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HeroFlyerController;
 use App\Http\Controllers\HeaderHomeController;
 use App\Http\Controllers\HeroCompanyController;
+use App\Http\Controllers\HeroWhyChooseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,25 +53,33 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/header-home', [HeaderHomeController::class, 'index'])->name('header-home.index');
         Route::get('/header-home/create', [HeaderHomeController::class, 'create'])->name('header-home.create');
         Route::post('/header-home', [HeaderHomeController::class, 'store'])->name('header-home.store');
-        Route::get('/header-home/{headerHome}/edit', [HeaderHomeController::class, 'edit'])->name('header-home.edit');
-        Route::put('/header-home/{headerHome}', [HeaderHomeController::class, 'update'])->name('header-home.update');
-        Route::delete('/header-home/{headerHome}', [HeaderHomeController::class, 'destroy'])->name('header-home.destroy');
+        Route::get('/header-home/{id}/edit', [HeaderHomeController::class, 'edit'])->name('header-home.edit');
+        Route::put('/header-home/{id}', [HeaderHomeController::class, 'update'])->name('header-home.update');
+        Route::delete('/header-home/{id}', [HeaderHomeController::class, 'destroy'])->name('header-home.destroy');
 
         // Route HeroFlyer
         Route::get('/hero-flyer', [HeroFlyerController::class, 'index'])->name('hero-flyer.index');
         Route::get('/hero-flyer/create', [HeroFlyerController::class, 'create'])->name('hero-flyer.create');
         Route::post('/hero-flyer', [HeroFlyerController::class, 'store'])->name('hero-flyer.store');
-        Route::get('/hero-flyer/{heroFlyer}/edit', [HeroFlyerController::class, 'edit'])->name('hero-flyer.edit');
-        Route::put('/hero-flyer/{heroFlyer}', [HeroFlyerController::class, 'update'])->name('hero-flyer.update');
-        Route::delete('/hero-flyer/{heroFlyer}', [HeroFlyerController::class, 'destroy'])->name('hero-flyer.destroy');
+        Route::get('/hero-flyer/{id}/edit', [HeroFlyerController::class, 'edit'])->name('hero-flyer.edit');
+        Route::put('/hero-flyer/{id}', [HeroFlyerController::class, 'update'])->name('hero-flyer.update');
+        Route::delete('/hero-flyer/{id}', [HeroFlyerController::class, 'destroy'])->name('hero-flyer.destroy');
 
-         // Route HeroCompany
-         Route::get('/hero-company', [HeroCompanyController::class, 'index'])->name('hero-company.index');
-         Route::get('/hero-company/create', [HeroCompanyController::class, 'create'])->name('hero-company.create');
-         Route::post('/hero-company', [HeroCompanyController::class, 'store'])->name('hero-company.store');
-         Route::get('/hero-company/{heroCompany}/edit', [HeroCompanyController::class, 'edit'])->name('hero-company.edit');
-         Route::put('/hero-company/{heroCompany}', [HeroCompanyController::class, 'update'])->name('hero-company.update');
-         Route::delete('/hero-company/{heroCompany}', [HeroCompanyController::class, 'destroy'])->name('hero-company.destroy');
+        // Route HeroCompany
+        Route::get('/hero-company', [HeroCompanyController::class, 'index'])->name('hero-company.index');
+        Route::get('/hero-company/create', [HeroCompanyController::class, 'create'])->name('hero-company.create');
+        Route::post('/hero-company', [HeroCompanyController::class, 'store'])->name('hero-company.store');
+        Route::get('/hero-company/{id}/edit', [HeroCompanyController::class, 'edit'])->name('hero-company.edit');
+        Route::put('/hero-company/{id}', [HeroCompanyController::class, 'update'])->name('hero-company.update');
+        Route::delete('/hero-company/{id}', [HeroCompanyController::class, 'destroy'])->name('hero-company.destroy');
+
+        // Route HeroWhyChoose
+        Route::get('/hero-why-choose', [HeroWhyChooseController::class, 'index'])->name('hero-why-choose.index');
+        Route::get('/hero-why-choose/create', [HeroWhyChooseController::class, 'create'])->name('hero-why-choose.create');
+        Route::post('/hero-why-choose', [HeroWhyChooseController::class, 'store'])->name('hero-why-choose.store');
+        Route::get('/hero-why-choose/{id}/edit', [HeroWhyChooseController::class, 'edit'])->name('hero-why-choose.edit');
+        Route::put('/hero-why-choose/{id}', [HeroWhyChooseController::class, 'update'])->name('hero-why-choose.update');
+        Route::delete('/hero-why-choose/{id}', [HeroWhyChooseController::class, 'destroy'])->name('hero-why-choose.destroy');
     });
 
     // Profil pengguna, hanya untuk pengguna yang sudah login
