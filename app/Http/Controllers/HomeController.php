@@ -18,7 +18,7 @@ class HomeController extends Controller
         $headerHome = HeaderHome::first();
 
         // Mengambil semua data dari tabel hero_flyer
-        $flyerHome = HeroFlyer::all();
+        $heroFlyer = HeroFlyer::all();
 
         // Mengambil semua data dari tabel hero_company
         $heroCompany = HeroCompany::latest()->first();
@@ -29,7 +29,7 @@ class HomeController extends Controller
         // Kembalikan data ke view Inertia 'Home.Index'
         return Inertia::render('Home/Index', [
             'dataHeaderHome' => $headerHome,
-            'dataHeroFlyer' => $flyerHome,
+            'dataHeroFlyer' => $heroFlyer,
             'dataHeroCompany' => $heroCompany,
             'dataHeroWhyChoose' => $heroWhyChoose,
         ]);

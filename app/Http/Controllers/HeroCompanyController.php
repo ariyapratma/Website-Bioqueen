@@ -14,9 +14,9 @@ class HeroCompanyController extends Controller
      */
     public function index()
     {
-        $companyHome = HeroCompany::all();
+        $heroCompany = HeroCompany::all();
         return Inertia::render('Admin/ManageHeroCompany', [
-            'dataHeroCompany' => $companyHome
+            'dataHeroCompany' => $heroCompany
         ]);
     }
 
@@ -67,16 +67,16 @@ class HeroCompanyController extends Controller
      */
     public function edit(HeroCompany $id)
     {
-        $companyHome = HeroCompany::findOrFail($id);
+        $heroCompany = HeroCompany::findOrFail($id);
         return Inertia::render('Admin/EditHeroCompany', [
-            'dataHeroCompany' => $companyHome
+            'dataHeroCompany' => $heroCompany
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, HeroCompany $companyHome)
+    public function update(Request $request, HeroCompany $heroCompany)
     {
         $request->validate([
             'image_url' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
@@ -90,8 +90,8 @@ class HeroCompanyController extends Controller
         // Handle image upload
         if ($request->hasFile('image_url')) {
             // Delete old image
-            if ($companyHome->image_url && Storage::exists(str_replace('storage/', 'public/', $companyHome->image_url))) {
-                Storage::delete(str_replace('storage/', 'public/', $companyHome->image_url));
+            if ($heroCompany->image_url && Storage::exists(str_replace('storage/', 'public/', $heroCompany->image_url))) {
+                Storage::delete(str_replace('storage/', 'public/', $heroCompany->image_url));
             }
 
             $file = $request->file('image_url');
@@ -100,10 +100,10 @@ class HeroCompanyController extends Controller
             $data['image_url'] = 'storage/hero_company/' . $filename;
         } else {
             // Use existing image URL if no new image is uploaded
-            $data['image_url'] = $request->input('existing_image_url', $companyHome->image_url);
+            $data['image_url'] = $request->input('existing_image_url', $heroCompany->image_url);
         }
 
-        $companyHome->update($data);
+        $heroCompany->update($data);
 
         return redirect()->route('hero-company.index');
     }
@@ -111,9 +111,9 @@ class HeroCompanyController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(HeroCompany $heroCompany)
+    public function destroy(HeroCompany $id)
     {
-        $heroCompany->delete();
+        $id->delete();
         return redirect()->route('hero-company.index');
     }
 }

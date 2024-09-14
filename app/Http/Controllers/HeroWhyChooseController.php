@@ -83,13 +83,13 @@ class HeroWhyChooseController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(HeroWhyChoose $id)
+    public function edit(HeroWhyChoose $heroWhyChoose)
     {
-        $heroWhyChoose = HeroWhyChoose::findOrFail($id);
-        return Inertia::render('Admin/EditHeroCompany', [
-            'dataHeroCompany' => $heroWhyChoose
+        return Inertia::render('Admin/EditHeroWhyChoose', [
+            'dataHeroWhyChoose' => $heroWhyChoose
         ]);
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -111,37 +111,9 @@ class HeroWhyChooseController extends Controller
         // Ambil data input tanpa gambar
         $data = $request->only(['title', 'subtitle', 'heading1', 'content1', 'heading2', 'content2']);
 
-        // Proses gambar pertama jika ada
-        if ($request->hasFile('image_url1')) {
-            // Hapus gambar lama jika ada
-            if ($heroWhyChoose->image_url1 && Storage::exists(str_replace('storage/', 'public/', $heroWhyChoose->image_url1))) {
-                Storage::delete(str_replace('storage/', 'public/', $heroWhyChoose->image_url1));
-            }
-
-            $file = $request->file('image_url1');
-            $filename = time() . '_1.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/hero_why_choose', $filename);
-            $data['image_url1'] = 'storage/hero_why_choose/' . $filename;
-        } else {
-            // Gunakan gambar yang ada jika tidak ada gambar baru
-            $data['image_url1'] = $heroWhyChoose->image_url1;
-        }
-
-        // Proses gambar kedua jika ada
-        if ($request->hasFile('image_url2')) {
-            // Hapus gambar lama jika ada
-            if ($heroWhyChoose->image_url2 && Storage::exists(str_replace('storage/', 'public/', $heroWhyChoose->image_url2))) {
-                Storage::delete(str_replace('storage/', 'public/', $heroWhyChoose->image_url2));
-            }
-
-            $file = $request->file('image_url2');
-            $filename = time() . '_2.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/hero_why_choose', $filename);
-            $data['image_url2'] = 'storage/hero_why_choose/' . $filename;
-        } else {
-            // Gunakan gambar yang ada jika tidak ada gambar baru
-            $data['image_url2'] = $heroWhyChoose->image_url2;
-        }
+        // Proses upload gambar
+        $data['image_url1'] = $this->handleImageUpload($request, 'image_url1', $heroWhyChoose->image_url1, 'hero_why_choose');
+        $data['image_url2'] = $this->handleImageUpload($request, 'image_url2', $heroWhyChoose->image_url2, 'hero_why_choose');
 
         // Update data ke database
         $heroWhyChoose->update($data);
@@ -150,6 +122,24 @@ class HeroWhyChooseController extends Controller
         return redirect()->route('hero-why-choose.index');
     }
 
+    private function handleImageUpload($request, $fieldName, $existingImagePath, $directory)
+    {
+        if ($request->hasFile($fieldName)) {
+            // Hapus gambar lama jika ada
+            if ($existingImagePath && Storage::exists(str_replace('storage/', 'public/', $existingImagePath))) {
+                Storage::delete(str_replace('storage/', 'public/', $existingImagePath));
+            }
+
+            // Simpan gambar baru
+            $file = $request->file($fieldName);
+            $filename = time() . '_' . $fieldName . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('public/' . $directory, $filename);
+            return 'storage/' . $directory . '/' . $filename;
+        }
+
+        // Kembalikan gambar lama jika tidak ada upload baru
+        return $existingImagePath;
+    }
 
     /**
      * Remove the specified resource from storage.

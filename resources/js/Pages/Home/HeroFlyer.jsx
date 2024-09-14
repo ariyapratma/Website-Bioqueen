@@ -23,7 +23,7 @@ const HeroFlyer = () => {
           ))
         ) : (
           <p className="text-center font-lexend font-medium text-red-500">
-            Tidak ada flyer yang tersedia saat ini.
+            No flyer available.
           </p>
         )}
       </div>

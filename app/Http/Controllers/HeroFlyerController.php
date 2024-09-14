@@ -14,9 +14,9 @@ class HeroFlyerController extends Controller
      */
     public function index()
     {
-        $flyerHome = HeroFlyer::all();
+        $heroFlyer = HeroFlyer::all();
         return Inertia::render('Admin/ManageHeroFlyer', [
-            'dataHeroFlyer' => $flyerHome
+            'dataHeroFlyer' => $heroFlyer
         ]);
     }
 
@@ -54,24 +54,24 @@ class HeroFlyerController extends Controller
      */
     public function edit($id)
     {
-        $flyerHome = HeroFlyer::findOrFail($id);
+        $heroFlyer = HeroFlyer::findOrFail($id);
         return Inertia::render('Admin/EditHeroFlyer', [
-            'dataHeroFlyer' => $flyerHome
+            'dataHeroFlyer' => $heroFlyer
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, HeroFlyer $flyerHome)
+    public function update(Request $request, HeroFlyer $heroFlyer)
     {
         $request->validate([
             'image_url' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         if ($request->hasFile('image_url')) {
-            if ($flyerHome->image_url && Storage::exists(str_replace('storage/', 'public/', $flyerHome->image_url))) {
-                Storage::delete(str_replace('storage/', 'public/', $flyerHome->image_url));
+            if ($heroFlyer->image_url && Storage::exists(str_replace('storage/', 'public/', $heroFlyer->image_url))) {
+                Storage::delete(str_replace('storage/', 'public/', $heroFlyer->image_url));
             }
 
             $file = $request->file('image_url');
@@ -79,10 +79,10 @@ class HeroFlyerController extends Controller
             $file->storeAs('public/hero_flyer', $filename);
             $data['image_url'] = 'storage/hero_flyer/' . $filename;
         } else {
-            $data['image_url'] = $request->input('existing_image_url', $flyerHome->image_url);
+            $data['image_url'] = $request->input('existing_image_url', $heroFlyer->image_url);
         }
 
-        $flyerHome->update($data);
+        $heroFlyer->update($data);
 
         return redirect()->route('hero-flyer.index');
     }
@@ -90,9 +90,9 @@ class HeroFlyerController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(HeroFlyer $heroFlyer)
+    public function destroy(HeroFlyer $id)
     {
-        $heroFlyer->delete();
+        $id->delete();
         return redirect()->route('hero-flyer.index');
     }
 }
