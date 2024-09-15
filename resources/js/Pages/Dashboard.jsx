@@ -53,6 +53,26 @@ export default function Dashboard({ auth }) {
                     Manage Hero Maklon Value
                   </Link>
                 </li>
+                <li>
+                  <Link href="/hero-team-value" className="text-blue-500">
+                    Manage Hero Team Value
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/hero-facilities-value" className="text-blue-500">
+                    Manage Hero Facilities Value
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/hero-certificate" className="text-blue-500">
+                    Manage Hero Certificate
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/hero-service" className="text-blue-500">
+                    Manage Hero Service
+                  </Link>
+                </li>
               </ul>
             </div>
           )}

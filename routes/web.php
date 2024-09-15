@@ -9,6 +9,7 @@ use App\Http\Controllers\HeroFlyerController;
 use App\Http\Controllers\HeaderHomeController;
 use App\Http\Controllers\HeroCompanyController;
 use App\Http\Controllers\HeroMaklonValueController;
+use App\Http\Controllers\HeroTeamValueController;
 use App\Http\Controllers\HeroWhyChooseController;
 
 /*
@@ -89,6 +90,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
          Route::get('/hero-maklon-value/{id}/edit', [HeroMaklonValueController::class, 'edit'])->name('hero-maklon-value.edit');
          Route::put('/hero-maklon-value/{id}', [HeroMaklonValueController::class, 'update'])->name('hero-maklon-value.update');
          Route::delete('/hero-maklon-value/{id}', [HeroMaklonValueController::class, 'destroy'])->name('hero-maklon-value.destroy');
+
+         // Route HeroTeamValue
+        Route::get('/hero-team-value', [HeroTeamValueController::class, 'index'])->name('hero-team-value.index');
+        Route::get('/hero-team-value/create', [HeroTeamValueController::class, 'create'])->name('hero-team-value.create');
+        Route::post('/hero-team-value', [HeroTeamValueController::class, 'store'])->name('hero-team-value.store');
+        Route::get('/hero-team-value/{id}/edit', [HeroTeamValueController::class, 'edit'])->name('hero-team-value.edit');
+        Route::put('/hero-team-value/{id}', [HeroTeamValueController::class, 'update'])->name('hero-team-value.update');
+        Route::delete('/hero-team-value/{id}', [HeroTeamValueController::class, 'destroy'])->name('hero-team-value.destroy');
     });
 
     // Profil pengguna, hanya untuk pengguna yang sudah login

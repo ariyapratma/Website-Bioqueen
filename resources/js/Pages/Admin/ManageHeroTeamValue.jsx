@@ -1,10 +1,10 @@
-// resources/js/Pages/ManageHeroMaklonValue.jsx
+// resources/js/Pages/ManageHeroTeamValue.jsx
 
 import React from "react";
 import { Link, Head, useForm } from "@inertiajs/react";
 import Swal from "sweetalert2";
 
-const ManageHeroMaklonValue = ({ dataHeroMaklonValue }) => {
+const ManageHeroTeamValue = ({ dataHeroTeamValue }) => {
   const { delete: deleteRecord } = useForm();
 
   const handleDelete = (id) => {
@@ -18,7 +18,7 @@ const ManageHeroMaklonValue = ({ dataHeroMaklonValue }) => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteRecord(`/hero-maklon-value/${id}`, {
+        deleteRecord(`/hero-team-value/${id}`, {
           method: "DELETE",
         });
         Swal.fire("Deleted!", "Your file has been deleted.", "success");
@@ -28,15 +28,15 @@ const ManageHeroMaklonValue = ({ dataHeroMaklonValue }) => {
 
   return (
     <div className="bg-white p-6">
-      <Head title="Manage Hero Maklon Value | PT Ratu Bio Indonesia" />
-      <h1 className="mb-6 text-2xl font-bold">Manage Hero Maklon Value</h1>
+      <Head title="Manage Hero Team Value | PT Ratu Bio Indonesia" />
+      <h1 className="mb-6 text-2xl font-bold">Manage Hero Team Value</h1>
 
       <div className="mb-6">
         <Link
-          href="/hero-maklon-value/create"
+          href="/hero-team-value/create"
           className="rounded bg-blue-500 px-4 py-2 text-white"
         >
-          Add New Hero Maklon Value
+          Add New Hero Team Value
         </Link>
       </div>
 
@@ -47,19 +47,22 @@ const ManageHeroMaklonValue = ({ dataHeroMaklonValue }) => {
               Title
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+              Subtitle
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
               Heading 1
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
               Content 1
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-              Image URL 1
-            </th>
-            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
               Heading 2
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
               Content 2
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+              Image URL 1
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
               Image URL 2
@@ -70,38 +73,41 @@ const ManageHeroMaklonValue = ({ dataHeroMaklonValue }) => {
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200 bg-white">
-          {dataHeroMaklonValue.map((heroMaklonValue) => (
-            <tr key={heroMaklonValue.id}>
+          {dataHeroTeamValue.map((heroTeamValue) => (
+            <tr key={heroTeamValue.id}>
               <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                {heroMaklonValue.title}
+                {heroTeamValue.title}
               </td>
               <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                {heroMaklonValue.heading1}
+                {heroTeamValue.subtitle}
               </td>
               <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                {heroMaklonValue.content1}
+                {heroTeamValue.heading1}
               </td>
               <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                {heroMaklonValue.image_url1}
+                {heroTeamValue.content1}
               </td>
               <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                {heroMaklonValue.heading2}
+                {heroTeamValue.heading2}
               </td>
               <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                {heroMaklonValue.content2}
+                {heroTeamValue.content2}
               </td>
               <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                {heroMaklonValue.image_url2}
+                {heroTeamValue.image_url1}
+              </td>
+              <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
+                {heroTeamValue.image_url2}
               </td>
               <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
                 <Link
-                  href={`/hero-maklon-value/${heroMaklonValue.id}/edit`}
+                  href={`/hero-team-value/${heroTeamValue.id}/edit`}
                   className="text-indigo-600 hover:text-indigo-900"
                 >
                   Edit
                 </Link>
                 <button
-                  onClick={() => handleDelete(heroMaklonValue.id)}
+                  onClick={() => handleDelete(heroTeamValue.id)}
                   className="ml-4 text-red-600 hover:text-red-900"
                 >
                   Delete
@@ -115,4 +121,4 @@ const ManageHeroMaklonValue = ({ dataHeroMaklonValue }) => {
   );
 };
 
-export default ManageHeroMaklonValue;
+export default ManageHeroTeamValue;

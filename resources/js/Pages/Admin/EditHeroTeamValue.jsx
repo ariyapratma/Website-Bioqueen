@@ -2,47 +2,84 @@ import { useForm } from "@inertiajs/react";
 import Swal from "sweetalert2";
 import { Head } from "@inertiajs/react";
 
-const CreateHeroWhyChoose = () => {
-  const { data, setData, post, processing, errors } = useForm({
-    title: "",
-    subtitle: "",
-    heading1: "",
-    content1: "",
-    heading2: "",
-    content2: "",
-    image_url1: null,
-    image_url2: null,
+const EditHeroTeamValue = ({ dataHeroTeamValue }) => {
+  // Initialize form with default values
+  const { data, setData, post, put, processing, errors } = useForm({
+    title: dataHeroTeamValue?.title || "",
+    subtitle: dataHeroTeamValue?.subtitle || "",
+    heading1: dataHeroTeamValue?.heading1 || "",
+    content1: dataHeroTeamValue?.content1 || "",
+    heading2: dataHeroTeamValue?.heading2 || "",
+    content2: dataHeroTeamValue?.content2 || "",
+    image_url1: null, // Initialize as null
+    image_url2: null, // Initialize as null
   });
 
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    post("/hero-why-choose", {
-      onSuccess: () => {
-        Swal.fire({
-          title: "Success!",
-          text: "Hero Why Choose has been added successfully.",
-          icon: "success",
-          confirmButtonText: "OK",
-        }).then(() => {
-          window.location.href = "/hero-why-choose";
-        });
-      },
-      onError: () => {
-        Swal.fire({
-          title: "Error!",
-          text: "There was an error adding the Hero Why Choose.",
-          icon: "error",
-          confirmButtonText: "OK",
-        });
-      },
+
+    // Use FormData if there are files to upload
+    if (data.image_url1 || data.image_url2) {
+      const formData = new FormData();
+      formData.append("title", data.title);
+      formData.append("subtitle", data.subtitle);
+      formData.append("heading1", data.heading1);
+      formData.append("content1", data.content1);
+      formData.append("heading2", data.heading2);
+      formData.append("content2", data.content2);
+
+      // Append images if they exist
+      if (data.image_url1) {
+        formData.append("image_url1", data.image_url1);
+      }
+      if (data.image_url2) {
+        formData.append("image_url2", data.image_url2);
+      }
+
+      // Send with FormData (multipart)
+      put(`/hero-team-value/${dataHeroTeamValue?.id}`, {
+        data: formData,
+        headers: { "Content-Type": "multipart/form-data" },
+        onSuccess: () => handleSuccess(),
+        onError: () => handleError(),
+      });
+    } else {
+      // If no files, send data as normal JSON payload
+      put(`/hero-team-value/${dataHeroTeamValue?.id}`, {
+        data,
+        onSuccess: () => handleSuccess(),
+        onError: () => handleError(),
+      });
+    }
+  };
+
+  const handleSuccess = () => {
+    Swal.fire({
+      title: "Success!",
+      text: "Hero Team Value has been updated successfully.",
+      icon: "success",
+      confirmButtonText: "OK",
+    }).then(() => {
+      window.location.href = "/hero-team-value"; // Redirect after success
+    });
+  };
+
+  const handleError = () => {
+    Swal.fire({
+      title: "Error!",
+      text: "There was an error updating the Hero Team Value.",
+      icon: "error",
+      confirmButtonText: "OK",
     });
   };
 
   return (
     <div className="bg-white p-6">
-      <Head title="Add Hero Why Choose | PT Ratu Bio Indonesia" />
-      <h1 className="mb-6 text-2xl font-bold">Add New Hero Why Choose</h1>
-      <form onSubmit={handleSubmit} encType="multipart/form-data">
+      <Head title="Edit Hero Team Value | PT Ratu Bio Indonesia" />
+      <h1 className="mb-6 text-2xl font-bold">Edit Hero Team Value</h1>
+      <form onSubmit={handleSubmit}>
+        {/* Title Field */}
         <div className="mb-4">
           <label htmlFor="title" className="block text-gray-700">
             Title
@@ -58,6 +95,8 @@ const CreateHeroWhyChoose = () => {
             <p className="mt-1 text-sm text-red-500">{errors.title}</p>
           )}
         </div>
+
+        {/* Subtitle Field */}
         <div className="mb-4">
           <label htmlFor="subtitle" className="block text-gray-700">
             Subtitle
@@ -73,6 +112,8 @@ const CreateHeroWhyChoose = () => {
             <p className="mt-1 text-sm text-red-500">{errors.subtitle}</p>
           )}
         </div>
+
+        {/* Heading 1 and Content 1 */}
         <div className="mb-4">
           <label htmlFor="heading1" className="block text-gray-700">
             Heading 1
@@ -102,6 +143,8 @@ const CreateHeroWhyChoose = () => {
             <p className="mt-1 text-sm text-red-500">{errors.content1}</p>
           )}
         </div>
+
+        {/* Heading 2 and Content 2 */}
         <div className="mb-4">
           <label htmlFor="heading2" className="block text-gray-700">
             Heading 2
@@ -117,6 +160,7 @@ const CreateHeroWhyChoose = () => {
             <p className="mt-1 text-sm text-red-500">{errors.heading2}</p>
           )}
         </div>
+
         <div className="mb-4">
           <label htmlFor="content2" className="block text-gray-700">
             Content 2
@@ -131,6 +175,8 @@ const CreateHeroWhyChoose = () => {
             <p className="mt-1 text-sm text-red-500">{errors.content2}</p>
           )}
         </div>
+
+        {/* Image 1 Field */}
         <div className="mb-4">
           <label htmlFor="image_url1" className="block text-gray-700">
             Image 1
@@ -145,6 +191,8 @@ const CreateHeroWhyChoose = () => {
             <p className="mt-1 text-sm text-red-500">{errors.image_url1}</p>
           )}
         </div>
+
+        {/* Image 1 Field */}
         <div className="mb-4">
           <label htmlFor="image_url2" className="block text-gray-700">
             Image 2
@@ -159,16 +207,18 @@ const CreateHeroWhyChoose = () => {
             <p className="mt-1 text-sm text-red-500">{errors.image_url2}</p>
           )}
         </div>
+
+        {/* Similar form structure for other fields */}
         <button
           type="submit"
           disabled={processing}
           className="rounded bg-blue-500 px-4 py-2 text-white"
         >
-          {processing ? "Saving..." : "Save"}
+          {processing ? "Updating..." : "Update"}
         </button>
       </form>
     </div>
   );
 };
 
-export default CreateHeroWhyChoose;
+export default EditHeroTeamValue;

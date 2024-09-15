@@ -2,7 +2,7 @@ import { useForm } from "@inertiajs/react";
 import Swal from "sweetalert2";
 import { Head } from "@inertiajs/react";
 
-const CreateHeroWhyChoose = () => {
+const CreateHeroTeamValue = () => {
   const { data, setData, post, processing, errors } = useForm({
     title: "",
     subtitle: "",
@@ -16,21 +16,21 @@ const CreateHeroWhyChoose = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    post("/hero-why-choose", {
+    post("/hero-team-value", {
       onSuccess: () => {
         Swal.fire({
           title: "Success!",
-          text: "Hero Why Choose has been added successfully.",
+          text: "Hero Team Value has been added successfully.",
           icon: "success",
           confirmButtonText: "OK",
         }).then(() => {
-          window.location.href = "/hero-why-choose";
+          window.location.href = "/hero-team-value";
         });
       },
       onError: () => {
         Swal.fire({
           title: "Error!",
-          text: "There was an error adding the Hero Why Choose.",
+          text: "There was an error adding the Hero Team Value.",
           icon: "error",
           confirmButtonText: "OK",
         });
@@ -40,8 +40,8 @@ const CreateHeroWhyChoose = () => {
 
   return (
     <div className="bg-white p-6">
-      <Head title="Add Hero Why Choose | PT Ratu Bio Indonesia" />
-      <h1 className="mb-6 text-2xl font-bold">Add New Hero Why Choose</h1>
+      <Head title="Add Hero Team Value | PT Ratu Bio Indonesia" />
+      <h1 className="mb-6 text-2xl font-bold">Add New Hero Team Value</h1>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div className="mb-4">
           <label htmlFor="title" className="block text-gray-700">
@@ -171,4 +171,4 @@ const CreateHeroWhyChoose = () => {
   );
 };
 
-export default CreateHeroWhyChoose;
+export default CreateHeroTeamValue;
