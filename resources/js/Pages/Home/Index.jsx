@@ -8,6 +8,7 @@ import HeroWhyChooseValue from "./HeroWhyChooseValue";
 import HeroMaklonValue from "./HeroMaklonValue";
 import HeroTeamValue from "./HeroTeamValue";
 import HeroFacilitiesValue from "./HeroFacilitiesValue";
+import HeroCertificate from "./HeroCertificate";
 import Footer from "@/Components/Footer/Footer";
 
 const Welcome = ({ auth }) => {
@@ -33,6 +34,8 @@ const Welcome = ({ auth }) => {
         <HeroTeamValue />
         {/* Hero Facilities Value */}
         <HeroFacilitiesValue />
+        {/* Hero Certificate */}
+        <HeroCertificate />
       </main>
       <Footer />
     </div>

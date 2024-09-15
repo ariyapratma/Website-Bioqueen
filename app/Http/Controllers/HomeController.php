@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Models\HeroFlyer;
 use App\Models\HeaderHome;
+use App\Models\HeroCertificate;
 use App\Models\HeroCompany;
 use App\Models\HeroFacilitiesValue;
 use App\Models\HeroMaklonValue;
@@ -32,11 +33,14 @@ class HomeController extends Controller
         // Mengambil semua data dari tabel hero_maklon_value
         $heroMaklonValue = HeroMaklonValue::first();
 
-         // Mengambil semua data dari tabel hero_team_value
+        // Mengambil semua data dari tabel hero_team_value
         $heroTeamValue = HeroTeamValue::first();
 
-         // Mengambil semua data dari tabel hero_facilities_value
+        // Mengambil semua data dari tabel hero_facilities_value
         $heroFacilitiesValue = HeroFacilitiesValue::first();
+
+        // Mengambil semua data dari tabel hero_certificate
+        $heroCertificate = HeroCertificate::first();
 
         // Kembalikan data ke view Inertia 'Home.Index'
         return Inertia::render('Home/Index', [
@@ -47,6 +51,7 @@ class HomeController extends Controller
             'dataHeroMaklonValue' => $heroMaklonValue,
             'dataHeroTeamValue' => $heroTeamValue,
             'dataHeroFacilitiesValue' => $heroFacilitiesValue,
+            'dataHeroCertificate' => $heroCertificate
         ]);
     }
 }
