@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use App\Models\HeroFlyer;
 use App\Models\HeaderHome;
 use App\Models\HeroCompany;
+use App\Models\HeroFacilitiesValue;
 use App\Models\HeroMaklonValue;
 use App\Models\HeroTeamValue;
 use App\Models\HeroWhyChoose;
@@ -34,6 +35,9 @@ class HomeController extends Controller
          // Mengambil semua data dari tabel hero_team_value
         $heroTeamValue = HeroTeamValue::first();
 
+         // Mengambil semua data dari tabel hero_facilities_value
+        $heroFacilitiesValue = HeroFacilitiesValue::first();
+
         // Kembalikan data ke view Inertia 'Home.Index'
         return Inertia::render('Home/Index', [
             'dataHeaderHome' => $headerHome,
@@ -42,6 +46,7 @@ class HomeController extends Controller
             'dataHeroWhyChoose' => $heroWhyChoose,
             'dataHeroMaklonValue' => $heroMaklonValue,
             'dataHeroTeamValue' => $heroTeamValue,
+            'dataHeroFacilitiesValue' => $heroFacilitiesValue,
         ]);
     }
 }

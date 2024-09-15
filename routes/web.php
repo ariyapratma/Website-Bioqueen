@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HeroFlyerController;
 use App\Http\Controllers\HeaderHomeController;
 use App\Http\Controllers\HeroCompanyController;
+use App\Http\Controllers\HeroFacilitiesValueController;
 use App\Http\Controllers\HeroMaklonValueController;
 use App\Http\Controllers\HeroTeamValueController;
 use App\Http\Controllers\HeroWhyChooseController;
@@ -83,21 +84,29 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/hero-why-choose/{id}', [HeroWhyChooseController::class, 'update'])->name('hero-why-choose.update');
         Route::delete('/hero-why-choose/{id}', [HeroWhyChooseController::class, 'destroy'])->name('hero-why-choose.destroy');
 
-         // Route HeroMaklonValue
-         Route::get('/hero-maklon-value', [HeroMaklonValueController::class, 'index'])->name('hero-maklon-value.index');
-         Route::get('/hero-maklon-value/create', [HeroMaklonValueController::class, 'create'])->name('hero-maklon-value.create');
-         Route::post('/hero-maklon-value', [HeroMaklonValueController::class, 'store'])->name('hero-maklon-value.store');
-         Route::get('/hero-maklon-value/{id}/edit', [HeroMaklonValueController::class, 'edit'])->name('hero-maklon-value.edit');
-         Route::put('/hero-maklon-value/{id}', [HeroMaklonValueController::class, 'update'])->name('hero-maklon-value.update');
-         Route::delete('/hero-maklon-value/{id}', [HeroMaklonValueController::class, 'destroy'])->name('hero-maklon-value.destroy');
+        // Route HeroMaklonValue
+        Route::get('/hero-maklon-value', [HeroMaklonValueController::class, 'index'])->name('hero-maklon-value.index');
+        Route::get('/hero-maklon-value/create', [HeroMaklonValueController::class, 'create'])->name('hero-maklon-value.create');
+        Route::post('/hero-maklon-value', [HeroMaklonValueController::class, 'store'])->name('hero-maklon-value.store');
+        Route::get('/hero-maklon-value/{id}/edit', [HeroMaklonValueController::class, 'edit'])->name('hero-maklon-value.edit');
+        Route::put('/hero-maklon-value/{id}', [HeroMaklonValueController::class, 'update'])->name('hero-maklon-value.update');
+        Route::delete('/hero-maklon-value/{id}', [HeroMaklonValueController::class, 'destroy'])->name('hero-maklon-value.destroy');
 
-         // Route HeroTeamValue
+        // Route HeroTeamValue
         Route::get('/hero-team-value', [HeroTeamValueController::class, 'index'])->name('hero-team-value.index');
         Route::get('/hero-team-value/create', [HeroTeamValueController::class, 'create'])->name('hero-team-value.create');
         Route::post('/hero-team-value', [HeroTeamValueController::class, 'store'])->name('hero-team-value.store');
         Route::get('/hero-team-value/{id}/edit', [HeroTeamValueController::class, 'edit'])->name('hero-team-value.edit');
         Route::put('/hero-team-value/{id}', [HeroTeamValueController::class, 'update'])->name('hero-team-value.update');
         Route::delete('/hero-team-value/{id}', [HeroTeamValueController::class, 'destroy'])->name('hero-team-value.destroy');
+
+        // Route HeroFacilitiesValue
+        Route::get('/hero-facilities-value', [HeroFacilitiesValueController::class, 'index'])->name('hero-facilities-value.index');
+        Route::get('/hero-facilities-value/create', [HeroFacilitiesValueController::class, 'create'])->name('hero-facilities-value.create');
+        Route::post('/hero-facilities-value', [HeroFacilitiesValueController::class, 'store'])->name('hero-facilities-value.store');
+        Route::get('/hero-facilities-value/{id}/edit', [HeroFacilitiesValueController::class, 'edit'])->name('hero-facilities-value.edit');
+        Route::put('/hero-facilities-value/{id}', [HeroFacilitiesValueController::class, 'update'])->name('hero-facilities-value.update');
+        Route::delete('/hero-facilities-value/{id}', [HeroFacilitiesValueController::class, 'destroy'])->name('hero-facilities-value.destroy');
     });
 
     // Profil pengguna, hanya untuk pengguna yang sudah login
