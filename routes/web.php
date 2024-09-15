@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HeroFlyerController;
 use App\Http\Controllers\HeaderHomeController;
 use App\Http\Controllers\HeroCompanyController;
+use App\Http\Controllers\HeroMaklonValueController;
 use App\Http\Controllers\HeroWhyChooseController;
 
 /*
@@ -80,6 +81,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/hero-why-choose/{id}/edit', [HeroWhyChooseController::class, 'edit'])->name('hero-why-choose.edit');
         Route::put('/hero-why-choose/{id}', [HeroWhyChooseController::class, 'update'])->name('hero-why-choose.update');
         Route::delete('/hero-why-choose/{id}', [HeroWhyChooseController::class, 'destroy'])->name('hero-why-choose.destroy');
+
+         // Route HeroMaklonValue
+         Route::get('/hero-maklon-value', [HeroMaklonValueController::class, 'index'])->name('hero-maklon-value.index');
+         Route::get('/hero-maklon-value/create', [HeroMaklonValueController::class, 'create'])->name('hero-maklon-value.create');
+         Route::post('/hero-maklon-value', [HeroMaklonValueController::class, 'store'])->name('hero-maklon-value.store');
+         Route::get('/hero-maklon-value/{id}/edit', [HeroMaklonValueController::class, 'edit'])->name('hero-maklon-value.edit');
+         Route::put('/hero-maklon-value/{id}', [HeroMaklonValueController::class, 'update'])->name('hero-maklon-value.update');
+         Route::delete('/hero-maklon-value/{id}', [HeroMaklonValueController::class, 'destroy'])->name('hero-maklon-value.destroy');
     });
 
     // Profil pengguna, hanya untuk pengguna yang sudah login

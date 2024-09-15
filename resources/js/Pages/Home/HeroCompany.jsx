@@ -1,5 +1,5 @@
 import { usePage } from "@inertiajs/react";
-import { FaPlay } from "react-icons/fa"; // Pastikan sudah diimport
+import { FaPlay } from "react-icons/fa";
 
 const HeroCompany = () => {
   const { props } = usePage();
@@ -12,12 +12,18 @@ const HeroCompany = () => {
         {/* image_url Section */}
         <div className="relative mb-8 flex justify-center lg:mb-0 lg:w-1/3">
           <div className="relative h-60 w-full overflow-hidden rounded-lg lg:h-full">
-            <img
-              src={dataHeroCompany?.image_url}
-              loading="lazy"
-              className="h-full w-full object-cover"
-              alt="Company"
-            />
+            {dataHeroCompany?.image_url ? (
+              <img
+                src={dataHeroCompany.image_url}
+                loading="lazy"
+                className="h-full w-full object-cover"
+                alt="Company"
+              />
+            ) : (
+              <p className="font-lexend font-medium text-red-500">
+                No images available
+              </p>
+            )}
             <button
               onClick={() => {
                 window.open(dataHeroCompany?.youtube_link);

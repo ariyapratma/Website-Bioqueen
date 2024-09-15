@@ -5,6 +5,7 @@ import HeaderHome from "./HeaderHome";
 import HeroFlyer from "./HeroFlyer";
 import HeroCompany from "./HeroCompany";
 import HeroWhyChooseValue from "./HeroWhyChooseValue";
+import HeroMaklonValue from "./HeroMaklonValue";
 import Footer from "@/Components/Footer/Footer";
 
 const Welcome = ({ auth }) => {
@@ -24,6 +25,8 @@ const Welcome = ({ auth }) => {
         <HeroCompany />
         {/* Hero Why Choose Value */}
         <HeroWhyChooseValue />
+        {/* Hero Maklon Value */}
+        <HeroMaklonValue />
       </main>
       <Footer />
     </div>

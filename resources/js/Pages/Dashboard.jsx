@@ -48,6 +48,11 @@ export default function Dashboard({ auth }) {
                     Manage Hero Why Choose
                   </Link>
                 </li>
+                <li>
+                  <Link href="/hero-maklon-value" className="text-blue-500">
+                    Manage Hero Maklon Value
+                  </Link>
+                </li>
               </ul>
             </div>
           )}
