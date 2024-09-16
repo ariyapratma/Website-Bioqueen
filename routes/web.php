@@ -13,6 +13,7 @@ use App\Http\Controllers\HeroFacilitiesValueController;
 use App\Http\Controllers\HeroMaklonValueController;
 use App\Http\Controllers\HeroServiceController;
 use App\Http\Controllers\HeroTeamValueController;
+use App\Http\Controllers\HeroVideoController;
 use App\Http\Controllers\HeroWhyChooseController;
 
 /*
@@ -125,6 +126,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/hero-service/{id}/edit', [HeroServiceController::class, 'edit'])->name('hero-service.edit');
         Route::put('/hero-service/{id}', [HeroServiceController::class, 'update'])->name('hero-service.update');
         Route::delete('/hero-service/{id}', [HeroServiceController::class, 'destroy'])->name('hero-service.destroy');
+
+         // Route HeroVideo
+         Route::get('/hero-video', [HeroVideoController::class, 'index'])->name('hero-video.index');
+         Route::get('/hero-video/create', [HeroVideoController::class, 'create'])->name('hero-video.create');
+         Route::post('/hero-video', [HeroVideoController::class, 'store'])->name('hero-video.store');
+         Route::get('/hero-video/{id}/edit', [HeroVideoController::class, 'edit'])->name('hero-video.edit');
+         Route::put('/hero-video/{id}', [HeroVideoController::class, 'update'])->name('hero-video.update');
+         Route::delete('/hero-video/{id}', [HeroVideoController::class, 'destroy'])->name('hero-video.destroy');
     });
 
     // Profil pengguna, hanya untuk pengguna yang sudah login

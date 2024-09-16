@@ -11,6 +11,7 @@ use App\Models\HeroFacilitiesValue;
 use App\Models\HeroMaklonValue;
 use App\Models\HeroService;
 use App\Models\HeroTeamValue;
+use App\Models\HeroVideo;
 use App\Models\HeroWhyChoose;
 use Illuminate\Http\Request;
 
@@ -46,6 +47,9 @@ class HomeController extends Controller
         // Mengambil semua data dari tabel hero_service
         $heroService = HeroService::latest()->first();
 
+        // Mengambil semua data dari tabel hero_video
+        $heroVideo = HeroVideo::first();
+
         // Kembalikan data ke view Inertia 'Home.Index'
         return Inertia::render('Home/Index', [
             'dataHeaderHome' => $headerHome,
@@ -57,6 +61,7 @@ class HomeController extends Controller
             'dataHeroFacilitiesValue' => $heroFacilitiesValue,
             'dataHeroCertificate' => $heroCertificate,
             'dataHeroService' => $heroService,
+            'dataHeroVideo' => $heroVideo,
         ]);
     }
 }

@@ -73,6 +73,16 @@ export default function Dashboard({ auth }) {
                     Manage Hero Service
                   </Link>
                 </li>
+                <li>
+                  <Link href="/hero-video" className="text-blue-500">
+                    Manage Hero Video
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/hero-excellence-value" className="text-blue-500">
+                    Manage Hero Excellence Value
+                  </Link>
+                </li>
               </ul>
             </div>
           )}

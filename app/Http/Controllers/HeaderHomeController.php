@@ -94,9 +94,9 @@ class HeaderHomeController extends Controller
         return redirect()->route('header-home.index');
     }
 
-    public function destroy(HeaderHome $headerHome)
+    public function destroy(HeaderHome $id)
     {
-        $headerHome->delete();
+        $id->delete();
         return redirect()->route('header-home.index');
     }
 }
