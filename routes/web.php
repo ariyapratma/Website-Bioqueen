@@ -11,6 +11,7 @@ use App\Http\Controllers\HeroCertificateController;
 use App\Http\Controllers\HeroCompanyController;
 use App\Http\Controllers\HeroFacilitiesValueController;
 use App\Http\Controllers\HeroMaklonValueController;
+use App\Http\Controllers\HeroServiceController;
 use App\Http\Controllers\HeroTeamValueController;
 use App\Http\Controllers\HeroWhyChooseController;
 
@@ -116,6 +117,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/hero-certificate/{id}/edit', [HeroCertificateController::class, 'edit'])->name('hero-certificate.edit');
         Route::put('/hero-certificate/{id}', [HeroCertificateController::class, 'update'])->name('hero-certificate.update');
         Route::delete('/hero-certificate/{id}', [HeroCertificateController::class, 'destroy'])->name('hero-certificate.destroy');
+
+        // Route HeroService
+        Route::get('/hero-service', [HeroServiceController::class, 'index'])->name('hero-service.index');
+        Route::get('/hero-service/create', [HeroServiceController::class, 'create'])->name('hero-service.create');
+        Route::post('/hero-service', [HeroServiceController::class, 'store'])->name('hero-service.store');
+        Route::get('/hero-service/{id}/edit', [HeroServiceController::class, 'edit'])->name('hero-service.edit');
+        Route::put('/hero-service/{id}', [HeroServiceController::class, 'update'])->name('hero-service.update');
+        Route::delete('/hero-service/{id}', [HeroServiceController::class, 'destroy'])->name('hero-service.destroy');
     });
 
     // Profil pengguna, hanya untuk pengguna yang sudah login

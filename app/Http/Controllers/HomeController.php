@@ -9,6 +9,7 @@ use App\Models\HeroCertificate;
 use App\Models\HeroCompany;
 use App\Models\HeroFacilitiesValue;
 use App\Models\HeroMaklonValue;
+use App\Models\HeroService;
 use App\Models\HeroTeamValue;
 use App\Models\HeroWhyChoose;
 use Illuminate\Http\Request;
@@ -42,6 +43,9 @@ class HomeController extends Controller
         // Mengambil semua data dari tabel hero_certificate
         $heroCertificate = HeroCertificate::first();
 
+        // Mengambil semua data dari tabel hero_service
+        $heroService = HeroService::latest()->first();
+
         // Kembalikan data ke view Inertia 'Home.Index'
         return Inertia::render('Home/Index', [
             'dataHeaderHome' => $headerHome,
@@ -51,7 +55,8 @@ class HomeController extends Controller
             'dataHeroMaklonValue' => $heroMaklonValue,
             'dataHeroTeamValue' => $heroTeamValue,
             'dataHeroFacilitiesValue' => $heroFacilitiesValue,
-            'dataHeroCertificate' => $heroCertificate
+            'dataHeroCertificate' => $heroCertificate,
+            'dataHeroService' => $heroService,
         ]);
     }
 }
