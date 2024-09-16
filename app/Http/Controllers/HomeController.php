@@ -7,6 +7,7 @@ use App\Models\HeroFlyer;
 use App\Models\HeaderHome;
 use App\Models\HeroCertificate;
 use App\Models\HeroCompany;
+use App\Models\HeroExcellenceValue;
 use App\Models\HeroFacilitiesValue;
 use App\Models\HeroMaklonValue;
 use App\Models\HeroService;
@@ -50,6 +51,9 @@ class HomeController extends Controller
         // Mengambil semua data dari tabel hero_video
         $heroVideo = HeroVideo::first();
 
+        // Mengambil semua data dari tabel hero_excellence_value
+        $heroExcellenceValue = HeroExcellenceValue::first();
+
         // Kembalikan data ke view Inertia 'Home.Index'
         return Inertia::render('Home/Index', [
             'dataHeaderHome' => $headerHome,
@@ -62,6 +66,7 @@ class HomeController extends Controller
             'dataHeroCertificate' => $heroCertificate,
             'dataHeroService' => $heroService,
             'dataHeroVideo' => $heroVideo,
+            'dataHeroExcellenceValue' => $heroExcellenceValue,
         ]);
     }
 }

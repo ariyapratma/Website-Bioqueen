@@ -12,6 +12,8 @@ import HeroCertificate from "./HeroCertificate";
 import HeroService from "./HeroService";
 import HeroVideo from "./HeroVideo";
 import HeroExcellenceValue from "./HeroExcellenceValue";
+import HeroReview from "@/Components/Home/HeroReview";
+import HeroAddReview from "@/Components/Home/HeroAddReview";
 import Footer from "@/Components/Footer/Footer";
 
 const Welcome = ({ auth }) => {
@@ -45,6 +47,10 @@ const Welcome = ({ auth }) => {
         <HeroVideo />
         {/* Hero Excellence Value */}
         <HeroExcellenceValue />
+        {/* Hero Review */}
+        <HeroReview />
+        {/* Hero Add Review */}
+        <HeroAddReview />
       </main>
       <Footer />
     </div>
