@@ -4,7 +4,10 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\MaklonController;
 use App\Http\Controllers\AboutUsController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HeroFlyerController;
 use App\Http\Controllers\HeroVideoController;
@@ -32,15 +35,9 @@ use App\Http\Controllers\HeroFacilitiesValueController;
 // Route yang bisa diakses oleh semua pengguna (Guest, User, Admin)
 Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::get('/about', [AboutUsController::class, 'index'])->name('about');
-Route::get('/contact', function () {
-    return Inertia::render('Contact');
-})->name('contact');
-Route::get('/product', function () {
-    return Inertia::render('Product');
-})->name('product');
-Route::get('/maklon', function () {
-    return Inertia::render('Maklon');
-})->name('maklon');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::get('/product', [ProductController::class, 'index'])->name('product');
+Route::get('/maklon', [MaklonController::class, 'index'])->name('maklon');
 
 // Route khusus untuk pengguna yang terautentikasi (auth) dan terverifikasi
 Route::middleware(['auth', 'verified'])->group(function () {

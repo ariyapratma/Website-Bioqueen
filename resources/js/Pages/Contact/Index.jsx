@@ -1,0 +1,23 @@
+import { Head } from "@inertiajs/react";
+import Navbar from "@/Components/Navbar/Navbar";
+import HeaderContact from "@/Components/Contact/HeaderContact";
+import HeroContact from "@/Components/Contact/HeroContact";
+import Footer from "@/Components/Footer/Footer";
+
+const Contact = ({ auth }) => {
+  return (
+    <div className="flex min-h-screen flex-col">
+      <Head title="Contact | PT Ratu Bio Indonesia" />
+      <Navbar auth={auth} />
+      <main className="flex-grow">
+        {/*HeaderContact */}
+        <HeaderContact />
+        {/*HeroContact */}
+        <HeroContact />
+      </main>
+      <Footer />
+    </div>
+  );
+};
+
+export default Contact;
