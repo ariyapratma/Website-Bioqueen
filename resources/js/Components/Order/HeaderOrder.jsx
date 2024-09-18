@@ -1,10 +1,11 @@
-export default function HeaderContact() {
+export default function HeaderOrder() {
   const data = {
-    title: "Contact",
+    title: "Order",
     description:
-      "Hubungi Tim Kami Untuk Info Lebih Lengkap Seputar Maklon Produk Anda.",
-    imageUrl: "Contact/HeaderContact/HeaderContact.png",
+      "Mulailah perjalanan produk Anda dari pemesanan hingga siap dipasarkan. Kami memastikan setiap langkah produksi berjalan dengan kualitas terbaik, menghasilkan produk yang memenuhi standar tinggi dan kebutuhan pasar.",
+    imageUrl: "/public/Maklon Main Content Fix.jpg",
   };
+
   return (
     <div className="relative w-full h-[30rem] overflow-hidden">
       {/* Hero Image */}
@@ -12,7 +13,7 @@ export default function HeaderContact() {
         src={data.imageUrl}
         loading="lazy"
         className="w-full h-full object-cover"
-        alt="Header Contact"
+        alt="Header Order"
       />
 
       {/* Text Overlay */}

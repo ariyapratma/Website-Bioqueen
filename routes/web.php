@@ -20,6 +20,7 @@ use App\Http\Controllers\HeroCertificateController;
 use App\Http\Controllers\HeroMaklonValueController;
 use App\Http\Controllers\HeroExcellenceValueController;
 use App\Http\Controllers\HeroFacilitiesValueController;
+use App\Http\Controllers\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,16 +36,21 @@ use App\Http\Controllers\HeroFacilitiesValueController;
 // Route yang bisa diakses oleh semua pengguna (Guest, User, Admin)
 Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::get('/about', [AboutUsController::class, 'index'])->name('about');
-Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+
+Route::get('/contact', [ContactController::class, 'index'])->name('/contact');
+
+
 Route::get('/product', [ProductController::class, 'index'])->name('product');
+Route::get('/order', [OrderController::class, 'index'])->name('order');
+
 Route::get('/maklon', [MaklonController::class, 'index'])->name('maklon');
 
 // Route khusus untuk pengguna yang terautentikasi (auth) dan terverifikasi
 Route::middleware(['auth', 'verified'])->group(function () {
     // Hanya Admin dan User yang bisa melakukan Order
-    Route::get('/order', function () {
-        return Inertia::render('Order');
-    })->middleware('permission:order product')->name('order');
+    // Route::get('/order', function () {
+    //     return Inertia::render('Order');
+    // })->middleware('permission:order product')->name('order');
 
     // Hanya Admin yang bisa mengakses dashboard dan mengelola konten
     Route::get('/dashboard', function () {
