@@ -20,7 +20,6 @@ class HomeController extends Controller
 {
     public function index()
     {
-
         // Mengambil data dari tabel header_home
         $headerHome = HeaderHome::first();
 

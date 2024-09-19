@@ -1,35 +1,50 @@
-// resources/js/Pages/CreateHeaderHome.jsx
+// resources/js/Pages/EditHeaderAboutUs.jsx
 
 import { useForm } from "@inertiajs/react";
 import Swal from "sweetalert2";
 import { Head } from "@inertiajs/react";
 
-const CreateHeaderHome = () => {
-  const { data, setData, post, processing, errors } = useForm({
-    title: "",
-    description: "",
-    image_url: "",
-    whatsapp_link: "",
+const EditHeaderAboutUs = ({ dataHeaderAboutUs }) => {
+  // Initialize form with default values
+  const { data, setData, put, processing, errors } = useForm({
+    title: dataHeaderAboutUs?.title || "",
+    description: dataHeaderAboutUs?.description || "",
+    image_url: null, // Initialize as null
   });
 
+  // Handle form submission
+  // Remove manual validation for title (if not required)
   const handleSubmit = (e) => {
     e.preventDefault();
-    post("/header-home", {
+
+    const formData = new FormData();
+    formData.append("title", data.title); // Allow title to be empty
+    formData.append("description", data.description);
+
+    // Append existing image URL if no new image is selected
+    if (!data.image_url) {
+      formData.append("existing_image_url", dataHeaderAboutUs?.image_url || "");
+    } else {
+      formData.append("image_url", data.image_url);
+    }
+
+    put(`/header-about-us/${dataHeaderAboutUs?.id}`, {
+      data: formData,
+      headers: { "Content-Type": "multipart/form-data" },
       onSuccess: () => {
         Swal.fire({
           title: "Success!",
-          text: "Header Home has been added successfully.",
+          text: "Header About Us has been updated successfully.",
           icon: "success",
           confirmButtonText: "OK",
         }).then(() => {
-          // Optionally redirect or clear the form
-          window.location.href = "/header-home";
+          window.location.href = "/header-about-us"; // Redirect after success
         });
       },
       onError: () => {
         Swal.fire({
           title: "Error!",
-          text: "There was an error adding the Header Home.",
+          text: "There was an error updating the Header About Us.",
           icon: "error",
           confirmButtonText: "OK",
         });
@@ -39,9 +54,10 @@ const CreateHeaderHome = () => {
 
   return (
     <div className="bg-white p-6">
-      <Head title="Add Header Home | PT Ratu Bio Indonesia" />
-      <h1 className="mb-6 text-2xl font-bold">Add New Header Home</h1>
-      <form onSubmit={handleSubmit} encType="multipart/form-data">
+      <Head title="Edit Header About Us | PT Ratu Bio Indonesia" />
+      <h1 className="mb-6 text-2xl font-bold">Edit Header About Us</h1>
+      <form onSubmit={handleSubmit}>
+        {/* Title Field */}
         <div className="mb-4">
           <label htmlFor="title" className="block text-gray-700">
             Title
@@ -57,6 +73,8 @@ const CreateHeaderHome = () => {
             <p className="mt-1 text-sm text-red-500">{errors.title}</p>
           )}
         </div>
+
+        {/* Description Field */}
         <div className="mb-4">
           <label htmlFor="description" className="block text-gray-700">
             Description
@@ -71,9 +89,11 @@ const CreateHeaderHome = () => {
             <p className="mt-1 text-sm text-red-500">{errors.description}</p>
           )}
         </div>
+
+        {/* Image URL Field */}
         <div className="mb-4">
           <label htmlFor="image_url" className="block text-gray-700">
-            Image Url
+            Image URL
           </label>
           <input
             type="file"
@@ -85,31 +105,17 @@ const CreateHeaderHome = () => {
             <p className="mt-1 text-sm text-red-500">{errors.image_url}</p>
           )}
         </div>
-        <div className="mb-4">
-          <label htmlFor="whatsapp_link" className="block text-gray-700">
-            WhatsApp Link
-          </label>
-          <input
-            type="text"
-            id="whatsapp_link"
-            value={data.whatsapp_link}
-            onChange={(e) => setData("whatsapp_link", e.target.value)}
-            className="mt-1 block w-full rounded border border-gray-300"
-          />
-          {errors.whatsapp_link && (
-            <p className="mt-1 text-sm text-red-500">{errors.whatsapp_link}</p>
-          )}
-        </div>
+
         <button
           type="submit"
           disabled={processing}
           className="rounded bg-blue-500 px-4 py-2 text-white"
         >
-          {processing ? "Saving..." : "Save"}
+          {processing ? "Updating..." : "Update"}
         </button>
       </form>
     </div>
   );
 };
 
-export default CreateHeaderHome;
+export default EditHeaderAboutUs;

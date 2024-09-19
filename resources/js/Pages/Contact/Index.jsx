@@ -15,10 +15,7 @@ const Index = ({ auth }) => {
       <Navbar auth={auth} />
       <main className="flex-grow">
         {/* HeaderContact */}
-        <HeaderHome />
-        {/* HeroContact */}
-        <HeroFlyer />
-        <HeroContact />
+        <HeaderContact />
       </main>
       <Footer />
     </div>

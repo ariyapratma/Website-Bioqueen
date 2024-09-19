@@ -1,35 +1,34 @@
-// resources/js/Pages/CreateHeaderHome.jsx
+// resources/js/Pages/CreateHeaderAboutUs.jsx
 
 import { useForm } from "@inertiajs/react";
 import Swal from "sweetalert2";
 import { Head } from "@inertiajs/react";
 
-const CreateHeaderHome = () => {
+const CreateHeaderAboutUs = () => {
   const { data, setData, post, processing, errors } = useForm({
     title: "",
     description: "",
     image_url: "",
-    whatsapp_link: "",
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    post("/header-home", {
+    post("/header-about-us", {
       onSuccess: () => {
         Swal.fire({
           title: "Success!",
-          text: "Header Home has been added successfully.",
+          text: "Header About Us has been added successfully.",
           icon: "success",
           confirmButtonText: "OK",
         }).then(() => {
           // Optionally redirect or clear the form
-          window.location.href = "/header-home";
+          window.location.href = "/header-about-us";
         });
       },
       onError: () => {
         Swal.fire({
           title: "Error!",
-          text: "There was an error adding the Header Home.",
+          text: "There was an error adding the Header About Us.",
           icon: "error",
           confirmButtonText: "OK",
         });
@@ -39,8 +38,8 @@ const CreateHeaderHome = () => {
 
   return (
     <div className="bg-white p-6">
-      <Head title="Add Header Home | PT Ratu Bio Indonesia" />
-      <h1 className="mb-6 text-2xl font-bold">Add New Header Home</h1>
+      <Head title="Add Header About Us | PT Ratu Bio Indonesia" />
+      <h1 className="mb-6 text-2xl font-bold">Add New Header About Us</h1>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         <div className="mb-4">
           <label htmlFor="title" className="block text-gray-700">
@@ -85,21 +84,6 @@ const CreateHeaderHome = () => {
             <p className="mt-1 text-sm text-red-500">{errors.image_url}</p>
           )}
         </div>
-        <div className="mb-4">
-          <label htmlFor="whatsapp_link" className="block text-gray-700">
-            WhatsApp Link
-          </label>
-          <input
-            type="text"
-            id="whatsapp_link"
-            value={data.whatsapp_link}
-            onChange={(e) => setData("whatsapp_link", e.target.value)}
-            className="mt-1 block w-full rounded border border-gray-300"
-          />
-          {errors.whatsapp_link && (
-            <p className="mt-1 text-sm text-red-500">{errors.whatsapp_link}</p>
-          )}
-        </div>
         <button
           type="submit"
           disabled={processing}
@@ -112,4 +96,4 @@ const CreateHeaderHome = () => {
   );
 };
 
-export default CreateHeaderHome;
+export default CreateHeaderAboutUs;

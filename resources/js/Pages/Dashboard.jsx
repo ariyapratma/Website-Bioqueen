@@ -28,6 +28,7 @@ export default function Dashboard({ auth }) {
             <div className="mt-6 rounded-lg bg-white p-6 shadow-md">
               <h3 className="mb-4 text-lg font-bold">Admin Menu</h3>
               <ul>
+                <h1 className="pt-2 text-lg font-bold">Home Page : </h1>
                 <li>
                   <Link href="/header-home" className="text-blue-500">
                     Manage Header Home
@@ -81,6 +82,12 @@ export default function Dashboard({ auth }) {
                 <li>
                   <Link href="/hero-excellence-value" className="text-blue-500">
                     Manage Hero Excellence Value
+                  </Link>
+                </li>
+                <h1 className="pt-2 text-lg font-bold">About Us Page : </h1>
+                <li>
+                  <Link href="/header-about-us" className="text-blue-500">
+                    Manage Header About Us
                   </Link>
                 </li>
               </ul>

@@ -7,6 +7,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\MaklonController;
 use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\HeaderAboutUsController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HeroFlyerController;
@@ -58,6 +59,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->middleware('role:admin')->name('dashboard');
 
     Route::middleware(['auth', 'role:admin'])->group(function () {
+
+        // Home Page :
+
         // Route HeaderHome
         Route::get('/header-home', [HeaderHomeController::class, 'index'])->name('header-home.index');
         Route::get('/header-home/create', [HeaderHomeController::class, 'create'])->name('header-home.create');
@@ -145,6 +149,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/hero-excellence-value/{id}/edit', [HeroExcellenceValueController::class, 'edit'])->name('hero-excellence-value.edit');
         Route::put('/hero-excellence-value/{id}', [HeroExcellenceValueController::class, 'update'])->name('hero-excellence-value.update');
         Route::delete('/hero-excellence-value/{id}', [HeroExcellenceValueController::class, 'destroy'])->name('hero-excellence-value.destroy');
+
+        // Home Page :
+
+        // Route HeaderAboutUs
+        Route::get('/header-about-us', [HeaderAboutUsController::class, 'index'])->name('header-about-us.index');
+        Route::get('/header-about-us/create', [HeaderAboutUsController::class, 'create'])->name('header-about-us.create');
+        Route::post('/header-about-us', [HeaderAboutUsController::class, 'store'])->name('header-about-us.store');
+        Route::get('/header-about-us/{id}/edit', [HeaderAboutUsController::class, 'edit'])->name('header-about-us.edit');
+        Route::put('/header-about-us/{id}', [HeaderAboutUsController::class, 'update'])->name('header-about-us.update');
+        Route::delete('/header-about-us/{id}', [HeaderAboutUsController::class, 'destroy'])->name('header-about-us.destroy');
     });
 
     // Profil pengguna, hanya untuk pengguna yang sudah login

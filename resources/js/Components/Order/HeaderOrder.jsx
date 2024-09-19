@@ -3,7 +3,7 @@ export default function HeaderOrder() {
     title: "Order",
     description:
       "Mulailah perjalanan produk Anda dari pemesanan hingga siap dipasarkan. Kami memastikan setiap langkah produksi berjalan dengan kualitas terbaik, menghasilkan produk yang memenuhi standar tinggi dan kebutuhan pasar.",
-    imageUrl: "/public/Maklon Main Content Fix.jpg",
+    imageUrl: "/Maklon Main Content Fix.jpg",
   };
 
   return (

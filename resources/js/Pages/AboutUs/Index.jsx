@@ -1,7 +1,7 @@
 import { Link, Head } from "@inertiajs/react";
 import Navbar from "@/Components/Navbar/Navbar";
 import { usePage } from "@inertiajs/react";
-import HeaderAboutUs from "@/Components/AboutUs/HeaderAboutUs";
+import HeaderAboutUs from "./HeaderAboutUs";
 import HeroAboutUs from "@/Components/AboutUs/HeroAboutUs";
 import HeroVisionMision from "@/Components/AboutUs/HeroVisionMision";
 import HeroOurGallery from "@/Components/AboutUs/HeroOurGallery";
