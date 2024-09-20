@@ -13,6 +13,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HeroFlyerController;
 use App\Http\Controllers\HeroVideoController;
 use App\Http\Controllers\HeaderHomeController;
+use App\Http\Controllers\HeaderOrderController;
 use App\Http\Controllers\HeaderProductController;
 use App\Http\Controllers\HeroCompanyController;
 use App\Http\Controllers\HeroServiceController;
@@ -170,6 +171,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/header-product/{id}/edit', [HeaderProductController::class, 'edit'])->name('header-product.edit');
         Route::put('/header-product/{id}', [HeaderProductController::class, 'update'])->name('header-product.update');
         Route::delete('/header-product/{id}', [HeaderProductController::class, 'destroy'])->name('header-product.destroy');
+
+        // Order Page :
+
+        // Route HeaderOrder
+        Route::get('/header-order', [HeaderOrderController::class, 'index'])->name('header-order.index');
+        Route::get('/header-order/create', [HeaderOrderController::class, 'create'])->name('header-order.create');
+        Route::post('/header-order', [HeaderOrderController::class, 'store'])->name('header-order.store');
+        Route::get('/header-order/{id}/edit', [HeaderOrderController::class, 'edit'])->name('header-order.edit');
+        Route::put('/header-order/{id}', [HeaderOrderController::class, 'update'])->name('header-order.update');
+        Route::delete('/header-order/{id}', [HeaderOrderController::class, 'destroy'])->name('header-order.destroy');
     });
 
     // Profil pengguna, hanya untuk pengguna yang sudah login

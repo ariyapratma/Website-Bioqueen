@@ -17,7 +17,7 @@ const HeaderAboutUs = () => {
       ) : (
         <div className="flex h-full w-full items-center justify-center bg-gray-200">
           <p className="font-lexend text-2xl font-medium text-red-500">
-            No images available
+            No image available.
           </p>
         </div>
       )}

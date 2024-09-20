@@ -90,6 +90,12 @@ export default function Dashboard({ auth }) {
                     Manage Header About Us
                   </Link>
                 </li>
+                <h1 className="pt-2 text-lg font-bold">Contact Page : </h1>
+                <li>
+                  <Link href="/header-contact" className="text-blue-500">
+                    Manage Header Contact
+                  </Link>
+                </li>
                 <h1 className="pt-2 text-lg font-bold">Product Page : </h1>
                 <li>
                   <Link href="/header-product" className="text-blue-500">
@@ -97,6 +103,17 @@ export default function Dashboard({ auth }) {
                   </Link>
                 </li>
                 <h1 className="pt-2 text-lg font-bold">Order Page : </h1>
+                <li>
+                  <Link href="/header-order" className="text-blue-500">
+                    Manage Header Order
+                  </Link>
+                </li>
+                <h1 className="pt-2 text-lg font-bold">Maklon Page : </h1>
+                <li>
+                  <Link href="/header-maklon" className="text-blue-500">
+                    Manage Header Maklon
+                  </Link>
+                </li>
               </ul>
             </div>
           )}
