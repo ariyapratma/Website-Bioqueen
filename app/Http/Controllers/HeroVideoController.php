@@ -14,7 +14,7 @@ class HeroVideoController extends Controller
     public function index()
     {
         $heroVideo = HeroVideo::all();
-        return Inertia::render('Admin/ManageHeroVideo', [
+        return Inertia::render('Admin/Home/ManageHeroVideo', [
             'dataHeroVideo' => $heroVideo
         ]);
     }
@@ -24,7 +24,7 @@ class HeroVideoController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Admin/CreateHeroVideo');
+        return Inertia::render('Admin/Home/CreateHeroVideo');
     }
 
     /**
@@ -59,7 +59,7 @@ class HeroVideoController extends Controller
     public function edit($id)
     {
         $heroVideo = HeroVideo::findOrFail($id);
-        return Inertia::render('Admin/EditHeroVideo', [
+        return Inertia::render('Admin/Home/EditHeroVideo', [
             'dataHeroVideo' => $heroVideo
         ]);
     }

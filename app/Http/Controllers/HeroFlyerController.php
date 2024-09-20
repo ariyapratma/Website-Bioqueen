@@ -15,7 +15,7 @@ class HeroFlyerController extends Controller
     public function index()
     {
         $heroFlyer = HeroFlyer::all();
-        return Inertia::render('Admin/ManageHeroFlyer', [
+        return Inertia::render('Admin/Home/ManageHeroFlyer', [
             'dataHeroFlyer' => $heroFlyer
         ]);
     }
@@ -25,7 +25,7 @@ class HeroFlyerController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Admin/CreateHeroFlyer');
+        return Inertia::render('Admin/Home/CreateHeroFlyer');
     }
 
     /**
@@ -55,7 +55,7 @@ class HeroFlyerController extends Controller
     public function edit($id)
     {
         $heroFlyer = HeroFlyer::findOrFail($id);
-        return Inertia::render('Admin/EditHeroFlyer', [
+        return Inertia::render('Admin/Home/EditHeroFlyer', [
             'dataHeroFlyer' => $heroFlyer
         ]);
     }

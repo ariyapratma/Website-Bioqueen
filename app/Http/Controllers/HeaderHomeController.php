@@ -12,14 +12,14 @@ class HeaderHomeController extends Controller
     public function index()
     {
         $headerHome = HeaderHome::all();
-        return Inertia::render('Admin/ManageHeaderHome', [
+        return Inertia::render('Admin/Home/ManageHeaderHome', [
             'dataHeaderHome' => $headerHome
         ]);
     }
 
     public function create()
     {
-        return Inertia::render('Admin/CreateHeaderHome');
+        return Inertia::render('Admin/Home/CreateHeaderHome');
     }
 
     public function store(Request $request)
@@ -56,7 +56,7 @@ class HeaderHomeController extends Controller
     public function edit($id)
     {
         $headerHome = HeaderHome::findOrFail($id);
-        return Inertia::render('Admin/EditHeaderHome', [
+        return Inertia::render('Admin/Home/EditHeaderHome', [
             'dataHeaderHome' => $headerHome
         ]);
     }

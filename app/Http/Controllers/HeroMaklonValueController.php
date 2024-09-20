@@ -15,7 +15,7 @@ class HeroMaklonValueController extends Controller
     public function index()
     {
         $heroMaklonValue = HeroMaklonValue::all();
-        return Inertia::render('Admin/ManageHeroMaklonValue', [
+        return Inertia::render('Admin/Home/ManageHeroMaklonValue', [
             'dataHeroMaklonValue' => $heroMaklonValue
         ]);
     }
@@ -25,7 +25,7 @@ class HeroMaklonValueController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Admin/CreateHeroMaklonValue');
+        return Inertia::render('Admin/Home/CreateHeroMaklonValue');
     }
 
     /**
@@ -81,9 +81,10 @@ class HeroMaklonValueController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(HeroMaklonValue $heroMaklonValue)
+    public function edit($id)
     {
-        return Inertia::render('Admin/EditHeroMaklonValue', [
+        $heroMaklonValue = HeroMaklonValue::findOrFail($id);
+        return Inertia::render('Admin/Home/EditHeroMaklonValue', [
             'dataHeroMaklonValue' => $heroMaklonValue
         ]);
     }

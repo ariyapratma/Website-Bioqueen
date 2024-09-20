@@ -14,7 +14,7 @@ class HeroCertificateController extends Controller
     public function index()
     {
         $heroCertificate = HeroCertificate::all();
-        return Inertia::render('Admin/ManageHeroCertificate', [
+        return Inertia::render('Admin/Home/ManageHeroCertificate', [
             'dataHeroCertificate' => $heroCertificate
         ]);
     }
@@ -24,7 +24,7 @@ class HeroCertificateController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Admin/CreateHeroCertificate');
+        return Inertia::render('Admin/Home/CreateHeroCertificate');
     }
 
     /**
@@ -104,9 +104,10 @@ class HeroCertificateController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(HeroCertificate $heroCertificate)
+    public function edit($id)
     {
-        return Inertia::render('Admin/EditHeroCertificate', [
+        $heroCertificate = HeroCertificate::findOrFail($id);
+        return Inertia::render('Admin/Home/EditHeroCertificate', [
             'dataHeroCertificate' => $heroCertificate
         ]);
     }

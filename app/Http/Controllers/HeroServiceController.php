@@ -15,7 +15,7 @@ class HeroServiceController extends Controller
     public function index()
     {
         $heroService = HeroService::all();
-        return Inertia::render('Admin/ManageHeroService', [
+        return Inertia::render('Admin/Home/ManageHeroService', [
             'dataHeroService' => $heroService
         ]);
     }
@@ -25,7 +25,7 @@ class HeroServiceController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Admin/CreateHeroService');
+        return Inertia::render('Admin/Home/CreateHeroService');
     }
 
     /**
@@ -72,7 +72,7 @@ class HeroServiceController extends Controller
     public function edit($id)
     {
         $heroService = HeroService::findOrFail($id);
-        return Inertia::render('Admin/EditHeroService', [
+        return Inertia::render('Admin/Home/EditHeroService', [
             'dataHeroService' => $heroService
         ]);
     }

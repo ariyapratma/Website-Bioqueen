@@ -14,7 +14,7 @@ class HeroExcellenceValueController extends Controller
     public function index()
     {
         $heroExcellenceValue = HeroExcellenceValue::all();
-        return Inertia::render('Admin/ManageHeroExcellenceValue', [
+        return Inertia::render('Admin/Home/ManageHeroExcellenceValue', [
             'dataHeroExcellenceValue' => $heroExcellenceValue
         ]);
     }
@@ -24,7 +24,7 @@ class HeroExcellenceValueController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Admin/CreateHeroExcellenceValue');
+        return Inertia::render('Admin/Home/CreateHeroExcellenceValue');
     }
 
     /**
@@ -67,7 +67,7 @@ class HeroExcellenceValueController extends Controller
     public function edit($id)
     {
         $heroExcellenceValue = HeroExcellenceValue::findOrFail($id);
-        return Inertia::render('Admin/EditHeroExcellenceValue', [
+        return Inertia::render('Admin/Home/EditHeroExcellenceValue', [
             'dataHeroExcellenceValue' => $heroExcellenceValue
         ]);
     }

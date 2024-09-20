@@ -15,7 +15,7 @@ class HeroTeamValueController extends Controller
     public function index()
     {
         $heroTeamValue = HeroTeamValue::all();
-        return Inertia::render('Admin/ManageHeroTeamValue', [
+        return Inertia::render('Admin/Home/ManageHeroTeamValue', [
             'dataHeroTeamValue' => $heroTeamValue
         ]);
     }
@@ -25,7 +25,7 @@ class HeroTeamValueController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Admin/CreateHeroTeamValue');
+        return Inertia::render('Admin/Home/CreateHeroTeamValue');
     }
 
     /**
@@ -82,9 +82,10 @@ class HeroTeamValueController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(HeroTeamValue $heroTeamValue)
+    public function edit($id)
     {
-        return Inertia::render('Admin/EditHeroTeamValue', [
+        $heroTeamValue = HeroTeamValue::findOrFail($id);
+        return Inertia::render('Admin/Home/EditHeroTeamValue', [
             'dataHeroTeamValue' => $heroTeamValue
         ]);
     }

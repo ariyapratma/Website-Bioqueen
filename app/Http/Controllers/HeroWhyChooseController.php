@@ -15,7 +15,7 @@ class HeroWhyChooseController extends Controller
     public function index()
     {
         $heroWhyChoose = HeroWhyChoose::all();
-        return Inertia::render('Admin/ManageHeroWhyChoose', [
+        return Inertia::render('Admin/Home/ManageHeroWhyChoose', [
             'dataHeroWhyChoose' => $heroWhyChoose
         ]);
     }
@@ -25,7 +25,7 @@ class HeroWhyChooseController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Admin/CreateHeroWhyChoose');
+        return Inertia::render('Admin/Home/CreateHeroWhyChoose');
     }
 
     /**
@@ -83,9 +83,10 @@ class HeroWhyChooseController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(HeroWhyChoose $heroWhyChoose)
+    public function edit($id)
     {
-        return Inertia::render('Admin/EditHeroWhyChoose', [
+        $heroWhyChoose = HeroWhyChoose::findOrFail($id);
+        return Inertia::render('Admin/Home/EditHeroWhyChoose', [
             'dataHeroWhyChoose' => $heroWhyChoose
         ]);
     }

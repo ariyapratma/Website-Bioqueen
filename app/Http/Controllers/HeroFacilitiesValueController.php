@@ -14,7 +14,7 @@ class HeroFacilitiesValueController extends Controller
     public function index()
     {
         $heroFacilitiesValue = HeroFacilitiesValue::all();
-        return Inertia::render('Admin/ManageHeroFacilitiesValue', [
+        return Inertia::render('Admin/Home/ManageHeroFacilitiesValue', [
             'dataHeroFacilitiesValue' => $heroFacilitiesValue
         ]);
     }
@@ -24,7 +24,7 @@ class HeroFacilitiesValueController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Admin/CreateHeroFacilitiesValue');
+        return Inertia::render('Admin/Home/CreateHeroFacilitiesValue');
     }
 
     /**
@@ -80,9 +80,10 @@ class HeroFacilitiesValueController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(HeroFacilitiesValue $heroFacilitiesValue)
+    public function edit($id)
     {
-        return Inertia::render('Admin/EditHeroFacilitiesValue', [
+        $heroFacilitiesValue = HeroFacilitiesValue::findOrFail($id);
+        return Inertia::render('Admin/Home/EditHeroFacilitiesValue', [
             'dataHeroFacilitiesValue' => $heroFacilitiesValue
         ]);
     }

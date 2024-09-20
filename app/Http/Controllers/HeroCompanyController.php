@@ -15,7 +15,7 @@ class HeroCompanyController extends Controller
     public function index()
     {
         $heroCompany = HeroCompany::all();
-        return Inertia::render('Admin/ManageHeroCompany', [
+        return Inertia::render('Admin/Home/ManageHeroCompany', [
             'dataHeroCompany' => $heroCompany
         ]);
     }
@@ -25,7 +25,7 @@ class HeroCompanyController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Admin/CreateHeroCompany');
+        return Inertia::render('Admin/Home/CreateHeroCompany');
     }
 
     /**
@@ -68,7 +68,7 @@ class HeroCompanyController extends Controller
     public function edit(HeroCompany $id)
     {
         $heroCompany = HeroCompany::findOrFail($id);
-        return Inertia::render('Admin/EditHeroCompany', [
+        return Inertia::render('Admin/Home/EditHeroCompany', [
             'dataHeroCompany' => $heroCompany
         ]);
     }
