@@ -16,6 +16,8 @@ const Index = ({ auth }) => {
       <main className="flex-grow">
         {/* HeaderContact */}
         <HeaderContact />
+        {/* HeroContact */}
+        <HeroContact />
       </main>
       <Footer />
     </div>

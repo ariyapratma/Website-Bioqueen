@@ -1,6 +1,6 @@
 import { Head } from "@inertiajs/react";
 import Navbar from "@/Components/Navbar/Navbar";
-import HeaderProduct from "@/Components/Product/HeaderProduct";
+import HeaderProduct from "./HeaderProduct";
 import Footer from "@/Components/Footer/Footer";
 
 const Product = ({ auth }) => {

@@ -13,7 +13,7 @@ export default function Dashboard({ auth }) {
         </h2>
       }
     >
-      <Head title="Dashboard" />
+      <Head title="Dashboard" $title />
 
       <div className="py-12">
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -90,6 +90,13 @@ export default function Dashboard({ auth }) {
                     Manage Header About Us
                   </Link>
                 </li>
+                <h1 className="pt-2 text-lg font-bold">Product Page : </h1>
+                <li>
+                  <Link href="/header-product" className="text-blue-500">
+                    Manage Header Product
+                  </Link>
+                </li>
+                <h1 className="pt-2 text-lg font-bold">Order Page : </h1>
               </ul>
             </div>
           )}

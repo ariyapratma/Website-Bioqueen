@@ -13,6 +13,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HeroFlyerController;
 use App\Http\Controllers\HeroVideoController;
 use App\Http\Controllers\HeaderHomeController;
+use App\Http\Controllers\HeaderProductController;
 use App\Http\Controllers\HeroCompanyController;
 use App\Http\Controllers\HeroServiceController;
 use App\Http\Controllers\HeroTeamValueController;
@@ -38,7 +39,7 @@ use App\Http\Controllers\OrderController;
 Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::get('/about', [AboutUsController::class, 'index'])->name('about');
 
-Route::get('/contact', [ContactController::class, 'index'])->name('/contact');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 
 
 Route::get('/product', [ProductController::class, 'index'])->name('product');
@@ -150,7 +151,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/hero-excellence-value/{id}', [HeroExcellenceValueController::class, 'update'])->name('hero-excellence-value.update');
         Route::delete('/hero-excellence-value/{id}', [HeroExcellenceValueController::class, 'destroy'])->name('hero-excellence-value.destroy');
 
-        // Home Page :
+        // AboutUs Page :
 
         // Route HeaderAboutUs
         Route::get('/header-about-us', [HeaderAboutUsController::class, 'index'])->name('header-about-us.index');
@@ -159,6 +160,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/header-about-us/{id}/edit', [HeaderAboutUsController::class, 'edit'])->name('header-about-us.edit');
         Route::put('/header-about-us/{id}', [HeaderAboutUsController::class, 'update'])->name('header-about-us.update');
         Route::delete('/header-about-us/{id}', [HeaderAboutUsController::class, 'destroy'])->name('header-about-us.destroy');
+
+        // Product Page :
+
+        // Route HeaderProduct
+        Route::get('/header-product', [HeaderProductController::class, 'index'])->name('header-product.index');
+        Route::get('/header-product/create', [HeaderProductController::class, 'create'])->name('header-product.create');
+        Route::post('/header-product', [HeaderProductController::class, 'store'])->name('header-product.store');
+        Route::get('/header-product/{id}/edit', [HeaderProductController::class, 'edit'])->name('header-product.edit');
+        Route::put('/header-product/{id}', [HeaderProductController::class, 'update'])->name('header-product.update');
+        Route::delete('/header-product/{id}', [HeaderProductController::class, 'destroy'])->name('header-product.destroy');
     });
 
     // Profil pengguna, hanya untuk pengguna yang sudah login

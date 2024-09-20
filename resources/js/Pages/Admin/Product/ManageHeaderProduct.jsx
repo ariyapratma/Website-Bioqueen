@@ -1,9 +1,9 @@
-// resources/js/Pages/ManageHeaderAboutUs.jsx
+// resources/js/Pages/ManageHeaderProduct.jsx
 
 import { Link, Head, useForm } from "@inertiajs/react";
 import Swal from "sweetalert2";
 
-const ManageHeaderAboutUs = ({ dataHeaderAboutUs }) => {
+const ManageHeaderProduct = ({ dataHeaderProduct }) => {
   const { delete: deleteRecord } = useForm();
 
   const handleDelete = (id) => {
@@ -17,7 +17,7 @@ const ManageHeaderAboutUs = ({ dataHeaderAboutUs }) => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteRecord(`/header-about-us/${id}`, {
+        deleteRecord(`/header-product/${id}`, {
           method: "DELETE",
         });
         Swal.fire("Deleted!", "Your file has been deleted.", "success");
@@ -27,15 +27,15 @@ const ManageHeaderAboutUs = ({ dataHeaderAboutUs }) => {
 
   return (
     <div className="bg-white p-6">
-      <Head title="Manage Header About Us | PT Ratu Bio Indonesia" />
-      <h1 className="mb-6 text-2xl font-bold">Manage Header About Us</h1>
+      <Head title="Manage Header Product | PT Ratu Bio Indonesia" />
+      <h1 className="mb-6 text-2xl font-bold">Manage Header Product</h1>
 
       <div className="mb-6">
         <Link
-          href="/header-about-us/create"
+          href="/header-product/create"
           className="rounded bg-blue-500 px-4 py-2 text-white"
         >
-          Add New Header About Us
+          Add New Header Product
         </Link>
       </div>
 
@@ -57,26 +57,26 @@ const ManageHeaderAboutUs = ({ dataHeaderAboutUs }) => {
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-200 bg-white">
-          {dataHeaderAboutUs.map((headerAboutUs) => (
-            <tr key={headerAboutUs.id}>
+          {dataHeaderProduct.map((headerProduct) => (
+            <tr key={headerProduct.id}>
               <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                {headerAboutUs.title}
+                {headerProduct.title}
               </td>
               <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                {headerAboutUs.description}
+                {headerProduct.description}
               </td>
               <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                {headerAboutUs.image_url}
+                {headerProduct.image_url}
               </td>
               <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
                 <Link
-                  href={`/header-about-us/${headerAboutUs.id}/edit`}
+                  href={`/header-product/${headerProduct.id}/edit`}
                   className="text-indigo-600 hover:text-indigo-900"
                 >
                   Edit
                 </Link>
                 <button
-                  onClick={() => handleDelete(headerAboutUs.id)}
+                  onClick={() => handleDelete(headerProduct.id)}
                   className="ml-4 text-red-600 hover:text-red-900"
                 >
                   Delete
@@ -90,4 +90,4 @@ const ManageHeaderAboutUs = ({ dataHeaderAboutUs }) => {
   );
 };
 
-export default ManageHeaderAboutUs;
+export default ManageHeaderProduct;

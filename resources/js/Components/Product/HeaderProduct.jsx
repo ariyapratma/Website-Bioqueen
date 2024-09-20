@@ -13,7 +13,7 @@ export default function HeaderProduct() {
         src={data.imageUrl}
         loading="lazy"
         className="w-full h-full object-cover"
-        alt="Header Order"
+        alt="Header Product"
       />
 
       {/* Text Overlay */}

@@ -9,6 +9,6 @@ class ContactController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Contact/Index');
+        return Inertia::render('Pages/Contact/Index');
     }
 }
