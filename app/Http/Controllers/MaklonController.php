@@ -9,6 +9,6 @@ class MaklonController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Maklon/Index');
+        return Inertia::render('Maklon1/Index');
     }
 }

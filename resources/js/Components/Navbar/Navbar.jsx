@@ -18,10 +18,10 @@ export default function Navbar({ user }) {
   const menuItems = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
-    { name: "Contact", path: "/contact" },
+    { name: "Contact1", path: "/contact1" },
     { name: "Product", path: "/product" },
     { name: "Order", path: "/order" },
-    { name: "Maklon", path: "/maklon" },
+    { name: "Maklon1", path: "/maklon1" },
     { name: "Login", path: "/login" },
     { name: "Register", path: "/register" },
   ];

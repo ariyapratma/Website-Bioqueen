@@ -40,13 +40,13 @@ use App\Http\Controllers\OrderController;
 Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::get('/about', [AboutUsController::class, 'index'])->name('about');
 
-Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::get('/contact1', [ContactController::class, 'index'])->name('contact1');
 
 
 Route::get('/product', [ProductController::class, 'index'])->name('product');
 Route::get('/order', [OrderController::class, 'index'])->name('order');
 
-Route::get('/maklon', [MaklonController::class, 'index'])->name('maklon');
+Route::get('/maklon1', [MaklonController::class, 'index'])->name('maklon1');
 
 // Route khusus untuk pengguna yang terautentikasi (auth) dan terverifikasi
 Route::middleware(['auth', 'verified'])->group(function () {
