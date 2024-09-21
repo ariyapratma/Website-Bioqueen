@@ -14,6 +14,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HeroFlyerController;
 use App\Http\Controllers\HeroVideoController;
 use App\Http\Controllers\HeaderHomeController;
+use App\Http\Controllers\HeaderMaklonController;
 use App\Http\Controllers\HeaderOrderController;
 use App\Http\Controllers\HeaderProductController;
 use App\Http\Controllers\HeroCompanyController;
@@ -192,6 +193,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/header-order/{id}/edit', [HeaderOrderController::class, 'edit'])->name('header-order.edit');
         Route::put('/header-order/{id}', [HeaderOrderController::class, 'update'])->name('header-order.update');
         Route::delete('/header-order/{id}', [HeaderOrderController::class, 'destroy'])->name('header-order.destroy');
+
+        // Order Page :
+
+        // Route HeaderMaklon
+        Route::get('/header-maklon', [HeaderMaklonController::class, 'index'])->name('header-maklon.index');
+        Route::get('/header-maklon/create', [HeaderMaklonController::class, 'create'])->name('header-maklon.create');
+        Route::post('/header-maklon', [HeaderMaklonController::class, 'store'])->name('header-maklon.store');
+        Route::get('/header-maklon/{id}/edit', [HeaderMaklonController::class, 'edit'])->name('header-maklon.edit');
+        Route::put('/header-maklon{id}', [HeaderMaklonController::class, 'update'])->name('header-maklon.update');
+        Route::delete('/header-maklon/{id}', [HeaderMaklonController::class, 'destroy'])->name('header-maklon.destroy');
     });
 
     // Profil pengguna, hanya untuk pengguna yang sudah login
