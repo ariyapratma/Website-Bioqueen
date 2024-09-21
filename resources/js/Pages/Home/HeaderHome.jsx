@@ -15,7 +15,7 @@ const HeaderHome = () => {
       />
 
       {/* Text Content */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-white lg:p-8">
+      <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-40 p-4 px-6 pt-6 text-white sm:px-12 md:px-24 lg:p-8 lg:px-36 xl:px-48">
         <h1 className="mb-4 text-center text-2xl font-bold sm:text-3xl md:text-4xl lg:text-5xl">
           {dataHeaderHome?.title}
         </h1>
