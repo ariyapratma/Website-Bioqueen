@@ -8,6 +8,7 @@ use App\Http\Controllers\MaklonController;
 use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HeaderAboutUsController;
+use App\Http\Controllers\HeaderContactController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HeroFlyerController;
@@ -161,6 +162,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/header-about-us/{id}/edit', [HeaderAboutUsController::class, 'edit'])->name('header-about-us.edit');
         Route::put('/header-about-us/{id}', [HeaderAboutUsController::class, 'update'])->name('header-about-us.update');
         Route::delete('/header-about-us/{id}', [HeaderAboutUsController::class, 'destroy'])->name('header-about-us.destroy');
+
+        // Contact Page :
+
+        // Route HeaderContact
+        Route::get('/header-contact', [HeaderContactController::class, 'index'])->name('header-contact.index');
+        Route::get('/header-contact/create', [HeaderContactController::class, 'create'])->name('header-contact.create');
+        Route::post('/header-contact', [HeaderContactController::class, 'store'])->name('header-contact.store');
+        Route::get('/header-contact/{id}/edit', [HeaderContactController::class, 'edit'])->name('header-contact.edit');
+        Route::put('/header-contact/{id}', [HeaderContactController::class, 'update'])->name('header-contact.update');
+        Route::delete('/header-contact/{id}', [HeaderContactController::class, 'destroy'])->name('header-contact.destroy');
 
         // Product Page :
 

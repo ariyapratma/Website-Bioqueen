@@ -1,7 +1,7 @@
 import { Link, Head } from "@inertiajs/react";
 import Navbar from "@/Components/Navbar/Navbar";
 import { usePage } from "@inertiajs/react";
-import HeaderContact from "@/Components/Contact/HeaderContact";
+import HeaderContact from "./HeaderContact";
 import HeroContact from "@/Components/Contact/HeroContact";
 import Footer from "@/Components/Footer/Footer";
 
