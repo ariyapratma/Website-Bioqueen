@@ -17,6 +17,7 @@ use App\Http\Controllers\HeaderHomeController;
 use App\Http\Controllers\HeaderMaklonController;
 use App\Http\Controllers\HeaderOrderController;
 use App\Http\Controllers\HeaderProductController;
+use App\Http\Controllers\HeroAddReviewController;
 use App\Http\Controllers\HeroCompanyController;
 use App\Http\Controllers\HeroServiceController;
 use App\Http\Controllers\HeroTeamValueController;
@@ -25,6 +26,7 @@ use App\Http\Controllers\HeroCertificateController;
 use App\Http\Controllers\HeroMaklonValueController;
 use App\Http\Controllers\HeroExcellenceValueController;
 use App\Http\Controllers\HeroFacilitiesValueController;
+use App\Http\Controllers\HeroReviewController;
 use App\Http\Controllers\OrderController;
 
 /*
@@ -41,13 +43,9 @@ use App\Http\Controllers\OrderController;
 // Route yang bisa diakses oleh semua pengguna (Guest, User, Admin)
 Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::get('/about', [AboutUsController::class, 'index'])->name('about');
-
 Route::get('/contact1', [ContactController::class, 'index'])->name('contact1');
-
-
 Route::get('/product', [ProductController::class, 'index'])->name('product');
 Route::get('/order', [OrderController::class, 'index'])->name('order');
-
 Route::get('/maklon1', [MaklonController::class, 'index'])->name('maklon1');
 
 // Route khusus untuk pengguna yang terautentikasi (auth) dan terverifikasi
@@ -60,8 +58,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Hanya Admin yang bisa mengakses dashboard dan mengelola konten
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
-    })->middleware('role:admin')->name('dashboard');
+    })->middleware('role:admin|user')->name('dashboard');
 
+    // Rute untuk menambahkan review, hanya user yang bisa mengakses
+    Route::middleware(['auth', 'role:user'])->group(function () {
+
+         // Home Page :
+
+         // Route HeroReview
+        Route::get('/hero-review', [HeroReviewController::class, 'index'])->name('hero-review.index');
+        Route::post('/hero-review', [HeroReviewController::class, 'store'])->name('hero-review.store');
+        // Route::get('/hero-review/{id}/edit', [HeroReviewController::class, 'edit'])->name('hero-review.edit');
+        // Route::put('/hero-review/{id}', [HeroReviewController::class, 'update'])->name('hero-review.update');
+        // Route::delete('/hero-review/{id}', [HeroReviewController::class, 'destroy'])->name('hero-review.destroy');
+    });
+
+    // Rute untuk mengelola isi konten web, hanya admin yang bisa mengakses
     Route::middleware(['auth', 'role:admin'])->group(function () {
 
         // Home Page :

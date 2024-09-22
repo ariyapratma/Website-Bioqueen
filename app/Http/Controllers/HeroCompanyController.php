@@ -65,7 +65,7 @@ class HeroCompanyController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(HeroCompany $id)
+    public function edit($id)
     {
         $heroCompany = HeroCompany::findOrFail($id);
         return Inertia::render('Admin/Home/EditHeroCompany', [

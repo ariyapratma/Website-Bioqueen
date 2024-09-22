@@ -13,7 +13,7 @@ export default function Dashboard({ auth }) {
         </h2>
       }
     >
-      <Head title="Dashboard" $title />
+      <Head title="Dashboard" />
 
       <div className="py-12">
         <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -124,8 +124,24 @@ export default function Dashboard({ auth }) {
               <h3 className="mb-4 text-lg font-bold">User Menu</h3>
               <ul>
                 <li>
+                  <Link href="/add-review" className="text-blue-500">
+                    Add a Review
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/my-reviews" className="text-blue-500">
+                    View My Reviews
+                  </Link>
+                </li>
+                <li>
                   <Link href="/order" className="text-blue-500">
                     Make an Order
+                  </Link>
+                </li>
+                {/* Daftar pesanan atau review yang sudah dibuat */}
+                <li>
+                  <Link href="/my-orders" className="text-blue-500">
+                    View My Orders
                   </Link>
                 </li>
               </ul>

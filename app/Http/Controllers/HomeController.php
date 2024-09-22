@@ -4,17 +4,18 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 use App\Models\HeroFlyer;
+use App\Models\HeroVideo;
 use App\Models\HeaderHome;
-use App\Models\HeroCertificate;
+use App\Models\HeroReview;
 use App\Models\HeroCompany;
+use App\Models\HeroService;
+use Illuminate\Http\Request;
+use App\Models\HeroTeamValue;
+use App\Models\HeroWhyChoose;
+use App\Models\HeroCertificate;
+use App\Models\HeroMaklonValue;
 use App\Models\HeroExcellenceValue;
 use App\Models\HeroFacilitiesValue;
-use App\Models\HeroMaklonValue;
-use App\Models\HeroService;
-use App\Models\HeroTeamValue;
-use App\Models\HeroVideo;
-use App\Models\HeroWhyChoose;
-use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -53,6 +54,9 @@ class HomeController extends Controller
         // Mengambil semua data dari tabel hero_excellence_value
         $heroExcellenceValue = HeroExcellenceValue::first();
 
+        // Mengambil semua data dari tabel hero_review
+        $heroReview = HeroReview::all();
+
         // Kembalikan data ke view Inertia 'Home.Index'
         return Inertia::render('Home/Index', [
             'dataHeaderHome' => $headerHome,
@@ -66,6 +70,7 @@ class HomeController extends Controller
             'dataHeroService' => $heroService,
             'dataHeroVideo' => $heroVideo,
             'dataHeroExcellenceValue' => $heroExcellenceValue,
+            'dataHeroReviews' => $heroReview,
         ]);
     }
 }
