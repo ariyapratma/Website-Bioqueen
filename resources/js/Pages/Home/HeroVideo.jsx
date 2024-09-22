@@ -31,7 +31,7 @@ const HeroVideo = () => {
             ></iframe>
           ) : (
             <p className="font-lexend font-medium text-red-500">
-              No link available.
+              No link youtube available.
             </p>
           )}
         </div>

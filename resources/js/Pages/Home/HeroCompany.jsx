@@ -21,7 +21,9 @@ const HeroCompany = () => {
               />
             ) : (
               <p className="font-lexend font-medium text-red-500">
-                No images available
+                No <br />
+                image <br />
+                available.
               </p>
             )}
             <button
@@ -40,10 +42,10 @@ const HeroCompany = () => {
         {/* Text Content */}
         <div className="flex flex-col items-center text-center lg:w-2/3 lg:items-start lg:text-left">
           <h1 className="mb-6 font-lexend text-3xl font-medium leading-tight text-black sm:text-4xl lg:text-6xl">
-            {dataHeroCompany?.title}
+            {dataHeroCompany?.title || "No title available"}
           </h1>
           <p className="sm:text-md font-regular font-lexend text-base text-gray-600 lg:text-lg">
-            {dataHeroCompany?.description}
+            {dataHeroCompany?.description || "No description available"}
           </p>
         </div>
       </div>

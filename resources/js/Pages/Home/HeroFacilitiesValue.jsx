@@ -9,7 +9,7 @@ const HeroFacilitiesValue = () => {
       <div className="w-full max-w-7xl p-4 sm:p-6">
         {/* Title Section */}
         <h1 className="mx-auto mb-8 rounded-xl bg-custom-yellow p-4 text-center font-lexend text-2xl font-bold text-black sm:text-3xl md:text-4xl">
-          {dataHeroFacilitiesValue?.title}
+          {dataHeroFacilitiesValue?.title || "No title available"}
         </h1>
 
         {/* Content Section */}
@@ -25,14 +25,14 @@ const HeroFacilitiesValue = () => {
               />
             ) : (
               <p className="font-lexend font-medium text-red-500">
-                No images available
+                No images available.
               </p>
             )}
             <h6 className="mb-2 text-center font-lexend text-xl font-medium text-black sm:text-2xl md:text-3xl lg:text-left">
-              {dataHeroFacilitiesValue?.heading1}
+              {dataHeroFacilitiesValue?.heading1 || "No heading available"}
             </h6>
             <p className="font-regular mb-4 text-center font-lexend text-sm text-gray-600 sm:text-base md:text-lg lg:text-left">
-              {dataHeroFacilitiesValue?.content1}
+              {dataHeroFacilitiesValue?.content1 || "No content available"}
             </p>
           </div>
 
@@ -47,14 +47,14 @@ const HeroFacilitiesValue = () => {
               />
             ) : (
               <p className="font-lexend font-medium text-red-500">
-                No images available
+                No images available.
               </p>
             )}
             <h6 className="mb-2 text-center font-lexend text-xl font-medium text-black sm:text-2xl md:text-3xl lg:text-left">
-              {dataHeroFacilitiesValue?.heading2}
+              {dataHeroFacilitiesValue?.heading2 || "No heading available"}
             </h6>
             <p className="font-regular mb-4 text-center font-lexend text-sm text-gray-600 sm:text-base md:text-lg lg:text-left">
-              {dataHeroFacilitiesValue?.content2}
+              {dataHeroFacilitiesValue?.content2 || "No content available"}
             </p>
           </div>
         </div>

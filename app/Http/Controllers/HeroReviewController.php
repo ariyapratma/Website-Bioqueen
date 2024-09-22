@@ -14,11 +14,19 @@ class HeroReviewController extends Controller
      */
     public function index()
     {
+        // // Mengambil semua ulasan dari database
+        // $heroReview = HeroReview::all();
+        // return Inertia::render('Home/HeroReview', [
+        //     'dataHeroReview' => $heroReview,
+        //     'success' => 'Review berhasil ditambahkan',
+        // ]);
         // Mengambil semua ulasan dari database
         $heroReview = HeroReview::all();
+
+        // Mengembalikan data dengan Inertia
         return Inertia::render('Home/HeroReview', [
             'dataHeroReview' => $heroReview,
-            'success' => 'Review berhasil ditambahkan',
+            'success' => session('success'), // Mengambil pesan sukses dari session jika ada
         ]);
     }
 
@@ -41,20 +49,23 @@ class HeroReviewController extends Controller
             'comment' => 'required|string|max:255',
         ]);
 
-        // Ambil avatar dari pengguna atau set default jika tidak ada
-        $avatar = Auth::user()->avatar ? Auth::user()->avatar : 'default-avatar.png';
-
         // Simpan review ke database
         HeroReview::create([
             'name' => Auth::user()->name,
-            'avatar' => $avatar,
+            'avatar' => Auth::user()->avatar ?? 'default-avatar.png',
             'rating' => $request->rating,
             'comment' => $request->comment,
             'user_id' => Auth::id(),
         ]);
 
-        // Redirect ke halaman HeroReview dengan pesan sukses
-        return redirect()->route('hero-review.index')->with('success', 'Review berhasil ditambahkan');
+        // Ambil semua ulasan untuk dikirim kembali ke halaman Home
+        $heroReview = HeroReview::all();
+
+        // Kembali ke halaman Home dengan data ulasan yang diperbarui
+        return Inertia::render('Home/HeroReview', [
+            'dataHeroReview' => $heroReview,
+            'success' => 'Review has been added successfully.',
+        ]);
     }
 
     /**

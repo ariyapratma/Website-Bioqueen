@@ -8,7 +8,7 @@ import { usePage } from "@inertiajs/react";
 
 const HeroService = () => {
   const { props } = usePage();
-  console.log(props); 
+  console.log(props);
   const { dataHeroService } = props;
 
   return (
@@ -24,13 +24,13 @@ const HeroService = () => {
           />
         ) : (
           <p className="font-lexend font-medium text-red-500">
-            No images available
+            No image available.
           </p>
         )}
         <div className="absolute inset-0 z-0 rounded-md bg-black bg-opacity-50"></div>
         <div className="relative z-10 flex h-full flex-col items-center justify-center p-6 text-custom-yellow">
           <h1 className="text-center font-lexend text-xl font-medium sm:text-3xl md:text-4xl lg:text-5xl">
-            {dataHeroService?.title}
+            {dataHeroService?.title || "No title available"}
           </h1>
         </div>
       </div>
@@ -45,10 +45,10 @@ const HeroService = () => {
             <MdOutlineCleanHands size="48" />
           </div>
           <h6 className="mb-2 font-lexend text-lg font-medium sm:text-xl">
-            {dataHeroService?.heading1}
+            {dataHeroService?.heading1 || "No heading available"}
           </h6>
           <p className="font-lexend text-sm text-gray-600 sm:text-base">
-            {dataHeroService?.content1}
+            {dataHeroService?.content1 || "No content available"}
           </p>
         </div>
 
@@ -60,10 +60,10 @@ const HeroService = () => {
             <MdOutlineMedicalServices size="48" />
           </div>
           <h6 className="mb-2 font-lexend text-lg font-medium sm:text-xl">
-            {dataHeroService?.heading2}
+            {dataHeroService?.heading2 || "No heading available"}
           </h6>
           <p className="font-lexend text-sm text-gray-600 sm:text-base">
-            {dataHeroService?.content2}
+            {dataHeroService?.content2 || "No content available"}
           </p>
         </div>
 
@@ -75,10 +75,10 @@ const HeroService = () => {
             <MdOutlineStarRate size="48" />
           </div>
           <h6 className="mb-2 font-lexend text-lg font-medium sm:text-xl">
-            {dataHeroService?.heading3}
+            {dataHeroService?.heading3 || "No heading available"}
           </h6>
           <p className="font-lexend text-sm text-gray-600 sm:text-base">
-            {dataHeroService?.content3}
+            {dataHeroService?.content3 || "No content available"}
           </p>
         </div>
       </div>

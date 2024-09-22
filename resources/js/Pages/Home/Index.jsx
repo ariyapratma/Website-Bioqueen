@@ -12,13 +12,14 @@ import HeroCertificate from "./HeroCertificate";
 import HeroService from "./HeroService";
 import HeroVideo from "./HeroVideo";
 import HeroExcellenceValue from "./HeroExcellenceValue";
-import HeroReview from "./HeroReview";
+// import HeroReview from "./HeroReview";
 import HeroAddReview from "./HeroAddReview";
 import Footer from "@/Components/Footer/Footer";
 
 const Welcome = ({ auth }) => {
   const { props } = usePage();
   const {} = props;
+  const { dataHeroReview } = props;
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -48,7 +49,7 @@ const Welcome = ({ auth }) => {
         {/* Hero Excellence Value */}
         <HeroExcellenceValue />
         {/* Hero Review */}
-        <HeroReview />
+        {/* <HeroReview dataHeroReview={dataHeroReview} /> */}
         {/* Hero Add Review */}
         <HeroAddReview />
       </main>
