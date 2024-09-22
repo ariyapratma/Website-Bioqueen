@@ -9,7 +9,7 @@ const HeroTeamValue = () => {
       <div className="w-full max-w-7xl p-6">
         <div className="hero-content flex flex-col lg:flex-row-reverse lg:items-start">
           <div className="order-2 flex w-full flex-col items-center lg:order-1 lg:ml-8 lg:w-1/2">
-            {/* Display images if available */}
+            {/* Display image 1 if available */}
             {dataHeroTeamValue?.image_url1 ? (
               <img
                 key="image1"
@@ -20,10 +20,11 @@ const HeroTeamValue = () => {
               />
             ) : (
               <p className="font-lexend font-medium text-red-500">
-                No image available.
+                No image 1 available.
               </p>
             )}
-            {dataHeroTeamValue.image_url2 ? (
+            {/* Display image 2 if available */}
+            {dataHeroTeamValue?.image_url2 ? (
               <img
                 key="image2"
                 src={dataHeroTeamValue.image_url2}
@@ -33,7 +34,7 @@ const HeroTeamValue = () => {
               />
             ) : (
               <p className="font-lexend font-medium text-red-500">
-                No image available.
+                No image 2 available.
               </p>
             )}
           </div>

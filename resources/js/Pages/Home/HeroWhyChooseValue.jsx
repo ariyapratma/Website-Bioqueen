@@ -20,7 +20,7 @@ const HeroWhyChooseValue = () => {
               />
             ) : (
               <p className="font-lexend font-medium text-red-500">
-                No image available.
+                No image 1 available.
               </p>
             )}
             {dataHeroWhyChoose?.image_url2 ? (
@@ -33,7 +33,7 @@ const HeroWhyChooseValue = () => {
               />
             ) : (
               <p className="font-lexend font-medium text-red-500">
-                No image available.
+                No image 2 available.
               </p>
             )}
           </div>
