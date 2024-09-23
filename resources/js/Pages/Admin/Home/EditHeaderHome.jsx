@@ -31,7 +31,8 @@ const EditHeaderHome = ({ dataHeaderHome }) => {
       formData.append("existing_image_url", data.existing_image_url);
     }
 
-    put(`/header-home/${dataHeaderHome?.id}`, formData, {
+    put(`/header-home/${dataHeaderHome?.id}`, {
+      data: formData,
       headers: { "Content-Type": "multipart/form-data" },
       onSuccess: () => {
         Swal.fire({
@@ -172,7 +173,7 @@ const EditHeaderHome = ({ dataHeaderHome }) => {
           <button
             type="submit"
             disabled={processing}
-            className="w-full rounded-md bg-custom-yellow py-2 font-lexend font-semibold text-white hover:bg-yellow-600"
+            className="w-full rounded-md bg-custom-yellow py-2 font-lexend font-semibold text-black hover:bg-yellow-600"
           >
             {processing ? "Updating..." : "Update Header Home"}
           </button>

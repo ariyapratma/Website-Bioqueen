@@ -89,18 +89,11 @@ class HeaderHomeController extends Controller
             // Use existing image URL if no new image is uploaded
             $data['image_url'] = $request->input('existing_image_url', $headerHome->image_url);
         }
-
-        // Debugging: Log data before updating
-        Log::info('Updating HeaderHome:', ['data' => $data]);
+        
 
         // Update model
-        $updated = $headerHome->update($data);
-
-        if ($updated) {
-            return redirect()->route('header-home.index')->with('success', 'Header Home updated successfully.');
-        } else {
-            return redirect()->route('header-home.index')->with('error', 'Failed to update Header Home.');
-        }
+        $headerHome->update($data);
+            return redirect()->route('header-home.index');
     }
 
     public function destroy(HeaderHome $id)
