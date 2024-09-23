@@ -1,37 +1,37 @@
-// resources/js/Pages/EditHeaderHome.jsx
-
-import { useForm } from "@inertiajs/react";
+import { Link, Head, useForm } from "@inertiajs/react";
 import Swal from "sweetalert2";
-import { Head } from "@inertiajs/react";
+import { useState } from "react";
+import { IoChevronBackOutline } from "react-icons/io5";
+import Sidebar from "@/Components/Admin/Sidebar";
+import Notification from "@/Components/Admin/Notification";
+import Avatar from "@/Components/Admin/Avatar";
 
 const EditHeaderHome = ({ dataHeaderHome }) => {
-  // Initialize form with default values
   const { data, setData, put, processing, errors } = useForm({
     title: dataHeaderHome?.title || "",
     description: dataHeaderHome?.description || "",
-    image_url: null, // Initialize as null
+    image_url: null,
     whatsapp_link: dataHeaderHome?.whatsapp_link || "",
+    existing_image_url: dataHeaderHome?.image_url || "",
   });
 
-  // Handle form submission
-  // Remove manual validation for title (if not required)
+  const [activeMenu, setActiveMenu] = useState("header-home");
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append("title", data.title); // Allow title to be empty
+    formData.append("title", data.title);
     formData.append("description", data.description);
-
-    // Append existing image URL if no new image is selected
-    if (!data.image_url) {
-      formData.append("existing_image_url", dataHeaderHome?.image_url || "");
-    } else {
-      formData.append("image_url", data.image_url);
-    }
     formData.append("whatsapp_link", data.whatsapp_link);
 
-    put(`/header-home/${dataHeaderHome?.id}`, {
-      data: formData,
+    if (data.image_url) {
+      formData.append("image_url", data.image_url);
+    } else {
+      formData.append("existing_image_url", data.existing_image_url);
+    }
+
+    put(`/header-home/${dataHeaderHome?.id}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
       onSuccess: () => {
         Swal.fire({
@@ -40,13 +40,13 @@ const EditHeaderHome = ({ dataHeaderHome }) => {
           icon: "success",
           confirmButtonText: "OK",
         }).then(() => {
-          window.location.href = "/header-home"; // Redirect after success
+          window.location.href = "/header-home";
         });
       },
       onError: () => {
         Swal.fire({
           title: "Error!",
-          text: "There was an error updating the Header Home.",
+          text: "There was an error updating the Header Home. Please check your input.",
           icon: "error",
           confirmButtonText: "OK",
         });
@@ -55,84 +55,129 @@ const EditHeaderHome = ({ dataHeaderHome }) => {
   };
 
   return (
-    <div className="bg-white p-6">
-      <Head title="Edit Header Home | PT Ratu Bio Indonesia" />
-      <h1 className="mb-6 text-2xl font-bold">Edit Header Home</h1>
-      <form onSubmit={handleSubmit}>
-        {/* Title Field */}
-        <div className="mb-4">
-          <label htmlFor="title" className="block text-gray-700">
-            Title
-          </label>
-          <input
-            type="text"
-            id="title"
-            value={data.title}
-            onChange={(e) => setData("title", e.target.value)}
-            className="mt-1 block w-full rounded border border-gray-300"
-          />
-          {errors.title && (
-            <p className="mt-1 text-sm text-red-500">{errors.title}</p>
-          )}
+    <div className="flex min-h-screen bg-gray-100">
+      {/* Sidebar */}
+      <Sidebar activeMenu={activeMenu} />
+
+      {/* Main content */}
+      <div className="flex-1 bg-neutral-50 p-6">
+        <Head title="Edit Header Home | PT Ratu Bio Indonesia" />
+
+        {/* Header */}
+        <div className="mb-4 flex w-full items-center justify-between">
+          <Link
+            href="/header-home"
+            className="rounded bg-custom-yellow px-4 py-2 text-black hover:bg-yellow-500"
+          >
+            <IoChevronBackOutline className="h-4 w-4" />
+          </Link>
+
+          {/* Admin Logo and Notification */}
+          <div className="flex items-center">
+            <Notification />
+            <Avatar />
+          </div>
         </div>
 
-        {/* Description Field */}
-        <div className="mb-4">
-          <label htmlFor="description" className="block text-gray-700">
-            Description
-          </label>
-          <textarea
-            id="description"
-            value={data.description}
-            onChange={(e) => setData("description", e.target.value)}
-            className="mt-1 block w-full rounded border border-gray-300"
-          />
-          {errors.description && (
-            <p className="mt-1 text-sm text-red-500">{errors.description}</p>
-          )}
-        </div>
+        {/* Title */}
+        <h2 className="mb-4 font-lexend text-xl font-bold">
+          Edit Home Page Content
+        </h2>
 
-        {/* Image URL Field */}
-        <div className="mb-4">
-          <label htmlFor="image_url" className="block text-gray-700">
-            Image URL
-          </label>
-          <input
-            type="file"
-            id="image_url"
-            onChange={(e) => setData("image_url", e.target.files[0])}
-            className="mt-1 block w-full rounded border border-gray-300"
-          />
-          {errors.image_url && (
-            <p className="mt-1 text-sm text-red-500">{errors.image_url}</p>
-          )}
-        </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Title Field */}
+          <div>
+            <label
+              htmlFor="title"
+              className="block font-lexend text-sm font-medium text-gray-700"
+            >
+              Title
+            </label>
+            <input
+              id="title"
+              type="text"
+              value={data.title}
+              onChange={(e) => setData("title", e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              required
+            />
+            {errors.title && (
+              <span className="text-sm text-red-600">{errors.title}</span>
+            )}
+          </div>
 
-        {/* WhatsApp Link Field */}
-        <div className="mb-4">
-          <label htmlFor="whatsapp_link" className="block text-gray-700">
-            WhatsApp Link
-          </label>
-          <input
-            type="text"
-            id="whatsapp_link"
-            value={data.whatsapp_link}
-            onChange={(e) => setData("whatsapp_link", e.target.value)}
-            className="mt-1 block w-full rounded border border-gray-300"
-          />
-          {errors.whatsapp_link && (
-            <p className="mt-1 text-sm text-red-500">{errors.whatsapp_link}</p>
-          )}
-        </div>
+          {/* Description Field */}
+          <div>
+            <label
+              htmlFor="description"
+              className="block font-lexend text-sm font-medium text-gray-700"
+            >
+              Description
+            </label>
+            <textarea
+              id="description"
+              value={data.description}
+              onChange={(e) => setData("description", e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              rows="4"
+              required
+            />
+            {errors.description && (
+              <span className="text-sm text-red-600">{errors.description}</span>
+            )}
+          </div>
 
-        <button
-          type="submit"
-          disabled={processing}
-          className="rounded bg-blue-500 px-4 py-2 text-white"
-        >
-          {processing ? "Updating..." : "Update"}
-        </button>
-      </form>
+          {/* Image URL Field */}
+          <div>
+            <label
+              htmlFor="image_url"
+              className="block font-lexend text-sm font-medium text-gray-700"
+            >
+              Image
+            </label>
+            <input
+              id="image_url"
+              type="file"
+              onChange={(e) => setData("image_url", e.target.files[0])}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            />
+            {errors.image_url && (
+              <span className="text-sm text-red-600">{errors.image_url}</span>
+            )}
+          </div>
+
+          {/* WhatsApp Link Field */}
+          <div>
+            <label
+              htmlFor="whatsapp_link"
+              className="block font-lexend text-sm font-medium text-gray-700"
+            >
+              WhatsApp Link
+            </label>
+            <input
+              id="whatsapp_link"
+              type="text"
+              value={data.whatsapp_link}
+              onChange={(e) => setData("whatsapp_link", e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              required
+            />
+            {errors.whatsapp_link && (
+              <span className="text-sm text-red-600">
+                {errors.whatsapp_link}
+              </span>
+            )}
+          </div>
+
+          <button
+            type="submit"
+            disabled={processing}
+            className="w-full rounded-md bg-custom-yellow py-2 font-lexend font-semibold text-white hover:bg-yellow-600"
+          >
+            {processing ? "Updating..." : "Update Header Home"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };

@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use App\Models\HeaderHome;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class HeaderHomeController extends Controller
@@ -89,9 +90,17 @@ class HeaderHomeController extends Controller
             $data['image_url'] = $request->input('existing_image_url', $headerHome->image_url);
         }
 
-        $headerHome->update($data);
+        // Debugging: Log data before updating
+        Log::info('Updating HeaderHome:', ['data' => $data]);
 
-        return redirect()->route('header-home.index');
+        // Update model
+        $updated = $headerHome->update($data);
+
+        if ($updated) {
+            return redirect()->route('header-home.index')->with('success', 'Header Home updated successfully.');
+        } else {
+            return redirect()->route('header-home.index')->with('error', 'Failed to update Header Home.');
+        }
     }
 
     public function destroy(HeaderHome $id)

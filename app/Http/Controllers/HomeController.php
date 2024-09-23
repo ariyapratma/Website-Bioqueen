@@ -73,4 +73,42 @@ class HomeController extends Controller
             'dataHeroReviews' => $heroReview,
         ]);
     }
+
+    public function search(Request $request)
+    {
+        // Mengambil keyword pencarian
+        $searchTerm = $request->input('searchTerm');
+
+        // Lakukan pencarian pada berbagai tabel
+        $headerHome = HeaderHome::where('title', 'LIKE', "%{$searchTerm}%")->get();
+        $heroFlyer = HeroFlyer::where('title', 'LIKE', "%{$searchTerm}%")->get();
+        $heroCompany = HeroCompany::where('name', 'LIKE', "%{$searchTerm}%")->get();
+        $heroWhyChoose = HeroWhyChoose::where('title', 'LIKE', "%{$searchTerm}%")->get();
+        $heroMaklonValue = HeroMaklonValue::where('value', 'LIKE', "%{$searchTerm}%")->get();
+        $heroTeamValue = HeroTeamValue::where('value', 'LIKE', "%{$searchTerm}%")->get();
+        $heroFacilitiesValue = HeroFacilitiesValue::where('value', 'LIKE', "%{$searchTerm}%")->get();
+        $heroCertificate = HeroCertificate::where('title', 'LIKE', "%{$searchTerm}%")->get();
+        $heroService = HeroService::where('name', 'LIKE', "%{$searchTerm}%")->get();
+        $heroVideo = HeroVideo::where('title', 'LIKE', "%{$searchTerm}%")->get();
+        $heroExcellenceValue = HeroExcellenceValue::where('value', 'LIKE', "%{$searchTerm}%")->get();
+        $heroReview = HeroReview::where('review', 'LIKE', "%{$searchTerm}%")->get();
+
+        // Gabungkan semua hasil pencarian
+        $results = collect([
+            'headerHome' => $headerHome,
+            'heroFlyer' => $heroFlyer,
+            'heroCompany' => $heroCompany,
+            'heroWhyChoose' => $heroWhyChoose,
+            'heroMaklonValue' => $heroMaklonValue,
+            'heroTeamValue' => $heroTeamValue,
+            'heroFacilitiesValue' => $heroFacilitiesValue,
+            'heroCertificate' => $heroCertificate,
+            'heroService' => $heroService,
+            'heroVideo' => $heroVideo,
+            'heroExcellenceValue' => $heroExcellenceValue,
+            'heroReview' => $heroReview,
+        ]);
+
+        return response()->json($results);
+    }
 }

@@ -77,6 +77,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::middleware(['auth', 'role:admin'])->group(function () {
 
         // Home Page :
+        Route::get('/search', [HomeController::class, 'search'])->name('home.search');
 
         // Route HeaderHome
         Route::get('/header-home', [HeaderHomeController::class, 'index'])->name('header-home.index');
