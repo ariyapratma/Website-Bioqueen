@@ -1,168 +1,188 @@
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
+import { useState, useEffect } from "react";
+import { IoChevronBackOutline } from "react-icons/io5";
+import Sidebar from "@/Components/Admin/Sidebar";
+import Searchbar from "@/Components/Admin/Searchbar";
+import Notification from "@/Components/Admin/Notification";
+import Dropdown from "@/Components/Dropdown";
+import Swal from "sweetalert2";
 
 export default function Dashboard({ auth }) {
+  const [activeMenu, setActiveMenu] = useState("dashboard");
   const user = auth.user;
 
-  return (
-    <AuthenticatedLayout
-      user={auth.user}
-      header={
-        <h2 className="font-lexend text-xl font-semibold leading-tight text-gray-800">
-          Dashboard
-        </h2>
-      }
-    >
-      <Head title="Dashboard" />
+  // SweetAlert on load
+  useEffect(() => {
+    Swal.fire({
+      icon: "success",
+      title: `Selamat Datang, ${user?.name}!`,
+      text: `Anda login sebagai ${user?.role}.`,
+      confirmButtonText: "OK",
+    });
+  }, []);
 
-      <div className="py-12">
-        <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-          <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-            <div className="p-6 font-lexend font-medium text-green-700">
-              You're logged in as {user.role}!
+  return (
+    <div className="flex min-h-screen bg-gray-100">
+      {/* Sidebar */}
+      <Sidebar activeMenu={activeMenu} />
+
+      {/* Main Content */}
+      <div className="flex-1 bg-neutral-50 p-6">
+        <Head title="Dashboard | PT Ratu Bio Indonesia" />
+
+        {/* Header */}
+        <div className="mb-4 flex w-full items-center justify-between">
+          {/* Back Button on the Left */}
+          <Link
+            href="/dashboard"
+            className="rounded bg-custom-yellow px-4 py-2 text-black hover:bg-yellow-500"
+          >
+            <IoChevronBackOutline className="h-4 w-4" />
+          </Link>
+
+          {/* Search Bar */}
+          <Searchbar />
+
+          {/* Admin Notification and Avatar */}
+          <div className="flex items-center">
+            <Notification />
+            <div className="relative ms-3">
+              <Dropdown>
+                <Dropdown.Trigger>
+                  <span className="inline-flex rounded-md">
+                    <button
+                      type="button"
+                      className="inline-flex items-center rounded-md border border-transparent px-3 py-2 font-lexend text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
+                    >
+                      {user?.name}
+                      <img
+                        src={
+                          user?.avatar
+                            ? `/storage/${user.avatar}`
+                            : "/default-avatar.png"
+                        }
+                        className="mx-2 h-10 w-10 rounded-full border border-custom-yellow"
+                      />
+                      <svg
+                        className="-me-0.5 ms-2 h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </button>
+                  </span>
+                </Dropdown.Trigger>
+
+                <Dropdown.Content>
+                  <Dropdown.Link
+                    href={route("profile.edit")}
+                    className="font-lexend"
+                  >
+                    Profile
+                  </Dropdown.Link>
+                  <Dropdown.Link
+                    href={route("logout")}
+                    className="font-lexend"
+                    method="post"
+                    as="button"
+                  >
+                    Log Out
+                  </Dropdown.Link>
+                </Dropdown.Content>
+              </Dropdown>
             </div>
           </div>
+        </div>
 
-          {/* Menu untuk Admin */}
+        {/* Title Dashboard */}
+        <h2 className="mb-4 font-lexend text-xl font-bold">
+          Dashboard {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+        </h2>
+
+        {/* Dashboard Content */}
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {/* Admin Cards */}
           {user.role === "admin" && (
-            <div className="mt-6 rounded-lg bg-white p-6 shadow-md">
-              <h3 className="mb-4 text-lg font-bold">Admin Menu</h3>
-              <ul>
-                <h1 className="pt-2 text-lg font-bold">Home Page : </h1>
-                <li>
-                  <Link href="/header-home" className="text-blue-500">
-                    Manage Header Home
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/hero-flyer" className="text-blue-500">
-                    Manage Hero Flyer
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/hero-company" className="text-blue-500">
-                    Manage Hero Company
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/hero-why-choose" className="text-blue-500">
-                    Manage Hero Why Choose
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/hero-maklon-value" className="text-blue-500">
-                    Manage Hero Maklon Value
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/hero-team-value" className="text-blue-500">
-                    Manage Hero Team Value
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/hero-facilities-value" className="text-blue-500">
-                    Manage Hero Facilities Value
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/hero-certificate" className="text-blue-500">
-                    Manage Hero Certificate
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/hero-service" className="text-blue-500">
-                    Manage Hero Service
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/hero-video" className="text-blue-500">
-                    Manage Hero Video
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/hero-excellence-value" className="text-blue-500">
-                    Manage Hero Excellence Value
-                  </Link>
-                </li>
-                <h1 className="pt-2 text-lg font-bold">About Us Page : </h1>
-                <li>
-                  <Link href="/header-about-us" className="text-blue-500">
-                    Manage Header About Us
-                  </Link>
-                </li>
-                <h1 className="pt-2 text-lg font-bold">Contact Page : </h1>
-                <li>
-                  <Link href="/header-contact" className="text-blue-500">
-                    Manage Header Contact
-                  </Link>
-                </li>
-                <h1 className="pt-2 text-lg font-bold">Product Page : </h1>
-                <li>
-                  <Link href="/header-product" className="text-blue-500">
-                    Manage Header Product
-                  </Link>
-                </li>
-                <h1 className="pt-2 text-lg font-bold">Order Page : </h1>
-                <li>
-                  <Link href="/header-order" className="text-blue-500">
-                    Manage Header Order
-                  </Link>
-                </li>
-                <h1 className="pt-2 text-lg font-bold">Maklon Page : </h1>
-                <li>
-                  <Link href="/header-maklon" className="text-blue-500">
-                    Manage Header Maklon
-                  </Link>
-                </li>
-              </ul>
-            </div>
+            <>
+              {/* Card 1: Ringkasan Penjualan */}
+              <div className="rounded-lg bg-white p-6 shadow-md">
+                <h3 className="font-lexend text-lg font-semibold">
+                  Ringkasan Penjualan
+                </h3>
+                <div className="mt-4">
+                  {/* Tempatkan grafik atau informasi ringkasan */}
+                  <p>Total Penjualan: 1000</p>
+                </div>
+              </div>
+
+              {/* Card 2: Ringkasan Pesanan */}
+              <div className="rounded-lg bg-white p-6 shadow-md">
+                <h3 className="font-lexend text-lg font-semibold">
+                  Ringkasan Pesanan
+                </h3>
+                <div className="mt-4">
+                  {/* Tempatkan grafik atau informasi ringkasan */}
+                  <p>Total Pesanan: 150</p>
+                </div>
+              </div>
+
+              {/* Card 3: Jumlah Pengguna */}
+              <div className="rounded-lg bg-white p-6 shadow-md">
+                <h3 className="font-lexend text-lg font-semibold">
+                  Jumlah Pengguna
+                </h3>
+                <div className="mt-4">
+                  {/* Tempatkan grafik atau informasi ringkasan */}
+                  <p>Total Pengguna: 500</p>
+                </div>
+              </div>
+            </>
           )}
 
-          {/* Menu untuk User */}
+          {/* User Cards */}
           {user.role === "user" && (
-            <div className="mt-6 rounded-lg bg-white p-6 shadow-md">
-              <h3 className="mb-4 text-lg font-bold">User Menu</h3>
-              <ul>
-                <li>
-                  <Link href="/add-review" className="text-blue-500">
-                    Add a Review
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/my-reviews" className="text-blue-500">
-                    View My Reviews
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/order" className="text-blue-500">
-                    Make an Order
-                  </Link>
-                </li>
-                {/* Daftar pesanan atau review yang sudah dibuat */}
-                <li>
-                  <Link href="/my-orders" className="text-blue-500">
-                    View My Orders
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          )}
+            <>
+              {/* Card 1: Informasi Pengguna */}
+              <div className="rounded-lg bg-white p-6 shadow-md">
+                <h3 className="font-lexend text-lg font-semibold">
+                  Informasi Pengguna
+                </h3>
+                <div className="mt-4">
+                  <p>Nama: {user.name}</p>
+                  <p>Email: {user.email}</p>
+                </div>
+              </div>
 
-          {/* Menu untuk Guest */}
-          {user.role === "guest" && (
-            <div className="mt-6 rounded-lg bg-white p-6 shadow-md">
-              <h3 className="mb-4 text-lg font-bold">Guest Menu</h3>
-              <ul>
-                <li>
-                  <Link href="/products" className="text-blue-500">
-                    View Products
-                  </Link>
-                </li>
-              </ul>
-            </div>
+              {/* Card 2: Riwayat Pesanan */}
+              <div className="rounded-lg bg-white p-6 shadow-md">
+                <h3 className="font-lexend text-lg font-semibold">
+                  Riwayat Pesanan
+                </h3>
+                <div className="mt-4">
+                  <p>Jumlah Pesanan: 3</p>
+                  {/* Tempatkan grafik atau informasi lain */}
+                </div>
+              </div>
+              {/* Card 3: Riwayat Komentar */}
+              <div className="rounded-lg bg-white p-6 shadow-md">
+                <h3 className="font-lexend text-lg font-semibold">
+                  Riwayat Komentar
+                </h3>
+                <div className="mt-4">
+                  <p>Jumlah Komentar: 13</p>
+                  {/* Tempatkan grafik atau informasi lain */}
+                </div>
+              </div>
+            </>
           )}
         </div>
       </div>
-    </AuthenticatedLayout>
+    </div>
   );
 }
