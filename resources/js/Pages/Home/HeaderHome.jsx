@@ -9,7 +9,8 @@ const HeaderHome = () => {
       {/* Background Image */}
       {dataHeaderHome?.image_url ? (
         <img
-          src={dataHeaderHome?.image_url}
+          // src={dataHeaderHome?.image_url}
+          src={`${dataHeaderHome.image_url}?${new Date().getTime()}`}
           alt="Header Background"
           loading="lazy"
           className="absolute inset-0 h-full w-full object-cover"

@@ -27,12 +27,11 @@ const EditHeaderHome = ({ dataHeaderHome }) => {
 
     if (data.image_url) {
       formData.append("image_url", data.image_url);
-    } else {
-      formData.append("existing_image_url", data.existing_image_url);
     }
 
-    put(`/header-home/${dataHeaderHome?.id}`, {
-      data: formData,
+    // Berhasil muncul notif, namun data tidak berubah apabila data: formData, namun berhasil jika formData
+    put(`/header-home/${dataHeaderHome?.id}`, formData, {
+      // data: formData,
       headers: { "Content-Type": "multipart/form-data" },
       onSuccess: () => {
         Swal.fire({
