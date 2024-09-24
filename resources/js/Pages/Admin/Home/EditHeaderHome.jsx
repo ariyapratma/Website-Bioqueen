@@ -1,6 +1,6 @@
 import { Link, Head, useForm } from "@inertiajs/react";
 import Swal from "sweetalert2";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { IoChevronBackOutline } from "react-icons/io5";
 import Sidebar from "@/Components/Admin/Sidebar";
 import Notification from "@/Components/Admin/Notification";
@@ -8,11 +8,10 @@ import Avatar from "@/Components/Admin/Avatar";
 
 const EditHeaderHome = ({ dataHeaderHome }) => {
   const { data, setData, put, processing, errors } = useForm({
-    title: dataHeaderHome?.title || "",
-    description: dataHeaderHome?.description || "",
+    title: dataHeaderHome.title || "", // Inisialisasi dengan data yang ada
+    description: dataHeaderHome.description || "",
     image_url: null,
-    whatsapp_link: dataHeaderHome?.whatsapp_link || "",
-    existing_image_url: dataHeaderHome?.image_url || "",
+    whatsapp_link: dataHeaderHome.whatsapp_link || "",
   });
 
   const [activeMenu, setActiveMenu] = useState("header-home");
@@ -20,19 +19,15 @@ const EditHeaderHome = ({ dataHeaderHome }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Using FormData to handle file upload
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("description", data.description);
+    formData.append("image_url", data.image_url); // Add the file
     formData.append("whatsapp_link", data.whatsapp_link);
 
-    if (data.image_url) {
-      formData.append("image_url", data.image_url);
-    }
-
-    // Berhasil muncul notif, namun data tidak berubah apabila data: formData, namun berhasil jika formData
-    put(`/header-home/${dataHeaderHome?.id}`, formData, {
-      // data: formData,
-      headers: { "Content-Type": "multipart/form-data" },
+    put(`/header-home/${dataHeaderHome.id}`, { // Ganti URL sesuai kebutuhan
+      data: formData,
       onSuccess: () => {
         Swal.fire({
           title: "Success!",
@@ -46,7 +41,7 @@ const EditHeaderHome = ({ dataHeaderHome }) => {
       onError: () => {
         Swal.fire({
           title: "Error!",
-          text: "There was an error updating the Header Home. Please check your input.",
+          text: "There was an error updating the Header Home.",
           icon: "error",
           confirmButtonText: "OK",
         });
@@ -54,16 +49,18 @@ const EditHeaderHome = ({ dataHeaderHome }) => {
     });
   };
 
+  // Jika data belum tersedia, tampilkan loading state
+  if (!dataHeaderHome) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
       <Sidebar activeMenu={activeMenu} />
 
-      {/* Main content */}
       <div className="flex-1 bg-neutral-50 p-6">
         <Head title="Edit Header Home | PT Ratu Bio Indonesia" />
 
-        {/* Header */}
         <div className="mb-4 flex w-full items-center justify-between">
           <Link
             href="/header-home"
@@ -72,20 +69,21 @@ const EditHeaderHome = ({ dataHeaderHome }) => {
             <IoChevronBackOutline className="h-4 w-4" />
           </Link>
 
-          {/* Admin Logo and Notification */}
           <div className="flex items-center">
             <Notification />
             <Avatar />
           </div>
         </div>
 
-        {/* Title */}
         <h2 className="mb-4 font-lexend text-xl font-bold">
           Edit Home Page Content
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Title Field */}
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-4"
+          encType="multipart/form-data"
+        >
           <div>
             <label
               htmlFor="title"
@@ -106,7 +104,6 @@ const EditHeaderHome = ({ dataHeaderHome }) => {
             )}
           </div>
 
-          {/* Description Field */}
           <div>
             <label
               htmlFor="description"
@@ -127,7 +124,6 @@ const EditHeaderHome = ({ dataHeaderHome }) => {
             )}
           </div>
 
-          {/* Image URL Field */}
           <div>
             <label
               htmlFor="image_url"
@@ -137,7 +133,7 @@ const EditHeaderHome = ({ dataHeaderHome }) => {
             </label>
             <input
               id="image_url"
-              type="file"
+              type="file" 
               onChange={(e) => setData("image_url", e.target.files[0])}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
             />
@@ -146,7 +142,6 @@ const EditHeaderHome = ({ dataHeaderHome }) => {
             )}
           </div>
 
-          {/* WhatsApp Link Field */}
           <div>
             <label
               htmlFor="whatsapp_link"
@@ -174,7 +169,7 @@ const EditHeaderHome = ({ dataHeaderHome }) => {
             disabled={processing}
             className="w-full rounded-md bg-custom-yellow py-2 font-lexend font-semibold text-black hover:bg-yellow-600"
           >
-            {processing ? "Updating..." : "Update Header Home"}
+            {processing ? "Saving..." : "Update Header Home"}
           </button>
         </form>
       </div>

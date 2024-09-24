@@ -23,6 +23,29 @@ class HeaderHomeController extends Controller
         return Inertia::render('Admin/Home/CreateHeaderHome');
     }
 
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'title' => 'required|string|max:255',
+    //         'description' => 'nullable|string',
+    //         'image_url' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    //         'whatsapp_link' => 'nullable|string',
+    //     ]);
+
+    //     $data = $request->only(['title', 'description', 'whatsapp_link']);
+
+    //     if ($request->hasFile('image_url')) {
+    //         $file = $request->file('image_url');
+    //         $filename = time() . '.' . $file->getClientOriginalExtension();
+    //         $file->storeAs('public/header_home', $filename);
+    //         $data['image_url'] = 'storage/header_home/' . $filename;
+    //     }
+
+    //     HeaderHome::create($data);
+
+    //     return redirect()->route('header-home.index');
+    // }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -36,7 +59,22 @@ class HeaderHomeController extends Controller
 
         if ($request->hasFile('image_url')) {
             $file = $request->file('image_url');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
+
+            // Menggunakan nama asli dari file
+            $filename = $file->getClientOriginalName();
+
+            // Tambahkan logika untuk menangani nama file yang sama
+            $path = 'public/header_home/' . $filename;
+            $counter = 1;
+
+            while (Storage::exists($path)) {
+                // Menambahkan angka untuk membedakan nama file jika sudah ada
+                $filename = pathinfo($filename, PATHINFO_FILENAME) . " ($counter)." . $file->getClientOriginalExtension();
+                $path = 'public/header_home/' . $filename;
+                $counter++;
+            }
+
+            // Menyimpan file
             $file->storeAs('public/header_home', $filename);
             $data['image_url'] = 'storage/header_home/' . $filename;
         }
@@ -45,6 +83,7 @@ class HeaderHomeController extends Controller
 
         return redirect()->route('header-home.index');
     }
+
 
     /**
      * Display the specified resource.
@@ -68,7 +107,6 @@ class HeaderHomeController extends Controller
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'image_url' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'existing_image_url' => 'nullable|string',
             'whatsapp_link' => 'nullable|string',
         ]);
 
@@ -82,19 +120,35 @@ class HeaderHomeController extends Controller
             }
 
             $file = $request->file('image_url');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
+
+            // Menggunakan nama asli dari file
+            $filename = $file->getClientOriginalName();
+
+            // Tambahkan logika untuk menangani nama file yang sama
+            $path = 'public/header_home/' . $filename;
+            $counter = 1;
+
+            while (Storage::exists($path)) {
+                // Menambahkan angka untuk membedakan nama file jika sudah ada
+                $filename = pathinfo($filename, PATHINFO_FILENAME) . " ($counter)." . $file->getClientOriginalExtension();
+                $path = 'public/header_home/' . $filename;
+                $counter++;
+            }
+
+            // Menyimpan file
             $file->storeAs('public/header_home', $filename);
             $data['image_url'] = 'storage/header_home/' . $filename;
         } else {
-            // Use existing image URL if no new image is uploaded
-            $data['image_url'] = $request->input('existing_image_url', $headerHome->image_url);
+            // Gunakan existing image URL jika tidak ada gambar baru yang diupload
+            $data['image_url'] = $headerHome->image_url;
         }
-        
 
         // Update model
         $headerHome->update($data);
-            return redirect()->route('header-home.index');
+
+        return redirect()->route('header-home.index');
     }
+
 
     public function destroy(HeaderHome $id)
     {
