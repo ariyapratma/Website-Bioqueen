@@ -91,8 +91,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/hero-flyer', [HeroFlyerController::class, 'index'])->name('hero-flyer.index');
         Route::get('/hero-flyer/create', [HeroFlyerController::class, 'create'])->name('hero-flyer.create');
         Route::post('/hero-flyer', [HeroFlyerController::class, 'store'])->name('hero-flyer.store');
-        Route::get('/hero-flyer/{id}/edit', [HeroFlyerController::class, 'edit'])->name('hero-flyer.edit');
-        Route::put('/hero-flyer/{id}', [HeroFlyerController::class, 'update'])->name('hero-flyer.update');
+        Route::get('/hero-flyer/{heroFlyer}/edit', [HeroFlyerController::class, 'edit'])->name('hero-flyer.edit');
+        Route::put('/hero-flyer/{heroFlyer}', [HeroFlyerController::class, 'update'])->name('hero-flyer.update');
         Route::delete('/hero-flyer/{id}', [HeroFlyerController::class, 'destroy'])->name('hero-flyer.destroy');
 
         // Route HeroCompany

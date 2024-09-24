@@ -1,14 +1,13 @@
 import { Link, Head, useForm } from "@inertiajs/react";
 import Swal from "sweetalert2";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { IoChevronBackOutline } from "react-icons/io5";
 import Sidebar from "@/Components/Admin/Sidebar";
-import Notification from "@/Components/Admin/Notification";
-import Avatar from "@/Components/Admin/Avatar";
+import Dropdown from "@/Components/Dropdown";
 
-const EditHeaderHome = ({ dataHeaderHome }) => {
+const EditHeaderHome = ({ dataHeaderHome, user }) => {
   const { data, setData, put, processing, errors } = useForm({
-    title: dataHeaderHome.title || "", // Inisialisasi dengan data yang ada
+    title: dataHeaderHome.title || "",
     description: dataHeaderHome.description || "",
     image_url: null,
     whatsapp_link: dataHeaderHome.whatsapp_link || "",
@@ -23,10 +22,10 @@ const EditHeaderHome = ({ dataHeaderHome }) => {
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("description", data.description);
-    formData.append("image_url", data.image_url); // Add the file
+    formData.append("image_url", data.image_url);
     formData.append("whatsapp_link", data.whatsapp_link);
 
-    put(`/header-home/${dataHeaderHome.id}`, { // Ganti URL sesuai kebutuhan
+    put(`/header-home/${dataHeaderHome.id}`, {
       data: formData,
       onSuccess: () => {
         Swal.fire({
@@ -69,9 +68,60 @@ const EditHeaderHome = ({ dataHeaderHome }) => {
             <IoChevronBackOutline className="h-4 w-4" />
           </Link>
 
+         
+          {/* Admin and Avatar */}
           <div className="flex items-center">
-            <Notification />
-            <Avatar />
+            <div className="relative ms-3">
+              <Dropdown>
+                <Dropdown.Trigger>
+                  <span className="inline-flex rounded-md">
+                    <button
+                      type="button"
+                      className="inline-flex items-center rounded-md border border-transparent px-3 py-2 font-lexend text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
+                    >
+                      {user?.name || "Admin"}
+                      <img
+                        src={
+                          user?.avatar
+                            ? `/storage/${user.avatar}`
+                            : "/default-avatar.png"
+                        }
+                        className="mx-2 h-10 w-10 rounded-full border border-custom-yellow"
+                      />
+                      <svg
+                        className="-me-0.5 ms-2 h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </button>
+                  </span>
+                </Dropdown.Trigger>
+
+                <Dropdown.Content>
+                  <Dropdown.Link
+                    href={route("profile.edit")}
+                    className="font-lexend"
+                  >
+                    Profile
+                  </Dropdown.Link>
+                  <Dropdown.Link
+                    href={route("logout")}
+                    className="font-lexend"
+                    method="post"
+                    as="button"
+                  >
+                    Log Out
+                  </Dropdown.Link>
+                </Dropdown.Content>
+              </Dropdown>
+            </div>
           </div>
         </div>
 
