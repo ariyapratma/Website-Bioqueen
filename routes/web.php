@@ -123,8 +123,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/hero-team-value', [HeroTeamValueController::class, 'index'])->name('hero-team-value.index');
         Route::get('/hero-team-value/create', [HeroTeamValueController::class, 'create'])->name('hero-team-value.create');
         Route::post('/hero-team-value', [HeroTeamValueController::class, 'store'])->name('hero-team-value.store');
-        Route::get('/hero-team-value/{id}/edit', [HeroTeamValueController::class, 'edit'])->name('hero-team-value.edit');
-        Route::put('/hero-team-value/{id}', [HeroTeamValueController::class, 'update'])->name('hero-team-value.update');
+        Route::get('/hero-team-value/{heroTeamValue}/edit', [HeroTeamValueController::class, 'edit'])->name('hero-team-value.edit');
+        Route::put('/hero-team-value/{heroTeamValue}', [HeroTeamValueController::class, 'update'])->name('hero-team-value.update');
         Route::delete('/hero-team-value/{id}', [HeroTeamValueController::class, 'destroy'])->name('hero-team-value.destroy');
 
         // Route HeroFacilitiesValue

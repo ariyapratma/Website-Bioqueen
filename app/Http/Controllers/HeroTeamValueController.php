@@ -50,18 +50,12 @@ class HeroTeamValueController extends Controller
 
         // Proses gambar pertama jika ada
         if ($request->hasFile('image_url1')) {
-            $file = $request->file('image_url1');
-            $filename = time() . '_1.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/hero_team_value', $filename);
-            $data['image_url1'] = 'storage/hero_team_value/' . $filename;
+            $data['image_url1'] = $this->handleFileUpload($request->file('image_url1'), 'hero_team_value');
         }
 
         // Proses gambar kedua jika ada
         if ($request->hasFile('image_url2')) {
-            $file = $request->file('image_url2');
-            $filename = time() . '_2.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/hero_team_value', $filename);
-            $data['image_url2'] = 'storage/hero_team_value/' . $filename;
+            $data['image_url2'] = $this->handleFileUpload($request->file('image_url2'), 'hero_team_value');
         }
 
         // Simpan data ke database
@@ -69,6 +63,29 @@ class HeroTeamValueController extends Controller
 
         // Redirect setelah sukses
         return redirect()->route('hero-team-value.index');
+    }
+
+    /**
+     * Fungsi untuk menangani upload file dan menghindari nama file yang sama.
+     */
+    private function handleFileUpload($file, $directory)
+    {
+        $filename = $file->getClientOriginalName();
+        $path = 'public/' . $directory . '/' . $filename;
+        $counter = 1;
+
+        // Tambahkan angka jika file dengan nama yang sama sudah ada
+        while (Storage::exists($path)) {
+            $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . " ($counter)." . $file->getClientOriginalExtension();
+            $path = 'public/' . $directory . '/' . $filename;
+            $counter++;
+        }
+
+        // Simpan file
+        $file->storeAs('public/' . $directory, $filename);
+
+        // Kembalikan path yang disimpan
+        return 'storage/' . $directory . '/' . $filename;
     }
 
     /**
@@ -110,34 +127,21 @@ class HeroTeamValueController extends Controller
         // Ambil data input tanpa gambar
         $data = $request->only(['title', 'subtitle', 'heading1', 'content1', 'heading2', 'content2']);
 
-        // Proses upload gambar
-        $data['image_url1'] = $this->handleImageUpload($request, 'image_url1', $heroTeamValue->image_url1, 'hero_team_value');
-        $data['image_url2'] = $this->handleImageUpload($request, 'image_url2', $heroTeamValue->image_url2, 'hero_team_value');
+        // Proses gambar pertama jika ada
+        if ($request->hasFile('image_url1')) {
+            $data['image_url1'] = $this->handleFileUpload($request->file('image_url1'), 'hero_team_value');
+        }
+
+        // Proses gambar kedua jika ada
+        if ($request->hasFile('image_url2')) {
+            $data['image_url2'] = $this->handleFileUpload($request->file('image_url2'), 'hero_team_value');
+        }
 
         // Update data ke database
         $heroTeamValue->update($data);
 
         // Redirect setelah sukses
         return redirect()->route('hero-team-value.index');
-    }
-
-    private function handleImageUpload($request, $fieldName, $existingImagePath, $directory)
-    {
-        if ($request->hasFile($fieldName)) {
-            // Hapus gambar lama jika ada
-            if ($existingImagePath && Storage::exists(str_replace('storage/', 'public/', $existingImagePath))) {
-                Storage::delete(str_replace('storage/', 'public/', $existingImagePath));
-            }
-
-            // Simpan gambar baru
-            $file = $request->file($fieldName);
-            $filename = time() . '_' . $fieldName . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/' . $directory, $filename);
-            return 'storage/' . $directory . '/' . $filename;
-        }
-
-        // Kembalikan gambar lama jika tidak ada upload baru
-        return $existingImagePath;
     }
 
     /**

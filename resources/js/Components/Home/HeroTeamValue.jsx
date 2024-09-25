@@ -1,31 +1,31 @@
-export default function HeroWhyChooseValue() {
-  const whychoose = {
+export default function HeroTeamValue() {
+  const data = {
     title: "Mengapa Harus Memilih",
-    subtitle: "Menyesuaikan Kebutuhan Pelanggan",
+    subtitle: "Tim Ahli yang Inovatif",
     sections: [
       {
-        heading: "Kustom Produk",
+        heading: "Tim Riset Profesional",
         content:
-          "Kami bisa mewujudkan produk kosmetik impian Anda dengan aneka macam bahan aktif, warna, aroma, kemasan yang selalu mengikuti tren pasar kosmetik dengan berstandar CPKB Grade A dan BPOM.",
+          "Memiliki tim riset ahli dan profesional di industri kimia untuk membuat produk kosmetik yang inovatif. Menjamin keamanan produk yang dihasilkan dengan uji laboraturium sesuai dengan standart.",
       },
       {
-        heading: "Minimum Kuantiti Pemesanan Bervariasi",
+        heading: "Kontrol Kualitas yang Ketat",
         content:
-          "Jumlah minimum pemesanan dapat dipilih sesuai keinginan berdasarkan paket yang tersedia sehingga bisa menyesuaikan anggaran Anda.",
+          "Memiliki tim QC khusus yang bertugas memantau seluruh proses produksi dan memastikan seluruh proses dilakukan sesuai dengan standar Cara Pembuatan Kosmetik yang Baik (CPKB).",
       },
     ],
-    imageUrl: [
-      "/Home/HeroWhyChooseValue/HeroWhyChoose1.jpg",
-      "/Home/HeroWhyChooseValue/HeroWhyChoose2.jpg",
+    images: [
+      "public/Home/HeroTeamValue/HeroTeamValue1.jpg",
+      "public/Home/HeroTeamValue/HeroTeamValue2.jpg",
     ],
   };
 
   return (
-    <div className="mb-2 flex items-center justify-center py-12">
+    <div className="mb-2 flex items-center justify-center">
       <div className="w-full max-w-7xl p-6">
         <div className="hero-content flex flex-col lg:flex-row-reverse lg:items-start">
           <div className="order-2 flex w-full flex-col items-center lg:order-1 lg:ml-8 lg:w-1/2">
-            {whychoose.imageUrl.map((src, index) => (
+            {data.images.map((src, index) => (
               <img
                 key={index}
                 src={src}
@@ -41,9 +41,9 @@ export default function HeroWhyChooseValue() {
               <span className="font-bold">PT Ratu Bio Indonesia?</span>
             </h1>
             <h6 className="mb-8 rounded-xl bg-custom-yellow p-4 text-left font-lexend text-xl font-bold text-black sm:p-6 sm:text-xl">
-              {whychoose.subtitle}
+              {data.subtitle}
             </h6>
-            {whychoose.sections.map((section, index) => (
+            {data.sections.map((section, index) => (
               <div key={index}>
                 <h6 className="mb-2 text-left font-lexend text-xl font-medium text-black sm:text-2xl">
                   {section.heading}
