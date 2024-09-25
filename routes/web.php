@@ -139,8 +139,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/hero-certificate', [HeroCertificateController::class, 'index'])->name('hero-certificate.index');
         Route::get('/hero-certificate/create', [HeroCertificateController::class, 'create'])->name('hero-certificate.create');
         Route::post('/hero-certificate', [HeroCertificateController::class, 'store'])->name('hero-certificate.store');
-        Route::get('/hero-certificate/{id}/edit', [HeroCertificateController::class, 'edit'])->name('hero-certificate.edit');
-        Route::put('/hero-certificate/{id}', [HeroCertificateController::class, 'update'])->name('hero-certificate.update');
+        Route::get('/hero-certificate/{heroCertificate}/edit', [HeroCertificateController::class, 'edit'])->name('hero-certificate.edit');
+        Route::put('/hero-certificate/{heroCertificate}', [HeroCertificateController::class, 'update'])->name('hero-certificate.update');
         Route::delete('/hero-certificate/{id}', [HeroCertificateController::class, 'destroy'])->name('hero-certificate.destroy');
 
         // Route HeroService

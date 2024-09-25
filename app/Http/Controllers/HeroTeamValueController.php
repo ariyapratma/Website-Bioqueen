@@ -137,7 +137,7 @@ class HeroTeamValueController extends Controller
             $data['image_url2'] = $this->handleFileUpload($request->file('image_url2'), 'hero_team_value');
         }
 
-        // Update data ke database
+        // Simpan data ke database
         $heroTeamValue->update($data);
 
         // Redirect setelah sukses

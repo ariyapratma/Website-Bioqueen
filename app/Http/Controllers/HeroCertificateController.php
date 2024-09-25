@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Models\HeroCertificate;
+use Illuminate\Support\Facades\Storage;
 
 class HeroCertificateController extends Controller
 {
@@ -48,42 +49,27 @@ class HeroCertificateController extends Controller
 
         // Proses gambar pertama jika ada
         if ($request->hasFile('image_url1')) {
-            $file = $request->file('image_url1');
-            $filename = time() . '_1.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/hero_certificate', $filename);
-            $data['image_url1'] = 'storage/hero_certificate/' . $filename;
+            $data['image_url1'] = $this->handleFileUpload($request->file('image_url1'), 'hero_certificate');
         }
 
         // Proses gambar kedua jika ada
         if ($request->hasFile('image_url2')) {
-            $file = $request->file('image_url2');
-            $filename = time() . '_2.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/hero_certificate', $filename);
-            $data['image_url2'] = 'storage/hero_certificate/' . $filename;
+            $data['image_url2'] = $this->handleFileUpload($request->file('image_url2'), 'hero_certificate');
         }
 
         // Proses gambar ketiga jika ada
         if ($request->hasFile('image_url3')) {
-            $file = $request->file('image_url3');
-            $filename = time() . '_3.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/hero_certificate', $filename);
-            $data['image_url3'] = 'storage/hero_certificate/' . $filename;
+            $data['image_url3'] = $this->handleFileUpload($request->file('image_url3'), 'hero_certificate');
         }
 
         // Proses gambar keempat jika ada
         if ($request->hasFile('image_url4')) {
-            $file = $request->file('image_url4');
-            $filename = time() . '_4.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/hero_certificate', $filename);
-            $data['image_url4'] = 'storage/hero_certificate/' . $filename;
+            $data['image_url4'] = $this->handleFileUpload($request->file('image_url4'), 'hero_certificate');
         }
 
         // Proses gambar kelima jika ada
         if ($request->hasFile('image_url5')) {
-            $file = $request->file('image_url5');
-            $filename = time() . '_5.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/hero_certificate', $filename);
-            $data['image_url5'] = 'storage/hero_certificate/' . $filename;
+            $data['image_url5'] = $this->handleFileUpload($request->file('image_url5'), 'hero_certificate');
         }
 
         // Simpan data ke database
@@ -91,6 +77,29 @@ class HeroCertificateController extends Controller
 
         // Redirect setelah sukses
         return redirect()->route('hero-certificate.index');
+    }
+
+    /**
+     * Fungsi untuk menangani upload file dan menghindari nama file yang sama.
+     */
+    private function handleFileUpload($file, $directory)
+    {
+        $filename = $file->getClientOriginalName();
+        $path = 'public/' . $directory . '/' . $filename;
+        $counter = 1;
+
+        // Tambahkan angka jika file dengan nama yang sama sudah ada
+        while (Storage::exists($path)) {
+            $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . " ($counter)." . $file->getClientOriginalExtension();
+            $path = 'public/' . $directory . '/' . $filename;
+            $counter++;
+        }
+
+        // Simpan file
+        $file->storeAs('public/' . $directory, $filename);
+
+        // Kembalikan path yang disimpan
+        return 'storage/' . $directory . '/' . $filename;
     }
 
     /**
@@ -131,14 +140,32 @@ class HeroCertificateController extends Controller
         // Ambil data input tanpa gambar
         $data = $request->only(['title', 'subtitle']);
 
-        // Proses upload gambar
-        $data['image_url1'] = $this->handleImageUpload($request, 'image_url1', $heroCertificate->image_url1, 'hero_certificate');
-        $data['image_url2'] = $this->handleImageUpload($request, 'image_url2', $heroCertificate->image_url2, 'hero_certificate');
-        $data['image_url3'] = $this->handleImageUpload($request, 'image_url3', $heroCertificate->image_url3, 'hero_certificate');
-        $data['image_url4'] = $this->handleImageUpload($request, 'image_url4', $heroCertificate->image_url4, 'hero_certificate');
-        $data['image_url5'] = $this->handleImageUpload($request, 'image_url5', $heroCertificate->image_url5, 'hero_certificate');
+        // Proses gambar pertama jika ada
+        if ($request->hasFile('image_url1')) {
+            $data['image_url1'] = $this->handleFileUpload($request->file('image_url1'), 'hero_certificate');
+        }
 
-        // Update data ke database
+        // Proses gambar kedua jika ada
+        if ($request->hasFile('image_url2')) {
+            $data['image_url2'] = $this->handleFileUpload($request->file('image_url2'), 'hero_certificate');
+        }
+
+        // Proses gambar ketiga jika ada
+        if ($request->hasFile('image_url3')) {
+            $data['image_url3'] = $this->handleFileUpload($request->file('image_url3'), 'hero_certificate');
+        }
+
+        // Proses gambar keempat jika ada
+        if ($request->hasFile('image_url4')) {
+            $data['image_url4'] = $this->handleFileUpload($request->file('image_url4'), 'hero_certificate');
+        }
+
+        // Proses gambar kelima jika ada
+        if ($request->hasFile('image_url5')) {
+            $data['image_url5'] = $this->handleFileUpload($request->file('image_url5'), 'hero_certificate');
+        }
+
+        // Simpan data ke database
         $heroCertificate->update($data);
 
         // Redirect setelah sukses
