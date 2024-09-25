@@ -107,8 +107,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/hero-why-choose', [HeroWhyChooseController::class, 'index'])->name('hero-why-choose.index');
         Route::get('/hero-why-choose/create', [HeroWhyChooseController::class, 'create'])->name('hero-why-choose.create');
         Route::post('/hero-why-choose', [HeroWhyChooseController::class, 'store'])->name('hero-why-choose.store');
-        Route::get('/hero-why-choose/{id}/edit', [HeroWhyChooseController::class, 'edit'])->name('hero-why-choose.edit');
-        Route::put('/hero-why-choose/{id}', [HeroWhyChooseController::class, 'update'])->name('hero-why-choose.update');
+        Route::get('/hero-why-choose/{heroWhyChoose}/edit', [HeroWhyChooseController::class, 'edit'])->name('hero-why-choose.edit');
+        Route::put('/hero-why-choose/{heroWhyChoose}', [HeroWhyChooseController::class, 'update'])->name('hero-why-choose.update');
         Route::delete('/hero-why-choose/{id}', [HeroWhyChooseController::class, 'destroy'])->name('hero-why-choose.destroy');
 
         // Route HeroMaklonValue

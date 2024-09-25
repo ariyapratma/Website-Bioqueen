@@ -22,7 +22,7 @@ const Index = ({ auth }) => {
   const { dataHeroReview } = props;
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col overflow-x-hidden">
       <Head title="Home | PT Ratu Bio Indonesia" />
       <Navbar auth={auth} />
       <main className="flex-grow">

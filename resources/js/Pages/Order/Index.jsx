@@ -4,17 +4,17 @@ import HeaderOrder from "./HeaderOrder";
 import Footer from "@/Components/Footer/Footer";
 
 const Order = ({ auth }) => {
-    return (
-        <div className="flex min-h-screen flex-col">
-            <Head title="Order | PT Ratu Bio Indonesia" />
-            <Navbar auth={auth} />
-            <main className="flex-grow">
-                {/*HeaderOrder*/}
-                <HeaderOrder />
-            </main>
-            <Footer />
-        </div>
-    );
+  return (
+    <div className="flex min-h-screen flex-col overflow-x-hidden">
+      <Head title="Order | PT Ratu Bio Indonesia" />
+      <Navbar auth={auth} />
+      <main className="flex-grow">
+        {/*HeaderOrder*/}
+        <HeaderOrder />
+      </main>
+      <Footer />
+    </div>
+  );
 };
 
 export default Order;

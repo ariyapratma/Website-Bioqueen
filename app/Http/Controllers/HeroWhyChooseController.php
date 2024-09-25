@@ -50,18 +50,12 @@ class HeroWhyChooseController extends Controller
 
         // Proses gambar pertama jika ada
         if ($request->hasFile('image_url1')) {
-            $file = $request->file('image_url1');
-            $filename = time() . '_1.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/hero_why_choose', $filename);
-            $data['image_url1'] = 'storage/hero_why_choose/' . $filename;
+            $data['image_url1'] = $this->handleFileUpload($request->file('image_url1'), 'hero_why_choose');
         }
 
         // Proses gambar kedua jika ada
         if ($request->hasFile('image_url2')) {
-            $file = $request->file('image_url2');
-            $filename = time() . '_2.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/hero_why_choose', $filename);
-            $data['image_url2'] = 'storage/hero_why_choose/' . $filename;
+            $data['image_url2'] = $this->handleFileUpload($request->file('image_url2'), 'hero_why_choose');
         }
 
         // Simpan data ke database
@@ -71,6 +65,28 @@ class HeroWhyChooseController extends Controller
         return redirect()->route('hero-why-choose.index');
     }
 
+    /**
+     * Fungsi untuk menangani upload file dan menghindari nama file yang sama.
+     */
+    private function handleFileUpload($file, $directory)
+    {
+        $filename = $file->getClientOriginalName();
+        $path = 'public/' . $directory . '/' . $filename;
+        $counter = 1;
+
+        // Tambahkan angka jika file dengan nama yang sama sudah ada
+        while (Storage::exists($path)) {
+            $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . " ($counter)." . $file->getClientOriginalExtension();
+            $path = 'public/' . $directory . '/' . $filename;
+            $counter++;
+        }
+
+        // Simpan file
+        $file->storeAs('public/' . $directory, $filename);
+
+        // Kembalikan path yang disimpan
+        return 'storage/' . $directory . '/' . $filename;
+    }
 
     /**
      * Display the specified resource.
@@ -99,11 +115,11 @@ class HeroWhyChooseController extends Controller
     {
         // Validasi input
         $request->validate([
-            'title' => 'required|string|max:255',
-            'subtitle' => 'required|string|max:255',
-            'heading1' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
+            'subtitle' => 'nullable|string|max:255',
+            'heading1' => 'nullable|string|max:255',
             'content1' => 'nullable|string',
-            'heading2' => 'required|string|max:255',
+            'heading2' => 'nullable|string|max:255',
             'content2' => 'nullable|string',
             'image_url1' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'image_url2' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
@@ -112,34 +128,21 @@ class HeroWhyChooseController extends Controller
         // Ambil data input tanpa gambar
         $data = $request->only(['title', 'subtitle', 'heading1', 'content1', 'heading2', 'content2']);
 
-        // Proses upload gambar
-        $data['image_url1'] = $this->handleImageUpload($request, 'image_url1', $heroWhyChoose->image_url1, 'hero_why_choose');
-        $data['image_url2'] = $this->handleImageUpload($request, 'image_url2', $heroWhyChoose->image_url2, 'hero_why_choose');
+        // Proses gambar pertama jika ada
+        if ($request->hasFile('image_url1')) {
+            $data['image_url1'] = $this->handleFileUpload($request->file('image_url1'), 'hero_why_choose');
+        }
 
-        // Update data ke database
+        // Proses gambar kedua jika ada
+        if ($request->hasFile('image_url2')) {
+            $data['image_url2'] = $this->handleFileUpload($request->file('image_url2'), 'hero_why_choose');
+        }
+
+        // Simpan data ke database
         $heroWhyChoose->update($data);
 
         // Redirect setelah sukses
         return redirect()->route('hero-why-choose.index');
-    }
-
-    private function handleImageUpload($request, $fieldName, $existingImagePath, $directory)
-    {
-        if ($request->hasFile($fieldName)) {
-            // Hapus gambar lama jika ada
-            if ($existingImagePath && Storage::exists(str_replace('storage/', 'public/', $existingImagePath))) {
-                Storage::delete(str_replace('storage/', 'public/', $existingImagePath));
-            }
-
-            // Simpan gambar baru
-            $file = $request->file($fieldName);
-            $filename = time() . '_' . $fieldName . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/' . $directory, $filename);
-            return 'storage/' . $directory . '/' . $filename;
-        }
-
-        // Kembalikan gambar lama jika tidak ada upload baru
-        return $existingImagePath;
     }
 
     /**

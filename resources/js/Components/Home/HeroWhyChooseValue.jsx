@@ -1,6 +1,6 @@
 export default function HeroWhyChooseValue() {
   const whychoose = {
-    title: "Mengapa HARUS Memilih PT Ratu Bio Indonesia?",
+    title: "Mengapa Harus Memilih PT Ratu Bio Indonesia?",
     subtitle: "Menyesuaikan Kebutuhan Pelanggan",
     sections: [
       {
