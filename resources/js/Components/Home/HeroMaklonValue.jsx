@@ -5,13 +5,13 @@ export default function HeroMaklonValue() {
       {
         heading: "Harga Bersaing",
         content:
-          "Kami bisa menyesuaikan anggaran produk kosmetikmu mulai dari bahan baku hingga kemasan dengan biaya yang dapat disepakati bersama untuk memulai bisnis sabun.",
+          "Kami bisa menyesuaikan anggaran produk maklonmu mulai dari bahan baku hingga kemasan dengan biaya yang dapat disepakati bersama untuk memulai bisnis sabun.",
         images: "/Home/HeroMaklonValue/HeroMaklonValue1.jpg",
       },
       {
         heading: "Jaminan Aman dan Berkualitas",
         content:
-          "Kami bisa menyesuaikan anggaran produk kosmetikmu mulai dari bahan baku hingga kemasan dengan biaya yang dapat disepakati bersama untuk memulai bisnis sabun.",
+          "Kami bisa menyesuaikan anggaran produk maklonmu mulai dari bahan baku hingga kemasan dengan biaya yang dapat disepakati bersama untuk memulai bisnis sabun.",
         images: "/Home/HeroMaklonValue/HeroMaklonValue2.jpg",
       },
     ],

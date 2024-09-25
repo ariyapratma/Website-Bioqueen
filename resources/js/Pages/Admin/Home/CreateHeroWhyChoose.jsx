@@ -32,6 +32,8 @@ const CreateHeroWhyChoose = ({ auth }) => {
     formData.append("content1", data.content1);
     formData.append("heading2", data.heading2);
     formData.append("content2", data.content2);
+    formData.append("image_url1", data.image_url1);
+    formData.append("image_url2", data.image_url2);
 
     post("/hero-why-choose", {
       data: formData,

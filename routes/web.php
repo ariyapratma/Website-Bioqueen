@@ -115,8 +115,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/hero-maklon-value', [HeroMaklonValueController::class, 'index'])->name('hero-maklon-value.index');
         Route::get('/hero-maklon-value/create', [HeroMaklonValueController::class, 'create'])->name('hero-maklon-value.create');
         Route::post('/hero-maklon-value', [HeroMaklonValueController::class, 'store'])->name('hero-maklon-value.store');
-        Route::get('/hero-maklon-value/{id}/edit', [HeroMaklonValueController::class, 'edit'])->name('hero-maklon-value.edit');
-        Route::put('/hero-maklon-value/{id}', [HeroMaklonValueController::class, 'update'])->name('hero-maklon-value.update');
+        Route::get('/hero-maklon-value/{heroMaklonValue}/edit', [HeroMaklonValueController::class, 'edit'])->name('hero-maklon-value.edit');
+        Route::put('/hero-maklon-value/{heroMaklonValue}', [HeroMaklonValueController::class, 'update'])->name('hero-maklon-value.update');
         Route::delete('/hero-maklon-value/{id}', [HeroMaklonValueController::class, 'destroy'])->name('hero-maklon-value.destroy');
 
         // Route HeroTeamValue
