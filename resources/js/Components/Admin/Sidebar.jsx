@@ -131,6 +131,19 @@ const Sidebar = ({ activeMenu, setActiveMenu, headerHome }) => {
               </li>
               <li>
                 <Link
+                  href="/hero-team-value"
+                  onClick={() => setActiveMenu("hero-team-value")}
+                  className={`flex items-center p-2 text-sm ${
+                    activeMenu === "hero-team-value"
+                      ? "bg-custom-yellow font-lexend text-black"
+                      : "text-gray-600"
+                  }`}
+                >
+                  Manage Hero Team Value
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/hero-facilities-value"
                   onClick={() => setActiveMenu("hero-facilities-value")}
                   className={`flex items-center p-2 text-sm ${
@@ -153,6 +166,58 @@ const Sidebar = ({ activeMenu, setActiveMenu, headerHome }) => {
                   }`}
                 >
                   Manage Hero Certificate
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/hero-service"
+                  onClick={() => setActiveMenu("hero-service")}
+                  className={`flex items-center p-2 text-sm ${
+                    activeMenu === "hero-service"
+                      ? "bg-custom-yellow font-lexend text-black"
+                      : "text-gray-600"
+                  }`}
+                >
+                  Manage Hero Service
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/hero-video"
+                  onClick={() => setActiveMenu("hero-video")}
+                  className={`flex items-center p-2 text-sm ${
+                    activeMenu === "hero-video"
+                      ? "bg-custom-yellow font-lexend text-black"
+                      : "text-gray-600"
+                  }`}
+                >
+                  Manage Hero Video
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/hero-excellence-value"
+                  onClick={() => setActiveMenu("hero-excellence-value")}
+                  className={`flex items-center p-2 text-sm ${
+                    activeMenu === "hero-excellence-value"
+                      ? "bg-custom-yellow font-lexend text-black"
+                      : "text-gray-600"
+                  }`}
+                >
+                  Manage Hero Excellence Value
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/hero-review"
+                  onClick={() => setActiveMenu("hero-review")}
+                  className={`flex items-center p-2 text-sm ${
+                    activeMenu === "hero-review"
+                      ? "bg-custom-yellow font-lexend text-black"
+                      : "text-gray-600"
+                  }`}
+                >
+                  Manage Hero Review
                 </Link>
               </li>
             </ul>

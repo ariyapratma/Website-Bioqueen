@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Models\HeroFacilitiesValue;
+use Illuminate\Support\Facades\Storage;
 
 class HeroFacilitiesValueController extends Controller
 {
@@ -48,18 +49,12 @@ class HeroFacilitiesValueController extends Controller
 
         // Proses gambar pertama jika ada
         if ($request->hasFile('image_url1')) {
-            $file = $request->file('image_url1');
-            $filename = time() . '_1.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/hero_facilities_value', $filename);
-            $data['image_url1'] = 'storage/hero_facilities_value/' . $filename;
+            $data['image_url1'] = $this->handleFileUpload($request->file('image_url1'), 'hero_facilities_value');
         }
 
         // Proses gambar kedua jika ada
         if ($request->hasFile('image_url2')) {
-            $file = $request->file('image_url2');
-            $filename = time() . '_2.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/hero_facilities_value', $filename);
-            $data['image_url2'] = 'storage/hero_facilities_value/' . $filename;
+            $data['image_url2'] = $this->handleFileUpload($request->file('image_url2'), 'hero_facilities_value');
         }
 
         // Simpan data ke database
@@ -67,6 +62,29 @@ class HeroFacilitiesValueController extends Controller
 
         // Redirect setelah sukses
         return redirect()->route('hero-facilities-value.index');
+    }
+
+    /**
+     * Fungsi untuk menangani upload file dan menghindari nama file yang sama.
+     */
+    private function handleFileUpload($file, $directory)
+    {
+        $filename = $file->getClientOriginalName();
+        $path = 'public/' . $directory . '/' . $filename;
+        $counter = 1;
+
+        // Tambahkan angka jika file dengan nama yang sama sudah ada
+        while (Storage::exists($path)) {
+            $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . " ($counter)." . $file->getClientOriginalExtension();
+            $path = 'public/' . $directory . '/' . $filename;
+            $counter++;
+        }
+
+        // Simpan file
+        $file->storeAs('public/' . $directory, $filename);
+
+        // Kembalikan path yang disimpan
+        return 'storage/' . $directory . '/' . $filename;
     }
 
     /**
@@ -107,11 +125,17 @@ class HeroFacilitiesValueController extends Controller
         // Ambil data input tanpa gambar
         $data = $request->only(['title', 'heading1', 'content1', 'heading2', 'content2']);
 
-        // Proses upload gambar
-        $data['image_url1'] = $this->handleImageUpload($request, 'image_url1', $heroFacilitiesValue->image_url1, 'hero_facilities_value');
-        $data['image_url2'] = $this->handleImageUpload($request, 'image_url2', $heroFacilitiesValue->image_url2, 'hero_facilities_value');
+        // Proses gambar pertama jika ada
+        if ($request->hasFile('image_url1')) {
+            $data['image_url1'] = $this->handleFileUpload($request->file('image_url1'), 'hero_facilities_value');
+        }
 
-        // Update data ke database
+        // Proses gambar kedua jika ada
+        if ($request->hasFile('image_url2')) {
+            $data['image_url2'] = $this->handleFileUpload($request->file('image_url2'), 'hero_facilities_value');
+        }
+
+        // Simpan data ke database
         $heroFacilitiesValue->update($data);
 
         // Redirect setelah sukses

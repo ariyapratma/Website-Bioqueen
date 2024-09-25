@@ -61,7 +61,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->middleware('role:admin|user')->name('dashboard');
 
     // Rute untuk menambahkan review, hanya user yang bisa mengakses
-    Route::middleware(['auth', 'role:user'])->group(function () {
+    Route::middleware(['auth', 'role:user|admin'])->group(function () {
 
         // Home Page :
 
@@ -131,8 +131,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/hero-facilities-value', [HeroFacilitiesValueController::class, 'index'])->name('hero-facilities-value.index');
         Route::get('/hero-facilities-value/create', [HeroFacilitiesValueController::class, 'create'])->name('hero-facilities-value.create');
         Route::post('/hero-facilities-value', [HeroFacilitiesValueController::class, 'store'])->name('hero-facilities-value.store');
-        Route::get('/hero-facilities-value/{id}/edit', [HeroFacilitiesValueController::class, 'edit'])->name('hero-facilities-value.edit');
-        Route::put('/hero-facilities-value/{id}', [HeroFacilitiesValueController::class, 'update'])->name('hero-facilities-value.update');
+        Route::get('/hero-facilities-value/{heroFacilitiesValue}/edit', [HeroFacilitiesValueController::class, 'edit'])->name('hero-facilities-value.edit');
+        Route::put('/hero-facilities-value/{heroFacilitiesValue}', [HeroFacilitiesValueController::class, 'update'])->name('hero-facilities-value.update');
         Route::delete('/hero-facilities-value/{id}', [HeroFacilitiesValueController::class, 'destroy'])->name('hero-facilities-value.destroy');
 
         // Route HeroCertificate
