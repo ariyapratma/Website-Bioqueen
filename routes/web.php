@@ -63,9 +63,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Rute untuk menambahkan review, hanya user yang bisa mengakses
     Route::middleware(['auth', 'role:user'])->group(function () {
 
-         // Home Page :
+        // Home Page :
 
-         // Route HeroReview
+        // Route HeroReview
         Route::get('/hero-review', [HeroReviewController::class, 'index'])->name('hero-review.index');
         Route::post('/hero-review', [HeroReviewController::class, 'store'])->name('hero-review.store');
         // Route::get('/hero-review/{id}/edit', [HeroReviewController::class, 'edit'])->name('hero-review.edit');
@@ -99,8 +99,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/hero-company', [HeroCompanyController::class, 'index'])->name('hero-company.index');
         Route::get('/hero-company/create', [HeroCompanyController::class, 'create'])->name('hero-company.create');
         Route::post('/hero-company', [HeroCompanyController::class, 'store'])->name('hero-company.store');
-        Route::get('/hero-company/{id}/edit', [HeroCompanyController::class, 'edit'])->name('hero-company.edit');
-        Route::put('/hero-company/{id}', [HeroCompanyController::class, 'update'])->name('hero-company.update');
+        Route::get('/hero-company/{heroCompany}/edit', [HeroCompanyController::class, 'edit'])->name('hero-company.edit');
+        Route::put('/hero-company/{heroCompany}', [HeroCompanyController::class, 'update'])->name('hero-company.update');
         Route::delete('/hero-company/{id}', [HeroCompanyController::class, 'destroy'])->name('hero-company.destroy');
 
         // Route HeroWhyChoose

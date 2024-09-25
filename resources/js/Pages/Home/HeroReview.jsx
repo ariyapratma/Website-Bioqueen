@@ -24,7 +24,7 @@ const HeroReview = () => {
 
   return (
     <div className="flex flex-col items-center p-4 sm:p-6">
-      <Head title="Reviews | PT Ratu Bio Indonesia" />
+      {/* <Head title="Reviews | PT Ratu Bio Indonesia" /> */}
       <h1 className="mb-4 font-lexend text-3xl font-semibold text-black md:mb-6 md:text-5xl">
         Reviews
       </h1>

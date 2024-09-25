@@ -5,12 +5,14 @@ import { IoChevronBackOutline } from "react-icons/io5";
 import Sidebar from "@/Components/Admin/Sidebar";
 import Dropdown from "@/Components/Dropdown";
 
-const CreateHeroFlyer = (user) => {
+const CreateHeroFlyer = ({ auth }) => {
   const { data, setData, post, processing, errors } = useForm({
     image_url: null,
   });
 
   const [activeMenu, setActiveMenu] = useState("hero-flyer");
+
+  const user = auth.user;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,7 +30,7 @@ const CreateHeroFlyer = (user) => {
           icon: "success",
           confirmButtonText: "OK",
         }).then(() => {
-          window.location.href = "/hero-flyer";
+          Inertia.visit("/hero-flyer");
         });
       },
       onError: () => {
@@ -70,7 +72,7 @@ const CreateHeroFlyer = (user) => {
                       type="button"
                       className="inline-flex items-center rounded-md border border-transparent px-3 py-2 font-lexend text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
                     >
-                      {user?.name || "Admin"}
+                      {user?.name}
                       <img
                         src={
                           user?.avatar

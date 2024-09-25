@@ -5,7 +5,7 @@ import { IoChevronBackOutline } from "react-icons/io5";
 import Sidebar from "@/Components/Admin/Sidebar";
 import Dropdown from "@/Components/Dropdown";
 
-const CreateHeaderHome = ( user ) => {
+const CreateHeaderHome = ({ auth }) => {
   const { data, setData, post, processing, errors } = useForm({
     title: "",
     description: "",
@@ -14,6 +14,8 @@ const CreateHeaderHome = ( user ) => {
   });
 
   const [activeMenu, setActiveMenu] = useState("header-home");
+
+  const user = auth.user;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -34,7 +36,7 @@ const CreateHeaderHome = ( user ) => {
           icon: "success",
           confirmButtonText: "OK",
         }).then(() => {
-          window.location.href = "/header-home";
+          Inertia.visit("/header-home");
         });
       },
       onError: () => {
@@ -76,7 +78,7 @@ const CreateHeaderHome = ( user ) => {
                       type="button"
                       className="inline-flex items-center rounded-md border border-transparent px-3 py-2 font-lexend text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
                     >
-                      {user?.name || "Admin"}
+                      {user?.name}
                       <img
                         src={
                           user?.avatar

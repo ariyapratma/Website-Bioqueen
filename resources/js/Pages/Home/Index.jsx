@@ -16,7 +16,7 @@ import HeroReview from "./HeroReview";
 import HeroAddReview from "./HeroAddReview";
 import Footer from "@/Components/Footer/Footer";
 
-const Welcome = ({ auth }) => {
+const Index = ({ auth }) => {
   const { props } = usePage();
   const {} = props;
   const { dataHeroReview } = props;
@@ -58,4 +58,4 @@ const Welcome = ({ auth }) => {
   );
 };
 
-export default Welcome;
+export default Index;

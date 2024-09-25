@@ -5,12 +5,14 @@ import { IoChevronBackOutline } from "react-icons/io5";
 import Sidebar from "@/Components/Admin/Sidebar";
 import Dropdown from "@/Components/Dropdown";
 
-const EditHeroFlyer = ({ dataHeroFlyer, user }) => {
+const EditHeroFlyer = ({ dataHeroFlyer, auth }) => {
   const { data, setData, put, processing, errors } = useForm({
     image_url: null,
   });
 
   const [activeMenu, setActiveMenu] = useState("hero-flyer");
+
+  const user = auth.user;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -28,7 +30,7 @@ const EditHeroFlyer = ({ dataHeroFlyer, user }) => {
           icon: "success",
           confirmButtonText: "OK",
         }).then(() => {
-          window.location.href = "/hero-flyer";
+          Inertia.visit("/hero-flyer");
         });
       },
       onError: () => {
@@ -41,11 +43,6 @@ const EditHeroFlyer = ({ dataHeroFlyer, user }) => {
       },
     });
   };
-
-  // Jika data belum tersedia, tampilkan loading state
-  if (!dataHeroFlyer) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -72,7 +69,7 @@ const EditHeroFlyer = ({ dataHeroFlyer, user }) => {
                       type="button"
                       className="inline-flex items-center rounded-md border border-transparent px-3 py-2 font-lexend text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
                     >
-                      {user?.name || "Admin"}
+                      {user?.name}
                       <img
                         src={
                           user?.avatar

@@ -7,9 +7,10 @@ import Searchbar from "@/Components/Admin/Searchbar";
 import Notification from "@/Components/Admin/Notification";
 import Dropdown from "@/Components/Dropdown";
 
-const ManageHeroFlyer = ({ dataHeroFlyer, user }) => {
+const ManageHeroFlyer = ({ dataHeroFlyer, auth }) => {
   const { delete: deleteRecord } = useForm();
   const [activeMenu, setActiveMenu] = useState("hero-flyer");
+  const user = auth.user;
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -63,7 +64,7 @@ const ManageHeroFlyer = ({ dataHeroFlyer, user }) => {
                       type="button"
                       className="inline-flex items-center rounded-md border border-transparent px-3 py-2 font-lexend text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
                     >
-                      {user?.name || "Admin"}
+                      {user?.name}
                       <img
                         src={
                           user?.avatar

@@ -35,16 +35,31 @@ class HeroCompanyController extends Controller
     {
         $request->validate([
             'image_url' => 'image|mimes:jpg,jpeg,png|max:2048',
-            'youtube_link' => 'nullable|string',
+            'youtube_link' => 'required|string|max:255',
             'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'description' => 'required|string|max:255',
         ]);
 
         $data = $request->only(['youtube_link', 'title', 'description']);
 
         if ($request->hasFile('image_url')) {
             $file = $request->file('image_url');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
+
+            // Menggunakan nama asli dari file
+            $filename = $file->getClientOriginalName();
+
+            // Tambahkan logika untuk menangani nama file yang sama
+            $path = 'public/hero_company/' . $filename;
+            $counter = 1;
+
+            while (Storage::exists($path)) {
+                // Menambahkan angka untuk membedakan nama file jika sudah ada
+                $filename = pathinfo($filename, PATHINFO_FILENAME) . " ($counter)." . $file->getClientOriginalExtension();
+                $path = 'public/hero_company/' . $filename;
+                $counter++;
+            }
+
+            // Menyimpan file
             $file->storeAs('public/hero_company', $filename);
             $data['image_url'] = 'storage/hero_company/' . $filename;
         }
@@ -78,35 +93,40 @@ class HeroCompanyController extends Controller
      */
     public function update(Request $request, HeroCompany $heroCompany)
     {
+        // Validasi data yang diinput
         $request->validate([
-            'image_url' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'youtube_link' => 'nullable|string',
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'image_url' => 'image|mimes:jpg,jpeg,png|max:2048',
+            'youtube_link' => 'nullable|string|max:255',
+            'title' => 'nullable|string|max:255',
+            'description' => 'nullable|string|max:255',
         ]);
 
         $data = $request->only(['youtube_link', 'title', 'description']);
 
         // Handle image upload
         if ($request->hasFile('image_url')) {
-            // Delete old image
-            if ($heroCompany->image_url && Storage::exists(str_replace('storage/', 'public/', $heroCompany->image_url))) {
-                Storage::delete(str_replace('storage/', 'public/', $heroCompany->image_url));
+            // Hapus gambar lama jika ada
+            $oldImagePath = public_path($heroCompany->image_url);
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath);
             }
 
+            // Simpan gambar baru
             $file = $request->file('image_url');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('public/hero_company', $filename);
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('storage/hero_company/'), $filename);
+
+            // Perbarui path gambar di database
             $data['image_url'] = 'storage/hero_company/' . $filename;
-        } else {
-            // Use existing image URL if no new image is uploaded
-            $data['image_url'] = $request->input('existing_image_url', $heroCompany->image_url);
         }
 
+        // Update data lainnya
         $heroCompany->update($data);
 
+        // Redirect ke halaman index setelah update berhasil
         return redirect()->route('hero-company.index');
     }
+
 
     /**
      * Remove the specified resource from storage.

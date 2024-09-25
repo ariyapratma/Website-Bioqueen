@@ -5,7 +5,7 @@ import { IoChevronBackOutline } from "react-icons/io5";
 import Sidebar from "@/Components/Admin/Sidebar";
 import Dropdown from "@/Components/Dropdown";
 
-const EditHeaderHome = ({ dataHeaderHome, user }) => {
+const EditHeaderHome = ({ dataHeaderHome, auth }) => {
   const { data, setData, put, processing, errors } = useForm({
     title: dataHeaderHome.title || "",
     description: dataHeaderHome.description || "",
@@ -14,6 +14,8 @@ const EditHeaderHome = ({ dataHeaderHome, user }) => {
   });
 
   const [activeMenu, setActiveMenu] = useState("header-home");
+
+  const user = auth.user;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -34,7 +36,7 @@ const EditHeaderHome = ({ dataHeaderHome, user }) => {
           icon: "success",
           confirmButtonText: "OK",
         }).then(() => {
-          window.location.href = "/header-home";
+          Inertia.visit("/header-home");
         });
       },
       onError: () => {
@@ -47,11 +49,6 @@ const EditHeaderHome = ({ dataHeaderHome, user }) => {
       },
     });
   };
-
-  // Jika data belum tersedia, tampilkan loading state
-  if (!dataHeaderHome) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -68,7 +65,6 @@ const EditHeaderHome = ({ dataHeaderHome, user }) => {
             <IoChevronBackOutline className="h-4 w-4" />
           </Link>
 
-         
           {/* Admin and Avatar */}
           <div className="flex items-center">
             <div className="relative ms-3">
@@ -79,7 +75,7 @@ const EditHeaderHome = ({ dataHeaderHome, user }) => {
                       type="button"
                       className="inline-flex items-center rounded-md border border-transparent px-3 py-2 font-lexend text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
                     >
-                      {user?.name || "Admin"}
+                      {user?.name}
                       <img
                         src={
                           user?.avatar
@@ -183,7 +179,7 @@ const EditHeaderHome = ({ dataHeaderHome, user }) => {
             </label>
             <input
               id="image_url"
-              type="file" 
+              type="file"
               onChange={(e) => setData("image_url", e.target.files[0])}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
             />
