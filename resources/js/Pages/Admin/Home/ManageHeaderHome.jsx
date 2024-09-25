@@ -121,7 +121,7 @@ const ManageHeaderHome = ({ dataHeaderHome, auth }) => {
             href="/header-home/create"
             className="rounded bg-custom-yellow px-4 py-2 font-lexend text-black hover:bg-yellow-500"
           >
-            Add New Header
+            Add New Header Home
           </Link>
         </div>
 

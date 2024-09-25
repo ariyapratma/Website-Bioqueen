@@ -155,8 +155,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/hero-video', [HeroVideoController::class, 'index'])->name('hero-video.index');
         Route::get('/hero-video/create', [HeroVideoController::class, 'create'])->name('hero-video.create');
         Route::post('/hero-video', [HeroVideoController::class, 'store'])->name('hero-video.store');
-        Route::get('/hero-video/{id}/edit', [HeroVideoController::class, 'edit'])->name('hero-video.edit');
-        Route::put('/hero-video/{id}', [HeroVideoController::class, 'update'])->name('hero-video.update');
+        Route::get('/hero-video/{heroVideo}/edit', [HeroVideoController::class, 'edit'])->name('hero-video.edit');
+        Route::put('/hero-video/{heroVideo}', [HeroVideoController::class, 'update'])->name('hero-video.update');
         Route::delete('/hero-video/{id}', [HeroVideoController::class, 'destroy'])->name('hero-video.destroy');
 
         // Route HeroExcellenceValue
