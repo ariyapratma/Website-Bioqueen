@@ -147,8 +147,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/hero-service', [HeroServiceController::class, 'index'])->name('hero-service.index');
         Route::get('/hero-service/create', [HeroServiceController::class, 'create'])->name('hero-service.create');
         Route::post('/hero-service', [HeroServiceController::class, 'store'])->name('hero-service.store');
-        Route::get('/hero-service/{id}/edit', [HeroServiceController::class, 'edit'])->name('hero-service.edit');
-        Route::put('/hero-service/{id}', [HeroServiceController::class, 'update'])->name('hero-service.update');
+        Route::get('/hero-service/{heroService}/edit', [HeroServiceController::class, 'edit'])->name('hero-service.edit');
+        Route::put('/hero-service/{heroService}', [HeroServiceController::class, 'update'])->name('hero-service.update');
         Route::delete('/hero-service/{id}', [HeroServiceController::class, 'destroy'])->name('hero-service.destroy');
 
         // Route HeroVideo

@@ -48,7 +48,22 @@ class HeroServiceController extends Controller
 
         if ($request->hasFile('image_url')) {
             $file = $request->file('image_url');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
+
+            // Menggunakan nama asli dari file
+            $filename = $file->getClientOriginalName();
+
+            // Tambahkan logika untuk menangani nama file yang sama
+            $path = 'public/hero_service/' . $filename;
+            $counter = 1;
+
+            while (Storage::exists($path)) {
+                // Menambahkan angka untuk membedakan nama file jika sudah ada
+                $filename = pathinfo($filename, PATHINFO_FILENAME) . " ($counter)." . $file->getClientOriginalExtension();
+                $path = 'public/hero_service/' . $filename;
+                $counter++;
+            }
+
+            // Menyimpan file
             $file->storeAs('public/hero_service', $filename);
             $data['image_url'] = 'storage/hero_service/' . $filename;
         }
@@ -103,14 +118,30 @@ class HeroServiceController extends Controller
             }
 
             $file = $request->file('image_url');
-            $filename = time() . '.' . $file->getClientOriginalExtension();
+
+            // Menggunakan nama asli dari file
+            $filename = $file->getClientOriginalName();
+
+            // Tambahkan logika untuk menangani nama file yang sama
+            $path = 'public/hero_service/' . $filename;
+            $counter = 1;
+
+            while (Storage::exists($path)) {
+                // Menambahkan angka untuk membedakan nama file jika sudah ada
+                $filename = pathinfo($filename, PATHINFO_FILENAME) . " ($counter)." . $file->getClientOriginalExtension();
+                $path = 'public/hero_service/' . $filename;
+                $counter++;
+            }
+
+            // Menyimpan file
             $file->storeAs('public/hero_service', $filename);
             $data['image_url'] = 'storage/hero_service/' . $filename;
         } else {
-            // Use existing image URL if no new image is uploaded
-            $data['image_url'] = $request->input('existing_image_url', $heroService->image_url);
+            // Gunakan existing image URL jika tidak ada gambar baru yang diupload
+            $data['image_url'] = $heroService->image_url;
         }
 
+        // Update model
         $heroService->update($data);
 
         return redirect()->route('hero-service.index');
