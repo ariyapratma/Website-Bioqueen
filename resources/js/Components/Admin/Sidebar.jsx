@@ -15,16 +15,29 @@ const Sidebar = ({ activeMenu, setActiveMenu }) => {
   const [dropdownAboutUsOpen, setDropdownAboutUsOpen] = useState(false);
 
   useEffect(() => {
-    // Buka dropdown jika activeMenu sesuai
-    if (
-      activeMenu.startsWith("header-home") ||
-      activeMenu.startsWith("hero-")
-    ) {
-      setDropdownHomeOpen(true);
-    }
-    if (activeMenu.startsWith("header-about-us")) {
-      setDropdownAboutUsOpen(true);
-    }
+    // Buka dropdown Home jika ada submenu yang aktif
+    setDropdownHomeOpen(
+      activeMenu.startsWith("home-page") ||
+        activeMenu.startsWith("header-home") ||
+        activeMenu.startsWith("hero-flyer") ||
+        activeMenu.startsWith("hero-company") ||
+        activeMenu.startsWith("hero-why-choose") ||
+        activeMenu.startsWith("hero-maklon-value") ||
+        activeMenu.startsWith("hero-team-value") ||
+        activeMenu.startsWith("hero-facilities-value") ||
+        activeMenu.startsWith("hero-certificate") ||
+        activeMenu.startsWith("hero-service") ||
+        activeMenu.startsWith("hero-video") ||
+        activeMenu.startsWith("hero-excellence-value") ||
+        activeMenu.startsWith("hero-review"),
+    );
+
+    // Buka dropdown About Us jika ada submenu yang aktif
+    setDropdownAboutUsOpen(
+      activeMenu.startsWith("about-us") ||
+        activeMenu.startsWith("header-about-us") ||
+        activeMenu.startsWith("hero-about-us"),
+    );
   }, [activeMenu]);
 
   return (
@@ -60,7 +73,7 @@ const Sidebar = ({ activeMenu, setActiveMenu }) => {
           <div
             onClick={() => setDropdownHomeOpen(!dropdownHomeOpen)}
             className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
-              activeMenu === "home-page"
+              dropdownHomeOpen || activeMenu.startsWith("home-page")
                 ? "bg-custom-yellow font-lexend text-black"
                 : "text-gray-600"
             }`}
@@ -78,172 +91,48 @@ const Sidebar = ({ activeMenu, setActiveMenu }) => {
           {/* Submenu (Dropdown Content) */}
           {dropdownHomeOpen && (
             <ul className="ml-4 space-y-1">
-              <li>
-                <Link
-                  href="/header-home"
-                  onClick={() => setActiveMenu("header-home")}
-                  className={`flex items-center p-2 text-sm ${
-                    activeMenu === "header-home"
-                      ? "bg-custom-yellow font-lexend text-black"
-                      : "text-gray-600"
-                  }`}
-                >
-                  Manage Header Home
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/hero-flyer"
-                  onClick={() => setActiveMenu("hero-flyer")}
-                  className={`flex items-center p-2 text-sm ${
-                    activeMenu === "hero-flyer"
-                      ? "bg-custom-yellow font-lexend text-black"
-                      : "text-gray-600"
-                  }`}
-                >
-                  Manage Hero Flyer
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/hero-company"
-                  onClick={() => setActiveMenu("hero-company")}
-                  className={`flex items-center p-2 text-sm ${
-                    activeMenu === "hero-company"
-                      ? "bg-custom-yellow font-lexend text-black"
-                      : "text-gray-600"
-                  }`}
-                >
-                  Manage Hero Company
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/hero-why-choose"
-                  onClick={() => setActiveMenu("hero-why-choose")}
-                  className={`flex items-center p-2 text-sm ${
-                    activeMenu === "hero-why-choose"
-                      ? "bg-custom-yellow font-lexend text-black"
-                      : "text-gray-600"
-                  }`}
-                >
-                  Manage Hero Why Choose
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/hero-maklon-value"
-                  onClick={() => setActiveMenu("hero-maklon-value")}
-                  className={`flex items-center p-2 text-sm ${
-                    activeMenu === "hero-maklon-value"
-                      ? "bg-custom-yellow font-lexend text-black"
-                      : "text-gray-600"
-                  }`}
-                >
-                  Manage Hero Maklon Value
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/hero-team-value"
-                  onClick={() => setActiveMenu("hero-team-value")}
-                  className={`flex items-center p-2 text-sm ${
-                    activeMenu === "hero-team-value"
-                      ? "bg-custom-yellow font-lexend text-black"
-                      : "text-gray-600"
-                  }`}
-                >
-                  Manage Hero Team Value
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/hero-facilities-value"
-                  onClick={() => setActiveMenu("hero-facilities-value")}
-                  className={`flex items-center p-2 text-sm ${
-                    activeMenu === "hero-facilities-value"
-                      ? "bg-custom-yellow font-lexend text-black"
-                      : "text-gray-600"
-                  }`}
-                >
-                  Manage Hero Facilities Value
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/hero-certificate"
-                  onClick={() => setActiveMenu("hero-certificate")}
-                  className={`flex items-center p-2 text-sm ${
-                    activeMenu === "hero-certificate"
-                      ? "bg-custom-yellow font-lexend text-black"
-                      : "text-gray-600"
-                  }`}
-                >
-                  Manage Hero Certificate
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/hero-service"
-                  onClick={() => setActiveMenu("hero-service")}
-                  className={`flex items-center p-2 text-sm ${
-                    activeMenu === "hero-service"
-                      ? "bg-custom-yellow font-lexend text-black"
-                      : "text-gray-600"
-                  }`}
-                >
-                  Manage Hero Service
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/hero-video"
-                  onClick={() => setActiveMenu("hero-video")}
-                  className={`flex items-center p-2 text-sm ${
-                    activeMenu === "hero-video"
-                      ? "bg-custom-yellow font-lexend text-black"
-                      : "text-gray-600"
-                  }`}
-                >
-                  Manage Hero Video
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/hero-excellence-value"
-                  onClick={() => setActiveMenu("hero-excellence-value")}
-                  className={`flex items-center p-2 text-sm ${
-                    activeMenu === "hero-excellence-value"
-                      ? "bg-custom-yellow font-lexend text-black"
-                      : "text-gray-600"
-                  }`}
-                >
-                  Manage Hero Excellence Value
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/hero-review"
-                  onClick={() => setActiveMenu("hero-review")}
-                  className={`flex items-center p-2 text-sm ${
-                    activeMenu === "hero-review"
-                      ? "bg-custom-yellow font-lexend text-black"
-                      : "text-gray-600"
-                  }`}
-                >
-                  Manage Hero Review
-                </Link>
-              </li>
+              {/* Daftar submenu di sini */}
+              {[
+                "header-home",
+                "hero-flyer",
+                "hero-company",
+                "hero-why-choose",
+                "hero-maklon-value",
+                "hero-team-value",
+                "hero-facilities-value",
+                "hero-certificate",
+                "hero-service",
+                "hero-video",
+                "hero-excellence-value",
+                "hero-review",
+              ].map((item) => (
+                <li key={item}>
+                  <Link
+                    href={`/${item}`}
+                    onClick={() => setActiveMenu(item)}
+                    className={`flex items-center p-2 text-sm ${
+                      activeMenu === item
+                        ? "bg-custom-yellow font-lexend text-black"
+                        : "text-gray-600"
+                    }`}
+                  >
+                    Manage{" "}
+                    {item
+                      .replace(/-/g, " ")
+                      .replace(/\b\w/g, (c) => c.toUpperCase())}
+                  </Link>
+                </li>
+              ))}
             </ul>
           )}
         </li>
 
+        {/* Dropdown for About Us Page Content */}
         <li>
-          {/* Dropdown for About Us Page Content */}
           <div
             onClick={() => setDropdownAboutUsOpen(!dropdownAboutUsOpen)}
             className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
-              activeMenu === "about-us"
+              dropdownAboutUsOpen || activeMenu.startsWith("about-us")
                 ? "bg-custom-yellow font-lexend text-black"
                 : "text-gray-600"
             }`}
@@ -272,6 +161,19 @@ const Sidebar = ({ activeMenu, setActiveMenu }) => {
                   }`}
                 >
                   Manage Header About Us
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/hero-about-us"
+                  onClick={() => setActiveMenu("hero-about-us")}
+                  className={`flex items-center p-2 text-sm ${
+                    activeMenu === "hero-about-us"
+                      ? "bg-custom-yellow font-lexend text-black"
+                      : "text-gray-600"
+                  }`}
+                >
+                  Manage Hero About Us
                 </Link>
               </li>
             </ul>

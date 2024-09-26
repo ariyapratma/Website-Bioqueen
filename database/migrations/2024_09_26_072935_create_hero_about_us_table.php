@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('hero_about_us', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->text('description1');
+            $table->text('description2');
+            $table->text('description3');
+            $table->string('image_url')->nullable();
             $table->timestamps();
         });
     }

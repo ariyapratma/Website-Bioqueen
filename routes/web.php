@@ -17,6 +17,7 @@ use App\Http\Controllers\HeaderHomeController;
 use App\Http\Controllers\HeaderMaklonController;
 use App\Http\Controllers\HeaderOrderController;
 use App\Http\Controllers\HeaderProductController;
+use App\Http\Controllers\HeroAboutUsController;
 use App\Http\Controllers\HeroAddReviewController;
 use App\Http\Controllers\HeroCompanyController;
 use App\Http\Controllers\HeroServiceController;
@@ -176,6 +177,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/header-about-us/{headerAboutUs}/edit', [HeaderAboutUsController::class, 'edit'])->name('header-about-us.edit');
         Route::put('/header-about-us/{headerAboutUs}', [HeaderAboutUsController::class, 'update'])->name('header-about-us.update');
         Route::delete('/header-about-us/{id}', [HeaderAboutUsController::class, 'destroy'])->name('header-about-us.destroy');
+
+        // Route HeroAboutUs
+        Route::get('/hero-about-us', [HeroAboutUsController::class, 'index'])->name('hero-about-us.index');
+        Route::get('/hero-about-us/create', [HeroAboutUsController::class, 'create'])->name('hero-about-us.create');
+        Route::post('/hero-about-us', [HeroAboutUsController::class, 'store'])->name('hero-about-us.store');
+        Route::get('/hero-about-us/{heroAboutUs}/edit', [HeroAboutUsController::class, 'edit'])->name('hero-about-us.edit');
+        Route::put('/hero-about-us/{heroAboutUs}', [HeroAboutUsController::class, 'update'])->name('hero-about-us.update');
+        Route::delete('/hero-about-us/{id}', [HeroAboutUsController::class, 'destroy'])->name('hero-about-us.destroy');
 
         // Contact Page :
 
