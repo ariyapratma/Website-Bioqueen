@@ -36,7 +36,8 @@ const Sidebar = ({ activeMenu, setActiveMenu }) => {
     setDropdownAboutUsOpen(
       activeMenu.startsWith("about-us") ||
         activeMenu.startsWith("header-about-us") ||
-        activeMenu.startsWith("hero-about-us"),
+        activeMenu.startsWith("hero-about-us") ||
+        activeMenu.startsWith("hero-vision-mision"),
     );
   }, [activeMenu]);
 
@@ -174,6 +175,19 @@ const Sidebar = ({ activeMenu, setActiveMenu }) => {
                   }`}
                 >
                   Manage Hero About Us
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/hero-vision-mision"
+                  onClick={() => setActiveMenu("hero-vision-mision")}
+                  className={`flex items-center p-2 text-sm ${
+                    activeMenu === "hero-vision-mision"
+                      ? "bg-custom-yellow font-lexend text-black"
+                      : "text-gray-600"
+                  }`}
+                >
+                  Manage Hero Vision Mision
                 </Link>
               </li>
             </ul>

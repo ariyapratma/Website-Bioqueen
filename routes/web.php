@@ -28,6 +28,7 @@ use App\Http\Controllers\HeroMaklonValueController;
 use App\Http\Controllers\HeroExcellenceValueController;
 use App\Http\Controllers\HeroFacilitiesValueController;
 use App\Http\Controllers\HeroReviewController;
+use App\Http\Controllers\HeroVisionMisionController;
 use App\Http\Controllers\OrderController;
 
 /*
@@ -185,6 +186,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/hero-about-us/{heroAboutUs}/edit', [HeroAboutUsController::class, 'edit'])->name('hero-about-us.edit');
         Route::put('/hero-about-us/{heroAboutUs}', [HeroAboutUsController::class, 'update'])->name('hero-about-us.update');
         Route::delete('/hero-about-us/{id}', [HeroAboutUsController::class, 'destroy'])->name('hero-about-us.destroy');
+
+        // Route HeroVisionMision
+        Route::get('/hero-vision-mision', [HeroVisionMisionController::class, 'index'])->name('hero-vision-mision.index');
+        Route::get('/hero-vision-mision/create', [HeroVisionMisionController::class, 'create'])->name('hero-vision-mision.create');
+        Route::post('/hero-vision-mision', [HeroVisionMisionController::class, 'store'])->name('hero-vision-mision.store');
+        Route::get('/hero-vision-mision/{heroVisionMision}/edit', [HeroVisionMisionController::class, 'edit'])->name('hero-vision-mision.edit');
+        Route::put('/hero-vision-mision/{heroVisionMision}', [HeroVisionMisionController::class, 'update'])->name('hero-vision-mision.update');
+        Route::delete('/hero-vision-mision/{id}', [HeroVisionMisionController::class, 'destroy'])->name('hero-vision-mision.destroy');
+
 
         // Contact Page :
 
