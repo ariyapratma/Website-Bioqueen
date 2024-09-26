@@ -1,5 +1,5 @@
 import { Link } from "@inertiajs/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   FaHome,
   FaInfoCircle,
@@ -10,8 +10,22 @@ import {
   FaChevronDown,
 } from "react-icons/fa";
 
-const Sidebar = ({ activeMenu, setActiveMenu, headerHome }) => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+const Sidebar = ({ activeMenu, setActiveMenu }) => {
+  const [dropdownHomeOpen, setDropdownHomeOpen] = useState(false);
+  const [dropdownAboutUsOpen, setDropdownAboutUsOpen] = useState(false);
+
+  useEffect(() => {
+    // Buka dropdown jika activeMenu sesuai
+    if (
+      activeMenu.startsWith("header-home") ||
+      activeMenu.startsWith("hero-")
+    ) {
+      setDropdownHomeOpen(true);
+    }
+    if (activeMenu.startsWith("header-about-us")) {
+      setDropdownAboutUsOpen(true);
+    }
+  }, [activeMenu]);
 
   return (
     // Sidebar
@@ -44,7 +58,7 @@ const Sidebar = ({ activeMenu, setActiveMenu, headerHome }) => {
         {/* Dropdown for Home Page Content */}
         <li>
           <div
-            onClick={() => setDropdownOpen(!dropdownOpen)}
+            onClick={() => setDropdownHomeOpen(!dropdownHomeOpen)}
             className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
               activeMenu === "home-page"
                 ? "bg-custom-yellow font-lexend text-black"
@@ -57,12 +71,12 @@ const Sidebar = ({ activeMenu, setActiveMenu, headerHome }) => {
             </span>
             <FaChevronDown
               className={`ml-2 transition-transform ${
-                dropdownOpen ? "rotate-180" : ""
+                dropdownHomeOpen ? "rotate-180" : ""
               }`}
             />
           </div>
           {/* Submenu (Dropdown Content) */}
-          {dropdownOpen && (
+          {dropdownHomeOpen && (
             <ul className="ml-4 space-y-1">
               <li>
                 <Link
@@ -225,33 +239,45 @@ const Sidebar = ({ activeMenu, setActiveMenu, headerHome }) => {
         </li>
 
         <li>
-          <Link
-            href="/about-us"
-            onClick={() => setActiveMenu("about-us")}
-            className={`flex items-center rounded-lg p-2 ${
+          {/* Dropdown for About Us Page Content */}
+          <div
+            onClick={() => setDropdownAboutUsOpen(!dropdownAboutUsOpen)}
+            className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
               activeMenu === "about-us"
                 ? "bg-custom-yellow font-lexend text-black"
                 : "text-gray-600"
             }`}
           >
-            <FaInfoCircle className="mr-2" />
-            About Us Content
-          </Link>
+            <span className="flex items-center">
+              <FaInfoCircle className="mr-2" />
+              About Us Content
+            </span>
+            <FaChevronDown
+              className={`ml-2 transition-transform ${
+                dropdownAboutUsOpen ? "rotate-180" : ""
+              }`}
+            />
+          </div>
+          {/* Submenu (Dropdown Content) */}
+          {dropdownAboutUsOpen && (
+            <ul className="ml-4 space-y-1">
+              <li>
+                <Link
+                  href="/header-about-us"
+                  onClick={() => setActiveMenu("header-about-us")}
+                  className={`flex items-center p-2 text-sm ${
+                    activeMenu === "header-about-us"
+                      ? "bg-custom-yellow font-lexend text-black"
+                      : "text-gray-600"
+                  }`}
+                >
+                  Manage Header About Us
+                </Link>
+              </li>
+            </ul>
+          )}
         </li>
-        <li>
-          <Link
-            href="/contact"
-            onClick={() => setActiveMenu("contact")}
-            className={`flex items-center rounded-lg p-2 ${
-              activeMenu === "contact"
-                ? "bg-custom-yellow font-lexend text-black"
-                : "text-gray-600"
-            }`}
-          >
-            <FaEnvelope className="mr-2" />
-            Contact Page Content
-          </Link>
-        </li>
+
         <li>
           <Link
             href="/product"

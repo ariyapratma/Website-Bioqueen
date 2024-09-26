@@ -173,8 +173,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/header-about-us', [HeaderAboutUsController::class, 'index'])->name('header-about-us.index');
         Route::get('/header-about-us/create', [HeaderAboutUsController::class, 'create'])->name('header-about-us.create');
         Route::post('/header-about-us', [HeaderAboutUsController::class, 'store'])->name('header-about-us.store');
-        Route::get('/header-about-us/{id}/edit', [HeaderAboutUsController::class, 'edit'])->name('header-about-us.edit');
-        Route::put('/header-about-us/{id}', [HeaderAboutUsController::class, 'update'])->name('header-about-us.update');
+        Route::get('/header-about-us/{headerAboutUs}/edit', [HeaderAboutUsController::class, 'edit'])->name('header-about-us.edit');
+        Route::put('/header-about-us/{headerAboutUs}', [HeaderAboutUsController::class, 'update'])->name('header-about-us.update');
         Route::delete('/header-about-us/{id}', [HeaderAboutUsController::class, 'destroy'])->name('header-about-us.destroy');
 
         // Contact Page :

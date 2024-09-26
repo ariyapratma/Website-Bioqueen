@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Models\HeaderHome;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class HeaderHomeController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
         $headerHome = HeaderHome::all();
@@ -18,34 +20,18 @@ class HeaderHomeController extends Controller
         ]);
     }
 
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
         return Inertia::render('Admin/Home/CreateHeaderHome');
     }
 
-    // public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'title' => 'required|string|max:255',
-    //         'description' => 'nullable|string',
-    //         'image_url' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-    //         'whatsapp_link' => 'nullable|string',
-    //     ]);
 
-    //     $data = $request->only(['title', 'description', 'whatsapp_link']);
-
-    //     if ($request->hasFile('image_url')) {
-    //         $file = $request->file('image_url');
-    //         $filename = time() . '.' . $file->getClientOriginalExtension();
-    //         $file->storeAs('public/header_home', $filename);
-    //         $data['image_url'] = 'storage/header_home/' . $filename;
-    //     }
-
-    //     HeaderHome::create($data);
-
-    //     return redirect()->route('header-home.index');
-    // }
-
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -93,6 +79,9 @@ class HeaderHomeController extends Controller
         //
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     */
     public function edit($id)
     {
         $headerHome = HeaderHome::findOrFail($id);
@@ -101,6 +90,9 @@ class HeaderHomeController extends Controller
         ]);
     }
 
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, HeaderHome $headerHome)
     {
         $request->validate([
@@ -149,7 +141,9 @@ class HeaderHomeController extends Controller
         return redirect()->route('header-home.index');
     }
 
-
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(HeaderHome $id)
     {
         $id->delete();
