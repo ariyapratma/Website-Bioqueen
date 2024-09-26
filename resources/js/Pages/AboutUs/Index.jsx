@@ -2,11 +2,10 @@ import { Link, Head } from "@inertiajs/react";
 import Navbar from "@/Components/Navbar/Navbar";
 import { usePage } from "@inertiajs/react";
 import HeaderAboutUs from "./HeaderAboutUs";
-import HeroAboutUs from "@/Components/AboutUs/HeroAboutUs";
-import HeroVisionMision from "@/Components/AboutUs/HeroVisionMision";
-import HeroOurGallery from "@/Components/AboutUs/HeroOurGallery";
-import HeroOurLegal from "@/Components/AboutUs/HeroOurLegal";
-import FooterAboutUs from "@/Components/AboutUs/FooterAboutUs";
+import HeroAboutUs from "./HeroAboutUs";
+import HeroVisionMision from "./HeroVisionMision";
+import HeroOurGallery from "./HeroOurGallery";
+import Footer from "@/Components/Footer/Footer";
 
 const Index = ({ auth }) => {
   const { props } = usePage();
@@ -25,10 +24,8 @@ const Index = ({ auth }) => {
         <HeroVisionMision />
         {/* HeroOurGallery */}
         <HeroOurGallery />
-        {/* HeroOurLegal */}
-        <HeroOurLegal />
       </main>
-      <FooterAboutUs />
+      <Footer/>
     </div>
   );
 };
