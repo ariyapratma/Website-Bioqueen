@@ -37,7 +37,8 @@ const Sidebar = ({ activeMenu, setActiveMenu }) => {
       activeMenu.startsWith("about-us") ||
         activeMenu.startsWith("header-about-us") ||
         activeMenu.startsWith("hero-about-us") ||
-        activeMenu.startsWith("hero-vision-mision"),
+        activeMenu.startsWith("hero-vision-mision") ||
+        activeMenu.startsWith("hero-our-gallery"),
     );
   }, [activeMenu]);
 
@@ -188,6 +189,19 @@ const Sidebar = ({ activeMenu, setActiveMenu }) => {
                   }`}
                 >
                   Manage Hero Vision Mision
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/hero-our-gallery"
+                  onClick={() => setActiveMenu("hero-our-gallery")}
+                  className={`flex items-center p-2 text-sm ${
+                    activeMenu === "hero-our-gallery"
+                      ? "bg-custom-yellow font-lexend text-black"
+                      : "text-gray-600"
+                  }`}
+                >
+                  Manage Hero Our Gallery
                 </Link>
               </li>
             </ul>

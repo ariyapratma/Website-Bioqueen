@@ -35,7 +35,8 @@ const HeroOurGallery = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 <div className="absolute bottom-4 left-4">
                   <h3 className="font-lexend text-xl font-semibold text-white">
-                    {dataHeroOurGallery?.title1 || "No title image available"}
+                    {dataHeroOurGallery?.title_image_url1 ||
+                      "No title image available"}
                   </h3>
                 </div>
               </div>
@@ -62,7 +63,8 @@ const HeroOurGallery = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 <div className="absolute bottom-4 left-4">
                   <h3 className="font-lexend text-xl font-semibold text-white">
-                    {dataHeroOurGallery?.title2 || "No title image available"}
+                    {dataHeroOurGallery?.title_image_url2 ||
+                      "No title image available"}
                   </h3>
                 </div>
               </div>
@@ -89,7 +91,8 @@ const HeroOurGallery = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 <div className="absolute bottom-4 left-4">
                   <h3 className="font-lexend text-xl font-semibold text-white">
-                    {dataHeroOurGallery?.title3 || "No title image available"}
+                    {dataHeroOurGallery?.title_image_url3 ||
+                      "No title image available"}
                   </h3>
                 </div>
               </div>
