@@ -163,8 +163,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/hero-excellence-value', [HeroExcellenceValueController::class, 'index'])->name('hero-excellence-value.index');
         Route::get('/hero-excellence-value/create', [HeroExcellenceValueController::class, 'create'])->name('hero-excellence-value.create');
         Route::post('/hero-excellence-value', [HeroExcellenceValueController::class, 'store'])->name('hero-excellence-value.store');
-        Route::get('/hero-excellence-value/{id}/edit', [HeroExcellenceValueController::class, 'edit'])->name('hero-excellence-value.edit');
-        Route::put('/hero-excellence-value/{id}', [HeroExcellenceValueController::class, 'update'])->name('hero-excellence-value.update');
+        Route::get('/hero-excellence-value/{heroExcellenceValue}/edit', [HeroExcellenceValueController::class, 'edit'])->name('hero-excellence-value.edit');
+        Route::put('/hero-excellence-value/{heroExcellenceValue}', [HeroExcellenceValueController::class, 'update'])->name('hero-excellence-value.update');
         Route::delete('/hero-excellence-value/{id}', [HeroExcellenceValueController::class, 'destroy'])->name('hero-excellence-value.destroy');
 
         // AboutUs Page :
