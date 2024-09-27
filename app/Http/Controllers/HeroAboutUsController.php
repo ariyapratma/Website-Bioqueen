@@ -35,9 +35,9 @@ class HeroAboutUsController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:1500',
-            'description1' => 'required|string||max:1500',
-            'description2' => 'required|string||max:1500',
-            'description3' => 'required|string||max:1500',
+            'description1' => 'required|string|max:1500',
+            'description2' => 'required|string|max:1500',
+            'description3' => 'required|string|max:1500',
             'image_url' => 'nullable|image|mimes:jpg,jpeg,png|max:100072',
         ]);
 
@@ -96,9 +96,9 @@ class HeroAboutUsController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:1500',
-            'description1' => 'required|string||max:1500',
-            'description2' => 'required|string||max:1500',
-            'description3' => 'required|string||max:1500',
+            'description1' => 'required|string|max:1500',
+            'description2' => 'required|string|max:1500',
+            'description3' => 'required|string|max:1500',
             'image_url' => 'nullable|image|mimes:jpg,jpeg,png|max:100072',
         ]);
 

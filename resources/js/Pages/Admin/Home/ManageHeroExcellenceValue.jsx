@@ -134,29 +134,29 @@ const ManageHeroExcellenceValue = ({ dataHeroExcellenceValue, auth }) => {
               <th className="w-1/6 px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                 Subtitle
               </th>
-              <th className="w-1/6 whitespace-nowrap px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
-                Heading 1
+              <th className="w-1/6 px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                Heading <br /> 1
               </th>
-              <th className="w-1/6 whitespace-nowrap px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
-                Content 1
+              <th className="w-1/6 px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                Content <br /> 1
               </th>
-              <th className="w-1/6 whitespace-nowrap px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
-                Heading 2
+              <th className="w-1/6 px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                Heading <br /> 2
               </th>
-              <th className="w-1/6 whitespace-nowrap px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
-                Content 2
+              <th className="w-1/6 px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                Content <br /> 2
               </th>
-              <th className="w-1/6 whitespace-nowrap px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
-                Heading 3
+              <th className="w-1/6 px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                Heading <br /> 3
               </th>
-              <th className="w-1/6 whitespace-nowrap px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
-                Content 3
+              <th className="w-1/6 px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                Content <br /> 3
               </th>
-              <th className="w-1/6 whitespace-nowrap px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
-                Heading 4
+              <th className="w-1/6 px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                Heading <br /> 4
               </th>
-              <th className="w-1/6 whitespace-nowrap px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
-                Content 4
+              <th className="w-1/6 px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                Content <br /> 4
               </th>
               <th className="w-1/6 px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                 Actions
@@ -166,37 +166,37 @@ const ManageHeroExcellenceValue = ({ dataHeroExcellenceValue, auth }) => {
           <tbody className="divide-y divide-gray-200 bg-white">
             {dataHeroExcellenceValue.map((heroExcellenceValue) => (
               <tr key={heroExcellenceValue.id}>
-                <td className="w-1/6 px-6 py-3 font-lexend text-sm tracking-wider text-gray-700">
+                <td className="w-1/6 px-4 py-3 font-lexend text-sm tracking-wider text-gray-700">
                   {heroExcellenceValue.title}
                 </td>
-                <td className="w-1/6 px-6 py-3 font-lexend text-sm tracking-wider text-gray-700">
+                <td className="w-1/6 px-4 py-3 font-lexend text-sm tracking-wider text-gray-700">
                   {heroExcellenceValue.subtitle}
                 </td>
-                <td className="w-1/6 px-6 py-3 font-lexend text-sm tracking-wider text-gray-700">
+                <td className="w-1/6 px-4 py-3 font-lexend text-sm tracking-wider text-gray-700">
                   {heroExcellenceValue.heading1}
                 </td>
-                <td className="w-1/6 px-6 py-3 font-lexend text-sm tracking-wider text-gray-700">
+                <td className="w-1/6 px-4 py-3 font-lexend text-sm tracking-wider text-gray-700">
                   {heroExcellenceValue.content1}
                 </td>
-                <td className="w-1/6 px-6 py-3 font-lexend text-sm tracking-wider text-gray-700">
+                <td className="w-1/6 px-4 py-3 font-lexend text-sm tracking-wider text-gray-700">
                   {heroExcellenceValue.heading2}
                 </td>
-                <td className="w-1/6 px-6 py-3 font-lexend text-sm tracking-wider text-gray-700">
+                <td className="w-1/6 px-4 py-3 font-lexend text-sm tracking-wider text-gray-700">
                   {heroExcellenceValue.content2}
                 </td>
-                <td className="w-1/6 px-6 py-3 font-lexend text-sm tracking-wider text-gray-700">
+                <td className="w-1/6 px-4 py-3 font-lexend text-sm tracking-wider text-gray-700">
                   {heroExcellenceValue.heading3}
                 </td>
-                <td className="w-1/6 px-6 py-3 font-lexend text-sm tracking-wider text-gray-700">
+                <td className="w-1/6 px-4 py-3 font-lexend text-sm tracking-wider text-gray-700">
                   {heroExcellenceValue.content3}
                 </td>
-                <td className="w-1/6 px-6 py-3 font-lexend text-sm tracking-wider text-gray-700">
+                <td className="w-1/6 px-4 py-3 font-lexend text-sm tracking-wider text-gray-700">
                   {heroExcellenceValue.heading4}
                 </td>
-                <td className="w-1/6 px-6 py-3 font-lexend text-sm tracking-wider text-gray-700">
+                <td className="w-1/6 px-4 py-3 font-lexend text-sm tracking-wider text-gray-700">
                   {heroExcellenceValue.content4}
                 </td>
-                <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm font-medium">
+                <td className="whitespace-nowrap px-4 py-4 font-lexend text-sm font-medium">
                   <Link
                     href={`/hero-excellence-value/${heroExcellenceValue.id}/edit`}
                     className="text-indigo-600 hover:text-indigo-900"

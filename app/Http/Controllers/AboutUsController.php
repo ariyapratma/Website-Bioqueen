@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\HeaderAboutUs;
 use App\Models\HeroAboutUs;
+use App\Models\HeroOurGallery;
 use App\Models\HeroVisionMision;
 use Inertia\Inertia;
 
@@ -19,11 +20,15 @@ class AboutUsController extends Controller
 
         // Mengambil data dari tabel hero_vision_mision
         $heroVisionMision = HeroVisionMision::first();
+        
+        // Mengambil data dari tabel hero_our_gallery
+        $heroOurGallery = HeroOurGallery::first();
 
         return Inertia::render('AboutUs/Index', [
             'dataHeaderAboutUs' => $headerAboutUs,
             'dataHeroAboutUs' => $heroAboutUs,
             'dataHeroVisionMision' => $heroVisionMision,
+            'dataHeroOurGallery' => $heroOurGallery
         ]);
     }
 }

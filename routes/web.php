@@ -27,9 +27,11 @@ use App\Http\Controllers\HeroCertificateController;
 use App\Http\Controllers\HeroMaklonValueController;
 use App\Http\Controllers\HeroExcellenceValueController;
 use App\Http\Controllers\HeroFacilitiesValueController;
+use App\Http\Controllers\HeroOurGalleryController;
 use App\Http\Controllers\HeroReviewController;
 use App\Http\Controllers\HeroVisionMisionController;
 use App\Http\Controllers\OrderController;
+use App\Models\HeroOurGallery;
 
 /*
 |--------------------------------------------------------------------------
@@ -195,6 +197,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/hero-vision-mision/{heroVisionMision}', [HeroVisionMisionController::class, 'update'])->name('hero-vision-mision.update');
         Route::delete('/hero-vision-mision/{id}', [HeroVisionMisionController::class, 'destroy'])->name('hero-vision-mision.destroy');
 
+        // Route HeroOurGallery
+        Route::get('/hero-our-gallery', [HeroOurGalleryController::class, 'index'])->name('hero-our-gallery.index');
+        Route::get('/hero-our-gallery/create', [HeroOurGalleryController::class, 'create'])->name('hero-our-gallery.create');
+        Route::post('/hero-our-gallery', [HeroOurGalleryController::class, 'store'])->name('hero-our-gallery.store');
+        Route::get('/hero-our-gallery/{heroOurGallery}/edit', [HeroOurGalleryController::class, 'edit'])->name('hero-our-gallery.edit');
+        Route::put('/hero-our-gallery/{heroOurGallery}', [HeroOurGalleryController::class, 'update'])->name('hero-our-gallery.update');
+        Route::delete('/hero-our-gallery/{id}', [HeroOurGalleryController::class, 'destroy'])->name('hero-our-gallery.destroy');
 
         // Contact Page :
 

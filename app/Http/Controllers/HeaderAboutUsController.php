@@ -35,7 +35,7 @@ class HeaderAboutUsController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string||max:255',
+            'description' => 'required|string|max:255',
             'image_url' => 'nullable|image|mimes:jpg,jpeg,png|max:3072',
         ]);
 

@@ -36,12 +36,12 @@ class HeroVisionMisionController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'subtitle' => 'required|string|max:255',
-            'description1' => 'required|string||max:255',
-            'description2' => 'required|string||max:255',
-            'description3' => 'required|string||max:255',
-            'description4' => 'required|string||max:255',
-            'description5' => 'required|string||max:255',
-            'description6' => 'required|string||max:255',
+            'description1' => 'required|string|max:255',
+            'description2' => 'required|string|max:255',
+            'description3' => 'required|string|max:255',
+            'description4' => 'required|string|max:255',
+            'description5' => 'required|string|max:255',
+            'description6' => 'required|string|max:255',
             'image_url' => 'nullable|image|mimes:jpg,jpeg,png|max:100072',
         ]);
 
@@ -101,12 +101,12 @@ class HeroVisionMisionController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'subtitle' => 'required|string|max:255',
-            'description1' => 'required|string||max:255',
-            'description2' => 'required|string||max:255',
-            'description3' => 'required|string||max:255',
-            'description4' => 'required|string||max:255',
-            'description5' => 'required|string||max:255',
-            'description6' => 'required|string||max:255',
+            'description1' => 'required|string|max:255',
+            'description2' => 'required|string|max:255',
+            'description3' => 'required|string|max:255',
+            'description4' => 'required|string|max:255',
+            'description5' => 'required|string|max:255',
+            'description6' => 'required|string|max:255',
             'image_url' => 'nullable|image|mimes:jpg,jpeg,png|max:100072',
         ]);
 

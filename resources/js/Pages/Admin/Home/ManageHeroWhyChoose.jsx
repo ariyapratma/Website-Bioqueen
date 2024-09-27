@@ -134,7 +134,7 @@ const ManageHeroWhyChoose = ({ dataHeroWhyChoose, auth }) => {
               <th className="w-1/6 px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                 Subtitle
               </th>
-              <th className="w-1/6 px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+              <th className="w-1/6 whitespace-nowrap px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                 Heading 1
               </th>
               <th className="w-1/6 px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
