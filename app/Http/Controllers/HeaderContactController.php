@@ -63,7 +63,6 @@ class HeaderContactController extends Controller
             $data['image_url'] = 'storage/header_contact/' . $filename;
         }
 
-
         HeaderContact::create($data);
 
         return redirect()->route('header-contact.index');

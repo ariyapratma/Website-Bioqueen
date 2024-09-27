@@ -95,7 +95,8 @@ export default function HeroContact() {
             >
               Send Message
             </button>
-          </form>a
+          </form>
+          a
         </div>
       </div>
     </div>

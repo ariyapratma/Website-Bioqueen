@@ -11,7 +11,7 @@ const HeaderHome = () => {
         <img
           // src={dataHeaderHome?.image_url}
           src={`${dataHeaderHome.image_url}?${new Date().getTime()}`}
-          alt="Header Background"
+          alt="Header Home"
           loading="lazy"
           className="absolute inset-0 h-full w-full object-cover"
         />

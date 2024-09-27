@@ -241,8 +241,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/header-maklon', [HeaderMaklonController::class, 'index'])->name('header-maklon.index');
         Route::get('/header-maklon/create', [HeaderMaklonController::class, 'create'])->name('header-maklon.create');
         Route::post('/header-maklon', [HeaderMaklonController::class, 'store'])->name('header-maklon.store');
-        Route::get('/header-maklon/{id}/edit', [HeaderMaklonController::class, 'edit'])->name('header-maklon.edit');
-        Route::put('/header-maklon{id}', [HeaderMaklonController::class, 'update'])->name('header-maklon.update');
+        Route::get('/header-maklon/{headerMaklon}/edit', [HeaderMaklonController::class, 'edit'])->name('header-maklon.edit');
+        Route::put('/header-maklon{headerMaklon}', [HeaderMaklonController::class, 'update'])->name('header-maklon.update');
         Route::delete('/header-maklon/{id}', [HeaderMaklonController::class, 'destroy'])->name('header-maklon.destroy');
     });
 
