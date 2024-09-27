@@ -13,6 +13,10 @@ import {
 const Sidebar = ({ activeMenu, setActiveMenu }) => {
   const [dropdownHomeOpen, setDropdownHomeOpen] = useState(false);
   const [dropdownAboutUsOpen, setDropdownAboutUsOpen] = useState(false);
+  const [dropdownContactOpen, setDropdownContactOpen] = useState(false);
+  const [dropdownProductOpen, setDropdownProductOpen] = useState(false);
+  const [dropdownOrderOpen, setDropdownOrderOpen] = useState(false);
+  const [dropdownMaklonOpen, setDropdownMaklonOpen] = useState(false);
 
   useEffect(() => {
     // Buka dropdown Home jika ada submenu yang aktif
@@ -39,6 +43,28 @@ const Sidebar = ({ activeMenu, setActiveMenu }) => {
         activeMenu.startsWith("hero-about-us") ||
         activeMenu.startsWith("hero-vision-mision") ||
         activeMenu.startsWith("hero-our-gallery"),
+    );
+
+    // Buka dropdown Contact jika ada submenu yang aktif
+    setDropdownContactOpen(
+      activeMenu.startsWith("contact") ||
+        activeMenu.startsWith("header-contact"),
+    );
+
+    // Buka dropdown Product jika ada submenu yang aktif
+    setDropdownProductOpen(
+      activeMenu.startsWith("product") ||
+        activeMenu.startsWith("header-product"),
+    );
+
+    // Buka dropdown Order jika ada submenu yang aktif
+    setDropdownOrderOpen(
+      activeMenu.startsWith("order") || activeMenu.startsWith("header-order"),
+    );
+
+    // Buka dropdown Maklon jika ada submenu yang aktif
+    setDropdownMaklonOpen(
+      activeMenu.startsWith("maklon") || activeMenu.startsWith("header-maklon"),
     );
   }, [activeMenu]);
 
@@ -141,7 +167,7 @@ const Sidebar = ({ activeMenu, setActiveMenu }) => {
           >
             <span className="flex items-center">
               <FaInfoCircle className="mr-2" />
-              About Us Content
+              AboutUs Page Content
             </span>
             <FaChevronDown
               className={`ml-2 transition-transform ${
@@ -208,47 +234,164 @@ const Sidebar = ({ activeMenu, setActiveMenu }) => {
           )}
         </li>
 
+        {/* Dropdown for Contact Page Content */}
         <li>
-          <Link
-            href="/product"
-            onClick={() => setActiveMenu("product")}
-            className={`flex items-center rounded-lg p-2 ${
-              activeMenu === "product"
+          <div
+            onClick={() => setDropdownContactOpen(!dropdownContactOpen)}
+            className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
+              dropdownContactOpen || activeMenu.startsWith("contact")
                 ? "bg-custom-yellow font-lexend text-black"
                 : "text-gray-600"
             }`}
           >
-            <FaBoxOpen className="mr-2" />
-            Product Page Content
-          </Link>
+            <span className="flex items-center">
+              <FaEnvelope className="mr-2" />
+              Contact Page Content
+            </span>
+            <FaChevronDown
+              className={`ml-2 transition-transform ${
+                dropdownContactOpen ? "rotate-180" : ""
+              }`}
+            />
+          </div>
+          {/* Submenu (Dropdown Content) */}
+          {dropdownContactOpen && (
+            <ul className="ml-4 space-y-1">
+              <li>
+                <Link
+                  href="/header-contact"
+                  onClick={() => setActiveMenu("header-contact")}
+                  className={`flex items-center p-2 text-sm ${
+                    activeMenu === "header-contact"
+                      ? "bg-custom-yellow font-lexend text-black"
+                      : "text-gray-600"
+                  }`}
+                >
+                  Manage Header Contact
+                </Link>
+              </li>
+            </ul>
+          )}
         </li>
+
+        {/* Dropdown for Product Page Content */}
         <li>
-          <Link
-            href="/order"
-            onClick={() => setActiveMenu("order")}
-            className={`flex items-center rounded-lg p-2 ${
-              activeMenu === "order"
+          <div
+            onClick={() => setDropdownProductOpen(!dropdownProductOpen)}
+            className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
+              dropdownProductOpen || activeMenu.startsWith("product")
                 ? "bg-custom-yellow font-lexend text-black"
                 : "text-gray-600"
             }`}
           >
-            <FaClipboardList className="mr-2" />
-            Order Page Content
-          </Link>
+            <span className="flex items-center">
+              <FaBoxOpen className="mr-2" />
+              Product Content
+            </span>
+            <FaChevronDown
+              className={`ml-2 transition-transform ${
+                dropdownProductOpen ? "rotate-180" : ""
+              }`}
+            />
+          </div>
+          {/* Submenu (Dropdown Content) */}
+          {dropdownProductOpen && (
+            <ul className="ml-4 space-y-1">
+              <li>
+                <Link
+                  href="/header-product"
+                  onClick={() => setActiveMenu("header-product")}
+                  className={`flex items-center p-2 text-sm ${
+                    activeMenu === "header-product"
+                      ? "bg-custom-yellow font-lexend text-black"
+                      : "text-gray-600"
+                  }`}
+                >
+                  Manage Header Product
+                </Link>
+              </li>
+            </ul>
+          )}
         </li>
+
+        {/* Dropdown for Order Page Content */}
         <li>
-          <Link
-            href="/maklon"
-            onClick={() => setActiveMenu("maklon")}
-            className={`flex items-center rounded-lg p-2 ${
-              activeMenu === "maklon"
+          <div
+            onClick={() => setDropdownOrderOpen(!dropdownOrderOpen)}
+            className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
+              dropdownOrderOpen || activeMenu.startsWith("order")
                 ? "bg-custom-yellow font-lexend text-black"
                 : "text-gray-600"
             }`}
           >
-            <FaIndustry className="mr-2" />
-            Maklon Page Content
-          </Link>
+            <span className="flex items-center">
+              <FaClipboardList className="mr-2" />
+              Order Page Content
+            </span>
+            <FaChevronDown
+              className={`ml-2 transition-transform ${
+                dropdownOrderOpen ? "rotate-180" : ""
+              }`}
+            />
+          </div>
+          {/* Submenu (Dropdown Content) */}
+          {dropdownOrderOpen && (
+            <ul className="ml-4 space-y-1">
+              <li>
+                <Link
+                  href="/header-order"
+                  onClick={() => setActiveMenu("header-order")}
+                  className={`flex items-center p-2 text-sm ${
+                    activeMenu === "header-order"
+                      ? "bg-custom-yellow font-lexend text-black"
+                      : "text-gray-600"
+                  }`}
+                >
+                  Manage Header Order
+                </Link>
+              </li>
+            </ul>
+          )}
+        </li>
+
+        {/* Dropdown for Maklon Page Content */}
+        <li>
+          <div
+            onClick={() => setDropdownMaklonOpen(!dropdownMaklonOpen)}
+            className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
+              dropdownMaklonOpen || activeMenu.startsWith("maklon")
+                ? "bg-custom-yellow font-lexend text-black"
+                : "text-gray-600"
+            }`}
+          >
+            <span className="flex items-center">
+              <FaIndustry className="mr-2" />
+              Maklon Page Content
+            </span>
+            <FaChevronDown
+              className={`ml-2 transition-transform ${
+                dropdownMaklonOpen ? "rotate-180" : ""
+              }`}
+            />
+          </div>
+          {/* Submenu (Dropdown Content) */}
+          {dropdownMaklonOpen && (
+            <ul className="ml-4 space-y-1">
+              <li>
+                <Link
+                  href="/header-maklon"
+                  onClick={() => setActiveMenu("header-maklon")}
+                  className={`flex items-center p-2 text-sm ${
+                    activeMenu === "header-maklon"
+                      ? "bg-custom-yellow font-lexend text-black"
+                      : "text-gray-600"
+                  }`}
+                >
+                  Manage Header Maklon
+                </Link>
+              </li>
+            </ul>
+          )}
         </li>
       </ul>
     </div>

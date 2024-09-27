@@ -211,8 +211,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/header-contact', [HeaderContactController::class, 'index'])->name('header-contact.index');
         Route::get('/header-contact/create', [HeaderContactController::class, 'create'])->name('header-contact.create');
         Route::post('/header-contact', [HeaderContactController::class, 'store'])->name('header-contact.store');
-        Route::get('/header-contact/{id}/edit', [HeaderContactController::class, 'edit'])->name('header-contact.edit');
-        Route::put('/header-contact/{id}', [HeaderContactController::class, 'update'])->name('header-contact.update');
+        Route::get('/header-contact/{headerContact}/edit', [HeaderContactController::class, 'edit'])->name('header-contact.edit');
+        Route::put('/header-contact/{headerContact}', [HeaderContactController::class, 'update'])->name('header-contact.update');
         Route::delete('/header-contact/{id}', [HeaderContactController::class, 'destroy'])->name('header-contact.destroy');
 
         // Product Page :
