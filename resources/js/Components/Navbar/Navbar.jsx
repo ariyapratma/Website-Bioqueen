@@ -89,7 +89,6 @@ export default function Navbar({ auth }) {
                             : "/default-avatar.png"
                         }
                         className="mx-2 h-10 w-10 rounded-full border border-custom-yellow"
-                        alt={user?.name}
                       />
                       <svg
                         className="-me-0.5 ms-2 h-4 w-4"
@@ -186,7 +185,7 @@ export default function Navbar({ auth }) {
               <li className="mt-4 flex flex-col items-center">
                 <img
                   className="h-10 w-10 rounded-full"
-                  src={user.avatar || "/default-avatar.png"}
+                  src={avatar || "/default-avatar.png"}
                   alt="User Avatar"
                 />
                 <div className="pt-2">
