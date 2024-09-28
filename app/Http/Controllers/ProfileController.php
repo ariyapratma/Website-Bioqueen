@@ -40,7 +40,7 @@ class ProfileController extends Controller
 
         // Validasi avatar jika ada
         $request->validate([
-            'avatar' => 'nullable|image|max:1024', // Maksimal 1MB
+            'avatar' => 'nullable|image|max:10024', // Maksimal 1MB
         ]);
 
         if ($request->hasFile('avatar')) {
@@ -85,6 +85,6 @@ class ProfileController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return Redirect::to('/');
+        return Redirect::to('/')->with('status', 'Account deleted successfully');
     }
 }

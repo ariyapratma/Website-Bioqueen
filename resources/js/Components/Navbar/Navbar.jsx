@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react"; // Pastikan ini sudah ada
+import { useState, useEffect } from "react";
 import { Link, usePage } from "@inertiajs/react";
+import Dropdown from "@/Components/Dropdown";
 
-export default function Navbar({ user }) {
+export default function Navbar({ auth }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { url } = usePage();
+  const user = auth.user;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -68,16 +70,61 @@ export default function Navbar({ user }) {
           )}
         </div>
 
-        {/* Avatar Section */}
+        {/* Admin and Avatar */}
         {user && (
           <div className="flex items-center">
-            <img
-              src={
-                user.avatar ? `/storage/${user.avatar}` : "/default-avatar.png"
-              }
-              alt={user.name}
-              className="h-10 w-10 rounded-full border border-custom-yellow"
-            />
+            <div className="relative ms-3">
+              <Dropdown>
+                <Dropdown.Trigger>
+                  <span className="inline-flex rounded-md">
+                    <button
+                      type="button"
+                      className="inline-flex items-center rounded-md border border-transparent px-3 py-2 font-lexend text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
+                    >
+                      {user?.name}
+                      <img
+                        src={
+                          user?.avatar
+                            ? `/storage/${user.avatar}`
+                            : "/default-avatar.png"
+                        }
+                        className="mx-2 h-10 w-10 rounded-full border border-custom-yellow"
+                        alt={user?.name}
+                      />
+                      <svg
+                        className="-me-0.5 ms-2 h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </button>
+                  </span>
+                </Dropdown.Trigger>
+
+                <Dropdown.Content>
+                  <Dropdown.Link
+                    href={route("profile.edit")}
+                    className="font-lexend"
+                  >
+                    Profile
+                  </Dropdown.Link>
+                  <Dropdown.Link
+                    href={route("logout")}
+                    className="font-lexend"
+                    method="post"
+                    as="button"
+                  >
+                    Log Out
+                  </Dropdown.Link>
+                </Dropdown.Content>
+              </Dropdown>
+            </div>
           </div>
         )}
 
@@ -103,58 +150,58 @@ export default function Navbar({ user }) {
             </svg>
           </button>
         </div>
-      </div>
 
-      {/* Mobile Menu */}
-      {menuOpen && (
-        <ul className="absolute left-0 right-0 top-14 z-50 mt-2 rounded-md bg-white p-4 text-gray-800 md:hidden">
-          {menuItems.map(({ name, path }) => (
-            <li key={path}>
-              <Link
-                href={path}
-                className={`block px-4 py-2 ${
-                  url === path ? "font-bold" : "font-regular"
-                } font-lexend hover:bg-gray-100`}
-                onClick={() => setMenuOpen(false)}
-              >
-                {name}
-              </Link>
-            </li>
-          ))}
-          {/* Dashboard Link in Mobile Menu */}
-          {user && (
-            <li>
-              <Link
-                href="/dashboard"
-                className={`block px-4 py-2 ${
-                  url === "/dashboard" ? "font-bold" : "font-regular"
-                } font-lexend hover:bg-gray-100`}
-                onClick={() => setMenuOpen(false)}
-              >
-                Dashboard
-              </Link>
-            </li>
-          )}
-          {/* Avatar and User Info in Mobile Menu */}
-          {user && (
-            <li className="mt-4 flex flex-col items-center">
-              <img
-                className="h-10 w-10 rounded-full"
-                src={user.avatar || "default-avatar.png"}
-                alt="User Avatar"
-              />
-              <div className="pt-2">
-                <div className="font-lexend text-base font-medium text-gray-800">
-                  {user.name}
+        {/* Mobile Menu */}
+        {menuOpen && (
+          <ul className="absolute left-0 right-0 top-14 z-50 mt-2 rounded-md bg-white p-4 text-gray-800 md:hidden">
+            {menuItems.map(({ name, path }) => (
+              <li key={path}>
+                <Link
+                  href={path}
+                  className={`block px-4 py-2 ${
+                    url === path ? "font-bold" : "font-regular"
+                  } font-lexend hover:bg-gray-100`}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {name}
+                </Link>
+              </li>
+            ))}
+            {/* Dashboard Link in Mobile Menu */}
+            {user && (
+              <li>
+                <Link
+                  href="/dashboard"
+                  className={`block px-4 py-2 ${
+                    url === "/dashboard" ? "font-bold" : "font-regular"
+                  } font-lexend hover:bg-gray-100`}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Dashboard
+                </Link>
+              </li>
+            )}
+            {/* Avatar and User Info in Mobile Menu */}
+            {user && (
+              <li className="mt-4 flex flex-col items-center">
+                <img
+                  className="h-10 w-10 rounded-full"
+                  src={user.avatar || "/default-avatar.png"}
+                  alt="User Avatar"
+                />
+                <div className="pt-2">
+                  <div className="font-lexend text-base font-medium text-gray-800">
+                    {user.name}
+                  </div>
+                  <div className="font-lexend text-sm font-medium text-gray-500">
+                    {user.email}
+                  </div>
                 </div>
-                <div className="font-lexend text-sm font-medium text-gray-500">
-                  {user.email}
-                </div>
-              </div>
-            </li>
-          )}
-        </ul>
-      )}
+              </li>
+            )}
+          </ul>
+        )}
+      </div>
     </nav>
   );
 }

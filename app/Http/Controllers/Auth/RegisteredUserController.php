@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
+use Spatie\Permission\Models\Role;
 
 class RegisteredUserController extends Controller
 {
@@ -33,9 +34,13 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
+
+        // Buat role 'user' dan 'admin' jika belum ada
+        Role::firstOrCreate(['name' => 'user']);
+        Role::firstOrCreate(['name' => 'admin']);
 
         $user = User::create([
             'name' => $request->name,
@@ -43,8 +48,13 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-         // Beri role guest kepada user baru
-         $user->assignRole('guest');  // Tambahkan role guest
+        // Secara default, semua pengguna mendapatkan role 'user'
+        $user->assignRole('user');
+
+        // Logika untuk menetapkan role 'admin' berdasarkan email tertentu
+        if ($request->email === 'adminbioqueen@indonesia.com') { // Ganti dengan email admin yang valid
+            $user->assignRole('admin');
+        }
 
         event(new Registered($user));
 
