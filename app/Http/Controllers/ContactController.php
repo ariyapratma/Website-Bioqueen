@@ -12,7 +12,7 @@ class ContactController extends Controller
     {
         // Mengambil data dari tabel header_contact
         $headerContact = HeaderContact::first();
-        return Inertia::render('Contact1/Index', [
+        return Inertia::render('Contact/Index', [
             'dataHeaderContact' => $headerContact,
 
         ]);

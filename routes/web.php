@@ -47,10 +47,10 @@ use App\Models\HeroOurGallery;
 // Route yang bisa diakses oleh semua pengguna (Guest, User, Admin)
 Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::get('/about', [AboutUsController::class, 'index'])->name('about');
-Route::get('/contact1', [ContactController::class, 'index'])->name('contact1');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::get('/product', [ProductController::class, 'index'])->name('product');
 Route::get('/order', [OrderController::class, 'index'])->name('order');
-Route::get('/maklon1', [MaklonController::class, 'index'])->name('maklon1');
+Route::get('/maklon', [MaklonController::class, 'index'])->name('maklon');
 
 // Route khusus untuk pengguna yang terautentikasi (auth) dan terverifikasi
 Route::middleware(['auth', 'verified'])->group(function () {

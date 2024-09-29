@@ -20,10 +20,10 @@ export default function Navbar({ auth }) {
   const menuItems = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
-    { name: "Contact1", path: "/contact1" },
+    { name: "Contact", path: "/contact" },
     { name: "Product", path: "/product" },
     { name: "Order", path: "/order" },
-    { name: "Maklon1", path: "/maklon1" },
+    { name: "Maklon", path: "/maklon" },
     { name: "Login", path: "/login" },
     { name: "Register", path: "/register" },
   ];

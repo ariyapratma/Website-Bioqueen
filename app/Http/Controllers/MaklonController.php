@@ -12,7 +12,7 @@ class MaklonController extends Controller
     {
         // Mengambil data dari tabel header_maklon
         $headerMaklon = HeaderMaklon::first();
-        return Inertia::render('Maklon1/Index', [
+        return Inertia::render('Maklon/Index', [
             'dataHeaderMaklon' => $headerMaklon,
 
         ]);

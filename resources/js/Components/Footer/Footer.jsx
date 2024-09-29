@@ -9,23 +9,23 @@ import {
 const data = [
   {
     title: "Certificate 1",
-    imageUrl: "/Home/HeroCertificate/Certificate1.png",
+    imageUrl: "/HomeAsset/HeroCertificate/Certificate1.png",
   },
   {
     title: "Certificate 2",
-    imageUrl: "/Home/HeroCertificate/Certificate2.png",
+    imageUrl: "/HomeAsset/HeroCertificate/Certificate2.png",
   },
   {
     title: "Certificate 3",
-    imageUrl: "/Home/HeroCertificate/Certificate3.png",
+    imageUrl: "/HomeAsset/HeroCertificate/Certificate3.png",
   },
   {
     title: "Certificate 4",
-    imageUrl: "/Home/HeroCertificate/Certificate4.png",
+    imageUrl: "/HomeAsset/HeroCertificate/Certificate4.png",
   },
   {
     title: "Certificate 5",
-    imageUrl: "/Home/HeroCertificate/Certificate5.png",
+    imageUrl: "/HomeAsset/HeroCertificate/Certificate5.png",
   },
 ];
 
