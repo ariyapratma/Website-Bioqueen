@@ -221,8 +221,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/header-product', [HeaderProductController::class, 'index'])->name('header-product.index');
         Route::get('/header-product/create', [HeaderProductController::class, 'create'])->name('header-product.create');
         Route::post('/header-product', [HeaderProductController::class, 'store'])->name('header-product.store');
-        Route::get('/header-product/{id}/edit', [HeaderProductController::class, 'edit'])->name('header-product.edit');
-        Route::put('/header-product/{id}', [HeaderProductController::class, 'update'])->name('header-product.update');
+        Route::get('/header-product/{headerProduct}/edit', [HeaderProductController::class, 'edit'])->name('header-product.edit');
+        Route::put('/header-product/{headerProduct}', [HeaderProductController::class, 'update'])->name('header-product.update');
         Route::delete('/header-product/{id}', [HeaderProductController::class, 'destroy'])->name('header-product.destroy');
 
         // Order Page :

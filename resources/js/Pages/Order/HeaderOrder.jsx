@@ -25,10 +25,10 @@ const HeaderOrder = () => {
       {/* Text Overlay */}
       <div className="absolute inset-0 flex flex-col justify-center bg-black bg-opacity-40 px-6 pt-6 sm:px-12 md:px-24 lg:px-36 xl:px-48">
         <h2 className="mb-4 pt-40 font-lexend text-5xl font-bold text-white">
-          {dataHeaderOrder?.title}
+          {dataHeaderOrder?.title || "No title available."}
         </h2>
         <p className="text-md max-w-md font-lexend font-bold text-white">
-          {dataHeaderOrder?.description}
+          {dataHeaderOrder?.description || "No description available."}
         </p>
       </div>
     </div>
