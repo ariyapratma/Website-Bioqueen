@@ -53,7 +53,7 @@ const EditHeaderAboutUs = ({ dataHeaderAboutUs, auth }) => {
       <Sidebar activeMenu={activeMenu} />
 
       <div className="flex-1 bg-neutral-50 p-6">
-        <Head title="Edit Header Home | PT Ratu Bio Indonesia" />
+        <Head title="Edit Header AboutUs | PT Ratu Bio Indonesia" />
 
         <div className="mb-4 flex w-full items-center justify-between">
           <Link

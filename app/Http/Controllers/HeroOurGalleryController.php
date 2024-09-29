@@ -104,7 +104,7 @@ class HeroOurGalleryController extends Controller
     public function edit($id)
     {
         $heroOurGallery = HeroOurGallery::findOrFail($id);
-        return Inertia::render('Admin/Home/EditHeroOurGallery', [
+        return Inertia::render('Admin/AboutUs/EditHeroOurGallery', [
             'dataHeroOurGallery' => $heroOurGallery
         ]);
     }
