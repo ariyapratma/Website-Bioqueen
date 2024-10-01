@@ -1,7 +1,8 @@
 import { Head } from "@inertiajs/react";
 import Navbar from "@/Components/Navbar/Navbar";
 import HeaderProduct from "./HeaderProduct";
-import HeroProduct from "./HeroProduct";
+import HeroCategories from "./HeroCategories";
+// import HeroProduct from "./HeroProduct";
 import Footer from "@/Components/Footer/Footer";
 
 const Product = ({ auth }) => {
@@ -12,8 +13,11 @@ const Product = ({ auth }) => {
       <main className="flex-grow">
         {/*HeaderProduct*/}
         <HeaderProduct />
-         {/*HeroProduct*/}
-        <HeroProduct />
+        <HeroCategories />
+        {/* <HeroProductList />
+        <HeroDetailProduct /> */}
+        {/*HeroProduct*/}
+        {/* <HeroProduct /> */}
       </main>
       <Footer />
     </div>

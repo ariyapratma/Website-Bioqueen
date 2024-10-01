@@ -19,6 +19,7 @@ use App\Http\Controllers\HeaderOrderController;
 use App\Http\Controllers\HeaderProductController;
 use App\Http\Controllers\HeroAboutUsController;
 use App\Http\Controllers\HeroAddReviewController;
+use App\Http\Controllers\HeroCategoriesController;
 use App\Http\Controllers\HeroCompanyController;
 use App\Http\Controllers\HeroServiceController;
 use App\Http\Controllers\HeroTeamValueController;
@@ -224,6 +225,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/header-product/{headerProduct}/edit', [HeaderProductController::class, 'edit'])->name('header-product.edit');
         Route::put('/header-product/{headerProduct}', [HeaderProductController::class, 'update'])->name('header-product.update');
         Route::delete('/header-product/{id}', [HeaderProductController::class, 'destroy'])->name('header-product.destroy');
+
+        // Route HeroCategories
+        Route::get('/hero-categories', [HeroCategoriesController::class, 'index'])->name('hero-categories.index');
+        Route::get('/hero-categories/create', [HeroCategoriesController::class, 'create'])->name('hero-categories.create');
+        Route::post('/hero-categories', [HeroCategoriesController::class, 'store'])->name('hero-categories.store');
+        Route::get('/hero-categories/{heroCategories}/edit', [HeroCategoriesController::class, 'edit'])->name('hero-categories.edit');
+        Route::put('/hero-categories/{heroCategories}', [HeroCategoriesController::class, 'update'])->name('hero-categories.update');
+        Route::delete('/hero-categories/{id}', [HeroCategoriesController::class, 'destroy'])->name('hero-categories.destroy');
+
+        // Route HeroProduct
+        Route::get('/menus', [ProductController::class, 'showCategories']);
+        Route::get('/menus/{category}', [ProductController::class, 'showProducts']);
+        Route::get('/menus/product/{id}', [ProductController::class, 'showProductDetail']);
+
 
         // Order Page :
 

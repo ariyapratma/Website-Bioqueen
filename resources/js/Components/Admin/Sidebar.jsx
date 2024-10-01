@@ -54,7 +54,8 @@ const Sidebar = ({ activeMenu, setActiveMenu }) => {
     // Buka dropdown Product jika ada submenu yang aktif
     setDropdownProductOpen(
       activeMenu.startsWith("product") ||
-        activeMenu.startsWith("header-product"),
+        activeMenu.startsWith("header-product") ||
+        activeMenu.startsWith("hero-categories"),
     );
 
     // Buka dropdown Order jika ada submenu yang aktif
@@ -308,6 +309,19 @@ const Sidebar = ({ activeMenu, setActiveMenu }) => {
                   }`}
                 >
                   Manage Header Product
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/hero-categories"
+                  onClick={() => setActiveMenu("hero-categories")}
+                  className={`flex items-center p-2 text-sm ${
+                    activeMenu === "hero-categories"
+                      ? "bg-custom-yellow font-lexend text-black"
+                      : "text-gray-600"
+                  }`}
+                >
+                  Manage Hero Categories
                 </Link>
               </li>
             </ul>
