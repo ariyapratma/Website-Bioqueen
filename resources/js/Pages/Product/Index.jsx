@@ -2,6 +2,7 @@ import { Head } from "@inertiajs/react";
 import Navbar from "@/Components/Navbar/Navbar";
 import HeaderProduct from "./HeaderProduct";
 import HeroCategories from "./HeroCategories";
+import ProductList from "./ProductList";
 // import HeroProduct from "./HeroProduct";
 import Footer from "@/Components/Footer/Footer";
 
@@ -14,6 +15,7 @@ const Product = ({ auth }) => {
         {/*HeaderProduct*/}
         <HeaderProduct />
         <HeroCategories />
+        <ProductList />
         {/* <HeroProductList />
         <HeroDetailProduct /> */}
         {/*HeroProduct*/}

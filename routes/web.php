@@ -32,6 +32,7 @@ use App\Http\Controllers\HeroOurGalleryController;
 use App\Http\Controllers\HeroReviewController;
 use App\Http\Controllers\HeroVisionMisionController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductListController;
 use App\Models\HeroOurGallery;
 
 /*
@@ -234,10 +235,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/hero-categories/{heroCategories}', [HeroCategoriesController::class, 'update'])->name('hero-categories.update');
         Route::delete('/hero-categories/{id}', [HeroCategoriesController::class, 'destroy'])->name('hero-categories.destroy');
 
-        // Route HeroProduct
-        Route::get('/menus', [ProductController::class, 'showCategories']);
-        Route::get('/menus/{category}', [ProductController::class, 'showProducts']);
-        Route::get('/menus/product/{id}', [ProductController::class, 'showProductDetail']);
+        // Route Product
+        Route::get('/product', [ProductController::class, 'index'])->name('product.index');
+        Route::get('/product/{slug}', [ProductController::class, 'showByCategory'])->name('product.byCategory');
+
+        // Route Product List
+        Route::resource('product-lists', ProductListController::class);
+
+        // // Route HeroProduct
+        // Route::get('/menus', [ProductController::class, 'showCategories']);
+        // Route::get('/menus/{category}', [ProductController::class, 'showProducts']);
+        // Route::get('/menus/product/{id}', [ProductController::class, 'showProductDetail']);
 
 
         // Order Page :
