@@ -10,7 +10,7 @@ const CreateProductList = ({ auth, categories }) => {
     // slug: "",
     image_url: null,
     name: "",
-    description_categories: "",
+    description: "",
     price: "",
     category_id: "",
   });
@@ -25,7 +25,7 @@ const CreateProductList = ({ auth, categories }) => {
     // formData.append("slug", data.slug);
     formData.append("image_url", data.image_url);
     formData.append("name", data.name);
-    formData.append("description_categories", data.description_categories);
+    formData.append("description", data.description);
     formData.append("price", data.price);
     formData.append("category_id", data.category_id);
 

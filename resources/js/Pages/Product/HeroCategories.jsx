@@ -1,8 +1,18 @@
-import { Link, usePage } from "@inertiajs/react";
+import { useState } from "react";
+import { usePage } from "@inertiajs/react";
+import ProductList from "./ProductList"; // Pastikan ProductList diimport
 
 const HeroCategories = () => {
   const { props } = usePage();
   const dataHeroCategories = props.dataHeroCategories || [];
+
+  // State untuk menyimpan kategori yang dipilih
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
+  // Fungsi untuk menangani ketika kategori dipilih
+  const handleCategoryClick = (category) => {
+    setSelectedCategory(category);
+  };
 
   return (
     <div className="container mx-auto mb-2 p-6 px-10 py-14">
@@ -12,35 +22,38 @@ const HeroCategories = () => {
       <p className="mb-4 font-lexend font-medium text-gray-600">
         Created with Love and Passion for Cleanliness
       </p>
-      {/* Grid adjustments for different screen sizes */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
         {Array.isArray(dataHeroCategories) && dataHeroCategories.length > 0 ? (
           dataHeroCategories.map((category) => (
-            <Link href={`/categories/${category.slug}`} key={category.id}>
-              <div className="flex h-full flex-col justify-between rounded-lg bg-white shadow-md hover:bg-gray-100">
-                {/* Gambar full width dengan object-cover */}
-                <div className="flex-shrink-0">
-                  <img
-                    src={category.image_url}
-                    alt={category.name}
-                    className="h-34 object-full w-full rounded-t-lg" // Ganti object-full dengan object-cover untuk menjaga rasio gambar
-                  />
-                </div>
-                <div className="flex h-28 flex-col items-center justify-center p-4">
-                  <h2 className="text-center text-lg font-semibold">
-                    {category.name}
-                  </h2>
-                  <p className="mt-2 text-center text-sm text-gray-600">
-                    {category.description_categories}
-                  </p>
-                </div>
+            <div
+              key={category.id}
+              onClick={() => handleCategoryClick(category)}
+              className="flex h-full cursor-pointer flex-col justify-between rounded-lg bg-white shadow-md hover:bg-gray-100"
+            >
+              <div className="flex-shrink-0">
+                <img
+                  src={category.image_url}
+                  alt={category.name}
+                  className="h-34 w-full rounded-t-lg object-cover"
+                />
               </div>
-            </Link>
+              <div className="flex h-28 flex-col items-center justify-center p-4">
+                <h2 className="text-center text-lg font-semibold">
+                  {category.name}
+                </h2>
+                <p className="mt-2 text-center text-sm text-gray-600">
+                  {category.description_categories}
+                </p>
+              </div>
+            </div>
           ))
         ) : (
           <p className="text-center text-gray-500">No categories available</p>
         )}
       </div>
+
+      {/* Tampilkan ProductList ketika kategori dipilih */}
+      {selectedCategory && <ProductList category={selectedCategory} />}
     </div>
   );
 };

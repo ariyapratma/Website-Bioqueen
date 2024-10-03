@@ -7,9 +7,7 @@ const ProductList = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="mb-4 text-3xl font-bold text-black">
-        Products in {category?.name || "Unknown Category"}
-      </h1>
+      <h1 className="mb-4 text-3xl font-bold text-black">{category?.name}</h1>
       {products && products.length > 0 ? ( // Memastikan products ada sebelum diakses
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
           {products.map((product) => (

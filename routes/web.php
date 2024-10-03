@@ -237,16 +237,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         // Route Product
         Route::get('/product', [ProductController::class, 'index'])->name('product.index');
-        Route::get('/product/{slug}', [ProductController::class, 'showByCategory'])->name('product.byCategory');
+        Route::get('/product/category/{slug}', [ProductController::class, 'showByCategory'])->name('product.byCategory');
 
         // Route Product List
         Route::resource('product-lists', ProductListController::class);
 
-        // // Route HeroProduct
-        // Route::get('/menus', [ProductController::class, 'showCategories']);
-        // Route::get('/menus/{category}', [ProductController::class, 'showProducts']);
-        // Route::get('/menus/product/{id}', [ProductController::class, 'showProductDetail']);
-
+        // Route HeroProduct (menggunakan kategori)
+        Route::get('/categories', [ProductController::class, 'showCategories'])->name('categories.index');
+        Route::get('/categories/{category}', [ProductController::class, 'showProductsByCategory'])->name('categories.products');
+        Route::get('/categories/product/{id}', [ProductController::class, 'showProductDetail'])->name('categories.product.detail');
 
         // Order Page :
 
