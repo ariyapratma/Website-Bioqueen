@@ -234,8 +234,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/hero-categories/{heroCategories}/edit', [HeroCategoriesController::class, 'edit'])->name('hero-categories.edit');
         Route::put('/hero-categories/{heroCategories}', [HeroCategoriesController::class, 'update'])->name('hero-categories.update');
         Route::delete('/hero-categories/{id}', [HeroCategoriesController::class, 'destroy'])->name('hero-categories.destroy');
-        
-        Route::get('/category/{slug}', [ProductController::class, 'showCategory'])->name('products.category');
+
+        // Route ProductCategory User
+        Route::get('/product/{slug}', [ProductController::class, 'showCategory'])->name('products.category');
+
+        // Route ProductList
+        Route::get('/product-list', [ProductListController::class, 'index'])->name('product-list.index');
+        Route::get('/product-list/create', [ProductListController::class, 'create'])->name('product-list.create');
+        Route::post('/product-list', [ProductListController::class, 'store'])->name('product-list.store');
+        Route::get('/product-list/{id}/edit', [ProductListController::class, 'edit'])->name('product-list.edit');
+        Route::put('/product-list/{id}', [ProductListController::class, 'update'])->name('product-list.update');
+        Route::delete('/product-list/{id}', [ProductListController::class, 'destroy'])->name('product-list.destroy');
 
         // Order Page :
 

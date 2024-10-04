@@ -1,4 +1,4 @@
-import { usePage, router } from "@inertiajs/react";
+import { usePage, Link, router } from "@inertiajs/react";
 
 const HeroCategories = () => {
   const { props } = usePage();
@@ -6,17 +6,33 @@ const HeroCategories = () => {
 
   // Fungsi untuk menangani klik kategori
   const handleCategoryClick = (category) => {
-    router.get(`/category/${category.slug}`); // Redirect ke route slug
+    router.get(`/product/${category.slug}`); // Redirect ke route slug
   };
 
   return (
     <div className="container mx-auto mb-2 p-6 px-10 py-14">
+      {/* Breadcrumb */}
+      {/* <nav className="mb-4 text-sm text-gray-500">
+        <ul className="flex space-x-2">
+          <li>
+            <Link href="/" className="text-blue-500 hover:underline">
+              Home
+            </Link>
+          </li>
+          <li>/</li>
+          <li>
+            <span className="text-gray-600">Product</span>
+          </li>
+        </ul>
+      </nav> */}
+
       <h1 className="mb-4 font-lexend text-3xl font-bold text-black sm:text-4xl">
         Created with Love and Passion for Cleanliness
       </h1>
       <p className="mb-4 font-lexend font-medium text-gray-600">
-        Created with Love and Passion for Cleanliness
+        Choose a category to see products
       </p>
+
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
         {Array.isArray(dataHeroCategories) && dataHeroCategories.length > 0 ? (
           dataHeroCategories.map((category) => (

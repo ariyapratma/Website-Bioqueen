@@ -32,7 +32,7 @@ class ProductController extends Controller
         // Ambil produk terkait kategori
         $products = Product::where('category_id', $category->id)->get();
 
-        return Inertia::render('Product/Category', [
+        return Inertia::render('Product/ProductList', [
             'category' => $category,
             'products' => $products,
         ]);

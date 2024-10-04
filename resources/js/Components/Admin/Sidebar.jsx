@@ -56,7 +56,7 @@ const Sidebar = ({ activeMenu, setActiveMenu }) => {
       activeMenu.startsWith("product") ||
         activeMenu.startsWith("header-product") ||
         activeMenu.startsWith("hero-categories") ||
-        activeMenu.startsWith("product-lists"),
+        activeMenu.startsWith("product-list"),
     );
 
     // Buka dropdown Order jika ada submenu yang aktif
@@ -327,10 +327,10 @@ const Sidebar = ({ activeMenu, setActiveMenu }) => {
               </li>
               <li>
                 <Link
-                  href="/product-lists"
-                  onClick={() => setActiveMenu("product-lists")}
+                  href="/product-list"
+                  onClick={() => setActiveMenu("product-list")}
                   className={`flex items-center p-2 text-sm ${
-                    activeMenu === "product-lists"
+                    activeMenu === "product-list"
                       ? "bg-custom-yellow font-lexend text-black"
                       : "text-gray-600"
                   }`}

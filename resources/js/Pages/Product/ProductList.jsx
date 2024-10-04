@@ -4,13 +4,14 @@ import HeaderProduct from "./HeaderProduct";
 import Footer from "@/Components/Footer/Footer";
 import { usePage, Head } from "@inertiajs/react";
 
-const Category = () => {
+const ProductList = () => {
   const { props } = usePage();
   const { category, products, auth } = props;
 
   return (
     <div className="flex min-h-screen flex-col overflow-x-hidden">
-      <Head title={`Product | PT Ratu Bio Indonesia`} />
+      {/* Title dinamis menggunakan category.name */}
+      <Head title={`${category.name} | PT Ratu Bio Indonesia`} />
       <Navbar auth={auth} />
       <main className="flex-grow">
         {/*HeaderProduct*/}
@@ -57,4 +58,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default ProductList;
