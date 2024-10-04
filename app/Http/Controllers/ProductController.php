@@ -17,30 +17,24 @@ class ProductController extends Controller
         // Mengambil semua data dari tabel categories
         $heroCategories = HeroCategories::all();
 
-        // Mengambil semua data dari tabel products
-        $productList = Product::all();
-
         return Inertia::render('Product/Index', [
             'dataHeaderProduct' => $headerProduct,
             'dataHeroCategories' => $heroCategories,
-            'dataProductList' => $productList,
         ]);
     }
 
-    /**
-     * Tampilkan produk berdasarkan kategori yang dipilih.
-     */
-    public function showByCategory($slug)
+    // Menampilkan produk berdasarkan kategori yang dipilih (menggunakan slug)
+    public function showCategory($slug)
     {
         // Cari kategori berdasarkan slug
         $category = HeroCategories::where('slug', $slug)->firstOrFail();
 
-        // Ambil semua produk berdasarkan kategori
+        // Ambil produk terkait kategori
         $products = Product::where('category_id', $category->id)->get();
 
-        return Inertia::render('Product/ProductList', [
-            'category' => $category, // Informasi kategori
-            'products' => $products, // Daftar produk sesuai kategori
+        return Inertia::render('Product/Category', [
+            'category' => $category,
+            'products' => $products,
         ]);
     }
 }

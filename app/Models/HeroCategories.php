@@ -19,8 +19,9 @@ class HeroCategories extends Model
         'description_categories',
     ];
 
-    public function products()
+    // Mendapatkan slug untuk URL
+    public function getRouteKeyName()
     {
-        return $this->hasMany(Product::class, 'category_id');
+        return 'slug';
     }
 }

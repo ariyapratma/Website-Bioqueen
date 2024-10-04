@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('category_id')->constrained('hero_categories')->onDelete('cascade');
             $table->string('name');
-            $table->decimal('price', 10, 2); // format untuk harga dengan maksimal 10 digit dan 2 desimal
-            $table->text('description')->nullable(); // bisa nullable
-            $table->foreignId('category_id')->constrained('hero_categories')->onDelete('cascade'); // Relasi ke tabel categories
+            $table->text('description');
+            $table->string('image_url');
+            $table->decimal('price', 10, 2);
             $table->timestamps();
         });
     }

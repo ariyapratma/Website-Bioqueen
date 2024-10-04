@@ -234,18 +234,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/hero-categories/{heroCategories}/edit', [HeroCategoriesController::class, 'edit'])->name('hero-categories.edit');
         Route::put('/hero-categories/{heroCategories}', [HeroCategoriesController::class, 'update'])->name('hero-categories.update');
         Route::delete('/hero-categories/{id}', [HeroCategoriesController::class, 'destroy'])->name('hero-categories.destroy');
-
-        // Route Product
-        Route::get('/product', [ProductController::class, 'index'])->name('product.index');
-        Route::get('/product/category/{slug}', [ProductController::class, 'showByCategory'])->name('product.byCategory');
-
-        // Route Product List
-        Route::resource('product-lists', ProductListController::class);
-
-        // Route HeroProduct (menggunakan kategori)
-        Route::get('/categories', [ProductController::class, 'showCategories'])->name('categories.index');
-        Route::get('/categories/{category}', [ProductController::class, 'showProductsByCategory'])->name('categories.products');
-        Route::get('/categories/product/{id}', [ProductController::class, 'showProductDetail'])->name('categories.product.detail');
+        
+        Route::get('/category/{slug}', [ProductController::class, 'showCategory'])->name('products.category');
 
         // Order Page :
 

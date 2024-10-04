@@ -1,17 +1,12 @@
-import { useState } from "react";
-import { usePage } from "@inertiajs/react";
-import ProductList from "./ProductList"; // Pastikan ProductList diimport
+import { usePage, router } from "@inertiajs/react";
 
 const HeroCategories = () => {
   const { props } = usePage();
   const dataHeroCategories = props.dataHeroCategories || [];
 
-  // State untuk menyimpan kategori yang dipilih
-  const [selectedCategory, setSelectedCategory] = useState(null);
-
-  // Fungsi untuk menangani ketika kategori dipilih
+  // Fungsi untuk menangani klik kategori
   const handleCategoryClick = (category) => {
-    setSelectedCategory(category);
+    router.get(`/category/${category.slug}`); // Redirect ke route slug
   };
 
   return (
@@ -51,9 +46,6 @@ const HeroCategories = () => {
           <p className="text-center text-gray-500">No categories available</p>
         )}
       </div>
-
-      {/* Tampilkan ProductList ketika kategori dipilih */}
-      {selectedCategory && <ProductList category={selectedCategory} />}
     </div>
   );
 };
