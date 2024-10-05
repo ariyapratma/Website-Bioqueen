@@ -91,7 +91,7 @@ class ProductListController extends Controller
     {
         $product = Product::findOrFail($id);
         $categories = HeroCategories::all();
-        return Inertia::render('Product/Edit', [
+        return Inertia::render('Admin/Product/EditProductList', [
             'product' => $product,
             'categories' => $categories,
         ]);
@@ -100,23 +100,78 @@ class ProductListController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    // public function update(Request $request, ProductList $id)
+    // {
+    //     // Validasi data input
+    //     $validatedData = $request->validate([
+    //         'category_id' => 'required|exists:hero_categories,id',
+    //         'name' => 'required|string|max:255',
+    //         'description' => 'required|string',
+    //         'image_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+    //         'price' => 'required|numeric',
+    //     ]);
+
+    //     // Update produk
+    //     $product = Product::findOrFail($id);
+    //     $product->update($validatedData);
+
+    //     return redirect()->route('product-list.index')->with('success', 'Product updated successfully!');
+    // }
+
+    public function update(Request $request, ProductList $productList)
     {
-        // Validasi data input
-        $validatedData = $request->validate([
-            'category_id' => 'required|exists:hero_categories,id',
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'image_url' => 'required|string',
-            'price' => 'required|numeric',
+        // Preprocess harga agar menghapus karakter yang tidak diperlukan (Rp, titik, dan spasi)
+        $request->merge([
+            'price' => preg_replace('/[Rp. ]/', '', $request->input('price')),
         ]);
 
-        // Update produk
-        $product = Product::findOrFail($id);
-        $product->update($validatedData);
+        // Validasi data input
+        $request->validate([
+            'category_id' => 'required|exists:hero_categories,id',
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Image tidak selalu required
+            'price' => 'required|numeric', // Pastikan setelah di-preprocess, ini berupa angka
+        ]);
 
-        return redirect()->route('product-list.index')->with('success', 'Product updated successfully!');
+        // Ambil data yang sudah divalidasi, kecuali 'image_url' (jika tidak ada file baru)
+        $data = $request->only(['category_id', 'name', 'description', 'price']);
+
+        // Handle image upload jika ada gambar baru
+        if ($request->hasFile('image_url')) {
+            // Hapus gambar lama jika ada
+            if ($productList->image_url && Storage::exists(str_replace('storage/', 'public/', $productList->image_url))) {
+                Storage::delete(str_replace('storage/', 'public/', $productList->image_url));
+            }
+
+            // Upload gambar baru
+            $file = $request->file('image_url');
+            $filename = $file->getClientOriginalName();
+            $path = 'public/product_list/' . $filename;
+
+            // Tambahkan logika untuk menangani nama file yang sama
+            $counter = 1;
+            while (Storage::exists($path)) {
+                $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . " ($counter)." . $file->getClientOriginalExtension();
+                $path = 'public/product_list/' . $filename;
+                $counter++;
+            }
+
+            // Simpan file
+            $file->storeAs('public/product_list', $filename);
+            $data['image_url'] = 'storage/product_list/' . $filename;
+        } else {
+            // Gunakan gambar yang ada jika tidak ada gambar baru yang diupload
+            $data['image_url'] = $productList->image_url;
+        }
+
+        // Update model dengan data baru
+        $productList->update($data);
+
+        // Redirect ke halaman daftar product list setelah update berhasil
+        return redirect()->route('product-list.index')->with('success', 'Product list updated successfully.');
     }
+
 
     /**
      * Remove the specified resource from storage.
