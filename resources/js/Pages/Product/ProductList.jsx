@@ -1,4 +1,3 @@
-import React from "react";
 import Navbar from "@/Components/Navbar/Navbar";
 import HeaderProduct from "./HeaderProduct";
 import Footer from "@/Components/Footer/Footer";
@@ -14,39 +13,49 @@ const ProductList = () => {
       <Head title={`${category.name} | PT Ratu Bio Indonesia`} />
       <Navbar auth={auth} />
       <main className="flex-grow">
-        {/*HeaderProduct*/}
+        {/* HeaderProduct */}
         <HeaderProduct />
-        <div className="container mx-auto px-6 py-10">
-          <h1 className="mb-4 text-3xl font-bold text-gray-900">
+        <div className="container mx-auto mb-2 p-6 px-10 py-14">
+          <h1 className="mb-4 font-lexend text-3xl font-bold text-black sm:text-4xl">
             {category.name}
           </h1>
-          <p className="mb-6 text-gray-600">
+          <p className="mb-4 font-lexend font-medium text-gray-600">
             {category.description_categories}
           </p>
 
-          <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
+          {/* Grid layout with responsive breakpoints */}
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {products.length > 0 ? (
               products.map((product) => (
                 <div
                   key={product.id}
-                  className="rounded-lg bg-white p-4 shadow-md"
+                  className="flex h-full cursor-pointer flex-col justify-between rounded-lg bg-white shadow-md hover:bg-gray-100"
                 >
-                  <img
-                    src={product.image_url}
-                    alt={product.name}
-                    className="h-48 w-full rounded-lg object-cover"
-                  />
-                  <h2 className="mt-2 text-lg font-semibold text-gray-900">
-                    {product.name}
-                  </h2>
-                  <p className="text-gray-600">{product.description}</p>
-                  <p className="mt-2 font-bold text-gray-900">
-                    {product.price}
-                  </p>
+                  {/* Product Image */}
+                  <div className="flex-shrink-0">
+                    <img
+                      src={`/storage/${product.image_url}`}
+                      alt={product.name}
+                      className="w-full rounded-t-lg object-contain"
+                      style={{ aspectRatio: "1 / 1" }} // menjaga rasio gambar
+                    />
+                  </div>
+                  {/* Product Content */}
+                  <div className="flex flex-col items-center justify-center p-4">
+                    <h2 className="line-clamp-1 text-center text-lg font-semibold">
+                      {product.name}
+                    </h2>
+                    <p className="mt-2 line-clamp-2 text-center text-sm text-gray-600">
+                      {product.description}
+                    </p>
+                    <p className="mt-2 text-center font-lexend text-sm font-semibold text-black">
+                      Rp {product.price}
+                    </p>
+                  </div>
                 </div>
               ))
             ) : (
-              <p className="col-span-4 text-center text-gray-500">
+              <p className="col-span-full text-center text-gray-500">
                 No products available in this category.
               </p>
             )}

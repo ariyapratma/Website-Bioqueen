@@ -130,6 +130,9 @@ const ManageProductList = ({ products, auth }) => {
           <thead>
             <tr>
               <th className="px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                Category ID
+              </th>
+              <th className="px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                 Name
               </th>
               <th className="px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
@@ -137,9 +140,6 @@ const ManageProductList = ({ products, auth }) => {
               </th>
               <th className="px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                 Image URL
-              </th>
-              <th className="px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
-                Category ID
               </th>
               <th className="px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                 Price
@@ -152,6 +152,9 @@ const ManageProductList = ({ products, auth }) => {
           <tbody className="divide-y divide-gray-200 bg-white">
             {products.map((product) => (
               <tr key={product.id}>
+                <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
+                  {product.category_id}
+                </td>
                 <td className="max-w-sm truncate whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
                   {product.name}
                 </td>
@@ -167,9 +170,6 @@ const ManageProductList = ({ products, auth }) => {
                   >
                     View Image
                   </a>
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
-                  {product.category_id}
                 </td>
                 <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
                   {product.price}

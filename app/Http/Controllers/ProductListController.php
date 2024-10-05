@@ -28,7 +28,7 @@ class ProductListController extends Controller
     public function create()
     {
         $categories = HeroCategories::all(); // Mengambil kategori untuk dropdown
-        return Inertia::render('Product/Create', [
+        return Inertia::render('Admin/Product/CreateProductList', [
             'categories' => $categories,
         ]);
     }
@@ -38,13 +38,18 @@ class ProductListController extends Controller
      */
     public function store(Request $request)
     {
+        // Preprocessing harga: Hapus format Rp. dan karakter selain angka
+        $request->merge([
+            'price' => preg_replace('/[Rp. ]/', '', $request->input('price')),
+        ]);
+
         // Validasi data input
         $validatedData = $request->validate([
             'category_id' => 'required|exists:hero_categories,id',
             'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'image_url' => 'required|string',
-            'price' => 'required|numeric',
+            'description' => 'required|string|max:255',
+            'image_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'price' => 'required|numeric', // Pastikan setelah di-preprocess, ini berupa angka
         ]);
 
         // Simpan gambar ke folder product_list
@@ -64,7 +69,8 @@ class ProductListController extends Controller
         // Simpan file ke storage
         $imagePath = $file->storeAs('product_list', $filename . '.' . $extension, 'public');
 
-        // Membuat produk baru
+        // Membuat produk baru, termasuk menyimpan harga sebagai angka
+        $validatedData['image_url'] = $imagePath;
         Product::create($validatedData);
 
         return redirect()->route('product-list.index')->with('success', 'Product created successfully!');
