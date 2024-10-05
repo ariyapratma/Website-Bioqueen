@@ -36,8 +36,8 @@ class HeroCategoriesController extends Controller
     {
         // Validasi data yang diterima
         $request->validate([
-            'slug' => 'nullable|string|unique:hero_categories,slug', // Tambahkan unique untuk slug
-            'image_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'slug' => 'nullable|string|unique:hero_categories,slug',
+            'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Izinkan nullable
             'name' => 'required|string|max:255',
             'description_categories' => 'nullable|string',
         ]);
@@ -45,33 +45,39 @@ class HeroCategoriesController extends Controller
         // Buat slug dari name jika slug tidak diberikan
         $slug = $request->slug ?? Str::slug($request->name, '-');
 
-        // Simpan gambar ke folder hero_categories
-        $file = $request->file('image_url');
-        $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $extension = $file->getClientOriginalExtension();
-        $path = 'public/hero_categories/' . $filename . '.' . $extension;
-
-        $counter = 1;
-        // Tangani jika nama file sudah ada
-        while (Storage::exists($path)) {
-            $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . " ($counter)";
+        // Proses gambar hanya jika ada gambar yang diunggah
+        if ($request->hasFile('image_url')) {
+            $file = $request->file('image_url');
+            $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $extension = $file->getClientOriginalExtension();
             $path = 'public/hero_categories/' . $filename . '.' . $extension;
-            $counter++;
-        }
 
-        // Simpan file ke storage
-        $imagePath = $file->storeAs('hero_categories', $filename . '.' . $extension, 'public');
+            $counter = 1;
+            while (Storage::exists($path)) {
+                $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . " ($counter)";
+                $path = 'public/hero_categories/' . $filename . '.' . $extension;
+                $counter++;
+            }
+
+            // Simpan gambar
+            $imagePath = $file->storeAs('hero_categories', $filename . '.' . $extension, 'public');
+            $imageUrl = Storage::url($imagePath);
+        } else {
+            // Jika tidak ada gambar, berikan nilai default
+            $imageUrl = '/default-image-url.jpg'; // Ubah sesuai gambar default Anda
+        }
 
         // Simpan data kategori baru ke database
         HeroCategories::create([
             'slug' => $slug,
-            'image_url' => Storage::url($imagePath),
+            'image_url' => $imageUrl, // Pastikan image_url terisi
             'name' => $request->name,
             'description_categories' => $request->description_categories,
         ]);
 
         return redirect()->route('hero-categories.index')->with('success', 'Hero Category created successfully.');
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -91,9 +97,9 @@ class HeroCategoriesController extends Controller
     {
         // Validasi data
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'string|max:255',
             'description_categories' => 'nullable|string',
-            'slug' => 'nullable|string|unique:hero_categories,slug,' . $heroCategories->id, // Unique untuk slug dengan pengecualian id
+            'slug' => 'nullable|string|unique:hero_categories,slug,' . $heroCategories->id,
             'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -130,12 +136,14 @@ class HeroCategoriesController extends Controller
         // Update data heroCategories
         $heroCategories->update([
             'slug' => $slug,
+            'image_url' => $heroCategories->image_url ?? '/default-image-url.jpg', // Pastikan image_url terisi
             'name' => $request->name,
             'description_categories' => $request->description_categories,
         ]);
 
         return redirect()->route('hero-categories.index')->with('success', 'Hero Category updated successfully.');
     }
+
 
     /**
      * Remove the specified resource from storage.

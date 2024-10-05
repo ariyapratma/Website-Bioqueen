@@ -7,10 +7,10 @@ import Dropdown from "@/Components/Dropdown";
 
 const EditHeroCategories = ({ dataHeroCategories, auth }) => {
   const { data, setData, put, processing, errors } = useForm({
-    slug: dataHeroCategories?.slug || "",
+    slug: dataHeroCategories.slug || "",
     image_url: null,
-    name: dataHeroCategories?.name || "",
-    description_categories: dataHeroCategories?.description_categories || "",
+    name: dataHeroCategories.name || "",
+    description_categories: dataHeroCategories.description_categories || "",
   });
 
   const [activeMenu, setActiveMenu] = useState("hero-categories");
@@ -20,7 +20,7 @@ const EditHeroCategories = ({ dataHeroCategories, auth }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Menggunakan FormData untuk mengirim file dan data lainnya
+    // Using FormData to handle file upload
     const formData = new FormData();
     formData.append("slug", data.slug);
     formData.append("image_url", data.image_url);
@@ -29,7 +29,6 @@ const EditHeroCategories = ({ dataHeroCategories, auth }) => {
 
     put(`/hero-categories/${dataHeroCategories.id}`, {
       data: formData,
-      headers: { "Content-Type": "multipart/form-data" }, // Pastikan format form-data
       onSuccess: () => {
         Swal.fire({
           title: "Success!",
@@ -66,7 +65,7 @@ const EditHeroCategories = ({ dataHeroCategories, auth }) => {
             <IoChevronBackOutline className="h-4 w-4" />
           </Link>
 
-          {/* Admin dan Avatar */}
+          {/* Admin and Avatar */}
           <div className="flex items-center">
             <div className="relative ms-3">
               <Dropdown>
@@ -123,7 +122,7 @@ const EditHeroCategories = ({ dataHeroCategories, auth }) => {
         </div>
 
         <h2 className="mb-4 font-lexend text-xl font-bold">
-          Edit Hero Categories
+          Edit Home Page Content
         </h2>
 
         <form
@@ -201,8 +200,8 @@ const EditHeroCategories = ({ dataHeroCategories, auth }) => {
             </label>
             <input
               id="image_url"
-              type="file"
-              onChange={(e) => setData("image_url", e.target.files[0])}
+              type="file" // Change type to file
+              onChange={(e) => setData("image_url", e.target.files[0])} // Handle file input
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
             />
             {errors.image_url && (

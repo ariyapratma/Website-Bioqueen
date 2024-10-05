@@ -231,8 +231,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/hero-categories', [HeroCategoriesController::class, 'index'])->name('hero-categories.index');
         Route::get('/hero-categories/create', [HeroCategoriesController::class, 'create'])->name('hero-categories.create');
         Route::post('/hero-categories', [HeroCategoriesController::class, 'store'])->name('hero-categories.store');
-        Route::get('/hero-categories/{heroCategories}/edit', [HeroCategoriesController::class, 'edit'])->name('hero-categories.edit');
-        Route::put('/hero-categories/{heroCategories}', [HeroCategoriesController::class, 'update'])->name('hero-categories.update');
+        Route::get('/hero-categories/{id}/edit', [HeroCategoriesController::class, 'edit'])->name('hero-categories.edit');
+        Route::put('/hero-categories/{id}', [HeroCategoriesController::class, 'update'])->name('hero-categories.update');
         Route::delete('/hero-categories/{id}', [HeroCategoriesController::class, 'destroy'])->name('hero-categories.destroy');
 
         // Route ProductCategory User
