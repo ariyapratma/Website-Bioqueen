@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use App\Models\Product;
 use App\Models\ProductList;
 use Illuminate\Http\Request;
+use App\Models\HeaderProduct;
 use App\Models\HeroCategories;
 use Illuminate\Support\Facades\Storage;
 
@@ -16,8 +17,12 @@ class ProductListController extends Controller
      */
     public function index()
     {
+
+        // Mengambil data pertama dari tabel header_product
+        $headerProduct = HeaderProduct::first();
         $products = Product::all();
         return Inertia::render('Admin/Product/ManageProductList', [
+            'dataHeaderProduct' => $headerProduct,
             'products' => $products,
         ]);
     }

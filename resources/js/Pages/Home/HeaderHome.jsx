@@ -23,17 +23,17 @@ const HeaderHome = () => {
 
       {/* Text Content */}
       <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-40 p-4 px-6 pt-6 text-white sm:px-12 md:px-24 lg:p-8 lg:px-36 xl:px-48">
-        <h1 className="mb-4 text-center text-2xl font-bold sm:text-3xl md:text-4xl lg:text-5xl">
+        <h1 className="mb-4 text-center font-lexend text-2xl font-bold sm:text-3xl md:text-4xl lg:text-5xl">
           {dataHeaderHome?.title || "No title available"}
         </h1>
-        <p className="mb-6 text-center text-base sm:text-lg md:text-xl lg:text-xl">
+        <p className="font-regular mb-6 text-center font-lexend text-base sm:text-lg md:text-xl lg:text-xl">
           {dataHeaderHome?.description || "No description available"}
         </p>
         <button
           onClick={() => {
             window.location.href = dataHeaderHome?.whatsapp_link;
           }}
-          className="text-base-content rounded-lg bg-custom-yellow px-4 py-2 text-base font-semibold transition-colors hover:bg-yellow-400 sm:px-6 sm:py-3 sm:text-lg"
+          className="text-base-content font-regular rounded-lg bg-custom-yellow px-4 py-2 font-lexend text-base text-black transition-colors hover:bg-yellow-400 sm:px-6 sm:py-3 sm:text-lg"
         >
           Konsultasikan Sekarang
         </button>

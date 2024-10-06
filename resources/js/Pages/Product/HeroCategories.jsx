@@ -10,7 +10,7 @@ const HeroCategories = () => {
   };
 
   return (
-    <div className="container mx-auto mb-2 p-6 px-10 py-14">
+    <div className="container mx-auto mb-24 p-6 px-10 py-14">
       {/* Breadcrumb */}
       {/* <nav className="mb-4 text-sm text-gray-500">
         <ul className="flex space-x-2">
