@@ -84,9 +84,7 @@ export default function UpdateProfileInformation({
       <form onSubmit={submit} className="mt-6 space-y-6 font-lexend">
         <div className="relative">
           <img
-            src={
-              user.avatar ? `/storage/${user.avatar}` : "/default-avatar.png"
-            } // Perbarui path gambar
+            src={`/storage/avatars/${user.id}.png`}
             alt={user.name}
             className="mx-auto h-20 w-20 rounded-full border border-custom-yellow"
             ref={avatarRef}

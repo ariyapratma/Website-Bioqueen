@@ -6,32 +6,31 @@ import { Head } from "@inertiajs/react";
 
 export default function Edit({ auth, mustVerifyEmail, status }) {
   return (
-    <AuthenticatedLayout
-      user={auth.user}
-      header={
-        <h2 className="font-lexend text-xl font-semibold leading-tight text-gray-800">
-          Profile
-        </h2>
-      }
-    >
+    <AuthenticatedLayout user={auth.user}>
       <Head title="Profile" />
 
       <div className="py-4 sm:py-6">
-        <div className="mx-auto max-w-7xl space-y-4 px-4 sm:space-y-6 sm:px-6">
-          <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
-            <UpdateProfileInformationForm
-              mustVerifyEmail={mustVerifyEmail}
-              status={status}
-              className="max-w-xl"
-            />
-          </div>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          {/* Gunakan grid layout untuk membagi tampilan */}
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+            {/* Card Update Profile */}
+            <div className="w-full bg-white p-4 shadow sm:rounded-lg sm:p-8">
+              <UpdateProfileInformationForm
+                mustVerifyEmail={mustVerifyEmail}
+                status={status}
+                className="max-w-full"
+              />
+            </div>
 
-          <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
-            <UpdatePasswordForm className="max-w-xl" />
-          </div>
+            {/* Card Update Password */}
+            <div className="w-full bg-white p-4 shadow sm:rounded-lg sm:p-8">
+              <UpdatePasswordForm className="max-w-full" />
+            </div>
 
-          <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
-            <DeleteUserForm className="max-w-xl" />
+            {/* Card Delete User */}
+            <div className="w-full bg-white p-4 shadow sm:rounded-lg sm:p-8">
+              <DeleteUserForm className="max-w-full" />
+            </div>
           </div>
         </div>
       </div>

@@ -1,17 +1,18 @@
 import { useState } from "react";
 import ApplicationLogo from "@/Components/ApplicationLogo";
+import { FaChevronDown } from "react-icons/fa";
 import Dropdown from "@/Components/Dropdown";
 import NavLink from "@/Components/NavLink";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink";
 import { Link } from "@inertiajs/react";
 
-export default function Authenticated({ user, header, children }) {
+export default function Authenticated({ user, children }) {
   const [showingNavigationDropdown, setShowingNavigationDropdown] =
     useState(false);
 
   return (
     <div className="min-h-screen bg-custom-yellow">
-      <nav className="border-b border-gray-100 bg-white">
+      <nav className="bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 justify-between">
             <div className="flex w-full gap-4">
@@ -24,10 +25,8 @@ export default function Authenticated({ user, header, children }) {
               <NavLink
                 href={route("index")}
                 active={false}
-                className="font-lexend font-bold"
-              >
-                Home
-              </NavLink>
+                className="font-lexend font-bold text-black"
+              ></NavLink>
             </div>
 
             <div className="hidden sm:ms-6 sm:flex sm:items-center">
@@ -41,25 +40,14 @@ export default function Authenticated({ user, header, children }) {
                       >
                         {user.name}
                         <img
-                          src={
-                            user.avatar
-                              ? `/storage/${user.avatar}`
-                              : "/default-avatar.png"
-                          }
-                          className="mx-auto h-10 w-10 rounded-full border border-custom-yellow"
+                          src={`/storage/avatars/${user.id}.png`}
+                          alt={user.name}
+                          className="mx-2 h-10 w-10 rounded-full border border-custom-yellow"
                         />
-                        <svg
-                          className="-me-0.5 ms-2 h-4 w-4"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
+                        <FaChevronDown
+                          className="ml-2 h-2 w-2"
+                          aria-hidden="true"
+                        />
                       </button>
                     </span>
                   </Dropdown.Trigger>
@@ -137,6 +125,7 @@ export default function Authenticated({ user, header, children }) {
             </ResponsiveNavLink>
           </div>
 
+          {/* {auth?.user && ( */}
           <div className="border-t border-gray-200 pb-1 pt-4">
             <div className="px-4">
               <div className="font-lexend text-base font-medium text-gray-800">
@@ -162,12 +151,6 @@ export default function Authenticated({ user, header, children }) {
           </div>
         </div>
       </nav>
-
-      {header && (
-        <header className="bg-white shadow">
-          <div className="mx-auto max-w-7xl p-4 sm:p-6">{header}</div>
-        </header>
-      )}
 
       <main>{children}</main>
     </div>

@@ -84,7 +84,7 @@ export default function Navbar({ auth }) {
                     >
                       {user?.name}
                       <img
-                        src={`/storage/avatars/${auth.user.id}.png`} // Mengakses avatar dari public storage
+                        src={`/storage/avatars/${auth.user.id}.png`}
                         alt={auth.user.name}
                         className="mx-2 h-10 w-10 rounded-full border border-custom-yellow"
                       />
