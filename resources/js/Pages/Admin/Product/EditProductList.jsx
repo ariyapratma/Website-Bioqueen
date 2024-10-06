@@ -1,17 +1,18 @@
 import { Link, Head, useForm } from "@inertiajs/react";
 import Swal from "sweetalert2";
+import { Inertia } from "@inertiajs/inertia";
 import { useState } from "react";
 import { IoChevronBackOutline } from "react-icons/io5";
 import Sidebar from "@/Components/Admin/Sidebar";
 import Dropdown from "@/Components/Dropdown";
 
-const EditProductList = ({ product, auth }) => {
+const EditProductList = ({ products, auth }) => {
   const { data, setData, put, processing, errors } = useForm({
-    category_id: product?.category_id || "",
-    name: product?.name || "",
-    description: product?.description || "",
+    category_id: products?.category_id || "",
+    name: products?.name || "",
+    description: products?.description || "",
     image_url: null,
-    price: product?.price || "",
+    price: products?.price || "",
   });
 
   const [activeMenu, setActiveMenu] = useState("product-list");
@@ -52,7 +53,7 @@ const EditProductList = ({ product, auth }) => {
     formData.append("image_url", data.image_url);
     formData.append("price", data.price);
 
-    put(`product-list/${product.id}`, {
+    put(route("product-list.update", products.id), {
       data: formData,
       onSuccess: () => {
         Swal.fire({

@@ -89,10 +89,10 @@ class ProductListController extends Controller
      */
     public function edit($id)
     {
-        $product = Product::findOrFail($id);
+        $products = Product::findOrFail($id);
         $categories = HeroCategories::all();
         return Inertia::render('Admin/Product/EditProductList', [
-            'product' => $product,
+            'products' => $products,
             'categories' => $categories,
         ]);
     }
@@ -171,7 +171,6 @@ class ProductListController extends Controller
         // Redirect ke halaman daftar product list setelah update berhasil
         return redirect()->route('product-list.index')->with('success', 'Product list updated successfully.');
     }
-
 
     /**
      * Remove the specified resource from storage.

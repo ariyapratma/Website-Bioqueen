@@ -1,5 +1,6 @@
 import { Link, Head, useForm } from "@inertiajs/react";
 import Swal from "sweetalert2";
+import { Inertia } from "@inertiajs/inertia";
 import { useState } from "react";
 import { IoChevronBackOutline } from "react-icons/io5";
 import Sidebar from "@/Components/Admin/Sidebar";

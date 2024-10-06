@@ -242,8 +242,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/product-list', [ProductListController::class, 'index'])->name('product-list.index');
         Route::get('/product-list/create', [ProductListController::class, 'create'])->name('product-list.create');
         Route::post('/product-list', [ProductListController::class, 'store'])->name('product-list.store');
-        Route::get('/product-list/{id}/edit', [ProductListController::class, 'edit'])->name('product-list.edit');
-        Route::put('/product-list/{id}', [ProductListController::class, 'update'])->name('product-list.update');
+        Route::get('/product-list/{products}/edit', [ProductListController::class, 'edit'])->name('product-list.edit');
+        Route::put('/product-list/{products}', [ProductListController::class, 'update'])->name('product-list.update');
         Route::delete('/product-list/{id}', [ProductListController::class, 'destroy'])->name('product-list.destroy');
 
         // Order Page :
