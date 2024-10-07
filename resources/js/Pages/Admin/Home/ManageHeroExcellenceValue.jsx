@@ -71,6 +71,10 @@ const ManageHeroExcellenceValue = ({ dataHeroExcellenceValue, auth }) => {
                         alt={auth.user.name}
                         className="mx-2 h-10 w-10 rounded-full border border-custom-yellow"
                       />
+                      <FaChevronDown
+                        className="ml-2 h-2 w-2"
+                        aria-hidden="true"
+                      />
                     </button>
                   </span>
                 </Dropdown.Trigger>
