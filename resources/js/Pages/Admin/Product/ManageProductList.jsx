@@ -2,6 +2,7 @@ import { Link, Head, useForm } from "@inertiajs/react";
 import Swal from "sweetalert2";
 import { useState } from "react";
 import { IoChevronBackOutline } from "react-icons/io5";
+import { FaChevronDown } from "react-icons/fa";
 import Sidebar from "@/Components/Admin/Sidebar";
 import Searchbar from "@/Components/Admin/Searchbar";
 import Notification from "@/Components/Admin/Notification";
@@ -66,25 +67,14 @@ const ManageProductList = ({ products, auth }) => {
                     >
                       {user?.name}
                       <img
-                        src={
-                          user?.avatar
-                            ? `/storage/${user.avatar}`
-                            : "/default-avatar.png"
-                        }
+                        src={`/storage/avatars/${auth.user.id}.png`}
+                        alt={auth.user.name}
                         className="mx-2 h-10 w-10 rounded-full border border-custom-yellow"
                       />
-                      <svg
-                        className="-me-0.5 ms-2 h-4 w-4"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 011.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
+                      <FaChevronDown
+                        className="ml-2 h-2 w-2"
+                        aria-hidden="true"
+                      />
                     </button>
                   </span>
                 </Dropdown.Trigger>
