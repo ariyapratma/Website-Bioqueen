@@ -1,9 +1,9 @@
 import { FaStar } from "react-icons/fa";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "@inertiajs/react";
 import Swal from "sweetalert2";
 
-export default function HeroAddReview({ success }) {
+export default function HeroAddReview() {
   const { data, setData, post, reset } = useForm({
     name: "",
     comment: "",
@@ -52,27 +52,8 @@ export default function HeroAddReview({ success }) {
           confirmButtonText: "OK",
         });
       },
-      onError: () => {
-        Swal.fire({
-          title: "Error!",
-          text: "There was an error adding the Review.",
-          icon: "error",
-          confirmButtonText: "OK",
-        });
-      },
     });
   };
-
-  useEffect(() => {
-    if (success) {
-      Swal.fire({
-        title: "Success!",
-        text: success,
-        icon: "success",
-        confirmButtonText: "OK",
-      });
-    }
-  }, [success]);
 
   return (
     <div className="mb-24 flex flex-col items-center p-4 sm:p-6">

@@ -66,17 +66,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('Dashboard');
     })->middleware('role:admin|user')->name('dashboard');
 
-    // Rute untuk menambahkan review, hanya user yang bisa mengakses
-    Route::middleware(['auth', 'role:user|admin'])->group(function () {
-
-        // Home Page :
-
-        // Route HeroReview
-        Route::get('/hero-review', [HeroReviewController::class, 'index'])->name('hero-review.index');
+    // Rute untuk menambahkan review, hanya user dan admin yang bisa mengakses
+    Route::middleware(['auth', 'role:user'])->group(function () {
+        // Route HeroReview User
         Route::post('/hero-review', [HeroReviewController::class, 'store'])->name('hero-review.store');
-        // Route::get('/hero-review/{id}/edit', [HeroReviewController::class, 'edit'])->name('hero-review.edit');
-        // Route::put('/hero-review/{id}', [HeroReviewController::class, 'update'])->name('hero-review.update');
-        // Route::delete('/hero-review/{id}', [HeroReviewController::class, 'destroy'])->name('hero-review.destroy');
+    });
+
+    // Rute untuk mengelola review, hanya admin yang bisa mengakses
+    Route::middleware(['auth', 'role:admin'])->group(function () {
+        // Route HeroReview Admin 
+        Route::get('/hero-review', [HeroReviewController::class, 'index'])->name('hero-review.index');
+        Route::get('/hero-review/{heroReview}/edit', [HeroReviewController::class, 'edit'])->name('hero-review.edit');
+        Route::put('/hero-review/{heroReview}', [HeroReviewController::class, 'update'])->name('hero-review.update');
+        Route::delete('/hero-review/{id}', [HeroReviewController::class, 'destroy'])->name('hero-review.destroy');
     });
 
     // Rute untuk mengelola isi konten web, hanya admin yang bisa mengakses

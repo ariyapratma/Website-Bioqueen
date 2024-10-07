@@ -18,10 +18,31 @@ class HeroReviewController extends Controller
         // Mengambil semua ulasan dari database
         $heroReview = HeroReview::all();
 
-        // Mengembalikan data dengan Inertia
+        // Periksa apakah pengguna sudah terautentikasi
+        if (Auth::check()) {
+            $user = Auth::user();
+
+            // Jika pengguna belum memiliki role 'user', berikan role tersebut
+            if (!$user->hasRole('user')) {
+                $user->assignRole('user');
+            }
+
+            // Logika untuk menetapkan role 'admin' berdasarkan email tertentu
+            if ($user->email === 'adminbioqueen@indonesia.com' && !$user->hasRole('admin')) {
+                $user->assignRole('admin');
+            }
+
+            // Periksa peran pengguna
+            if ($user->hasRole('admin')) {
+                return Inertia::render('Admin/Home/ManageHeroReview', [
+                    'dataHeroReview' => $heroReview,
+                ]);
+            }
+        }
+
+        // Jika bukan admin, kembalikan tampilan biasa
         return Inertia::render('Home/Index', [
             'dataHeroReview' => $heroReview,
-            'success' => session('success'),
         ]);
     }
 
@@ -62,8 +83,6 @@ class HeroReviewController extends Controller
             'user_id' => Auth::id(),
         ]);
 
-        session()->flash('success', 'Review has been added successfully.');
-
         // Kembali ke halaman sebelumnya (Home/Index)
         return redirect()->route('index');
     }
@@ -82,7 +101,9 @@ class HeroReviewController extends Controller
      */
     public function edit(HeroReview $heroReview)
     {
-        //
+        return Inertia::render('Admin/Home/EditHeroReview', [
+            'dataHeroReview' => $heroReview
+        ]);
     }
 
     /**
@@ -90,14 +111,28 @@ class HeroReviewController extends Controller
      */
     public function update(Request $request, HeroReview $heroReview)
     {
-        //
+        // Validasi input
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'required|string|max:255',
+        ]);
+
+        // Update data ulasan
+        $heroReview->update([
+            'rating' => $request->rating,
+            'comment' => $request->comment,
+        ]);
+
+        // Redirect ke halaman manage review
+        return redirect()->route('hero-review.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(HeroReview $heroReview)
+    public function destroy(HeroReview $id)
     {
-        //
+        $id->delete();
+        return redirect()->route('hero-review.index');
     }
 }

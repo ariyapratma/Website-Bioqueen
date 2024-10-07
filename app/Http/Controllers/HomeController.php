@@ -71,7 +71,6 @@ class HomeController extends Controller
             'dataHeroVideo' => $heroVideo,
             'dataHeroExcellenceValue' => $heroExcellenceValue,
             'dataHeroReview' => $heroReview,
-            'success' => 'Review has been added successfully.',
         ]);
     }
 
