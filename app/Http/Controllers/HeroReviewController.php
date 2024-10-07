@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use App\Models\HeroReview;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Laravolt\Avatar\Facade as Avatar;
 
 class HeroReviewController extends Controller
 {
@@ -14,19 +15,13 @@ class HeroReviewController extends Controller
      */
     public function index()
     {
-        // // Mengambil semua ulasan dari database
-        // $heroReview = HeroReview::all();
-        // return Inertia::render('Home/HeroReview', [
-        //     'dataHeroReview' => $heroReview,
-        //     'success' => 'Review berhasil ditambahkan',
-        // ]);
         // Mengambil semua ulasan dari database
         $heroReview = HeroReview::all();
 
         // Mengembalikan data dengan Inertia
-        return Inertia::render('Home/HeroReview', [
+        return Inertia::render('Home/Index', [
             'dataHeroReview' => $heroReview,
-            'success' => session('success'), // Mengambil pesan sukses dari session jika ada
+            'success' => session('success'),
         ]);
     }
 
@@ -49,24 +44,30 @@ class HeroReviewController extends Controller
             'comment' => 'required|string|max:255',
         ]);
 
+        // Cek apakah pengguna memiliki avatar di storage
+        $avatarPath = "storage/avatars/" . Auth::user()->id . ".png";
+        if (!file_exists(public_path($avatarPath))) {
+            // Jika tidak ada avatar, generate avatar menggunakan Laravolt
+            $avatar = Avatar::create(Auth::user()->name)->toBase64();
+        } else {
+            $avatar = $avatarPath;
+        }
+
         // Simpan review ke database
         HeroReview::create([
             'name' => Auth::user()->name,
-            'avatar' => Auth::user()->avatar ?? 'default-avatar.png',
+            'avatar' => $avatar,
             'rating' => $request->rating,
             'comment' => $request->comment,
             'user_id' => Auth::id(),
         ]);
 
-        // Ambil semua ulasan untuk dikirim kembali ke halaman Home
-        $heroReview = HeroReview::all();
+        session()->flash('success', 'Review has been added successfully.');
 
-        // Kembali ke halaman Home dengan data ulasan yang diperbarui
-        return Inertia::render('Home/HeroReview', [
-            'dataHeroReview' => $heroReview,
-            'success' => 'Review has been added successfully.',
-        ]);
+        // Kembali ke halaman sebelumnya (Home/Index)
+        return redirect()->route('index');
     }
+
 
     /**
      * Display the specified resource.

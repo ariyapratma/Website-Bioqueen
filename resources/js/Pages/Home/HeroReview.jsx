@@ -6,9 +6,8 @@ import Swal from "sweetalert2";
 import { Head } from "@inertiajs/react";
 
 const HeroReview = () => {
-  // Mengambil data dari Inertia
   const { props } = usePage();
-  const { dataHeroReview = [], success } = props; // Mengakses data ulasan dan pesan sukses
+  const { dataHeroReview = [], success } = props;
 
   useEffect(() => {
     // Menampilkan pesan sukses menggunakan SweetAlert

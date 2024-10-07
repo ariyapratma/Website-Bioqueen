@@ -55,7 +55,7 @@ class HomeController extends Controller
         $heroExcellenceValue = HeroExcellenceValue::first();
 
         // Mengambil semua data dari tabel hero_review
-        $heroReview = HeroReview::all();
+        $heroReview = HeroReview::latest()->get();
 
         // Kembalikan data ke view Inertia 'Home.Index'
         return Inertia::render('Home/Index', [
@@ -70,7 +70,8 @@ class HomeController extends Controller
             'dataHeroService' => $heroService,
             'dataHeroVideo' => $heroVideo,
             'dataHeroExcellenceValue' => $heroExcellenceValue,
-            'dataHeroReviews' => $heroReview,
+            'dataHeroReview' => $heroReview,
+            'success' => 'Review has been added successfully.',
         ]);
     }
 

@@ -94,8 +94,8 @@ class HeaderProductController extends Controller
     public function update(Request $request, HeaderProduct $headerProduct)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string||max:255',
+            'title' => 'string|max:255',
+            'description' => 'string||max:255',
             'image_url' => 'nullable|image|mimes:jpg,jpeg,png|max:3072',
         ]);
 

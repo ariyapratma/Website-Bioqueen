@@ -175,8 +175,8 @@ export default function Navbar({ auth }) {
               <li className="mt-4 flex flex-col items-center">
                 <img
                   className="h-10 w-10 rounded-full"
-                  src={avatar || "/default-avatar.png"}
-                  alt="User Avatar"
+                  src={`/storage/avatars/${auth.user.id}.png`}
+                  alt={auth.user.name}
                 />
                 <div className="pt-2">
                   <div className="font-lexend text-base font-medium text-gray-800">
