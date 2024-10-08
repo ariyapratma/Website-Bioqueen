@@ -10,9 +10,10 @@ import Dropdown from "@/Components/Dropdown";
 const CreateProductList = ({ auth }) => {
   const { data, setData, post, processing, errors } = useForm({
     category_id: "",
+    image_url: null,
+    slug: "",
     name: "",
     description: "",
-    image_url: null,
     price: "", // price disimpan sebagai string untuk format Rp.
   });
 
@@ -51,9 +52,10 @@ const CreateProductList = ({ auth }) => {
     // Menggunakan FormData untuk menangani pengunggahan file
     const formData = new FormData();
     formData.append("category_id", data.category_id);
+    formData.append("slug", data.slug);
+    formData.append("image_url", data.image_url);
     formData.append("name", data.name);
     formData.append("description", data.description);
-    formData.append("image_url", data.image_url);
     formData.append("price", formattedPrice); // kirimkan harga tanpa format Rp.
 
     post("/product-list", {
@@ -165,6 +167,45 @@ const CreateProductList = ({ auth }) => {
 
           <div>
             <label
+              htmlFor="slug"
+              className="block font-lexend text-sm font-medium text-gray-700"
+            >
+              Slug
+            </label>
+            <input
+              id="slug"
+              type="text"
+              value={data.slug}
+              onChange={(e) => setData("slug", e.target.value)}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              required
+            />
+            {errors.slug && (
+              <span className="text-sm text-red-600">{errors.slug}</span>
+            )}
+          </div>
+
+          <div>
+            <label
+              htmlFor="image_url"
+              className="block font-lexend text-sm font-medium text-gray-700"
+            >
+              Image
+            </label>
+            <input
+              id="image_url"
+              type="file"
+              onChange={(e) => setData("image_url", e.target.files[0])}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              required
+            />
+            {errors.image_url && (
+              <span className="text-sm text-red-600">{errors.image_url}</span>
+            )}
+          </div>
+
+          <div>
+            <label
               htmlFor="name"
               className="block font-lexend text-sm font-medium text-gray-700"
             >
@@ -204,25 +245,6 @@ const CreateProductList = ({ auth }) => {
 
           <div>
             <label
-              htmlFor="image_url"
-              className="block font-lexend text-sm font-medium text-gray-700"
-            >
-              Image
-            </label>
-            <input
-              id="image_url"
-              type="file"
-              onChange={(e) => setData("image_url", e.target.files[0])}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-              required
-            />
-            {errors.image_url && (
-              <span className="text-sm text-red-600">{errors.image_url}</span>
-            )}
-          </div>
-
-          <div>
-            <label
               htmlFor="price"
               className="block font-lexend text-sm font-medium text-gray-700"
             >
@@ -244,9 +266,9 @@ const CreateProductList = ({ auth }) => {
           <button
             type="submit"
             disabled={processing}
-            className="w-full rounded-md bg-custom-yellow py-2 text-black hover:bg-yellow-500"
+            className="w-full rounded-md bg-custom-yellow py-2 font-lexend font-semibold text-black hover:bg-yellow-600"
           >
-            Add Product List
+            {processing ? "Saving..." : "Save Product List"}
           </button>
         </form>
       </div>

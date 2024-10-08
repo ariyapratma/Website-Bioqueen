@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('hero_categories', function (Blueprint $table) {
             $table->id();
-            $table->string('slug')->unique(); // Tambahkan unique untuk memastikan slug tidak duplikat
-            $table->string('image_url', 500); // Panjangkan image_url jika diperlukan
+            $table->string('slug')->unique();
+            $table->string('image_url', 500);
             $table->string('name');
             $table->text('description_categories');
             $table->timestamps();
 
-            $table->index('slug'); // Tambahkan index untuk mempercepat pencarian berdasarkan slug
+            $table->index('slug');
         });
     }
 

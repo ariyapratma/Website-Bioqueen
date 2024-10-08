@@ -123,13 +123,16 @@ const ManageProductList = ({ products, auth }) => {
                 Category ID
               </th>
               <th className="px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                Slug
+              </th>
+              <th className="px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                Image URL
+              </th>
+              <th className="px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                 Name
               </th>
               <th className="px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                 Description
-              </th>
-              <th className="px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
-                Image URL
               </th>
               <th className="px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                 Price
@@ -145,11 +148,8 @@ const ManageProductList = ({ products, auth }) => {
                 <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
                   {product.category_id}
                 </td>
-                <td className="max-w-sm truncate whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
-                  {product.name}
-                </td>
-                <td className="max-w-sm truncate whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
-                  {product.description}
+                <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
+                  {product.slug}
                 </td>
                 <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
                   <a
@@ -160,6 +160,12 @@ const ManageProductList = ({ products, auth }) => {
                   >
                     View Image
                   </a>
+                </td>
+                <td className="max-w-sm truncate whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
+                  {product.name}
+                </td>
+                <td className="max-w-sm truncate whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
+                  {product.description}
                 </td>
                 <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
                   {product.price}

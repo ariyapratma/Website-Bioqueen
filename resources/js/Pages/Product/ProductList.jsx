@@ -1,7 +1,12 @@
 import Navbar from "@/Components/Navbar/Navbar";
 import HeaderProduct from "./HeaderProduct";
 import Footer from "@/Components/Footer/Footer";
-import { usePage, Head } from "@inertiajs/react";
+import { usePage, Head, Link, router } from "@inertiajs/react";
+
+// Fungsi untuk menangani klik produk
+const handleProductClick = (categorySlug, productSlug) => {
+  router.get(`/product/${categorySlug}/${productSlug}`); // Redirect ke route detail produk
+};
 
 const ProductList = () => {
   const { props } = usePage();
@@ -30,6 +35,9 @@ const ProductList = () => {
                 <div
                   key={product.id}
                   className="flex h-full cursor-pointer flex-col justify-between rounded-lg bg-white shadow-md hover:bg-gray-100"
+                  onClick={() =>
+                    handleProductClick(category.slug, product.slug)
+                  }
                 >
                   {/* Product Image */}
                   <div className="flex-shrink-0">

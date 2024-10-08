@@ -97,10 +97,10 @@ class HeroCategoriesController extends Controller
     {
         // Validasi data
         $request->validate([
+            'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'name' => 'string|max:255',
             'description_categories' => 'nullable|string',
             'slug' => 'nullable|string|unique:hero_categories,slug,' . $heroCategories->id,
-            'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         // Buat slug jika tidak diberikan

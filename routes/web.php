@@ -53,6 +53,8 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::get('/product', [ProductController::class, 'index'])->name('product');
 // Route ProductCategory User
 Route::get('/product/{slug}', [ProductController::class, 'showCategory'])->name('products.category');
+// Route ProductDetail User
+Route::get('/product/{category}/{product}', [ProductController::class, 'showProduct'])->name('product.detail');
 Route::get('/order', [OrderController::class, 'index'])->name('order');
 Route::get('/maklon', [MaklonController::class, 'index'])->name('maklon');
 

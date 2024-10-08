@@ -37,4 +37,18 @@ class ProductController extends Controller
             'products' => $products,
         ]);
     }
+
+    public function showProduct($categorySlug, $productSlug)
+    {
+        // Mendapatkan kategori berdasarkan slug
+        $category = HeroCategories::where('slug', $categorySlug)->firstOrFail();
+
+        // Mendapatkan produk berdasarkan slug dan kategori
+        $product = Product::where('slug', $productSlug)->where('category_id', $category->id)->firstOrFail();
+
+        return Inertia::render('Product/ProductDetail', [
+            'category' => $category,
+            'product' => $product,
+        ]);
+    }
 }

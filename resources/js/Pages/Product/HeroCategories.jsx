@@ -12,8 +12,8 @@ const HeroCategories = () => {
   return (
     <div className="container mx-auto mb-24 p-6 px-10 py-14">
       {/* Breadcrumb */}
-      {/* <nav className="mb-4 text-sm text-gray-500">
-        <ul className="flex space-x-2">
+      <nav className="mb-4 text-sm text-gray-500">
+        <ul className="font-regular flex space-x-2 font-lexend">
           <li>
             <Link href="/" className="text-blue-500 hover:underline">
               Home
@@ -21,10 +21,10 @@ const HeroCategories = () => {
           </li>
           <li>/</li>
           <li>
-            <span className="text-gray-600">Product</span>
+            <span className="text-gray-600">Product Category</span>
           </li>
         </ul>
-      </nav> */}
+      </nav>
 
       <h1 className="mb-4 font-lexend text-3xl font-bold text-black sm:text-4xl">
         Created with Love and Passion for Cleanliness

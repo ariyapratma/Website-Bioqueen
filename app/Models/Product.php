@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Product extends Model
 {
@@ -13,9 +14,10 @@ class Product extends Model
 
     protected $fillable = [
         'category_id',
+        'slug',
+        'image_url',
         'name',
         'description',
-        'image_url',
         'price',
     ];
 
@@ -23,5 +25,12 @@ class Product extends Model
     public function category()
     {
         return $this->belongsTo(HeroCategories::class, 'category_id');
+    }
+
+    // Setter untuk otomatis membuat slug berdasarkan nama
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = $value;
+        $this->attributes['slug'] = Str::slug($value); // Otomatis membuat slug dari nama produk
     }
 }

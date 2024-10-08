@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Models\Product;
 use App\Models\ProductList;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\HeaderProduct;
 use App\Models\HeroCategories;
@@ -51,11 +52,15 @@ class ProductListController extends Controller
         // Validasi data input
         $validatedData = $request->validate([
             'category_id' => 'required|exists:hero_categories,id',
+            'slug' => 'nullable|string|unique:hero_categories,slug',
+            'image_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'image_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'price' => 'required|numeric', // Pastikan setelah di-preprocess, ini berupa angka
         ]);
+
+        // Buat slug dari name jika slug tidak diberikan
+        $slug = $request->slug ?? Str::slug($request->name, '-');
 
         // Simpan gambar ke folder product_list
         $file = $request->file('image_url');
@@ -105,23 +110,6 @@ class ProductListController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    // public function update(Request $request, ProductList $id)
-    // {
-    //     // Validasi data input
-    //     $validatedData = $request->validate([
-    //         'category_id' => 'required|exists:hero_categories,id',
-    //         'name' => 'required|string|max:255',
-    //         'description' => 'required|string',
-    //         'image_url' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-    //         'price' => 'required|numeric',
-    //     ]);
-
-    //     // Update produk
-    //     $product = Product::findOrFail($id);
-    //     $product->update($validatedData);
-
-    //     return redirect()->route('product-list.index')->with('success', 'Product updated successfully!');
-    // }
 
     public function update(Request $request, ProductList $productList)
     {
@@ -133,14 +121,18 @@ class ProductListController extends Controller
         // Validasi data input
         $request->validate([
             'category_id' => 'required|exists:hero_categories,id',
+            'slug' => 'nullable|string|unique:hero_categories,slug',
+            'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Image tidak selalu required
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Image tidak selalu required
             'price' => 'required|numeric', // Pastikan setelah di-preprocess, ini berupa angka
         ]);
 
+        // Buat slug jika tidak diberikan
+        $slug = $request->slug ? Str::slug($request->slug) : $productList->slug;
+
         // Ambil data yang sudah divalidasi, kecuali 'image_url' (jika tidak ada file baru)
-        $data = $request->only(['category_id', 'name', 'description', 'price']);
+        $data = $request->only(['category_id', 'slug', 'name', 'description', 'price']);
 
         // Handle image upload jika ada gambar baru
         if ($request->hasFile('image_url')) {
