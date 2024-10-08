@@ -1,4 +1,5 @@
 import { FaLinkedin, FaInstagram, FaWhatsapp } from "react-icons/fa";
+import { useState } from "react";
 
 export default function HeroContact() {
   const data = {
@@ -9,6 +10,34 @@ export default function HeroContact() {
           "Sudah Punya Brand & Develop Produk? Atau Belum Punya Brand, Ingin Mulai Maklon?",
       },
     ],
+  };
+
+  // State to manage form inputs
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  // Handle input change
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // Handle form submission
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const whatsappNumber = "6282162637186";
+    const whatsappMessage = `Halo PT Ratu Bio Indonesia, saya ${formData.name}.\nSaya tertarik untuk konsultasi terkait layanan maklon.\n\nBerikut informasi saya:\nNama: ${formData.name}\nEmail: ${formData.email}\n\nPesan: "${formData.message}".\n\nTerima kasih.`;
+
+    // Redirect to WhatsApp
+    const whatsappLink = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+      whatsappMessage,
+    )}`;
+    window.open(whatsappLink, "_blank");
   };
 
   return (
@@ -57,16 +86,19 @@ export default function HeroContact() {
         ))}
 
         {/* Right Section - Contact Form */}
-        <div className="relative h-auto w-full rounded-lg bg-white p-8 shadow-lg lg:w-1/3">
-          <form>
+        <div className="relative h-auto w-full rounded-lg border-gray-200 bg-white p-8 shadow-lg lg:w-1/3">
+          <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label className="mb-2 block text-sm font-bold text-gray-700">
                 Name
               </label>
               <input
                 type="text"
+                name="name"
                 placeholder="Input Your Name"
-                className="w-full rounded-md border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-custom-yellow"
+                value={formData.name}
+                onChange={handleInputChange}
+                className="w-full rounded-md border border-gray-300 p-3 focus:outline-none focus:ring-0"
               />
             </div>
             <div className="mb-4">
@@ -75,8 +107,11 @@ export default function HeroContact() {
               </label>
               <input
                 type="email"
+                name="email"
                 placeholder="Input Your Email"
-                className="w-full rounded-md border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-custom-yellow"
+                value={formData.email}
+                onChange={handleInputChange}
+                className="w-full rounded-md border border-gray-300 p-3 focus:outline-none focus:ring-0"
               />
             </div>
             <div className="mb-4">
@@ -84,8 +119,11 @@ export default function HeroContact() {
                 Message
               </label>
               <textarea
+                name="message"
                 placeholder="Input Your Message"
-                className="w-full rounded-md border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-custom-yellow"
+                value={formData.message}
+                onChange={handleInputChange}
+                className="w-full rounded-md border border-gray-300 p-3 focus:outline-none focus:ring-0"
                 rows="4"
               ></textarea>
             </div>

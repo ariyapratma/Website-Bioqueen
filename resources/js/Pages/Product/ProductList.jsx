@@ -5,7 +5,7 @@ import { usePage, Head } from "@inertiajs/react";
 
 const ProductList = () => {
   const { props } = usePage();
-  const { category, products, auth, headerProduct } = props;
+  const { category, products, auth, dataHeroProduct } = props;
 
   return (
     <div className="flex min-h-screen flex-col overflow-x-hidden">
@@ -14,7 +14,7 @@ const ProductList = () => {
       <Navbar auth={auth} />
       <main className="flex-grow">
         {/* HeaderProduct */}
-        <HeaderProduct data={headerProduct} />
+        <HeaderProduct dataHeroProduct={dataHeroProduct} />
         <div className="container mx-auto mb-24 p-6 px-10 py-14">
           <h1 className="mb-4 font-lexend text-3xl font-bold text-black sm:text-4xl">
             {category.name}

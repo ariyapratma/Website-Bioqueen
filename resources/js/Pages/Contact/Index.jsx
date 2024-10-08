@@ -2,7 +2,7 @@ import { Link, Head } from "@inertiajs/react";
 import Navbar from "@/Components/Navbar/Navbar";
 import { usePage } from "@inertiajs/react";
 import HeaderContact from "./HeaderContact";
-import HeroContact from "@/Components/Contact/HeroContact";
+import HeroContact from "./HeroContact";
 import Footer from "@/Components/Footer/Footer";
 
 const Index = ({ auth }) => {
