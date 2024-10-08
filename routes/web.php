@@ -1,39 +1,40 @@
 <?php
 
 use Inertia\Inertia;
+use App\Models\HeroOurGallery;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\MaklonController;
 use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\HeaderAboutUsController;
-use App\Http\Controllers\HeaderContactController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HeroFlyerController;
 use App\Http\Controllers\HeroVideoController;
 use App\Http\Controllers\HeaderHomeController;
-use App\Http\Controllers\HeaderMaklonController;
+use App\Http\Controllers\HeroReviewController;
 use App\Http\Controllers\HeaderOrderController;
-use App\Http\Controllers\HeaderProductController;
 use App\Http\Controllers\HeroAboutUsController;
-use App\Http\Controllers\HeroAddReviewController;
-use App\Http\Controllers\HeroCategoriesController;
 use App\Http\Controllers\HeroCompanyController;
 use App\Http\Controllers\HeroServiceController;
+use App\Http\Controllers\ProductListController;
+use App\Http\Controllers\HeaderMaklonController;
+use App\Http\Controllers\HeaderAboutUsController;
+use App\Http\Controllers\HeaderContactController;
+use App\Http\Controllers\HeaderProductController;
+use App\Http\Controllers\HeroAddReviewController;
 use App\Http\Controllers\HeroTeamValueController;
 use App\Http\Controllers\HeroWhyChooseController;
+use App\Http\Controllers\HeroCategoriesController;
+use App\Http\Controllers\HeroOurGalleryController;
 use App\Http\Controllers\HeroCertificateController;
 use App\Http\Controllers\HeroMaklonValueController;
+use App\Http\Controllers\HeroVisionMisionController;
 use App\Http\Controllers\HeroExcellenceValueController;
 use App\Http\Controllers\HeroFacilitiesValueController;
-use App\Http\Controllers\HeroOurGalleryController;
-use App\Http\Controllers\HeroReviewController;
-use App\Http\Controllers\HeroVisionMisionController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\ProductListController;
-use App\Models\HeroOurGallery;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,6 +56,8 @@ Route::get('/product', [ProductController::class, 'index'])->name('product');
 Route::get('/product/{slug}', [ProductController::class, 'showCategory'])->name('products.category');
 // Route ProductDetail User
 Route::get('/product/{category}/{product}', [ProductController::class, 'showProduct'])->name('product.detail');
+// Route AddCart User
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::get('/order', [OrderController::class, 'index'])->name('order');
 Route::get('/maklon', [MaklonController::class, 'index'])->name('maklon');
 

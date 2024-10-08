@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import { Link, usePage } from "@inertiajs/react";
 import Dropdown from "@/Components/Dropdown";
-import { FaChevronDown } from "react-icons/fa";
+import { FaChevronDown, FaShoppingCart } from "react-icons/fa";
 
 export default function Navbar({ auth }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { url } = usePage();
   const user = auth.user;
+
+  // State untuk menyimpan jumlah item di keranjang
+  const [cartItems, setCartItems] = useState(0); 
 
   useEffect(() => {
     const handleScroll = () => {
@@ -52,7 +55,9 @@ export default function Navbar({ auth }) {
               key={path}
               href={path}
               className={`font-regular font-lexend transition-colors hover:text-gray-800 ${
-                url === path ? "font-lexend font-bold text-black" : ""
+                url === path || (url.startsWith("/product") && path === "/product")
+                  ? "font-lexend font-bold text-black"
+                  : ""
               }`}
             >
               {name}
@@ -69,6 +74,18 @@ export default function Navbar({ auth }) {
               Dashboard
             </Link>
           )}
+        </div>
+
+        {/* Cart Icon */}
+        <div className="flex items-center">
+          <Link href="/cart" className="relative text-gray-700 hover:text-gray-800">
+            <FaShoppingCart className="h-6 w-6" />
+            {cartItems > 0 && (
+              <span className="absolute -top-2 -right-2 rounded-full bg-red-500 px-2 py-1 text-xs text-white">
+                {cartItems}
+              </span>
+            )}
+          </Link>
         </div>
 
         {/* Admin and Avatar */}
@@ -148,7 +165,7 @@ export default function Navbar({ auth }) {
                 <Link
                   href={path}
                   className={`block px-4 py-2 ${
-                    url === path ? "font-bold" : "font-regular"
+                    url === path || (url.startsWith("/product") && path === "/product") ? "font-bold" : "font-regular"
                   } font-lexend hover:bg-gray-100`}
                   onClick={() => setMenuOpen(false)}
                 >

@@ -6,22 +6,22 @@ const HeroCategories = () => {
 
   // Fungsi untuk menangani klik kategori
   const handleCategoryClick = (category) => {
-    router.get(`/product/${category.slug}`); // Redirect ke route slug
+    router.get(`/product/${category.slug}`);
   };
 
   return (
     <div className="container mx-auto mb-24 p-6 px-10 py-14">
       {/* Breadcrumb */}
       <nav className="mb-4 text-sm text-gray-500">
-        <ul className="font-regular flex space-x-2 font-lexend">
+        <ul className="flex space-x-2 font-lexend font-medium">
           <li>
-            <Link href="/" className="text-blue-500 hover:underline">
+            <Link href="/" className="text-gray-600">
               Home
             </Link>
           </li>
           <li>/</li>
           <li>
-            <span className="text-gray-600">Product Category</span>
+            <span className="font-bold text-black">Product Category</span>
           </li>
         </ul>
       </nav>

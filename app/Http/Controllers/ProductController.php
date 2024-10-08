@@ -32,9 +32,14 @@ class ProductController extends Controller
         // Ambil produk terkait kategori
         $products = Product::where('category_id', $category->id)->get();
 
+        // Mengambil data dari tabel header_product
+        $headerProduct = HeaderProduct::first();
+
         return Inertia::render('Product/ProductList', [
             'category' => $category,
             'products' => $products,
+            'dataHeaderProduct' => $headerProduct,
+
         ]);
     }
 
