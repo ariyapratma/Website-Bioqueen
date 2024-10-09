@@ -2,7 +2,7 @@ import Navbar from "@/Components/Navbar/Navbar";
 import Swal from "sweetalert2";
 import Footer from "@/Components/Footer/Footer";
 import { usePage, Link, Head } from "@inertiajs/react";
-import { useState, useEffect } from "react"; // Import useEffect
+import { useState, useEffect } from "react";
 
 const ProductDetail = () => {
   const { props } = usePage();
@@ -11,17 +11,37 @@ const ProductDetail = () => {
   const [totalPrice, setTotalPrice] = useState(product.price); // Menyimpan total harga
   const [cartItems, setCartItems] = useState(0); // Menyimpan jumlah item di cart
 
-  // Menyimpan jumlah item di localStorage saat cartItems berubah
+  // Mendapatkan jumlah item di cart dari server saat komponen pertama kali dimuat
   useEffect(() => {
-    const storedCartItems = localStorage.getItem("cartItems");
-    if (storedCartItems) {
-      setCartItems(parseInt(storedCartItems, 10));
-    }
-  }, []);
+    const fetchCartItems = async () => {
+      try {
+        const response = await fetch("/api/cart/items", {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": document
+              .querySelector('meta[name="csrf-token"]')
+              .getAttribute("content"),
+          },
+          credentials: "include",
+        });
 
-  useEffect(() => {
-    localStorage.setItem("cartItems", cartItems);
-  }, [cartItems]);
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch cart items: ${response.status} ${response.statusText}`,
+          );
+        }
+
+        const data = await response.json();
+        setCartItems(data.length); // Update cart items count from server data
+      } catch (error) {
+        console.error("Failed to fetch cart items:", error);
+      }
+    };
+
+    fetchCartItems();
+  }, []);
 
   // Update total harga setiap kali jumlah barang berubah
   const updateTotalPrice = (newQuantity) => {
@@ -30,54 +50,51 @@ const ProductDetail = () => {
 
   const addToCart = async () => {
     try {
-      // Menambah jumlah barang ke cart
-      setCartItems((prevItems) => prevItems + quantity);
-
-      // Get CSRF token from meta tag
-      const csrfTokenElement = document.querySelector(
-        'meta[name="csrf-token"]',
-      );
-      if (!csrfTokenElement) {
-        throw new Error("CSRF token not found");
-      }
-      const csrfToken = csrfTokenElement.getAttribute("content");
-
-      // Simpan data ke database melalui request AJAX
-      const response = await fetch("/cart/add", {
+      const response = await fetch("/api/cart/add", {
         method: "POST",
         headers: {
+          Accept: "application/json",
           "Content-Type": "application/json",
-          "X-CSRF-TOKEN": csrfToken, // Add CSRF token
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // Jika menggunakan token
+          "X-CSRF-TOKEN": document
+            .querySelector('meta[name="csrf-token"]')
+            .getAttribute("content"),
         },
         body: JSON.stringify({
           product_id: product.id,
-          quantity,
-          price: product.price * quantity,
+          quantity: quantity,
+          price: product.price,
         }),
+        credentials: "include",
       });
 
-      // Cek apakah response dari server berhasil
-      if (response.ok) {
-        const result = await response.json();
-        Swal.fire({
-          title: "Success!",
-          text: "Product added to cart.",
-          icon: "success",
-        });
-      } else {
-        const errorData = await response.json();
-        Swal.fire({
-          title: "Error!",
-          text: `Failed to add product to cart. ${errorData.message}`,
-          icon: "error",
-        });
+      if (!response.ok) {
+        throw new Error(
+          `Failed to add product to cart: ${response.statusText}`,
+        );
       }
+
+      const data = await response.json();
+      console.log("Product added to cart:", data);
+
+      // Update cart items count after adding the product
+      setCartItems((prevCount) => prevCount + 1); // Increment cart items count
+
+      // Menampilkan SweetAlert setelah produk berhasil ditambahkan
+      Swal.fire({
+        title: "Success!",
+        text: `${product.name} has been added to your cart with quantity ${quantity}.`,
+        icon: "success",
+        confirmButtonText: "OK",
+      });
     } catch (error) {
+      console.error("Failed to add product to cart. Please try again.", error);
+
+      // Menampilkan SweetAlert jika ada kesalahan
       Swal.fire({
         title: "Error!",
         text: "Failed to add product to cart. Please try again.",
         icon: "error",
+        confirmButtonText: "OK",
       });
     }
   };

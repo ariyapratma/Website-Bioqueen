@@ -1,29 +1,14 @@
 import { useState, useEffect } from "react";
 import { Link, usePage } from "@inertiajs/react";
 import Dropdown from "@/Components/Dropdown";
-import { FaChevronDown, FaShoppingCart } from "react-icons/fa";
+import { FaChevronDown } from "react-icons/fa";
+import { BsCart } from "react-icons/bs";
 
-export default function Navbar({ auth }) {
+export default function Navbar({ auth, cartItems }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { url } = usePage();
   const user = auth.user;
-
-  // State untuk menyimpan jumlah item di keranjang
-  const [cartItems, setCartItems] = useState(0);
-
-  // useEffect untuk mengambil nilai cartItems dari localStorage
-  useEffect(() => {
-    const storedCartItems = localStorage.getItem("cartItems");
-    if (storedCartItems) {
-      setCartItems(JSON.parse(storedCartItems));
-    }
-  }, []);
-
-  // useEffect untuk menyimpan cartItems ke localStorage ketika berubah
-  useEffect(() => {
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
-  }, [cartItems]);
 
   const menuItems = [
     { name: "Home", path: "/" },
@@ -38,8 +23,6 @@ export default function Navbar({ auth }) {
 
   const addToCart = (item) => {
     setCartItems((prevItems) => prevItems + 1);
-    // Simpan nilai terbaru ke localStorage
-    localStorage.setItem("cartItems", JSON.stringify(cartItems + 1));
   };
 
   return (
@@ -90,10 +73,10 @@ export default function Navbar({ auth }) {
         {/* Cart Icon */}
         <div className="flex items-center">
           <Link
-            href="/cart"
+            href="/carts"
             className="relative text-gray-700 hover:text-gray-800"
           >
-            <FaShoppingCart className="h-6 w-6" />
+            <BsCart className="h-6 w-6" />
             {cartItems > 0 && (
               <span className="absolute -right-2 -top-2 rounded-full bg-red-500 px-2 py-1 text-xs text-white">
                 {cartItems}

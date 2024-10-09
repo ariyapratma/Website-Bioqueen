@@ -23,4 +23,10 @@ class HeroCategories extends Model
     {
         return 'slug';
     }
+
+    // Relasi ke produk
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'category_id');
+    }
 }
