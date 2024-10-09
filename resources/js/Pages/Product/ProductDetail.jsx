@@ -2,7 +2,7 @@ import Navbar from "@/Components/Navbar/Navbar";
 import Swal from "sweetalert2";
 import Footer from "@/Components/Footer/Footer";
 import { usePage, Link, Head } from "@inertiajs/react";
-import { useState } from "react";
+import { useState, useEffect } from "react"; // Import useEffect
 
 const ProductDetail = () => {
   const { props } = usePage();
@@ -10,6 +10,18 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1); // Menyimpan jumlah barang
   const [totalPrice, setTotalPrice] = useState(product.price); // Menyimpan total harga
   const [cartItems, setCartItems] = useState(0); // Menyimpan jumlah item di cart
+
+  // Menyimpan jumlah item di localStorage saat cartItems berubah
+  useEffect(() => {
+    const storedCartItems = localStorage.getItem("cartItems");
+    if (storedCartItems) {
+      setCartItems(parseInt(storedCartItems, 10));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("cartItems", cartItems);
+  }, [cartItems]);
 
   // Update total harga setiap kali jumlah barang berubah
   const updateTotalPrice = (newQuantity) => {
@@ -99,7 +111,7 @@ const ProductDetail = () => {
   return (
     <div className="flex min-h-screen flex-col overflow-x-hidden">
       <Head title={`${product.name} | PT Ratu Bio Indonesia`} />
-      <Navbar auth={auth} />
+      <Navbar auth={auth} cartItems={cartItems} />
       <main className="mb-24 mt-32 flex-grow">
         <div className="container mx-auto p-6 md:p-10 lg:p-14">
           {/* Breadcrumb */}
@@ -184,7 +196,7 @@ const ProductDetail = () => {
                 </button>
                 <button
                   onClick={orderNow}
-                  className="flex-1 rounded-lg bg-black px-6 py-3 text-white transition duration-300 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+                  className="flex-1 rounded-lg bg-black px-6 py-3 text-white transition duration-300 hover:bg-black focus:outline-none focus:ring-2 focus:ring-black focus:ring-opacity-50"
                 >
                   Order Now
                 </button>

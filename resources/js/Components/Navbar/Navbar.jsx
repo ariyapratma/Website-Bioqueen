@@ -10,16 +10,20 @@ export default function Navbar({ auth }) {
   const user = auth.user;
 
   // State untuk menyimpan jumlah item di keranjang
-  const [cartItems, setCartItems] = useState(0); 
+  const [cartItems, setCartItems] = useState(0);
 
+  // useEffect untuk mengambil nilai cartItems dari localStorage
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const storedCartItems = localStorage.getItem("cartItems");
+    if (storedCartItems) {
+      setCartItems(JSON.parse(storedCartItems));
+    }
   }, []);
+
+  // useEffect untuk menyimpan cartItems ke localStorage ketika berubah
+  useEffect(() => {
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  }, [cartItems]);
 
   const menuItems = [
     { name: "Home", path: "/" },
@@ -31,6 +35,12 @@ export default function Navbar({ auth }) {
     { name: "Login", path: "/login" },
     { name: "Register", path: "/register" },
   ];
+
+  const addToCart = (item) => {
+    setCartItems((prevItems) => prevItems + 1);
+    // Simpan nilai terbaru ke localStorage
+    localStorage.setItem("cartItems", JSON.stringify(cartItems + 1));
+  };
 
   return (
     <nav
@@ -55,7 +65,8 @@ export default function Navbar({ auth }) {
               key={path}
               href={path}
               className={`font-regular font-lexend transition-colors hover:text-gray-800 ${
-                url === path || (url.startsWith("/product") && path === "/product")
+                url === path ||
+                (url.startsWith("/product") && path === "/product")
                   ? "font-lexend font-bold text-black"
                   : ""
               }`}
@@ -78,10 +89,13 @@ export default function Navbar({ auth }) {
 
         {/* Cart Icon */}
         <div className="flex items-center">
-          <Link href="/cart" className="relative text-gray-700 hover:text-gray-800">
+          <Link
+            href="/cart"
+            className="relative text-gray-700 hover:text-gray-800"
+          >
             <FaShoppingCart className="h-6 w-6" />
             {cartItems > 0 && (
-              <span className="absolute -top-2 -right-2 rounded-full bg-red-500 px-2 py-1 text-xs text-white">
+              <span className="absolute -right-2 -top-2 rounded-full bg-red-500 px-2 py-1 text-xs text-white">
                 {cartItems}
               </span>
             )}
@@ -165,7 +179,10 @@ export default function Navbar({ auth }) {
                 <Link
                   href={path}
                   className={`block px-4 py-2 ${
-                    url === path || (url.startsWith("/product") && path === "/product") ? "font-bold" : "font-regular"
+                    url === path ||
+                    (url.startsWith("/product") && path === "/product")
+                      ? "font-bold"
+                      : "font-regular"
                   } font-lexend hover:bg-gray-100`}
                   onClick={() => setMenuOpen(false)}
                 >
