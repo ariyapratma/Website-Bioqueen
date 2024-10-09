@@ -1,4 +1,5 @@
 import Navbar from "@/Components/Navbar/Navbar";
+import Swal from "sweetalert2";
 import Footer from "@/Components/Footer/Footer";
 import { usePage, Link, Head } from "@inertiajs/react";
 import { useState } from "react";
@@ -44,23 +45,37 @@ const ProductDetail = () => {
         }),
       });
 
-      //   if (!response.ok) {
-      //     throw new Error("Network response was not ok");
-      //   }
-
-      const result = await response.json();
-      // Menggunakan result jika diperlukan
+      // Cek apakah response dari server berhasil
+      if (response.ok) {
+        const result = await response.json();
+        Swal.fire({
+          title: "Success!",
+          text: "Product added to cart.",
+          icon: "success",
+        });
+      } else {
+        const errorData = await response.json();
+        Swal.fire({
+          title: "Error!",
+          text: `Failed to add product to cart. ${errorData.message}`,
+          icon: "error",
+        });
+      }
     } catch (error) {
-      // Menangani kesalahan tanpa console.error
-      alert("Failed to add product to cart. Please try again.");
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to add product to cart. Please try again.",
+        icon: "error",
+      });
     }
   };
 
   const orderNow = () => {
-    // Menghilangkan log di sini
-    alert(
-      `Order for ${product.name} initiated with quantity ${quantity} and total price Rp ${parseFloat(totalPrice).toLocaleString("id-ID")}!`,
-    );
+    Swal.fire({
+      title: "Order Initiated",
+      text: `Order for ${product.name} with quantity ${quantity} and total price Rp ${parseFloat(totalPrice).toLocaleString("id-ID")}!`,
+      icon: "info",
+    });
   };
 
   const increaseQuantity = () => {

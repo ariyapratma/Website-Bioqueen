@@ -4,42 +4,46 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
     public function add(Request $request)
     {
-        try {
-            // Validasi request
-            $validated = $request->validate([
-                'product_id' => 'required|exists:products,id',
-                'quantity' => 'required|integer|min:1',
-                'price' => 'required|numeric',
-            ]);
+        // Validasi request
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'quantity' => 'required|integer|min:1',
+            'price' => 'required|numeric',
+        ]);
+
+        // Cek apakah user sudah login
+        if (Auth::check()) {
+            $user = Auth::user();
 
             // Cek apakah produk sudah ada di keranjang
-            $cartItem = Cart::where('user_id', auth()->id())
-                ->where('product_id', $validated['product_id'])
+            $cartItem = Cart::where('user_id', $user->id)
+                ->where('product_id', $request->product_id)
                 ->first();
 
             if ($cartItem) {
-                // Jika ada, update kuantitas dan total harga
-                $cartItem->quantity += $validated['quantity'];
-                $cartItem->price = $cartItem->quantity * $validated['price'];
+                // Update jumlah produk jika sudah ada
+                $cartItem->quantity += $request->quantity;
+                $cartItem->price = $request->price * $cartItem->quantity;
                 $cartItem->save();
             } else {
-                // Jika tidak ada, buat item baru di keranjang
+                // Jika belum ada, buat item baru di keranjang
                 Cart::create([
-                    'user_id' => auth()->id(),
-                    'product_id' => $validated['product_id'],
-                    'quantity' => $validated['quantity'],
-                    'price' => $validated['price'] * $validated['quantity'],
+                    'user_id' => $user->id,
+                    'product_id' => $request->product_id,
+                    'quantity' => $request->quantity,
+                    'price' => $request->price,
                 ]);
             }
 
-            return response()->json(['message' => 'Product added to cart'], 200);
-        } catch (\Exception $e) {
-            return response()->json(['message' => 'Error adding product to cart: ' . $e->getMessage()], 500);
+            return response()->json(['message' => 'Product added to cart successfully.'], 200);
+        } else {
+            return response()->json(['message' => 'User not authenticated.'], 401);
         }
     }
 

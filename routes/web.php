@@ -57,7 +57,9 @@ Route::get('/product/{slug}', [ProductController::class, 'showCategory'])->name(
 // Route ProductDetail User
 Route::get('/product/{category}/{product}', [ProductController::class, 'showProduct'])->name('product.detail');
 // Route AddCart User
-Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+// Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+// Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
+Route::post('/cart/add', [CartController::class, 'add'])->middleware('auth');
 Route::get('/order', [OrderController::class, 'index'])->name('order');
 Route::get('/maklon', [MaklonController::class, 'index'])->name('maklon');
 
