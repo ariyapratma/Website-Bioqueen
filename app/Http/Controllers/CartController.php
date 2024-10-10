@@ -64,6 +64,7 @@ class CartController extends Controller
 
     public function addToCart(Request $request)
     {
+        // Validasi input request
         $validated = $request->validate([
             'product_id' => 'required|exists:products,id',
             'quantity' => 'required|integer|min:1',
@@ -77,17 +78,28 @@ class CartController extends Controller
             return response()->json(['message' => 'Product not found'], 404);
         }
 
-        // Tambahkan produk ke keranjang
-        $cartItem = Cart::create([
-            'user_id' => auth()->id(),
-            'product_id' => $product->id,
-            'quantity' => $validated['quantity'],
-            'price' => $product->price, // Gunakan harga dari produk
-        ]);
+        // Cek apakah produk sudah ada di keranjang
+        $cartItem = Cart::where('user_id', auth()->id())
+            ->where('product_id', $product->id)
+            ->first();
+
+        if ($cartItem) {
+            // Jika produk sudah ada, update kuantitas dan harga total
+            $cartItem->quantity += $validated['quantity'];
+            $cartItem->price = $product->price * $cartItem->quantity; // Update total harga
+            $cartItem->save();
+        } else {
+            // Tambahkan produk ke keranjang jika belum ada
+            $cartItem = Cart::create([
+                'user_id' => auth()->id(),
+                'product_id' => $product->id,
+                'quantity' => $validated['quantity'],
+                'price' => $product->price * $validated['quantity'], // Total harga berdasarkan quantity
+            ]);
+        }
 
         return response()->json($cartItem, 201);
     }
-
 
     public function removeFromCart($id)
     {

@@ -17,12 +17,13 @@ use App\Http\Controllers\CartController;
 
 
 // Rute untuk mengambil informasi pengguna yang terautentikasi
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth')->get('/user', function (Request $request) {
     return $request->user();
 });
 
 // Rute untuk cart
-Route::middleware('auth:sanctum')->group(function () {
+// Rute cart di web.php
+Route::middleware('auth')->group(function () {
     Route::get('/cart/items', [CartController::class, 'getCartItems']);
     Route::post('/cart/add', [CartController::class, 'addToCart']);
     Route::delete('/cart/remove/{id}', [CartController::class, 'removeFromCart']);

@@ -50,21 +50,23 @@ const ProductDetail = () => {
 
   const addToCart = async () => {
     try {
+      const csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
+
       const response = await fetch("/api/cart/add", {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          "X-CSRF-TOKEN": document
-            .querySelector('meta[name="csrf-token"]')
-            .getAttribute("content"),
+          "X-CSRF-TOKEN": csrfToken, // Sertakan CSRF token
         },
         body: JSON.stringify({
           product_id: product.id,
           quantity: quantity,
           price: product.price,
         }),
-        credentials: "include",
+        credentials: "include", // Sertakan kredensial untuk cookies/sessions
       });
 
       if (!response.ok) {
@@ -76,10 +78,9 @@ const ProductDetail = () => {
       const data = await response.json();
       console.log("Product added to cart:", data);
 
-      // Update cart items count after adding the product
-      setCartItems((prevCount) => prevCount + 1); // Increment cart items count
+      // Update jumlah item di keranjang
+      setCartItems((prevCount) => prevCount + 1);
 
-      // Menampilkan SweetAlert setelah produk berhasil ditambahkan
       Swal.fire({
         title: "Success!",
         text: `${product.name} has been added to your cart with quantity ${quantity}.`,
@@ -89,7 +90,6 @@ const ProductDetail = () => {
     } catch (error) {
       console.error("Failed to add product to cart. Please try again.", error);
 
-      // Menampilkan SweetAlert jika ada kesalahan
       Swal.fire({
         title: "Error!",
         text: "Failed to add product to cart. Please try again.",
