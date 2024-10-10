@@ -21,10 +21,6 @@ export default function Navbar({ auth, cartItems }) {
     { name: "Register", path: "/register" },
   ];
 
-  const addToCart = (item) => {
-    setCartItems((prevItems) => prevItems + 1);
-  };
-
   return (
     <nav
       className={`fixed left-0 top-0 z-50 w-full transition-colors duration-300 ${

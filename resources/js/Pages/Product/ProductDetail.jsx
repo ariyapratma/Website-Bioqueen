@@ -59,14 +59,14 @@ const ProductDetail = () => {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          "X-CSRF-TOKEN": csrfToken, // Sertakan CSRF token
+          "X-CSRF-TOKEN": csrfToken,
         },
         body: JSON.stringify({
           product_id: product.id,
           quantity: quantity,
           price: product.price,
         }),
-        credentials: "include", // Sertakan kredensial untuk cookies/sessions
+        credentials: "include",
       });
 
       if (!response.ok) {
@@ -78,8 +78,10 @@ const ProductDetail = () => {
       const data = await response.json();
       console.log("Product added to cart:", data);
 
-      // Update jumlah item di keranjang
-      setCartItems((prevCount) => prevCount + 1);
+      // Update jumlah item di keranjang jika produk baru ditambahkan
+      if (data.isNewProduct) {
+        setCartItems((prevCount) => prevCount + 1);
+      }
 
       Swal.fire({
         title: "Success!",

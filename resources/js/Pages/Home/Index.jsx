@@ -16,7 +16,7 @@ import HeroReview from "./HeroReview";
 import HeroAddReview from "./HeroAddReview";
 import Footer from "@/Components/Footer/Footer";
 
-const Index = ({ auth }) => {
+const Index = ({ auth, cartItems  }) => {
   const { props } = usePage();
   const {} = props;
   const { dataHeroReview } = props;
@@ -24,7 +24,7 @@ const Index = ({ auth }) => {
   return (
     <div className="flex min-h-screen flex-col overflow-x-hidden">
       <Head title="Home | PT Ratu Bio Indonesia" />
-      <Navbar auth={auth} />
+      <Navbar auth={auth} cartItems={cartItems} />
       <main className="flex-grow">
         {/* HeaderHome */}
         <HeaderHome />

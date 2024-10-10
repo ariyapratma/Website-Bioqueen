@@ -24,7 +24,9 @@ Route::middleware('auth')->get('/user', function (Request $request) {
 // Rute untuk cart
 // Rute cart di web.php
 Route::middleware('auth')->group(function () {
+    Route::get('/api/cart', [CartController::class, 'index']);
     Route::get('/cart/items', [CartController::class, 'getCartItems']);
     Route::post('/cart/add', [CartController::class, 'addToCart']);
+    Route::put('/cart/update/{id}', [CartController::class, 'update']);
     Route::delete('/cart/remove/{id}', [CartController::class, 'removeFromCart']);
 });
