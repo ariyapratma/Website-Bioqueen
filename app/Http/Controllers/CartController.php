@@ -52,20 +52,6 @@ class CartController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
-    {
-        $cartItem = Cart::find($id);
-        if (!$cartItem) {
-            return response()->json(['message' => 'Item not found'], 404);
-        }
-
-        $cartItem->quantity = $request->input('quantity');
-        $cartItem->save();
-
-        return response()->json(['message' => 'Cart updated successfully']);
-    }
-
-
     public function removeFromCart($id)
     {
         // Hapus item dari keranjang berdasarkan id
@@ -129,10 +115,23 @@ class CartController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    // public function update(Request $request, Cart $cart)
-    // {
-    //     //
-    // }
+    public function update(Request $request, $id)
+    {
+        // Validasi kuantitas
+        $request->validate([
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        // Cari item di keranjang berdasarkan ID
+        $cartItem = Cart::findOrFail($id);
+
+        // Update kuantitas
+        $cartItem->quantity = $request->input('quantity');
+        $cartItem->save();
+
+        // Kembali ke halaman keranjang dengan Inertia response
+        return redirect()->back()->with('success', 'Quantity updated successfully');
+    }
 
     /**
      * Remove the specified resource from storage.

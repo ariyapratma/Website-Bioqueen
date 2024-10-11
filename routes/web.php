@@ -56,8 +56,11 @@ Route::get('/product', [ProductController::class, 'index'])->name('product');
 Route::get('/product/{slug}', [ProductController::class, 'showCategory'])->name('products.category');
 // Route ProductDetail User
 Route::get('/product/{category}/{product}', [ProductController::class, 'showProduct'])->name('product.detail');
+// Route AddCart and CartDetail
+Route::get('/carts', [CartController::class, 'index'])->name('carts');
+Route::put('/carts/{id}', [CartController::class, 'update'])->name('carts.update');
+Route::delete('/carts/{id}', [CartController::class, 'removeFromCart'])->name('cart.remove');
 Route::get('/order', [OrderController::class, 'index'])->name('order');
-Route::get('/carts', [OrderController::class, 'index'])->name('carts');
 Route::get('/maklon', [MaklonController::class, 'index'])->name('maklon');
 
 // Rute API yang mengembalikan JSON biasa
