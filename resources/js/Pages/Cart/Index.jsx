@@ -69,7 +69,9 @@ const CartIndex = ({ cartItems, auth, user }) => {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Head title={`Cart ${auth.user.username || "User"} | PT Ratu Bio Indonesia`} />
+      <Head
+        title={`Cart ${auth.user.username || "User"} | PT Ratu Bio Indonesia`}
+      />
       <Navbar auth={auth} />
       <main className="flex-grow py-32">
         <div className="container mx-auto mb-24 px-4">

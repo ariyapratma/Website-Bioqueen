@@ -7,11 +7,10 @@ import { BsCart } from "react-icons/bs";
 export default function Navbar({ auth }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [cartItems, setCartItems] = useState(0); // Initialize cartItems in Navbar
+  const [cartItems, setCartItems] = useState(0);
   const { url } = usePage();
   const user = auth.user;
 
-  // Fetch the cart items from the server and update cartItems
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
@@ -34,7 +33,7 @@ export default function Navbar({ auth }) {
         }
 
         const data = await response.json();
-        setCartItems(data.length); // Update cart items count from server data
+        setCartItems(data.length);
       } catch (error) {
         console.error("Failed to fetch cart items:", error);
       }
@@ -50,9 +49,15 @@ export default function Navbar({ auth }) {
     { name: "Product", path: "/product" },
     { name: "Order", path: "/order" },
     { name: "Maklon", path: "/maklon" },
-    { name: "Login", path: "/login" },
-    { name: "Register", path: "/register" },
   ];
+
+  // Tambahkan kondisi untuk link Login dan Register
+  if (!user) {
+    menuItems.push(
+      { name: "Login", path: "/login" },
+      { name: "Register", path: "/register" }
+    );
+  }
 
   return (
     <nav
@@ -105,13 +110,13 @@ export default function Navbar({ auth }) {
             href="/carts"
             className={`relative flex items-center justify-center rounded-full p-2 transition-all duration-300 ${
               url === "/carts"
-                ? "border-2 border-custom-yellow text-black" // Tambahkan border dan latar belakang saat aktif
+                ? "border-2 border-custom-yellow text-black"
                 : "hover:bg-gray-100"
             }`}
           >
             <BsCart
               className={`h-6 w-6 transition-colors duration-300 ${
-                url === "/carts" ? "text-black" : "text-gray-700" // Ubah warna ikon saat aktif
+                url === "/carts" ? "text-black" : "text-gray-700"
               }`}
             />
             {cartItems > 0 && (
@@ -236,7 +241,7 @@ export default function Navbar({ auth }) {
                   <div className="font-lexend text-base font-medium text-gray-800">
                     {user.name}
                   </div>
-                  <div className="font-lexend text-sm font-medium text-gray-500">
+                  <div className="font-lexend text-sm font-medium text-gray-600">
                     {user.email}
                   </div>
                 </div>
