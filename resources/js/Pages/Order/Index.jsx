@@ -1,7 +1,6 @@
 import { Head } from "@inertiajs/react";
 import Navbar from "@/Components/Navbar/Navbar";
 import HeaderOrder from "./HeaderOrder";
-import Cart from "./Cart";
 import Footer from "@/Components/Footer/Footer";
 
 const Order = ({ auth }) => {
@@ -12,8 +11,6 @@ const Order = ({ auth }) => {
       <main className="flex-grow">
         {/*HeaderOrder*/}
         <HeaderOrder />
-        {/*Cart*/}
-        <Cart />
       </main>
       <Footer />
     </div>

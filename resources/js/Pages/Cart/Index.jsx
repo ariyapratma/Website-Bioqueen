@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { Link } from "@inertiajs/react";
 import { FaTrash } from "react-icons/fa";
 
-const Cart = () => {
+const Index = () => {
   const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
-        const response = await fetch("/api/cart"); // Sesuaikan endpoint API kamu
+        const response = await fetch("/api/cart/items"); // Sesuaikan endpoint API kamu
         if (!response.ok) {
           throw new Error("Failed to fetch cart items");
         }
@@ -57,22 +57,32 @@ const Cart = () => {
         </div>
       ) : (
         <>
-          <div className="mb-4">
+          <div className="mb-4 space-y-4">
             {cartItems.map((item) => (
               <div
                 key={item.id}
                 className="flex items-center justify-between border-b p-2"
               >
-                <div>
-                  <h2 className="text-lg font-semibold">{item.name}</h2>
-                  <p className="text-gray-600">
-                    Harga: ${item.price.toFixed(2)}
-                  </p>
-                  <p className="text-gray-600">Jumlah: {item.quantity}</p>
+                {/* Gambar produk */}
+                <div className="flex items-center">
+                  <img
+                    src={`/storage/${item.image_url}`} // Tampilkan gambar produk
+                    alt={item.name}
+                    className="h-16 w-16 rounded-lg object-cover"
+                  />
+                  <div className="ml-4">
+                    <h2 className="text-lg font-semibold">{item.name}</h2>
+                    <p className="text-gray-600">
+                      Harga: Rp {item.price.toLocaleString("id-ID")}
+                    </p>
+                    <p className="text-gray-600">Jumlah: {item.quantity}</p>
+                  </div>
                 </div>
+
+                {/* Harga total per item */}
                 <div className="flex items-center">
                   <span className="text-lg font-semibold">
-                    ${(item.price * item.quantity).toFixed(2)}
+                    Rp {(item.price * item.quantity).toLocaleString("id-ID")}
                   </span>
                   <button
                     onClick={() => removeItem(item.id)}
@@ -85,9 +95,12 @@ const Cart = () => {
             ))}
           </div>
 
+          {/* Total harga semua item */}
           <div className="mt-4 flex justify-between">
             <h2 className="text-lg font-bold">Total Harga:</h2>
-            <p className="text-lg font-semibold">${getTotalPrice()}</p>
+            <p className="text-lg font-semibold">
+              Rp {getTotalPrice().toLocaleString("id-ID")}
+            </p>
           </div>
 
           <Link
@@ -102,4 +115,4 @@ const Cart = () => {
   );
 };
 
-export default Cart;
+export default Index;

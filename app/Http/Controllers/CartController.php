@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use Inertia\Inertia;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -22,47 +23,6 @@ class CartController extends Controller
         // Jika permintaan tidak melalui API, lempar error
         return response()->json(['message' => 'Invalid request'], 400);
     }
-
-
-    // public function addToCart(Request $request)
-    // {
-    //     // Validasi input request
-    //     $validated = $request->validate([
-    //         'product_id' => 'required|exists:products,id',
-    //         'quantity' => 'required|integer|min:1',
-    //         'price' => 'required|numeric|min:0',
-    //     ]);
-
-    //     // Ambil produk berdasarkan ID
-    //     $product = Product::find($validated['product_id']);
-
-    //     if (!$product) {
-    //         return response()->json(['message' => 'Product not found'], 404);
-    //     }
-
-    //     // Cek apakah produk sudah ada di keranjang
-    //     $cartItem = Cart::where('user_id', auth()->id())
-    //         ->where('product_id', $product->id)
-    //         ->first();
-
-    //     if ($cartItem) {
-    //         // Jika produk sudah ada, update kuantitas dan harga total
-    //         $cartItem->quantity += $validated['quantity'];
-    //         $cartItem->price = $product->price * $cartItem->quantity; // Update total harga
-    //         $cartItem->save();
-    //     } else {
-    //         // Tambahkan produk ke keranjang jika belum ada
-    //         $cartItem = Cart::create([
-    //             'user_id' => auth()->id(),
-    //             'product_id' => $product->id,
-    //             'quantity' => $validated['quantity'],
-    //             'price' => $product->price * $validated['quantity'], // Total harga berdasarkan quantity
-    //         ]);
-    //     }
-
-    //     return response()->json($cartItem, 201);
-    // }
-
 
     public function addToCart(Request $request)
     {
@@ -123,7 +83,15 @@ class CartController extends Controller
      */
     public function index()
     {
-        //
+        // Ambil item keranjang berdasarkan user yang sedang login
+        $cartItems = Cart::where('user_id', Auth::id())
+            ->with('product') // Pastikan ada relasi ke produk
+            ->get();
+
+        // Kirim data ke komponen React menggunakan Inertia
+        return Inertia::render('Cart/Index', [
+            'cartItems' => $cartItems,
+        ]);
     }
 
     /**

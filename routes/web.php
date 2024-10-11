@@ -56,14 +56,12 @@ Route::get('/product', [ProductController::class, 'index'])->name('product');
 Route::get('/product/{slug}', [ProductController::class, 'showCategory'])->name('products.category');
 // Route ProductDetail User
 Route::get('/product/{category}/{product}', [ProductController::class, 'showProduct'])->name('product.detail');
-// Route AddCart User
-// Route::post('/cart/add', [CartController::class, 'add'])->middleware('auth');
-
 Route::get('/order', [OrderController::class, 'index'])->name('order');
 Route::get('/carts', [OrderController::class, 'index'])->name('carts');
 Route::get('/maklon', [MaklonController::class, 'index'])->name('maklon');
 
 // Rute API yang mengembalikan JSON biasa
+// Route AddCart User
 Route::middleware('auth')->group(function () {
     Route::get('/api/cart/items', [CartController::class, 'getCartItems']);
     Route::post('/api/cart/add', [CartController::class, 'addToCart']);

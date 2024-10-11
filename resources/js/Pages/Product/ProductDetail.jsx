@@ -130,7 +130,7 @@ const ProductDetail = () => {
   return (
     <div className="flex min-h-screen flex-col overflow-x-hidden">
       <Head title={`${product.name} | PT Ratu Bio Indonesia`} />
-      <Navbar auth={auth} cartItems={cartItems} />
+      <Navbar auth={auth} />
       <main className="mb-24 mt-32 flex-grow">
         <div className="container mx-auto p-6 md:p-10 lg:p-14">
           {/* Breadcrumb */}

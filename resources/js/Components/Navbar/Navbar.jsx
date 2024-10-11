@@ -4,11 +4,44 @@ import Dropdown from "@/Components/Dropdown";
 import { FaChevronDown } from "react-icons/fa";
 import { BsCart } from "react-icons/bs";
 
-export default function Navbar({ auth, cartItems }) {
+export default function Navbar({ auth }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [cartItems, setCartItems] = useState(0); // Initialize cartItems in Navbar
   const { url } = usePage();
   const user = auth.user;
+
+  // Fetch the cart items from the server and update cartItems
+  useEffect(() => {
+    const fetchCartItems = async () => {
+      try {
+        const response = await fetch("/api/cart/items", {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": document
+              .querySelector('meta[name="csrf-token"]')
+              .getAttribute("content"),
+          },
+          credentials: "include",
+        });
+
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch cart items: ${response.status} ${response.statusText}`,
+          );
+        }
+
+        const data = await response.json();
+        setCartItems(data.length); // Update cart items count from server data
+      } catch (error) {
+        console.error("Failed to fetch cart items:", error);
+      }
+    };
+
+    fetchCartItems();
+  }, []);
 
   const menuItems = [
     { name: "Home", path: "/" },
