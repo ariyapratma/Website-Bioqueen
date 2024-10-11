@@ -2,43 +2,42 @@ import Navbar from "@/Components/Navbar/Navbar";
 import { Inertia } from "@inertiajs/inertia";
 import Footer from "@/Components/Footer/Footer";
 import Swal from "sweetalert2";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Head } from "@inertiajs/react";
 
-const CartIndex = ({ cartItems, auth }) => {
+const CartIndex = ({ cartItems, auth, user }) => {
   const [updatedItems, setUpdatedItems] = useState(cartItems);
 
-  // Menghitung total harga keranjang
   const totalPrice = updatedItems.reduce(
-    (sum, item) => sum + item.quantity * item.price,
+    (sum, item) => sum + item.price * item.quantity,
     0,
   );
 
-  // Fungsi untuk memperbarui jumlah barang di keranjang
   const updateQuantity = (itemId, quantity) => {
-    setUpdatedItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === itemId ? { ...item, quantity: quantity } : item,
-      ),
+    const updated = updatedItems.map((item) =>
+      item.id === itemId ? { ...item, quantity } : item,
     );
+    setUpdatedItems(updated);
   };
 
-  // Fungsi untuk menyimpan jumlah item ke cart dengan SweetAlert
-  const saveCart = (itemId, quantity) => {
-    Inertia.put(
-      `/carts/${itemId}`,
-      { quantity },
-      {
-        onSuccess: () => {
-          Swal.fire("Saved!", "Quantity has been updated.", "success");
+  const saveCart = (itemId) => {
+    const itemToSave = updatedItems.find((item) => item.id === itemId);
+    if (itemToSave) {
+      Inertia.put(
+        `/carts/${itemId}`,
+        { quantity: itemToSave.quantity },
+        {
+          onSuccess: () => {
+            Swal.fire("Saved!", "Quantity has been updated.", "success");
+          },
+          onError: () => {
+            Swal.fire("Error", "Failed to update quantity.", "error");
+          },
         },
-        onError: (error) => {
-          Swal.fire("Error", "Failed to update quantity.", "error");
-        },
-      },
-    );
+      );
+    }
   };
 
-  // Fungsi untuk menghapus item dari keranjang
   const removeFromCart = (itemId) => {
     Swal.fire({
       title: "Are you sure?",
@@ -51,9 +50,12 @@ const CartIndex = ({ cartItems, auth }) => {
       if (result.isConfirmed) {
         Inertia.delete(`/carts/${itemId}`, {
           onSuccess: () => {
+            setUpdatedItems((prevItems) =>
+              prevItems.filter((item) => item.id !== itemId),
+            );
             Swal.fire("Deleted!", "The item has been removed.", "success");
           },
-          onError: (error) => {
+          onError: () => {
             Swal.fire("Error", "Failed to remove item from cart.", "error");
           },
         });
@@ -61,11 +63,16 @@ const CartIndex = ({ cartItems, auth }) => {
     });
   };
 
+  useEffect(() => {
+    setUpdatedItems(cartItems);
+  }, [cartItems]);
+
   return (
-    <div className="flex min-h-screen flex-col overflow-x-hidden bg-gray-50">
+    <div className="flex min-h-screen flex-col">
+      <Head title={`Cart ${auth.user.username || "User"} | PT Ratu Bio Indonesia`} />
       <Navbar auth={auth} />
-      <main className="mb-24 mt-32 flex-grow">
-        <div className="container mx-auto px-4 py-8">
+      <main className="flex-grow py-32">
+        <div className="container mx-auto mb-24 px-4">
           <h1 className="mb-8 text-center font-lexend text-4xl font-bold text-gray-800">
             Your Cart
           </h1>
@@ -75,10 +82,10 @@ const CartIndex = ({ cartItems, auth }) => {
               <p className="text-lg text-gray-500">Your cart is empty.</p>
             </div>
           ) : (
-            <div className="overflow-hidden rounded-lg bg-white shadow-lg">
-              <table className="min-w-full bg-white">
-                <thead>
-                  <tr className="bg-gray-100 text-left font-lexend text-sm font-semibold uppercase text-gray-600">
+            <div className="overflow-hidden rounded-lg bg-white font-lexend shadow-lg">
+              <table className="min-w-full border-collapse">
+                <thead className="bg-custom-yellow text-left text-sm font-medium text-black">
+                  <tr>
                     <th className="px-6 py-4">Product</th>
                     <th className="px-6 py-4">Price</th>
                     <th className="px-6 py-4">Quantity</th>
@@ -88,52 +95,45 @@ const CartIndex = ({ cartItems, auth }) => {
                 </thead>
                 <tbody>
                   {updatedItems.map((item) => (
-                    <tr key={item.id} className="border-t">
+                    <tr key={item.id} className="border-t hover:bg-gray-50">
                       <td className="flex items-center px-6 py-4">
                         <img
                           src={`/storage/${item.product?.image_url}`}
-                          alt={item.product?.name || "Product not found"}
-                          className="mr-4 h-16 w-16 rounded-md border border-gray-200 object-cover"
+                          alt={item.product?.name}
+                          className="h-16 w-16 rounded object-cover"
                         />
-                        <div>
-                          <p className="font-lexend font-semibold text-gray-900">
-                            {item.product?.name || "Product not found"}
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            Category: {item.product?.category?.name || "Unknown"}
-                          </p>
-                        </div>
+                        <span className="ml-4 text-sm font-medium text-gray-800">
+                          {item.product?.name}
+                        </span>
                       </td>
-                      <td className="px-6 py-4 text-gray-900">
+                      <td className="px-6 py-4 text-sm font-medium text-gray-800">
                         Rp {parseFloat(item.price).toLocaleString("id-ID")}
                       </td>
-                      <td className="px-6 py-4 text-gray-900">
+                      <td className="px-6 py-4 text-sm font-medium text-gray-800">
                         <input
                           type="number"
-                          value={item.quantity}
                           min="1"
+                          value={item.quantity}
                           onChange={(e) =>
-                            updateQuantity(item.id, parseInt(e.target.value, 10))
+                            updateQuantity(item.id, Math.max(1, e.target.value))
                           }
-                          className="w-20 rounded border border-gray-300 px-2 py-1 text-center focus:border-yellow-500 focus:ring-1 focus:ring-yellow-500"
+                          className="w-16 rounded border border-gray-300 p-1"
                         />
                         <button
-                          onClick={() => saveCart(item.id, item.quantity)}
-                          className="ml-2 rounded bg-green-500 px-2 py-1 text-white transition duration-300 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300"
+                          onClick={() => saveCart(item.id)}
+                          className="ml-2 rounded bg-blue-600 px-4 py-1 text-white transition duration-200 hover:bg-blue-700"
                         >
                           Save
                         </button>
                       </td>
-                      <td className="px-6 py-4 text-gray-900">
+                      <td className="px-6 py-4 text-sm font-medium text-gray-800">
                         Rp{" "}
-                        {parseFloat(item.quantity * item.price).toLocaleString(
-                          "id-ID",
-                        )}
+                        {(item.price * item.quantity).toLocaleString("id-ID")}
                       </td>
                       <td className="px-6 py-4 text-center">
                         <button
                           onClick={() => removeFromCart(item.id)}
-                          className="rounded bg-red-500 px-3 py-1 text-white transition duration-300 hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300"
+                          className="rounded bg-red-600 px-4 py-1 text-white transition duration-200 hover:bg-red-700"
                         >
                           Remove
                         </button>
@@ -141,16 +141,21 @@ const CartIndex = ({ cartItems, auth }) => {
                     </tr>
                   ))}
                 </tbody>
+                <tfoot>
+                  <tr>
+                    <td
+                      colSpan="3"
+                      className="px-6 py-4 text-right font-bold text-gray-800"
+                    >
+                      Total:
+                    </td>
+                    <td className="px-6 py-4 text-sm font-medium text-gray-800">
+                      Rp {totalPrice.toLocaleString("id-ID")}
+                    </td>
+                    <td className="px-6 py-4"></td>
+                  </tr>
+                </tfoot>
               </table>
-
-              <div className="flex items-center justify-between bg-gray-50 p-6">
-                <h2 className="font-lexend text-xl font-bold text-gray-800">
-                  Total Price: Rp {parseFloat(totalPrice).toLocaleString("id-ID")}
-                </h2>
-                <button className="rounded bg-yellow-500 px-6 py-2 font-lexend font-semibold text-white transition duration-300 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-300">
-                  Proceed to Checkout
-                </button>
-              </div>
             </div>
           )}
         </div>

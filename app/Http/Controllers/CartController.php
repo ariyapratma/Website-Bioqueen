@@ -26,14 +26,28 @@ class CartController extends Controller
 
     public function addToCart(Request $request)
     {
-        $cart = Cart::where('user_id', auth()->id())->where('product_id', $request->product_id)->first();
+        // Validasi data yang masuk
+        $request->validate([
+            'product_id' => 'required|exists:products,id', // Pastikan produk ada
+            'quantity' => 'required|integer|min:1', // Pastikan kuantitas valid
+            'price' => 'required|numeric|min:0', // Pastikan harga valid
+        ]);
+
+        // Mencari item keranjang berdasarkan user dan product
+        $cart = Cart::where('user_id', auth()->id())
+            ->where('product_id', $request->product_id)
+            ->first();
 
         if ($cart) {
-            // Update quantity jika produk sudah ada
+            // Jika produk sudah ada, tambahkan kuantitas
             $cart->quantity += $request->quantity;
+
+            // Perbarui total price berdasarkan kuantitas dan harga produk
+            $cart->price = $cart->quantity * $request->price;
+
             $cart->save();
             return response()->json([
-                'message' => 'Product quantity updated successfully',
+                'message' => 'Product quantity and price updated successfully',
                 'isNewProduct' => false,  // Produk sudah ada sebelumnya
             ]);
         } else {
@@ -42,7 +56,7 @@ class CartController extends Controller
                 'user_id' => auth()->id(),
                 'product_id' => $request->product_id,
                 'quantity' => $request->quantity,
-                'price' => $request->price,
+                'price' => $request->price, // Simpan harga awal
             ]);
 
             return response()->json([
@@ -52,17 +66,21 @@ class CartController extends Controller
         }
     }
 
+
     public function removeFromCart($id)
     {
         // Hapus item dari keranjang berdasarkan id
         $cartItem = Cart::where('id', $id)->where('user_id', auth()->id())->first();
         if ($cartItem) {
             $cartItem->delete();
-            return response()->json(null, 204);
+
+            // Set a success message in the session
+            return redirect()->route('carts')->with('success', 'Edit Cart Successfully');
         }
 
         return response()->json(['message' => 'Item not found'], 404);
     }
+
 
     /**
      * Display a listing of the resource.
@@ -107,9 +125,36 @@ class CartController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Cart $cart)
+    public function edit(Request $request, $id)
     {
-        //
+        // Validasi kuantitas
+        $request->validate([
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        // Cari item di keranjang berdasarkan ID
+        $cartItem = Cart::where('id', $id)->where('user_id', auth()->id())->first();
+
+        if (!$cartItem) {
+            return response()->json(['message' => 'Item not found'], 404);
+        }
+
+        // Update kuantitas
+        $cartItem->quantity = $request->input('quantity');
+
+        // Perbarui total price berdasarkan kuantitas dan harga produk
+        $product = Product::find($cartItem->product_id); // Ambil produk untuk mendapatkan harga
+        if ($product) {
+            $cartItem->price = $cartItem->quantity * $product->price; // Perbarui harga total
+        }
+
+        $cartItem->save();
+
+        // Kembali ke halaman keranjang dengan Inertia response
+        return response()->json([
+            'message' => 'Quantity updated successfully',
+            'cartItem' => $cartItem,  // Mengembalikan item keranjang yang diperbarui
+        ]);
     }
 
     /**

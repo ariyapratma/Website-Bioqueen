@@ -103,9 +103,17 @@ export default function Navbar({ auth }) {
         <div className="flex items-center">
           <Link
             href="/carts"
-            className="relative text-gray-700 hover:text-gray-800"
+            className={`relative flex items-center justify-center rounded-full p-2 transition-all duration-300 ${
+              url === "/carts"
+                ? "border-2 border-custom-yellow text-black" // Tambahkan border dan latar belakang saat aktif
+                : "hover:bg-gray-100"
+            }`}
           >
-            <BsCart className="h-6 w-6" />
+            <BsCart
+              className={`h-6 w-6 transition-colors duration-300 ${
+                url === "/carts" ? "text-black" : "text-gray-700" // Ubah warna ikon saat aktif
+              }`}
+            />
             {cartItems > 0 && (
               <span className="absolute -right-2 -top-2 rounded-full bg-red-500 px-2 py-1 text-xs text-white">
                 {cartItems}
