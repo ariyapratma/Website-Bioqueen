@@ -187,6 +187,16 @@ const CartIndex = ({ cartItems, auth }) => {
                         >
                           Remove
                         </button>
+
+                        {/* Continue button moved here */}
+                        <div className="px-6 py-4  text-center">
+                          <button
+                            onClick={() => Inertia.visit("/order-info")}
+                            className="rounded bg-green-600 px-6 py-2 text-white transition duration-200 hover:bg-green-700"
+                          >
+                            Continue
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}

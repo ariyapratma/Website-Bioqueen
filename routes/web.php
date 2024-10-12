@@ -64,8 +64,8 @@ Route::put('/carts/{id}', [CartController::class, 'update'])->name('carts.update
 Route::delete('/carts/{id}', [CartController::class, 'removeFromCart'])->name('carts.remove');
 
 // Route OrderDetail 
-Route::get('/order', [OrderController::class, 'index'])->name('order');
-Route::get('/order', [OrderController::class, 'index'])->name('order.detail');
+Route::get('/order-info', [OrderController::class, 'showOrderInfo'])->name('order.info');
+Route::post('/order/submit', [OrderController::class, 'submitOrder'])->name('order.submit');
 
 // Rute API yang mengembalikan JSON biasa
 // Route AddCart User
