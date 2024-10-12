@@ -6,12 +6,12 @@ import { useState, useEffect } from "react";
 import { Head, usePage } from "@inertiajs/react";
 
 const CartIndex = ({ cartItems, auth }) => {
-  const { flash } = usePage().props; // Mendapatkan flash message dari props
+  const { flash } = usePage().props;
   const [updatedItems, setUpdatedItems] = useState(cartItems);
 
   // Hitung total harga berdasarkan kuantitas dan harga produk
   const totalPrice = updatedItems.reduce(
-    (sum, item) => sum + item.product?.price * item.quantity, // Update di sini
+    (sum, item) => sum + item.product?.price * item.quantity,
     0,
   );
 
@@ -21,7 +21,7 @@ const CartIndex = ({ cartItems, auth }) => {
         ? {
             ...item,
             quantity,
-            // Hapus perhitungan price di sini
+            price: item.product?.price * quantity,
           }
         : item,
     );
@@ -33,17 +33,17 @@ const CartIndex = ({ cartItems, auth }) => {
     if (itemToSave) {
       Inertia.put(
         `/carts/${itemId}`,
-        { quantity: itemToSave.quantity, price: itemToSave.price }, // Save updated quantity and price
+        { quantity: itemToSave.quantity },
         {
           onSuccess: (response) => {
             // Show SweetAlert on successful response
             Swal.fire({
               title: "Success!",
-              text: response.props.message, // Use the message from the response
+              text: response.props.flash.success,
               icon: "success",
               confirmButtonText: "OK",
             }).then(() => {
-              Inertia.visit("/cart"); // Redirect or refresh after success
+              Inertia.visit("/carts");
             });
           },
           onError: () => {

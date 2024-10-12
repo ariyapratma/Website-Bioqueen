@@ -1,11 +1,9 @@
 <?php
 
 use Inertia\Inertia;
-use App\Models\HeroOurGallery;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\MaklonController;
 use App\Http\Controllers\AboutUsController;
@@ -25,7 +23,6 @@ use App\Http\Controllers\HeaderMaklonController;
 use App\Http\Controllers\HeaderAboutUsController;
 use App\Http\Controllers\HeaderContactController;
 use App\Http\Controllers\HeaderProductController;
-use App\Http\Controllers\HeroAddReviewController;
 use App\Http\Controllers\HeroTeamValueController;
 use App\Http\Controllers\HeroWhyChooseController;
 use App\Http\Controllers\HeroCategoriesController;
@@ -52,25 +49,23 @@ Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::get('/about', [AboutUsController::class, 'index'])->name('about');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::get('/product', [ProductController::class, 'index'])->name('product');
+Route::get('/order', [OrderController::class, 'index'])->name('order');
+Route::get('/maklon', [MaklonController::class, 'index'])->name('maklon');
+
 // Route ProductCategory User
 Route::get('/product/{slug}', [ProductController::class, 'showCategory'])->name('products.category');
 // Route ProductDetail User
 Route::get('/product/{category}/{product}', [ProductController::class, 'showProduct'])->name('product.detail');
+
 // Route AddCart and CartDetail
-// Route untuk menampilkan semua item di cart
 Route::get('/carts', [CartController::class, 'index'])->name('carts');
-
-// Route untuk menambahkan item baru ke cart (menggunakan POST)
 Route::post('/carts', [CartController::class, 'store'])->name('carts.store');
-
-// Route untuk memperbarui quantity dan price item di cart (menggunakan PUT)
 Route::put('/carts/{id}', [CartController::class, 'update'])->name('carts.update');
-
-// Route untuk menghapus item dari cart (menggunakan DELETE)
 Route::delete('/carts/{id}', [CartController::class, 'removeFromCart'])->name('carts.remove');
 
+// Route OrderDetail 
 Route::get('/order', [OrderController::class, 'index'])->name('order');
-Route::get('/maklon', [MaklonController::class, 'index'])->name('maklon');
+Route::get('/order', [OrderController::class, 'index'])->name('order.detail');
 
 // Rute API yang mengembalikan JSON biasa
 // Route AddCart User
@@ -81,10 +76,6 @@ Route::middleware('auth')->group(function () {
 
 // Route khusus untuk pengguna yang terautentikasi (auth) dan terverifikasi
 Route::middleware(['auth', 'verified'])->group(function () {
-    // Hanya Admin dan User yang bisa melakukan Order
-    // Route::get('/order', function () {
-    //     return Inertia::render('Order');
-    // })->middleware('permission:order product')->name('order');
 
     // Hanya Admin yang bisa mengakses dashboard dan mengelola konten
     Route::get('/dashboard', function () {
