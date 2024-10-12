@@ -3,19 +3,27 @@ import { Inertia } from "@inertiajs/inertia";
 import Footer from "@/Components/Footer/Footer";
 import Swal from "sweetalert2";
 import { useState, useEffect } from "react";
-import { Head } from "@inertiajs/react";
+import { Head, usePage } from "@inertiajs/react";
 
-const CartIndex = ({ cartItems, auth, user }) => {
+const CartIndex = ({ cartItems, auth }) => {
+  const { flash } = usePage().props; // Mendapatkan flash message dari props
   const [updatedItems, setUpdatedItems] = useState(cartItems);
 
+  // Hitung total harga berdasarkan kuantitas dan harga produk
   const totalPrice = updatedItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+    (sum, item) => sum + item.product?.price * item.quantity, // Update di sini
     0,
   );
 
   const updateQuantity = (itemId, quantity) => {
     const updated = updatedItems.map((item) =>
-      item.id === itemId ? { ...item, quantity } : item,
+      item.id === itemId
+        ? {
+            ...item,
+            quantity,
+            // Hapus perhitungan price di sini
+          }
+        : item,
     );
     setUpdatedItems(updated);
   };
@@ -25,13 +33,26 @@ const CartIndex = ({ cartItems, auth, user }) => {
     if (itemToSave) {
       Inertia.put(
         `/carts/${itemId}`,
-        { quantity: itemToSave.quantity },
+        { quantity: itemToSave.quantity, price: itemToSave.price }, // Save updated quantity and price
         {
-          onSuccess: () => {
-            Swal.fire("Saved!", "Quantity has been updated.", "success");
+          onSuccess: (response) => {
+            // Show SweetAlert on successful response
+            Swal.fire({
+              title: "Success!",
+              text: response.props.message, // Use the message from the response
+              icon: "success",
+              confirmButtonText: "OK",
+            }).then(() => {
+              Inertia.visit("/cart"); // Redirect or refresh after success
+            });
           },
           onError: () => {
-            Swal.fire("Error", "Failed to update quantity.", "error");
+            Swal.fire({
+              title: "Error!",
+              text: "There was an error updating the cart.",
+              icon: "error",
+              confirmButtonText: "OK",
+            });
           },
         },
       );
@@ -53,10 +74,22 @@ const CartIndex = ({ cartItems, auth, user }) => {
             setUpdatedItems((prevItems) =>
               prevItems.filter((item) => item.id !== itemId),
             );
-            Swal.fire("Deleted!", "The item has been removed.", "success");
+
+            // Menampilkan SweetAlert setelah item dihapus
+            Swal.fire({
+              title: "Deleted!",
+              text: "The item has been removed successfully.",
+              confirmButtonText: "OK",
+            });
           },
           onError: () => {
-            Swal.fire("Error", "Failed to remove item from cart.", "error");
+            // Menampilkan SweetAlert error jika gagal menghapus
+            Swal.fire({
+              title: "Error!",
+              text: "Failed to remove item from the cart.",
+              icon: "error",
+              confirmButtonText: "OK",
+            });
           },
         });
       }
@@ -65,13 +98,22 @@ const CartIndex = ({ cartItems, auth, user }) => {
 
   useEffect(() => {
     setUpdatedItems(cartItems);
-  }, [cartItems]);
+
+    // Display SweetAlert for flash message
+    if (flash?.success) {
+      Swal.fire({
+        icon: "success",
+        title: "Success!",
+        text: flash.success,
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    }
+  }, [cartItems, flash]);
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Head
-        title={`Cart ${auth.user.username || "User"} | PT Ratu Bio Indonesia`}
-      />
+      <Head title="Cart | PT Ratu Bio Indonesia" />
       <Navbar auth={auth} />
       <main className="flex-grow py-32">
         <div className="container mx-auto mb-24 px-4">
@@ -109,7 +151,10 @@ const CartIndex = ({ cartItems, auth, user }) => {
                         </span>
                       </td>
                       <td className="px-6 py-4 text-sm font-medium text-gray-800">
-                        Rp {parseFloat(item.price).toLocaleString("id-ID")}
+                        Rp{" "}
+                        {parseFloat(item.product?.price).toLocaleString(
+                          "id-ID",
+                        )}
                       </td>
                       <td className="px-6 py-4 text-sm font-medium text-gray-800">
                         <input
@@ -130,7 +175,10 @@ const CartIndex = ({ cartItems, auth, user }) => {
                       </td>
                       <td className="px-6 py-4 text-sm font-medium text-gray-800">
                         Rp{" "}
-                        {(item.price * item.quantity).toLocaleString("id-ID")}
+                        {(item.product?.price * item.quantity).toLocaleString(
+                          "id-ID",
+                        )}{" "}
+                        {/* Hitung total berdasarkan kuantitas */}
                       </td>
                       <td className="px-6 py-4 text-center">
                         <button

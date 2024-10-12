@@ -18,6 +18,9 @@ return new class extends Migration
             $table->integer('quantity');
             $table->decimal('price', 10, 2);
             $table->timestamps();
+
+            // Tambahkan unique constraint untuk menghindari duplikasi
+            $table->unique(['user_id', 'product_id']);
         });
     }
 

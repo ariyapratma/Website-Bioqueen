@@ -57,9 +57,18 @@ Route::get('/product/{slug}', [ProductController::class, 'showCategory'])->name(
 // Route ProductDetail User
 Route::get('/product/{category}/{product}', [ProductController::class, 'showProduct'])->name('product.detail');
 // Route AddCart and CartDetail
+// Route untuk menampilkan semua item di cart
 Route::get('/carts', [CartController::class, 'index'])->name('carts');
+
+// Route untuk menambahkan item baru ke cart (menggunakan POST)
+Route::post('/carts', [CartController::class, 'store'])->name('carts.store');
+
+// Route untuk memperbarui quantity dan price item di cart (menggunakan PUT)
 Route::put('/carts/{id}', [CartController::class, 'update'])->name('carts.update');
-Route::delete('/carts/{id}', [CartController::class, 'removeFromCart'])->name('cart.remove');
+
+// Route untuk menghapus item dari cart (menggunakan DELETE)
+Route::delete('/carts/{id}', [CartController::class, 'removeFromCart'])->name('carts.remove');
+
 Route::get('/order', [OrderController::class, 'index'])->name('order');
 Route::get('/maklon', [MaklonController::class, 'index'])->name('maklon');
 
