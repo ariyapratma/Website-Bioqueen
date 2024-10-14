@@ -12,7 +12,7 @@ const Order = ({ auth }) => {
       <main className="flex-grow">
         {/*HeaderOrder*/}
         <HeaderOrder />
-        <OrderInfo />
+        <OrderInfo auth={auth} />
       </main>
       <Footer />
     </div>

@@ -49,8 +49,13 @@ Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::get('/about', [AboutUsController::class, 'index'])->name('about');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::get('/product', [ProductController::class, 'index'])->name('product');
-Route::get('/order', [OrderController::class, 'index'])->name('order');
+// Route::get('/order', [OrderController::class, 'index'])->name('order');
 Route::get('/maklon', [MaklonController::class, 'index'])->name('maklon');
+
+// Route untuk Order hanya dapat diakses oleh pengguna dengan peran 'user'
+Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
+    Route::get('/order', [OrderController::class, 'index'])->name('order.index');
+});
 
 // Route ProductCategory User
 Route::get('/product/{slug}', [ProductController::class, 'showCategory'])->name('products.category');

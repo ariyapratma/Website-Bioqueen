@@ -5,26 +5,31 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Models\Order;
 use App\Models\HeaderOrder;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
-        // Ambil pesanan dari pengguna yang terautentikasi
-        $orders = Order::where('user_id', Auth::id())->get();
+        // Ambil semua pesanan pengguna yang terautentikasi dan load relasi produk
+        $orders = Order::where('user_id', Auth::id())->with('product')->get();
 
-        // Mengambil semua item produk dari pesanan untuk keranjang
+        // Mengambil data produk dari pesanan
         $cartItems = $orders->map(function ($order) {
             return [
                 'id' => $order->id,
                 'product' => [
-                    'name' => $order->product_name, // Kolom nama produk
-                    'price' => $order->price, // Kolom harga produk
-                    'image_url' => $order->product->image_url ?? null, // Kolom image URL produk
+                    'name' => $order->product->name, // Menggunakan relasi product
+                    'price' => $order->product->price,
+                    'image_url' => $order->product->image_url,
                 ],
-                'quantity' => $order->quantity, // Kolom jumlah
+                'quantity' => $order->quantity,
             ];
         });
 
@@ -37,12 +42,12 @@ class OrderController extends Controller
             'auth' => [
                 'user' => Auth::user(),
             ],
-            'cartItems' => $cartItems, // Tambahkan data cartItems
-            'orderInfo' => [ // Masukkan informasi order tambahan
+            'cartItems' => $cartItems,
+            'orderInfo' => [
                 'total_price' => $cartItems->sum(function ($item) {
                     return $item['product']['price'] * $item['quantity'];
-                }), // Hitung total harga dari keranjang
-                'item_count' => $cartItems->count(), // Hitung jumlah item
+                }),
+                'item_count' => $cartItems->count(),
             ],
         ]);
     }
