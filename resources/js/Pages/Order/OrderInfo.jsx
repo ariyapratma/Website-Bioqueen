@@ -1,6 +1,10 @@
-import { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Inertia } from "@inertiajs/inertia";
 import { Head } from "@inertiajs/react";
+import L from "leaflet";
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-control-geocoder/dist/Control.Geocoder.css';
+import * as Control from 'leaflet-control-geocoder';
 
 const OrderInfo = ({ auth }) => {
   const user = auth.user;
@@ -12,6 +16,83 @@ const OrderInfo = ({ auth }) => {
   const [postalCode, setPostalCode] = useState("");
   const [deliveryNotes, setDeliveryNotes] = useState("");
   const [deliveryMethod, setDeliveryMethod] = useState("");
+  const [mapCenter, setMapCenter] = useState([-6.200001, 106.845]);
+  const [suggestions, setSuggestions] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const mapRef = useRef(null);
+  const mapInstanceRef = useRef(null);
+  const geocoderRef = useRef(null);
+
+  useEffect(() => {
+    // Inisialisasi peta
+    mapInstanceRef.current = L.map(mapRef.current).setView(mapCenter, 13);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+    }).addTo(mapInstanceRef.current);
+
+    // Inisialisasi geocoder
+    geocoderRef.current = Control.Geocoder.nominatim();
+
+    // Menangani event klik peta
+    mapInstanceRef.current.on("click", (e) => {
+      const { lat, lng } = e.latlng;
+
+      // Reverse geocode lokasi yang diklik
+      geocoderRef.current.reverse(
+        L.latLng(lat, lng),
+        (results) => {
+          if (results && results.length > 0) {
+            const firstResult = results[0];
+            setAddress(firstResult.display_name);
+            const postalCodeComponent = firstResult.properties?.address?.postcode || "";
+            setPostalCode(postalCodeComponent);
+          } else {
+            alert("No address found for this location.");
+          }
+        },
+        { addressdetails: 1, format: "json" } // Pastikan addressdetails dan format ditentukan
+      );
+    });
+
+    return () => {
+      mapInstanceRef.current.remove();
+    };
+  }, [mapCenter]);
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setAddress(value);
+
+    // Jika input tidak kosong, mulai pencarian geocode
+    if (value) {
+      setLoading(true);
+      geocoderRef.current.geocode(`${value}, Indonesia`, (results) => {
+        if (results && results.length > 0) {
+          console.log(results);
+          setSuggestions(results);
+        } else {
+          setSuggestions([]);
+        }
+        setLoading(false);
+      }, { country: "Indonesia" });
+    } else {
+      setSuggestions([]);
+    }
+  };
+
+  const handleSelectSuggestion = (suggestion) => {
+    // Atur alamat dan pembaruan tampilan peta
+    setAddress(suggestion.display_name);
+    const { lat, lon } = suggestion; // Ambil lat dan lon
+    if (lat && lon) {
+      mapInstanceRef.current.setView([lat, lon], mapInstanceRef.current.getZoom()); // Pindahkan peta ke lokasi yang dipilih
+    } else {
+      alert("Latitude and longitude not available for this suggestion.");
+    }
+    setSuggestions([]); // Kosongkan saran setelah pemilihan
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -38,178 +119,81 @@ const OrderInfo = ({ auth }) => {
               Informasi Pemesanan
             </h1>
 
-            {/* Set Delivery Location */}
             <div className="bg-gray-50 p-6 rounded-lg shadow-md mb-6">
               <h2 className="text-lg font-semibold mb-4">Set Delivery Location</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Set the exact location on map
-                  </label>
-                  <div className="mt-1 bg-gray-200 h-56 rounded-md">
-                    {/* Placeholder Map */}
-                    <p className="text-center py-24">[Map Here]</p>
-                  </div>
-                </div>
-                <div>
-                  <label
-                    htmlFor="address"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Complete Address
-                  </label>
-                  <input
-                    type="text"
-                    id="address"
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    required
-                    className="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Enter your full address"
-                  />
-                  <label
-                    htmlFor="postalCode"
-                    className="block text-sm font-medium text-gray-700 mt-4"
-                  >
-                    Postal Code
-                  </label>
-                  <input
-                    type="text"
-                    id="postalCode"
-                    value={postalCode}
-                    onChange={(e) => setPostalCode(e.target.value)}
-                    className="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Enter postal code"
-                  />
-                  <label
-                    htmlFor="deliveryNotes"
-                    className="block text-sm font-medium text-gray-700 mt-4"
-                  >
-                    Delivery Notes (Optional)
-                  </label>
-                  <textarea
-                    id="deliveryNotes"
-                    value={deliveryNotes}
-                    onChange={(e) => setDeliveryNotes(e.target.value)}
-                    className="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Additional delivery instructions"
-                    rows="3"
-                  />
-                </div>
-              </div>
+              <h3 className="text-md mb-2">1. Set Location</h3>
+              <p className="mb-4">Set the exact location on the map</p>
+
+              <div ref={mapRef} style={{ height: "400px", marginBottom: "20px" }}></div>
+
+              <input
+                type="text"
+                placeholder="Search Address"
+                value={address}
+                onChange={handleInputChange}
+                className="w-full p-2 border border-gray-300 rounded mb-2"
+                required
+              />
+              {loading && <p>Loading...</p>}
+              {suggestions.length > 0 && (
+                <ul className="border border-gray-300 rounded bg-white max-h-40 overflow-y-auto">
+                  {suggestions.map((suggestion, index) => (
+                    <li
+                      key={index}
+                      className="p-2 hover:bg-gray-200 cursor-pointer"
+                      onClick={() => handleSelectSuggestion(suggestion)}
+                    >
+                      {suggestion.display_name}
+                    </li>
+                  ))}
+                </ul>
+              )}
+
+              <input
+                type="text"
+                placeholder="Complete Address"
+                value={address}
+                readOnly
+                className="w-full p-2 border border-gray-300 rounded mb-2"
+              />
+              <input
+                type="text"
+                placeholder="Postal Code"
+                value={postalCode}
+                readOnly
+                className="w-full p-2 border border-gray-300 rounded"
+              />
             </div>
 
-            {/* Recipient Details */}
-            <h2 className="text-lg font-semibold mb-4">Recipient Detail</h2>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Recipient Name */}
-                <div>
-                  <label
-                    htmlFor="recipientName"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Nama Penerima
-                  </label>
-                  <input
-                    type="text"
-                    id="recipientName"
-                    value={recipientName}
-                    onChange={(e) => setRecipientName(e.target.value)}
-                    required
-                    className="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-
-                {/* Email */}
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-              </div>
-
-              {/* Payment Method */}
-              <div>
-                <label
-                  htmlFor="paymentMethod"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Metode Pembayaran
-                </label>
-                <select
-                  id="paymentMethod"
-                  value={paymentMethod}
-                  onChange={(e) => setPaymentMethod(e.target.value)}
+            <form onSubmit={handleSubmit}>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Recipient Name</label>
+                <input
+                  type="text"
+                  value={recipientName}
+                  onChange={(e) => setRecipientName(e.target.value)}
+                  className="w-full p-2 border border-gray-300 rounded"
                   required
-                  className="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
-                >
-                  <option value="">Pilih metode pembayaran</option>
-                  <option value="Credit Card">Kartu Kredit</option>
-                  <option value="Bank Transfer">Transfer Bank</option>
-                  <option value="Cash on Delivery">Bayar di Tempat</option>
-                </select>
-              </div>
-
-              {/* Delivery Method */}
-              <div>
-                <label
-                  htmlFor="deliveryMethod"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Metode Pengiriman
-                </label>
-                <select
-                  id="deliveryMethod"
-                  value={deliveryMethod}
-                  onChange={(e) => setDeliveryMethod(e.target.value)}
-                  required
-                  className="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
-                >
-                  <option value="">Pilih metode pengiriman</option>
-                  <option value="Delivery Now">Pengiriman Sekarang</option>
-                  <option value="Scheduled Delivery">Pengiriman Terjadwal</option>
-                  <option value="Delivery Courier">Kurir Pengiriman</option>
-                </select>
-              </div>
-
-              {/* Notes */}
-              <div>
-                <label
-                  htmlFor="notes"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Catatan (Opsional)
-                </label>
-                <textarea
-                  id="notes"
-                  value={notes}
-                  onChange={(e) => setNotes(e.target.value)}
-                  className="mt-1 block w-full border border-gray-300 rounded-md py-2 px-3 focus:ring-blue-500 focus:border-blue-500"
-                  rows="3"
                 />
               </div>
 
-              {/* Submit Button */}
-              <div className="text-center">
-                <button
-                  type="submit"
-                  className="w-full bg-custom-yellow rounded-md py-2 px-4 text-black font-semibold hover:bg-green-700 transition duration-200"
-                >
-                  Kirim Pesanan
-                </button>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full p-2 border border-gray-300 rounded"
+                  required
+                />
               </div>
+
+              <button
+                type="submit"
+                className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition duration-200"
+              >
+                Submit Order
+              </button>
             </form>
           </div>
         </div>
