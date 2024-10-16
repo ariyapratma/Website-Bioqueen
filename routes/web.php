@@ -10,6 +10,7 @@ use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\HeroFlyerController;
 use App\Http\Controllers\HeroVideoController;
 use App\Http\Controllers\HeaderHomeController;
@@ -72,7 +73,7 @@ Route::delete('/carts/{id}', [CartController::class, 'removeFromCart'])->name('c
 Route::get('/order-info', [OrderController::class, 'showOrderInfo'])->name('order.info');
 Route::post('/order/submit', [OrderController::class, 'submitOrder'])->name('order.submit');
 
-// Rute API yang mengembalikan JSON biasa
+// Route API yang mengembalikan JSON biasa
 // Route AddCart User
 Route::middleware('auth')->group(function () {
     Route::get('/api/cart/items', [CartController::class, 'getCartItems']);
