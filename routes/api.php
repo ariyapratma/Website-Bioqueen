@@ -30,7 +30,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/cart/add', [CartController::class, 'addToCart']);
     Route::put('/cart/update/{id}', [CartController::class, 'update']);
     Route::delete('/cart/remove/{id}', [CartController::class, 'removeFromCart']);
-
-    // Route API yang mengembalikan JSON biasa untuk Data Provinsi
-    Route::get('/provinces', [ProvinceController::class, 'index']);
 });
+
+
+// Route API yang mengembalikan JSON biasa untuk Data Provinsi
+Route::get('/provinces', [ProvinceController::class, 'index']);

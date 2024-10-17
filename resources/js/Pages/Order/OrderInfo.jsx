@@ -19,14 +19,25 @@ const OrderInfo = ({ auth }) => {
   useEffect(() => {
     const fetchProvinces = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/provinces"); // Pastikan URL endpoint sesuai
+        const response = await fetch("api/provinces", {
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error("Error fetching provinces");
+        }
+  
         const data = await response.json();
+        console.log(data); // Cek apakah data diterima
         setProvinces(data); // Update state provinsi
       } catch (error) {
         console.error("Error fetching provinces:", error);
       }
     };
-
+  
     fetchProvinces();
   }, []);
 
@@ -177,7 +188,7 @@ const OrderInfo = ({ auth }) => {
 
               <button
                 type="submit"
-                className="w-full rounded bg-blue-500 py-2 text-white transition duration-200 hover:bg-blue-600"
+                className="w-full rounded bg-custom-yellow py-2 text-black transition font-semibold duration-200 hover:bg-yellow-400"
               >
                 Submit Order
               </button>
