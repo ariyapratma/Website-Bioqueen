@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\RegencyController;
+use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\ProvinceController;
 
 /*
@@ -38,3 +39,5 @@ Route::middleware('auth')->group(function () {
 Route::get('/provinces', [ProvinceController::class, 'index']);
 // Route API yang mengembalikan JSON biasa untuk Data Kota/Kabupaten
 Route::get('/regencies/{provinceId}', [RegencyController::class, 'getRegenciesByProvince']);
+// Route API yang mengembalikan JSON biasa untuk Data Kecamatan
+Route::get('/districts', [DistrictController::class, 'index']);

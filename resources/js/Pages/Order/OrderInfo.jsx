@@ -69,6 +69,35 @@ const OrderInfo = ({ auth }) => {
     fetchRegencies();
   }, [provinceId]); // Memantau perubahan provinceId
 
+  // Fetch Districts (Kecamatan) dari API berdasarkan regencyId
+useEffect(() => {
+  if (!regencyId) return; // Jika tidak ada regencyId, tidak perlu fetch
+
+  const fetchDistricts = async () => {
+    try {
+      const response = await fetch(`api/districts?regency_id=${regencyId}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Error fetching districts");
+      }
+
+      const data = await response.json();
+      console.log(data); // Cek apakah data diterima
+      setDistricts(data); // Update state kecamatan
+    } catch (error) {
+      console.error("Error fetching districts:", error);
+    }
+  };
+
+  fetchDistricts();
+}, [regencyId]); // Memantau perubahan regencyId
+
+
   // Filter data berdasarkan pilihan pengguna
   const filteredDistricts = districts.filter(
     (district) => district.regency_id === regencyId
