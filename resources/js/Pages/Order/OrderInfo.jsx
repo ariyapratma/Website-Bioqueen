@@ -9,13 +9,13 @@ const OrderInfo = ({ auth }) => {
   const [districtId, setDistrictId] = useState("");
   const [villageId, setVillageId] = useState("");
 
-  // Tambahkan state untuk menyimpan provinsi
+  // Tambahkan state untuk menyimpan provinsi, kabupaten, kecamatan, dan kelurahan
   const [provinces, setProvinces] = useState([]);
   const [regencies, setRegencies] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [villages, setVillages] = useState([]);
 
-  // Fetch Provinces dari API Anda
+  // Fetch Provinces dari API
   useEffect(() => {
     const fetchProvinces = async () => {
       try {
@@ -41,11 +41,35 @@ const OrderInfo = ({ auth }) => {
     fetchProvinces();
   }, []);
 
-  // Filter data berdasarkan pilihan pengguna
-  const filteredRegencies = regencies.filter(
-    (regency) => regency.province_id === provinceId
-  );
+  // Fetch Regencies (Kabupaten) dari API berdasarkan provinceId
+  useEffect(() => {
+    if (!provinceId) return; // Jika tidak ada provinceId, tidak perlu fetch
 
+    const fetchRegencies = async () => {
+      try {
+        const response = await fetch(`api/regencies/${provinceId}`, {
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error("Error fetching regencies");
+        }
+  
+        const data = await response.json();
+        console.log(data); // Cek apakah data diterima
+        setRegencies(data); // Update state kabupaten
+      } catch (error) {
+        console.error("Error fetching regencies:", error);
+      }
+    };
+  
+    fetchRegencies();
+  }, [provinceId]); // Memantau perubahan provinceId
+
+  // Filter data berdasarkan pilihan pengguna
   const filteredDistricts = districts.filter(
     (district) => district.regency_id === regencyId
   );
@@ -133,10 +157,10 @@ const OrderInfo = ({ auth }) => {
                   onChange={(e) => setRegencyId(e.target.value)}
                   className="w-full rounded border border-gray-300 p-2"
                   required
-                  disabled={!provinceId}
+                  disabled={!provinceId} // Disable jika provinsi belum dipilih
                 >
                   <option value="">Select Regency</option>
-                  {filteredRegencies.map((regency) => (
+                  {regencies.map((regency) => (
                     <option key={regency.id} value={regency.id}>
                       {regency.name}
                     </option>
@@ -154,7 +178,7 @@ const OrderInfo = ({ auth }) => {
                   onChange={(e) => setDistrictId(e.target.value)}
                   className="w-full rounded border border-gray-300 p-2"
                   required
-                  disabled={!regencyId}
+                  disabled={!regencyId} // Disable jika kabupaten belum dipilih
                 >
                   <option value="">Select District</option>
                   {filteredDistricts.map((district) => (
@@ -175,7 +199,7 @@ const OrderInfo = ({ auth }) => {
                   onChange={(e) => setVillageId(e.target.value)}
                   className="w-full rounded border border-gray-300 p-2"
                   required
-                  disabled={!districtId}
+                  disabled={!districtId} // Disable jika kecamatan belum dipilih
                 >
                   <option value="">Select Village</option>
                   {filteredVillages.map((village) => (
