@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-const OrderInfo = ({ auth }) => {
+const OrderInfo = ({ orderItems = [], auth }) => { // Tambahkan default value untuk orderItems
   const user = auth.user;
   const [recipientName, setRecipientName] = useState(user?.name || "");
   const [email, setEmail] = useState(user?.email || "");
@@ -9,7 +9,6 @@ const OrderInfo = ({ auth }) => {
   const [districtId, setDistrictId] = useState("");
   const [villageId, setVillageId] = useState("");
 
-  // Tambahkan state untuk menyimpan provinsi, kabupaten, kecamatan, dan kelurahan
   const [provinces, setProvinces] = useState([]);
   const [regencies, setRegencies] = useState([]);
   const [districts, setDistricts] = useState([]);
@@ -22,89 +21,112 @@ const OrderInfo = ({ auth }) => {
         const response = await fetch("api/provinces", {
           headers: {
             "Content-Type": "application/json",
-            "Accept": "application/json",
+            Accept: "application/json",
           },
         });
-  
+
         if (!response.ok) {
           throw new Error("Error fetching provinces");
         }
-  
+
         const data = await response.json();
-        console.log(data); // Cek apakah data diterima
         setProvinces(data); // Update state provinsi
       } catch (error) {
         console.error("Error fetching provinces:", error);
       }
     };
-  
+
     fetchProvinces();
   }, []);
 
   // Fetch Regencies (Kabupaten) dari API berdasarkan provinceId
   useEffect(() => {
-    if (!provinceId) return; // Jika tidak ada provinceId, tidak perlu fetch
+    if (!provinceId) return;
 
     const fetchRegencies = async () => {
       try {
         const response = await fetch(`api/regencies/${provinceId}`, {
           headers: {
             "Content-Type": "application/json",
-            "Accept": "application/json",
+            Accept: "application/json",
           },
         });
-  
+
         if (!response.ok) {
           throw new Error("Error fetching regencies");
         }
-  
+
         const data = await response.json();
-        console.log(data); // Cek apakah data diterima
         setRegencies(data); // Update state kabupaten
       } catch (error) {
         console.error("Error fetching regencies:", error);
       }
     };
-  
+
     fetchRegencies();
-  }, [provinceId]); // Memantau perubahan provinceId
+  }, [provinceId]);
 
   // Fetch Districts (Kecamatan) dari API berdasarkan regencyId
-useEffect(() => {
-  if (!regencyId) return; // Jika tidak ada regencyId, tidak perlu fetch
+  useEffect(() => {
+    if (!regencyId) return;
 
-  const fetchDistricts = async () => {
-    try {
-      const response = await fetch(`api/districts?regency_id=${regencyId}`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-        },
-      });
+    const fetchDistricts = async () => {
+      try {
+        const response = await fetch(`api/districts?regency_id=${regencyId}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        });
 
-      if (!response.ok) {
-        throw new Error("Error fetching districts");
+        if (!response.ok) {
+          throw new Error("Error fetching districts");
+        }
+
+        const data = await response.json();
+        setDistricts(data); // Update state kecamatan
+      } catch (error) {
+        console.error("Error fetching districts:", error);
       }
+    };
 
-      const data = await response.json();
-      console.log(data); // Cek apakah data diterima
-      setDistricts(data); // Update state kecamatan
-    } catch (error) {
-      console.error("Error fetching districts:", error);
-    }
-  };
+    fetchDistricts();
+  }, [regencyId]);
 
-  fetchDistricts();
-}, [regencyId]); // Memantau perubahan regencyId
+  // Fetch Villages (Kelurahan) dari API berdasarkan districtId
+  useEffect(() => {
+    if (!districtId) return;
 
+    const fetchVillages = async () => {
+      try {
+        const response = await fetch(`api/villages?district_id=${districtId}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Error fetching villages");
+        }
+
+        const data = await response.json();
+        setVillages(data); // Update state kelurahan
+      } catch (error) {
+        console.error("Error fetching villages:", error);
+      }
+    };
+
+    fetchVillages();
+  }, [districtId]);
 
   // Filter data berdasarkan pilihan pengguna
   const filteredDistricts = districts.filter(
-    (district) => district.regency_id === regencyId
+    (district) => district.regency_id === regencyId,
   );
 
   const filteredVillages = villages.filter(
-    (village) => village.district_id === districtId
+    (village) => village.district_id === districtId,
   );
 
   const handleSubmit = (e) => {
@@ -239,9 +261,38 @@ useEffect(() => {
                 </select>
               </div>
 
+              {orderItems.length === 0 ? ( // Pastikan orderItems ada
+                <p className="text-gray-500">No items in the order</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="min-w-full">
+                    <thead>
+                      <tr>
+                        <th className="px-6 py-4">Product</th>
+                        <th className="px-6 py-4">Price</th>
+                        <th className="px-6 py-4">Quantity</th>
+                        <th className="px-6 py-4">Total</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200">
+                      {orderItems.map((item) => (
+                        <tr key={item.id}>
+                          <td className="px-6 py-4">{item.productName}</td>
+                          <td className="px-6 py-4">{item.price}</td>
+                          <td className="px-6 py-4">{item.quantity}</td>
+                          <td className="px-6 py-4">
+                            {item.price * item.quantity}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
               <button
                 type="submit"
-                className="w-full rounded bg-custom-yellow py-2 text-black transition font-semibold duration-200 hover:bg-yellow-400"
+                className="mt-6 w-full rounded bg-custom-yellow p-2 text-black font-lexend font-semibold"
               >
                 Submit Order
               </button>

@@ -111,6 +111,21 @@ const CartIndex = ({ cartItems, auth }) => {
     }
   }, [cartItems, flash]);
 
+  const handleContinue = () => {
+    const orderData = updatedItems.map(item => ({
+      product_id: item.product?.id,
+      product_name: item.product?.name,
+      product_price: item.product?.price,
+      quantity: item.quantity,
+    }));
+
+    // Mengirim data pesanan ke halaman OrderInfo
+    Inertia.visit("/order", {
+      method: "get",
+      data: { orderItems: orderData },
+    });
+  };
+
   return (
     <div className="flex min-h-screen flex-col">
       <Head title="Cart | PT Ratu Bio Indonesia" />
@@ -191,7 +206,7 @@ const CartIndex = ({ cartItems, auth }) => {
                         {/* Continue button moved here */}
                         <div className="px-6 py-4  text-center">
                           <button
-                            onClick={() => Inertia.visit("/order-info")}
+                             onClick={handleContinue}
                             className="rounded bg-green-600 px-6 py-2 text-white transition duration-200 hover:bg-green-700"
                           >
                             Continue
