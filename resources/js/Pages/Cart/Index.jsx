@@ -36,7 +36,6 @@ const CartIndex = ({ cartItems, auth }) => {
         { quantity: itemToSave.quantity },
         {
           onSuccess: (response) => {
-            // Show SweetAlert on successful response
             Swal.fire({
               title: "Success!",
               text: response.props.flash.success,
@@ -74,8 +73,6 @@ const CartIndex = ({ cartItems, auth }) => {
             setUpdatedItems((prevItems) =>
               prevItems.filter((item) => item.id !== itemId),
             );
-
-            // Menampilkan SweetAlert setelah item dihapus
             Swal.fire({
               title: "Deleted!",
               text: "The item has been removed successfully.",
@@ -83,11 +80,9 @@ const CartIndex = ({ cartItems, auth }) => {
             });
           },
           onError: () => {
-            // Menampilkan SweetAlert error jika gagal menghapus
             Swal.fire({
               title: "Error!",
-              text: "Failed to remove item from the cart.",
-              icon: "error",
+              text: "Failed to remove the item.",
               confirmButtonText: "OK",
             });
           },
@@ -112,7 +107,7 @@ const CartIndex = ({ cartItems, auth }) => {
   }, [cartItems, flash]);
 
   const handleContinue = () => {
-    const orderData = updatedItems.map(item => ({
+    const orderData = updatedItems.map((item) => ({
       product_id: item.product?.id,
       product_name: item.product?.name,
       product_price: item.product?.price,
@@ -202,16 +197,6 @@ const CartIndex = ({ cartItems, auth }) => {
                         >
                           Remove
                         </button>
-
-                        {/* Continue button moved here */}
-                        <div className="px-6 py-4  text-center">
-                          <button
-                             onClick={handleContinue}
-                            className="rounded bg-green-600 px-6 py-2 text-white transition duration-200 hover:bg-green-700"
-                          >
-                            Continue
-                          </button>
-                        </div>
                       </td>
                     </tr>
                   ))}
@@ -231,6 +216,16 @@ const CartIndex = ({ cartItems, auth }) => {
                   </tr>
                 </tfoot>
               </table>
+
+              {/* Tombol Continue di luar tabel */}
+              <div className="mt-6 text-right">
+                <button
+                  onClick={handleContinue}
+                  className="rounded bg-green-600 px-6 py-2 text-white transition duration-200 hover:bg-green-700"
+                >
+                  Continue
+                </button>
+              </div>
             </div>
           )}
         </div>

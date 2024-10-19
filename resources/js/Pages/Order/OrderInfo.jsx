@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
-const OrderInfo = ({ orderItems = [], auth }) => { // Tambahkan default value untuk orderItems
+const OrderInfo = ({ auth }) => {
+  // Tambahkan default value untuk orderItems
   const user = auth.user;
   const [recipientName, setRecipientName] = useState(user?.name || "");
   const [email, setEmail] = useState(user?.email || "");
@@ -13,6 +14,8 @@ const OrderInfo = ({ orderItems = [], auth }) => { // Tambahkan default value un
   const [regencies, setRegencies] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [villages, setVillages] = useState([]);
+
+  const [orderItems, setOrderItems] = useState([]);
 
   // Fetch Provinces dari API
   useEffect(() => {
@@ -128,6 +131,49 @@ const OrderInfo = ({ orderItems = [], auth }) => { // Tambahkan default value un
   const filteredVillages = villages.filter(
     (village) => village.district_id === districtId,
   );
+
+  // Fetch order items dari API
+  useEffect(() => {
+    const fetchOrderItems = async () => {
+      try {
+        const response = await fetch("api/cart/items", {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Error fetching cart items");
+        }
+
+        const data = await response.json();
+        setOrderItems(data); // Gunakan setOrderItems untuk menyimpan data dari API
+      } catch (error) {
+        console.error("Error fetching cart items:", error);
+      }
+    };
+
+    fetchOrderItems();
+  }, []);
+
+  // Fungsi untuk parsing orderItems dari URL
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const items = [];
+
+    // Mengumpulkan data item dari URL
+    for (let i = 0; i < urlParams.getAll("orderItems").length; i++) {
+      items.push({
+        productId: urlParams.get(`orderItems[${i}][product_id]`),
+        productName: urlParams.get(`orderItems[${i}][product_name]`),
+        price: parseFloat(urlParams.get(`orderItems[${i}][product_price]`)),
+        quantity: parseInt(urlParams.get(`orderItems[${i}][quantity]`)),
+      });
+    }
+
+    setOrderItems(items);
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -292,7 +338,7 @@ const OrderInfo = ({ orderItems = [], auth }) => { // Tambahkan default value un
 
               <button
                 type="submit"
-                className="mt-6 w-full rounded bg-custom-yellow p-2 text-black font-lexend font-semibold"
+                className="mt-6 w-full rounded bg-custom-yellow p-2 font-lexend font-semibold text-black"
               >
                 Submit Order
               </button>
