@@ -189,37 +189,83 @@ class CartController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    // public function update(Request $request, $id)
+    // {
+    //     // Validasi kuantitas
+    //     $request->validate([
+    //         'quantity' => 'required|integer|min:1',
+    //     ]);
+
+    //     // Cari item di keranjang berdasarkan user dan product ID
+    //     $cartItem = Cart::where('user_id', auth()->id())->where('id', $id)->first();
+
+    //     if (!$cartItem) {
+    //         return response()->json(['success' => false, 'message' => 'Item not found.'], 404);
+    //     }
+
+    //     // Ambil harga satuan produk
+    //     $product = Product::find($cartItem->product_id);
+
+    //     if (!$product) {
+    //         return response()->json(['success' => false, 'message' => 'Product not found.'], 404);
+    //     }
+
+    //     // Update kuantitas dan harga
+    //     $cartItem->quantity = $request->input('quantity');
+    //     $cartItem->price = $cartItem->quantity * $product->price; // Update total harga
+    //     $cartItem->save(); // Simpan perubahan keranjang
+
+    //     return response()->json([
+    //         'success' => true,
+    //         'message' => 'Quantity and price updated successfully.',
+    //     ]);
+    // }
+
+    // public function update(Request $request, $id)
+    // {
+    //     $request->validate([
+    //         'quantity' => 'required|integer|min:1',
+    //     ]);
+
+    //     $cartItem = Cart::where('id', $id)->where('user_id', auth()->id())->firstOrFail();
+    //     $product = Product::find($cartItem->product_id);
+
+    //     if ($product) {
+    //         $cartItem->quantity = $request->input('quantity');
+    //         $cartItem->price = $cartItem->quantity * $product->price;
+    //         $cartItem->save();
+
+    //         return response()->json([
+    //             'success' => true,
+    //             'message' => 'Quantity and price updated successfully.',
+    //         ]);
+    //     } else {
+    //         return response()->json(['message' => 'Product not found.'], 404);
+    //     }
+    // }
+
     public function update(Request $request, $id)
     {
-        // Validasi kuantitas
         $request->validate([
             'quantity' => 'required|integer|min:1',
         ]);
 
-        // Cari item di keranjang berdasarkan user dan product ID
-        $cartItem = Cart::where('user_id', auth()->id())->where('id', $id)->first();
-
-        if (!$cartItem) {
-            return response()->json(['success' => false, 'message' => 'Item not found.'], 404);
-        }
-
-        // Ambil harga satuan produk
+        $cartItem = Cart::where('id', $id)->where('user_id', auth()->id())->firstOrFail();
         $product = Product::find($cartItem->product_id);
 
-        if (!$product) {
-            return response()->json(['success' => false, 'message' => 'Product not found.'], 404);
+        if ($product) {
+            $cartItem->quantity = $request->input('quantity');
+            $cartItem->price = $cartItem->quantity * $product->price;
+            $cartItem->save();
+
+            // Menggunakan session flash untuk pesan
+            return redirect()->back()->with('success', 'Quantity and price updated successfully.');
+        } else {
+            return redirect()->back()->with('error', 'Product not found.');
         }
-
-        // Update kuantitas dan harga
-        $cartItem->quantity = $request->input('quantity');
-        $cartItem->price = $cartItem->quantity * $product->price; // Update total harga
-        $cartItem->save(); // Simpan perubahan keranjang
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Quantity and price updated successfully.',
-        ]);
     }
+
+
 
     /**
      * Remove the specified resource from storage.

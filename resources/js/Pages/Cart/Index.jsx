@@ -60,6 +60,19 @@ const CartIndex = ({ cartItems, auth }) => {
   };
 
   useEffect(() => {
+    // Jika ada flash message sukses, tampilkan SweetAlert
+    if (flash?.success) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: flash.success,
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    }
+  }, [flash]);
+  
+  useEffect(() => {
     setUpdatedItems(cartItems);
 
     // Display SweetAlert for flash message

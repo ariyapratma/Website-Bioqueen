@@ -26,13 +26,11 @@ Route::middleware('auth')->get('/user', function (Request $request) {
 });
 
 // Rute untuk cart
-// Rute cart di web.php
+// Rute cart di api.php
 Route::middleware('auth')->group(function () {
     // Route API yang mengembalikan JSON biasa untuk Cart
     Route::get('/cart/items', [CartController::class, 'getCartItems']);
     Route::post('/cart/add', [CartController::class, 'addToCart']);
-    // Route::put('/cart/update/{id}', [CartController::class, 'update']);
-    // Route::delete('/cart/remove/{id}', [CartController::class, 'removeFromCart']);
 });
 
 
