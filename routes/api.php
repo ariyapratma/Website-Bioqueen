@@ -31,8 +31,8 @@ Route::middleware('auth')->group(function () {
     // Route API yang mengembalikan JSON biasa untuk Cart
     Route::get('/cart/items', [CartController::class, 'getCartItems']);
     Route::post('/cart/add', [CartController::class, 'addToCart']);
-    Route::put('/cart/update/{id}', [CartController::class, 'update']);
-    Route::delete('/cart/remove/{id}', [CartController::class, 'removeFromCart']);
+    // Route::put('/cart/update/{id}', [CartController::class, 'update']);
+    // Route::delete('/cart/remove/{id}', [CartController::class, 'removeFromCart']);
 });
 
 

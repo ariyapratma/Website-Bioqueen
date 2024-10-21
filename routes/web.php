@@ -65,7 +65,6 @@ Route::get('/product/{category}/{product}', [ProductController::class, 'showProd
 
 // Route AddCart and CartDetail
 Route::get('/carts', [CartController::class, 'index'])->name('carts.index');
-Route::post('/carts/add', [CartController::class, 'addToCart'])->name('carts.add');
 Route::put('/carts/update/{id}', [CartController::class, 'update'])->name('carts.update');
 Route::delete('/carts/remove/{id}', [CartController::class, 'removeFromCart'])->name('carts.remove');
 

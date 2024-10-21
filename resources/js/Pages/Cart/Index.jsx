@@ -1,6 +1,6 @@
 import Navbar from "@/Components/Navbar/Navbar";
 import { Inertia } from "@inertiajs/inertia";
-import { useForm } from '@inertiajs/react';
+import { useForm } from "@inertiajs/react";
 import Footer from "@/Components/Footer/Footer";
 import Swal from "sweetalert2";
 import { useState, useEffect } from "react";
@@ -34,27 +34,24 @@ const CartIndex = ({ cartItems, auth }) => {
 
   const saveCart = (itemId) => {
     const itemToSave = updatedItems.find((item) => item.id === itemId);
+
     if (itemToSave) {
       Inertia.put(
-        `/carts/${itemId}`,
+        `/carts/update/${itemId}`,
         { quantity: itemToSave.quantity },
         {
+          // Hapus onSuccess dan onError di sini
           onSuccess: (response) => {
+            // Tampilkan SweetAlert tanpa mengembalikan respons ke Inertia
             Swal.fire({
-              title: "Success!",
-              text: response.props.flash.success,
+              title: "Updated!",
+              text:
+                response.message || "Quantity and price updated successfully.",
               icon: "success",
               confirmButtonText: "OK",
             }).then(() => {
+              // Mengunjungi ulang halaman untuk mendapatkan data terbaru
               Inertia.visit("/carts");
-            });
-          },
-          onError: () => {
-            Swal.fire({
-              title: "Error!",
-              text: "There was an error updating the cart.",
-              icon: "error",
-              confirmButtonText: "OK",
             });
           },
         },

@@ -196,27 +196,29 @@ class CartController extends Controller
             'quantity' => 'required|integer|min:1',
         ]);
 
-        // Cari item di cart berdasarkan user dan product ID
+        // Cari item di keranjang berdasarkan user dan product ID
         $cartItem = Cart::where('user_id', auth()->id())->where('id', $id)->first();
 
-        if ($cartItem) {
-            // Update quantity
-            $cartItem->quantity = $request->input('quantity');
-
-            // Ambil harga satuan produk dan hitung ulang total
-            $product = Product::find($cartItem->product_id);
-            if ($product) {
-                $cartItem->price = $cartItem->quantity * $product->price; // Update total harga
-            } else {
-                return Inertia::location('/cart')->with('error', 'Product not found.');
-            }
-
-            $cartItem->save();
-
-            return redirect()->route('carts.index')->with('success', 'Cart updated successfully.');
-        } else {
-            return Inertia::location('carts.index')->with('error', 'Cart item not found.');
+        if (!$cartItem) {
+            return response()->json(['success' => false, 'message' => 'Item not found.'], 404);
         }
+
+        // Ambil harga satuan produk
+        $product = Product::find($cartItem->product_id);
+
+        if (!$product) {
+            return response()->json(['success' => false, 'message' => 'Product not found.'], 404);
+        }
+
+        // Update kuantitas dan harga
+        $cartItem->quantity = $request->input('quantity');
+        $cartItem->price = $cartItem->quantity * $product->price; // Update total harga
+        $cartItem->save(); // Simpan perubahan keranjang
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Quantity and price updated successfully.',
+        ]);
     }
 
     /**
