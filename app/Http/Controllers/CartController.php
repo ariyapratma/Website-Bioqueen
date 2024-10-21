@@ -81,9 +81,11 @@ class CartController extends Controller
     {
         $cartItem = Cart::where('user_id', auth()->id())->findOrFail($id);
 
+        // Hapus item dari keranjang
         $cartItem->delete();
 
-        return response()->json(['message' => 'Item removed from cart.'], 200);
+        // Kembalikan redirect dengan Inertia dan pesan sukses
+        return redirect()->route('carts.index')->with('success', 'Item removed from cart.');
     }
 
     /**
@@ -137,7 +139,7 @@ class CartController extends Controller
             ]);
         }
 
-        return redirect()->route('carts')->with('success', 'Item added to cart');
+        return redirect()->route('carts.index')->with('success', 'Item added to cart');
     }
 
 
@@ -211,9 +213,9 @@ class CartController extends Controller
 
             $cartItem->save();
 
-            return redirect()->route('carts')->with('success', 'Cart updated successfully.');
+            return redirect()->route('carts.index')->with('success', 'Cart updated successfully.');
         } else {
-            return Inertia::location('/cart')->with('error', 'Cart item not found.');
+            return Inertia::location('carts.index')->with('error', 'Cart item not found.');
         }
     }
 

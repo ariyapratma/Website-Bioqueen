@@ -1,5 +1,6 @@
 import Navbar from "@/Components/Navbar/Navbar";
 import { Inertia } from "@inertiajs/inertia";
+import { useForm } from '@inertiajs/react';
 import Footer from "@/Components/Footer/Footer";
 import Swal from "sweetalert2";
 import { useState, useEffect } from "react";
@@ -8,6 +9,9 @@ import { Head, usePage } from "@inertiajs/react";
 const CartIndex = ({ cartItems, auth }) => {
   const { flash } = usePage().props;
   const [updatedItems, setUpdatedItems] = useState(cartItems);
+
+  // Ambil method delete dari useForm di sini
+  const { delete: destroy } = useForm();
 
   // Hitung total harga berdasarkan kuantitas dan harga produk
   const totalPrice = updatedItems.reduce(
@@ -58,39 +62,6 @@ const CartIndex = ({ cartItems, auth }) => {
     }
   };
 
-  const removeFromCart = (itemId) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "Do you want to remove this item from your cart?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, remove it!",
-      cancelButtonText: "Cancel",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Inertia.delete(`/carts/${itemId}`, {
-          onSuccess: () => {
-            setUpdatedItems((prevItems) =>
-              prevItems.filter((item) => item.id !== itemId),
-            );
-            Swal.fire({
-              title: "Deleted!",
-              text: "The item has been removed successfully.",
-              confirmButtonText: "OK",
-            });
-          },
-          onError: () => {
-            Swal.fire({
-              title: "Error!",
-              text: "Failed to remove the item.",
-              confirmButtonText: "OK",
-            });
-          },
-        });
-      }
-    });
-  };
-
   useEffect(() => {
     setUpdatedItems(cartItems);
 
@@ -106,21 +77,6 @@ const CartIndex = ({ cartItems, auth }) => {
     }
   }, [cartItems, flash]);
 
-  // const handleContinue = () => {
-  //   const orderData = updatedItems.map((item) => ({
-  //     product_id: item.product?.id,
-  //     product_name: item.product?.name,
-  //     product_price: item.product?.price,
-  //     quantity: item.quantity,
-  //   }));
-
-  //   // Mengirim data pesanan ke halaman OrderInfo
-  //   Inertia.visit("/order", {
-  //     method: "get",
-  //     data: { orderItems: orderData },
-  //   });
-  // };
-
   const handleContinue = () => {
     const orderData = updatedItems.map((item) => ({
       product_id: item.product?.id,
@@ -128,14 +84,46 @@ const CartIndex = ({ cartItems, auth }) => {
       product_price: item.product?.price,
       quantity: item.quantity,
     }));
-  
-    // Simpan data pesanan di sessionStorage
-    sessionStorage.setItem('orderItems', JSON.stringify(orderData));
-  
-    // Arahkan ke halaman OrderInfo
-    Inertia.visit("/order");
+
+    // Mengirim data pesanan ke halaman OrderInfo
+    Inertia.visit("/order", {
+      method: "get",
+      data: { orderItems: orderData },
+    });
   };
-  
+
+  const removeFromCart = (itemId) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Do you want to remove this item from your cart?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, remove it!",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Gunakan destroy dari useForm untuk melakukan request delete
+        destroy(`/carts/remove/${itemId}`, {
+          onSuccess: () => {
+            Swal.fire({
+              title: "Deleted!",
+              text: "The item has been removed successfully.",
+              icon: "success", // Menambahkan ikon sukses
+              confirmButtonText: "OK",
+            });
+          },
+          onError: () => {
+            Swal.fire({
+              title: "Error!",
+              text: "Failed to remove the item.",
+              icon: "error", // Menambahkan ikon error
+              confirmButtonText: "OK",
+            });
+          },
+        });
+      }
+    });
+  };
 
   return (
     <div className="flex min-h-screen flex-col">

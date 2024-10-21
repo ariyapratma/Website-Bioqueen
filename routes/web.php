@@ -64,10 +64,10 @@ Route::get('/product/{slug}', [ProductController::class, 'showCategory'])->name(
 Route::get('/product/{category}/{product}', [ProductController::class, 'showProduct'])->name('product.detail');
 
 // Route AddCart and CartDetail
-Route::get('/carts', [CartController::class, 'index'])->name('carts');
-Route::post('/carts', [CartController::class, 'store'])->name('carts.store');
-Route::put('/carts/{id}', [CartController::class, 'update'])->name('carts.update');
-Route::delete('/carts/{id}', [CartController::class, 'removeFromCart'])->name('carts.remove');
+Route::get('/carts', [CartController::class, 'index'])->name('carts.index');
+Route::post('/carts/add', [CartController::class, 'addToCart'])->name('carts.add');
+Route::put('/carts/update/{id}', [CartController::class, 'update'])->name('carts.update');
+Route::delete('/carts/remove/{id}', [CartController::class, 'removeFromCart'])->name('carts.remove');
 
 // Route OrderDetail 
 Route::get('/order-info', [OrderController::class, 'showOrderInfo'])->name('order.info');

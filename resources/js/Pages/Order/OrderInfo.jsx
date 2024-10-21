@@ -314,39 +314,20 @@ const OrderInfo = ({ auth }) => {
                   <table className="min-w-full">
                     <thead>
                       <tr>
-                        <th className="px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
-                          Product
-                        </th>
-                        <th className="px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
-                          Price
-                        </th>
-                        <th className="px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
-                          Quantity
-                        </th>
-                        <th className="px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
-                          Total
-                        </th>
+                        <th className="px-6 py-4">Product</th>
+                        <th className="px-6 py-4">Price</th>
+                        <th className="px-6 py-4">Quantity</th>
+                        <th className="px-6 py-4">Total</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                       {orderItems.map((item) => (
                         <tr key={item.id}>
-                          <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
-                            {item.productName}
-                          </td>
-                          <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
-                            {" "}
-                            Rp {parseFloat(item.price).toLocaleString("id-ID")}
-                          </td>
-                          <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
-                            {item.quantity}
-                          </td>
-                          <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
-                            {" "}
-                            Rp{" "}
-                            {parseFloat(
-                              item.price * item.quantity,
-                            ).toLocaleString("id-ID")}
+                          <td className="px-6 py-4">{item.productName}</td>
+                          <td className="px-6 py-4">{item.price}</td>
+                          <td className="px-6 py-4">{item.quantity}</td>
+                          <td className="px-6 py-4">
+                            {item.price * item.quantity}
                           </td>
                         </tr>
                       ))}
