@@ -106,6 +106,21 @@ const CartIndex = ({ cartItems, auth }) => {
     }
   }, [cartItems, flash]);
 
+  // const handleContinue = () => {
+  //   const orderData = updatedItems.map((item) => ({
+  //     product_id: item.product?.id,
+  //     product_name: item.product?.name,
+  //     product_price: item.product?.price,
+  //     quantity: item.quantity,
+  //   }));
+
+  //   // Mengirim data pesanan ke halaman OrderInfo
+  //   Inertia.visit("/order", {
+  //     method: "get",
+  //     data: { orderItems: orderData },
+  //   });
+  // };
+
   const handleContinue = () => {
     const orderData = updatedItems.map((item) => ({
       product_id: item.product?.id,
@@ -113,13 +128,14 @@ const CartIndex = ({ cartItems, auth }) => {
       product_price: item.product?.price,
       quantity: item.quantity,
     }));
-
-    // Mengirim data pesanan ke halaman OrderInfo
-    Inertia.visit("/order", {
-      method: "get",
-      data: { orderItems: orderData },
-    });
+  
+    // Simpan data pesanan di sessionStorage
+    sessionStorage.setItem('orderItems', JSON.stringify(orderData));
+  
+    // Arahkan ke halaman OrderInfo
+    Inertia.visit("/order");
   };
+  
 
   return (
     <div className="flex min-h-screen flex-col">
