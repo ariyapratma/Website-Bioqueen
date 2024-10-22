@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { usePage } from "@inertiajs/react";
 
 const OrderInfo = ({ auth }) => {
-  // Tambahkan default value untuk orderItems
   const user = auth.user;
   const [recipientName, setRecipientName] = useState(user?.name || "");
   const [email, setEmail] = useState(user?.email || "");
@@ -15,7 +15,18 @@ const OrderInfo = ({ auth }) => {
   const [districts, setDistricts] = useState([]);
   const [villages, setVillages] = useState([]);
 
-  const [orderItems, setOrderItems] = useState([]);
+  // Menambahkan state untuk orderItems
+  const [orderItems, setOrderItems] = useState([]); // Tambahkan ini
+  const { orderItems: pageOrderItems } = usePage().props; // Menerima data dari props Inertia
+
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    // Mengatur orderItems dari props Inertia jika tersedia
+    if (pageOrderItems) {
+      setOrderItems(pageOrderItems);
+    }
+  }, [pageOrderItems]);
 
   // Fetch Provinces dari API
   useEffect(() => {
@@ -131,49 +142,6 @@ const OrderInfo = ({ auth }) => {
   const filteredVillages = villages.filter(
     (village) => village.district_id === districtId,
   );
-
-  // Fetch order items dari API
-  useEffect(() => {
-    const fetchOrderItems = async () => {
-      try {
-        const response = await fetch("api/cart/items", {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error("Error fetching cart items");
-        }
-
-        const data = await response.json();
-        setOrderItems(data); // Gunakan setOrderItems untuk menyimpan data dari API
-      } catch (error) {
-        console.error("Error fetching cart items:", error);
-      }
-    };
-
-    fetchOrderItems();
-  }, []);
-
-  // Fungsi untuk parsing orderItems dari URL
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const items = [];
-
-    // Mengumpulkan data item dari URL
-    for (let i = 0; i < urlParams.getAll("orderItems").length; i++) {
-      items.push({
-        productId: urlParams.get(`orderItems[${i}][product_id]`),
-        productName: urlParams.get(`orderItems[${i}][product_name]`),
-        price: parseFloat(urlParams.get(`orderItems[${i}][product_price]`)),
-        quantity: parseInt(urlParams.get(`orderItems[${i}][quantity]`)),
-      });
-    }
-
-    setOrderItems(items);
-  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -307,40 +275,24 @@ const OrderInfo = ({ auth }) => {
                 </select>
               </div>
 
-              {orderItems.length === 0 ? ( // Pastikan orderItems ada
-                <p className="text-gray-500">No items in the order</p>
-              ) : (
-                <div className="overflow-x-auto">
-                  <table className="min-w-full">
-                    <thead>
-                      <tr>
-                        <th className="px-6 py-4">Product</th>
-                        <th className="px-6 py-4">Price</th>
-                        <th className="px-6 py-4">Quantity</th>
-                        <th className="px-6 py-4">Total</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200">
-                      {orderItems.map((item) => (
-                        <tr key={item.id}>
-                          <td className="px-6 py-4">{item.productName}</td>
-                          <td className="px-6 py-4">{item.price}</td>
-                          <td className="px-6 py-4">{item.quantity}</td>
-                          <td className="px-6 py-4">
-                            {item.price * item.quantity}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+              {orderItems && orderItems.length > 0 && (
+                <div className="mb-4">
+                  <h2 className="mb-2 text-lg font-semibold">Order Items</h2>
+                  <ul>
+                    {orderItems.map((item, index) => (
+                      <li key={index} className="mb-1">
+                        {item.name} - {item.quantity} pcs
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               )}
 
               <button
                 type="submit"
-                className="mt-6 w-full rounded bg-custom-yellow p-2 font-lexend font-semibold text-black"
+                className="w-full rounded bg-blue-600 p-2 text-white hover:bg-blue-700"
               >
-                Submit Order
+                Submit
               </button>
             </form>
           </div>

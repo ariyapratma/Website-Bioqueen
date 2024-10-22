@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\HeaderOrder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -50,5 +52,30 @@ class OrderController extends Controller
                 'item_count' => $cartItems->count(),
             ],
         ]);
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'orderItems' => 'required|array',
+            'orderItems.*.product_id' => 'required|exists:products,id',
+            'orderItems.*.quantity' => 'required|integer|min:1',
+        ]);
+
+        foreach ($request->orderItems as $item) {
+            $product = Product::find($item['product_id']);
+
+            if ($product) {
+                $totalPrice = $product->price * $item['quantity'];
+                Order::create([
+                    'user_id' => Auth::id(),
+                    'product_id' => $item['product_id'],
+                    'quantity' => $item['quantity'],
+                    'total_price' => $totalPrice, // Menyimpan total_price
+                ]);
+            }
+        }
+
+        return redirect()->route('order.index')->with('success', 'Order placed successfully.');
     }
 }

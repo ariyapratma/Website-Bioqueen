@@ -10,7 +10,6 @@ use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProvinceController;
 use App\Http\Controllers\HeroFlyerController;
 use App\Http\Controllers\HeroVideoController;
 use App\Http\Controllers\HeaderHomeController;
@@ -50,12 +49,12 @@ Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::get('/about', [AboutUsController::class, 'index'])->name('about');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::get('/product', [ProductController::class, 'index'])->name('product');
-// Route::get('/order', [OrderController::class, 'index'])->name('order');
 Route::get('/maklon', [MaklonController::class, 'index'])->name('maklon');
 
 // Route untuk Order hanya dapat diakses oleh pengguna dengan peran 'user'
 Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
+    Route::post('/order', [OrderController::class, 'store'])->name('order.store');
 });
 
 // Route ProductCategory User
@@ -67,10 +66,6 @@ Route::get('/product/{category}/{product}', [ProductController::class, 'showProd
 Route::get('/carts', [CartController::class, 'index'])->name('carts.index');
 Route::put('/carts/update/{id}', [CartController::class, 'update'])->name('carts.update');
 Route::delete('/carts/remove/{id}', [CartController::class, 'removeFromCart'])->name('carts.remove');
-
-// Route OrderDetail 
-Route::get('/order-info', [OrderController::class, 'showOrderInfo'])->name('order.info');
-Route::post('/order/submit', [OrderController::class, 'submitOrder'])->name('order.submit');
 
 // Route API yang mengembalikan JSON biasa
 // Route AddCart User

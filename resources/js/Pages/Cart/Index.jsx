@@ -63,15 +63,15 @@ const CartIndex = ({ cartItems, auth }) => {
     // Jika ada flash message sukses, tampilkan SweetAlert
     if (flash?.success) {
       Swal.fire({
-        icon: 'success',
-        title: 'Success!',
+        icon: "success",
+        title: "Success!",
         text: flash.success,
         timer: 2000,
         showConfirmButton: false,
       });
     }
   }, [flash]);
-  
+
   useEffect(() => {
     setUpdatedItems(cartItems);
 
@@ -95,11 +95,37 @@ const CartIndex = ({ cartItems, auth }) => {
       quantity: item.quantity,
     }));
 
-    // Mengirim data pesanan ke halaman OrderInfo
-    Inertia.visit("/order", {
-      method: "get",
-      data: { orderItems: orderData },
-    });
+    console.log("Order Data:", orderData);
+
+    Inertia.post(
+      "/order",
+      {
+        orderItems: orderData,
+      },
+      {
+        onSuccess: (response) => {
+          if (response.props?.flash?.success) {
+            Swal.fire({
+              title: "Success!",
+              text: response.props.flash.success,
+              icon: "success",
+              confirmButtonText: "OK",
+            }).then(() => {
+              // Optionally redirect to another page or do something else
+              Inertia.visit("/order");
+            });
+          }
+        },
+        onError: (errors) => {
+          Swal.fire({
+            title: "Error!",
+            text: "There was an error processing your order.",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+        },
+      },
+    );
   };
 
   const removeFromCart = (itemId) => {
