@@ -15,18 +15,8 @@ const OrderInfo = ({ auth }) => {
   const [districts, setDistricts] = useState([]);
   const [villages, setVillages] = useState([]);
 
-  // Menambahkan state untuk orderItems
-  const [orderItems, setOrderItems] = useState([]); // Tambahkan ini
-  const { orderItems: pageOrderItems } = usePage().props; // Menerima data dari props Inertia
-
-  const [items, setItems] = useState([]);
-
-  useEffect(() => {
-    // Mengatur orderItems dari props Inertia jika tersedia
-    if (pageOrderItems) {
-      setOrderItems(pageOrderItems);
-    }
-  }, [pageOrderItems]);
+  // Mengambil cartItems dari usePage().props
+  const { cartItems } = usePage().props;
 
   // Fetch Provinces dari API
   useEffect(() => {
@@ -44,7 +34,7 @@ const OrderInfo = ({ auth }) => {
         }
 
         const data = await response.json();
-        setProvinces(data); // Update state provinsi
+        setProvinces(data);
       } catch (error) {
         console.error("Error fetching provinces:", error);
       }
@@ -53,7 +43,7 @@ const OrderInfo = ({ auth }) => {
     fetchProvinces();
   }, []);
 
-  // Fetch Regencies (Kabupaten) dari API berdasarkan provinceId
+  // Fetch Regencies berdasarkan provinceId
   useEffect(() => {
     if (!provinceId) return;
 
@@ -71,7 +61,7 @@ const OrderInfo = ({ auth }) => {
         }
 
         const data = await response.json();
-        setRegencies(data); // Update state kabupaten
+        setRegencies(data);
       } catch (error) {
         console.error("Error fetching regencies:", error);
       }
@@ -80,7 +70,7 @@ const OrderInfo = ({ auth }) => {
     fetchRegencies();
   }, [provinceId]);
 
-  // Fetch Districts (Kecamatan) dari API berdasarkan regencyId
+  // Fetch Districts berdasarkan regencyId
   useEffect(() => {
     if (!regencyId) return;
 
@@ -98,7 +88,7 @@ const OrderInfo = ({ auth }) => {
         }
 
         const data = await response.json();
-        setDistricts(data); // Update state kecamatan
+        setDistricts(data);
       } catch (error) {
         console.error("Error fetching districts:", error);
       }
@@ -107,7 +97,7 @@ const OrderInfo = ({ auth }) => {
     fetchDistricts();
   }, [regencyId]);
 
-  // Fetch Villages (Kelurahan) dari API berdasarkan districtId
+  // Fetch Villages berdasarkan districtId
   useEffect(() => {
     if (!districtId) return;
 
@@ -125,7 +115,7 @@ const OrderInfo = ({ auth }) => {
         }
 
         const data = await response.json();
-        setVillages(data); // Update state kelurahan
+        setVillages(data);
       } catch (error) {
         console.error("Error fetching villages:", error);
       }
@@ -133,15 +123,6 @@ const OrderInfo = ({ auth }) => {
 
     fetchVillages();
   }, [districtId]);
-
-  // Filter data berdasarkan pilihan pengguna
-  const filteredDistricts = districts.filter(
-    (district) => district.regency_id === regencyId,
-  );
-
-  const filteredVillages = villages.filter(
-    (village) => village.district_id === districtId,
-  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -246,7 +227,7 @@ const OrderInfo = ({ auth }) => {
                   disabled={!regencyId} // Disable jika kabupaten belum dipilih
                 >
                   <option value="">Select District</option>
-                  {filteredDistricts.map((district) => (
+                  {districts.map((district) => (
                     <option key={district.id} value={district.id}>
                       {district.name}
                     </option>
@@ -267,7 +248,7 @@ const OrderInfo = ({ auth }) => {
                   disabled={!districtId} // Disable jika kecamatan belum dipilih
                 >
                   <option value="">Select Village</option>
-                  {filteredVillages.map((village) => (
+                  {villages.map((village) => (
                     <option key={village.id} value={village.id}>
                       {village.name}
                     </option>
@@ -275,24 +256,46 @@ const OrderInfo = ({ auth }) => {
                 </select>
               </div>
 
-              {orderItems && orderItems.length > 0 && (
-                <div className="mb-4">
+              {/* Tabel Order Items */}
+              {cartItems.length === 0 ? (
+                <p className="text-gray-500">No items in the order</p>
+              ) : (
+                <div className="mb-4 overflow-x-auto">
                   <h2 className="mb-2 text-lg font-semibold">Order Items</h2>
-                  <ul>
-                    {orderItems.map((item, index) => (
-                      <li key={index} className="mb-1">
-                        {item.name} - {item.quantity} pcs
-                      </li>
-                    ))}
-                  </ul>
+                  <table className="min-w-full border">
+                    <thead>
+                      <tr>
+                        <th className="border px-4 py-2">Product</th>
+                        <th className="border px-4 py-2">Price</th>
+                        <th className="border px-4 py-2">Quantity</th>
+                        <th className="border px-4 py-2">Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {cartItems.map((item) => (
+                        <tr key={item.id}>
+                          <td className="border px-4 py-2">
+                            {item.product.name}
+                          </td>
+                          <td className="border px-4 py-2">
+                            ${item.product.price}
+                          </td>
+                          <td className="border px-4 py-2">{item.quantity}</td>
+                          <td className="border px-4 py-2">
+                            ${item.product.price * item.quantity}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               )}
 
               <button
                 type="submit"
-                className="w-full rounded bg-blue-600 p-2 text-white hover:bg-blue-700"
+                className="mt-4 w-full rounded bg-blue-500 py-2 text-white hover:bg-blue-600"
               >
-                Submit
+                Submit Order
               </button>
             </form>
           </div>
