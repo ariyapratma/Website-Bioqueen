@@ -66,13 +66,26 @@ class OrderController extends Controller
             $product = Product::find($item['product_id']);
 
             if ($product) {
-                $totalPrice = $product->price * $item['quantity'];
-                Order::create([
-                    'user_id' => Auth::id(),
-                    'product_id' => $item['product_id'],
-                    'quantity' => $item['quantity'],
-                    'total_price' => $totalPrice, // Menyimpan total_price
-                ]);
+                $existingOrder = Order::where('user_id', Auth::id())
+                    ->where('product_id', $item['product_id'])
+                    ->first();
+
+                // Jika pesanan dengan produk yang sama sudah ada
+                if ($existingOrder) {
+                    // Update kuantitas dan total harga
+                    $existingOrder->quantity += $item['quantity'];
+                    $existingOrder->total_price = $existingOrder->product->price * $existingOrder->quantity;
+                    $existingOrder->save();
+                } else {
+                    // Buat pesanan baru jika produk belum ada
+                    $totalPrice = $product->price * $item['quantity'];
+                    Order::create([
+                        'user_id' => Auth::id(),
+                        'product_id' => $item['product_id'],
+                        'quantity' => $item['quantity'],
+                        'total_price' => $totalPrice,
+                    ]);
+                }
             }
         }
 
