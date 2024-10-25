@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { usePage } from "@inertiajs/react";
+import Swal from "sweetalert2";
+import {
+  MdFactCheck,
+  MdReceiptLong,
+  MdChat,
+  MdAttachMoney,
+  MdErrorOutline,
+} from "react-icons/md";
 
 const OrderInfo = ({ auth }) => {
   const user = auth.user;
@@ -135,7 +143,13 @@ const OrderInfo = ({ auth }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Logic submit form
+    // Logika submit form
+    Swal.fire({
+      icon: "success",
+      title: "Order Submitted",
+      text: "Pesanan Anda telah berhasil dikirim.",
+      confirmButtonText: "OK",
+    });
     console.log({
       recipientName,
       email,
@@ -362,17 +376,50 @@ const OrderInfo = ({ auth }) => {
                   Payment Information
                 </h2>
                 <p className="mb-4 text-gray-600">
-                  Untuk Kenyamanan, kami menyediakan opsi pembayaran melalui
+                  Untuk kenyamanan, kami menyediakan opsi pembayaran melalui
                   Whatsapp agar lebih mudah dan cepat.
                 </p>
+
                 {/* Informasi tambahan tentang pembayaran */}
                 <h2 className="mb-6 text-2xl font-bold text-gray-800">
                   Payment Method
                 </h2>
-                <p className="text-gray-600">
-                  Untuk Kenyamanan, kami menyediakan opsi pembayaran melalui
-                  Whatsapp agar lebih mudah dan cepat.
-                </p>
+
+                {/* Icon dan Deskripsi */}
+                <div className="mb-2 flex items-center gap-2">
+                  <MdReceiptLong className="text-custom-yellow" size={20} />
+                  <p className="text-gray-600">
+                    Terima struk pembayaran di Whatsapp.
+                  </p>
+                </div>
+
+                <div className="mb-2 flex items-center gap-2">
+                  <MdFactCheck className="text-custom-yellow" size={20} />
+                  <p className="text-gray-600">
+                    Ikuti instruksi di chat Whatsapp.
+                  </p>
+                </div>
+
+                <div className="mb-2 flex items-center gap-2">
+                  <MdAttachMoney className="text-custom-yellow" size={20} />
+                  <p className="text-gray-600">
+                    Kirim bukti pembayaran di Whatsapp.
+                  </p>
+                </div>
+
+                <div className="mb-2 flex items-center gap-2">
+                  <MdErrorOutline className="text-red-500" size={20} />
+                  <p className="text-red-500">
+                    Pastikan nomor Whatsapp Anda aktif untuk menerima struk.
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <MdChat className="text-custom-yellow" size={20} />
+                  <p className="text-gray-600">
+                    Jika ada pertanyaan, silahkan hubungi kami di Whatsapp.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
