@@ -7,7 +7,9 @@ use Inertia\Inertia;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\HeaderOrder;
+use App\Models\OrderDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -136,5 +138,48 @@ class OrderController extends Controller
 
         // Redirect ke halaman pesanan dengan pesan sukses
         return redirect()->route('order.index')->with('success', 'Order placed successfully.');
+    }
+
+    public function storeDetails(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'order_id' => 'required|exists:orders,id', // Pastikan order_id valid
+            'recipientName' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'provinceId' => 'required|integer',
+            'regencyId' => 'required|integer',
+            'districtId' => 'required|integer',
+            'villageId' => 'required|integer',
+            'postalCode' => 'required|string|max:10',
+            'notes' => 'nullable|string',
+        ]);
+
+        try {
+            // Ambil ID order dari request
+            $orderId = $request->order_id;
+
+            // Cek apakah order dengan ID tersebut ada di database
+            $order = Order::findOrFail($orderId);
+
+            // Buat detail pesanan baru
+            $orderDetail = OrderDetail::create([
+                'order_id' => $order->id, // Ambil ID dari order yang valid
+                'recipient_name' => $request->recipientName,
+                'email' => $request->email,
+                'province_id' => $request->provinceId,
+                'regency_id' => $request->regencyId,
+                'district_id' => $request->districtId,
+                'village_id' => $request->villageId,
+                'postal_code' => $request->postalCode,
+                'notes' => $request->notes,
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'Order details saved successfully!', 'orderDetail' => $orderDetail], 200);
+        } catch (\Exception $e) {
+            // Log error untuk debugging
+            Log::error('Failed to save order details: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Failed to save order details'], 500);
+        }
     }
 }

@@ -57,6 +57,8 @@ Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
 });
 
+Route::post('/order-details', [OrderController::class, 'storeDetails']);
+
 // Route ProductCategory User
 Route::get('/product/{slug}', [ProductController::class, 'showCategory'])->name('products.category');
 // Route ProductDetail User
