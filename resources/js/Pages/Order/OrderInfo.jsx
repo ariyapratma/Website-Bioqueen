@@ -25,15 +25,19 @@ const OrderInfo = ({ auth }) => {
   const [districts, setDistricts] = useState([]);
   const [villages, setVillages] = useState([]);
 
+  const [product_id, setProductId] = useState(null); // Pastikan ini ada
+    const [quantity, setQuantity] = useState(1); // Inisialisasi dengan nilai default
+    const [total_price, setTotalPrice] = useState(0); // Hitung total harga sesuai logika Anda
+
   // Mengambil cartItems dari usePage().props
   const { cartItems } = usePage().props;
 
   const [orderId, setOrderId] = useState(null);
-  const [selectedOrderId, setSelectedOrderId] = useState(null); 
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
 
   useEffect(() => {
     // Simulating fetching order ID from an API or local storage
-    const fetchedOrderId = '123456'; // Example order ID
+    const fetchedOrderId = "123456"; // Example order ID
     setOrderId(fetchedOrderId);
   }, []);
 
@@ -150,292 +154,79 @@ const OrderInfo = ({ auth }) => {
     }).format(number);
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  
-  //   const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content'); // Add this line
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  //   const payload = {
-  //     order_id: orderId, // Order ID yang disimpan sebelumnya dari halaman cart
-  //     recipientName,
-  //     email,
-  //     provinceId,
-  //     regencyId,
-  //     districtId,
-  //     villageId,
-  //     postalCode,
-  //     notes,
-  //   };
-  
-  //   try {
-  //     const response = await fetch('/order-details', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         Accept: 'application/json',
-  //         'X-CSRF-TOKEN': csrfToken,
-  //       },
-  //       body: JSON.stringify(payload),
-  //     });
-  
-  //     const result = await response.json();
-  
-  //     if (response.ok) {
-  //       Swal.fire({
-  //         icon: 'success',
-  //         title: 'Order Details Submitted',
-  //         text: result.message,
-  //         confirmButtonText: 'OK',
-  //       });
-  //     } else {
-  //       Swal.fire({
-  //         icon: 'error',
-  //         title: 'Submission Failed',
-  //         text: result.message || 'Terjadi kesalahan saat mengirim detail pesanan.',
-  //         confirmButtonText: 'OK',
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.error('Submission error:', error);
-  //     Swal.fire({
-  //       icon: 'error',
-  //       title: 'Submission Failed',
-  //       text: 'Gagal mengirim detail pesanan.',
-  //       confirmButtonText: 'OK',
-  //     });
-  //   }
-  // };
+    if (!recipientName || !email || !provinceId || !regencyId || !districtId || !villageId || !postalCode) {
+        console.log("Incomplete Form Data: ", { recipientName, email, provinceId, regencyId, districtId, villageId, postalCode });
+        return;
+    }
 
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
+    // Ambil CSRF token
+    const csrfToken = document
+        .querySelector('meta[name="csrf-token"]')
+        ?.getAttribute("content");
 
-//     // Ensure all fields are set
-//     if (!orderId || !recipientName || !email || !provinceId || !regencyId || !districtId || !villageId || !postalCode) {
-//         Swal.fire({
-//             icon: 'error',
-//             title: 'Incomplete Form',
-//             text: 'Please fill in all required fields.',
-//             confirmButtonText: 'OK',
-//         });
-//         return;
-//     }
+    if (!csrfToken) {
+        Swal.fire({
+            icon: "error",
+            title: "CSRF Token Missing",
+            text: "Please refresh the page and try again.",
+            confirmButtonText: "OK",
+        });
+        return;
+    }
 
-//     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    // Objek data order yang hanya berisi kolom-kolom yang diperlukan
+    const orderData = {
+        recipientName,
+        email,
+        provinceId,
+        regencyId,
+        districtId,
+        villageId,
+        postalCode,
+        notes,
+    };
 
-//     const payload = {
-//         order_id: orderId,
-//         recipientName,
-//         email,
-//         provinceId,
-//         regencyId,
-//         districtId,
-//         villageId,
-//         postalCode,
-//         notes,
-//     };
+    try {
+        const response = await fetch('/order-details', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+            },
+            body: JSON.stringify(orderData),
+            credentials: 'same-origin',
+        });
 
-//     try {
-//         const response = await fetch('/order-details', {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//                 Accept: 'application/json',
-//                 'X-CSRF-TOKEN': csrfToken,
-//             },
-//             body: JSON.stringify(payload),
-//         });
+        const result = await response.json();
 
-//         const result = await response.json();
-
-//         if (response.ok) {
-//             Swal.fire({
-//                 icon: 'success',
-//                 title: 'Order Details Submitted',
-//                 text: result.message,
-//                 confirmButtonText: 'OK',
-//             });
-//         } else {
-//             Swal.fire({
-//                 icon: 'error',
-//                 title: 'Submission Failed',
-//                 text: result.message || 'Terjadi kesalahan saat mengirim detail pesanan.',
-//                 confirmButtonText: 'OK',
-//             });
-//         }
-//     } catch (error) {
-//         console.error('Submission error:', error);
-//         Swal.fire({
-//             icon: 'error',
-//             title: 'Submission Failed',
-//             text: 'Gagal mengirim detail pesanan.',
-//             confirmButtonText: 'OK',
-//         });
-//     }
-// };
-
-// const handleSubmit = async (e) => {
-//   e.preventDefault();
-
-//   // Ensure all fields are set
-//   if (!orderId || !recipientName || !email || !provinceId || !regencyId || !districtId || !villageId || !postalCode) {
-//       Swal.fire({
-//           icon: 'error',
-//           title: 'Incomplete Form',
-//           text: 'Please fill in all required fields.',
-//           confirmButtonText: 'OK',
-//       });
-//       return;
-//   }
-
-//   const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-//   // const payload = {
-//   //     order_id: orderId,
-//   //     recipientName,
-//   //     email,
-//   //     provinceId,
-//   //     regencyId,
-//   //     districtId,
-//   //     villageId,
-//   //     postalCode,
-//   //     notes,
-//   // };
-
-//   const orderData = {
-//     order_id: selectedOrderId, // pastikan ini adalah ID order yang valid
-//     recipientName: recipientName,
-//     email: email,
-//     provinceId: provinceId,
-//     regencyId: regencyId,
-//     districtId: districtId,
-//     villageId: villageId,
-//     postalCode: postalCode,
-//     notes: notes,
-// };
-
-//   console.log("orderData:", orderData); // Log payload
-
-//   try {
-//       const response = await fetch('/order-details', {
-//           method: 'POST',
-//           headers: {
-//               'Content-Type': 'application/json',
-//               Accept: 'application/json',
-//               'X-CSRF-TOKEN': csrfToken,
-//           },
-//           body: JSON.stringify(orderData),
-//       });
-
-//       const result = await response.json();
-
-//       if (response.ok) {
-//           Swal.fire({
-//               icon: 'success',
-//               title: 'Order Details Submitted',
-//               text: result.message,
-//               confirmButtonText: 'OK',
-//           });
-//       } else {
-//           console.error("Error response:", result); // Log error response
-//           Swal.fire({
-//               icon: 'error',
-//               title: 'Submission Failed',
-//               text: result.message || 'Terjadi kesalahan saat mengirim detail pesanan.',
-//               confirmButtonText: 'OK',
-//           });
-//       }
-//   } catch (error) {
-//       console.error('Submission error:', error);
-//       Swal.fire({
-//           icon: 'error',
-//           title: 'Submission Failed',
-//           text: 'Gagal mengirim detail pesanan.',
-//           confirmButtonText: 'OK',
-//       });
-//   }
-// };
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  // Ensure all fields are set
-  if (!orderId || !recipientName || !email || !provinceId || !regencyId || !districtId || !villageId || !postalCode) {
-      Swal.fire({
-          icon: 'error',
-          title: 'Incomplete Form',
-          text: 'Please fill in all required fields.',
-          confirmButtonText: 'OK',
-      });
-      return;
-  }
-
-  // Pastikan selectedOrderId didefinisikan sebelumnya
-  if (!selectedOrderId) {
-      Swal.fire({
-          icon: 'error',
-          title: 'Invalid Order ID',
-          text: 'Please select a valid order.',
-          confirmButtonText: 'OK',
-      });
-      return;
-  }
-
-  const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-  const orderData = {
-      order_id: selectedOrderId, // pastikan ini adalah ID order yang valid
-      recipient_name: recipientName,
-      email: email,
-      province_id: provinceId,
-      regency_id: regencyId,
-      district_id: districtId,
-      village_id: villageId,
-      postal_code: postalCode,
-      notes: notes,
-  };
-
-  console.log("orderData:", orderData); // Log payload
-
-  try {
-      const response = await fetch('/order-details', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-              Accept: 'application/json',
-              'X-CSRF-TOKEN': csrfToken,
-          },
-          body: JSON.stringify(orderData),
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-          Swal.fire({
-              icon: 'success',
-              title: 'Order Details Submitted',
-              text: result.message,
-              confirmButtonText: 'OK',
-          });
-      } else {
-          console.error("Error response:", result); // Log error response
-          Swal.fire({
-              icon: 'error',
-              title: 'Submission Failed',
-              text: result.message || 'Terjadi kesalahan saat mengirim detail pesanan.',
-              confirmButtonText: 'OK',
-          });
-      }
-  } catch (error) {
-      console.error('Submission error:', error);
-      Swal.fire({
-          icon: 'error',
-          title: 'Submission Failed',
-          text: 'Gagal mengirim detail pesanan.',
-          confirmButtonText: 'OK',
-      });
-  }
+        if (response.ok) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Order Submitted',
+                text: result.message || 'Order and order details saved successfully!',
+                confirmButtonText: 'OK',
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Submission Failed',
+                text: result.message || 'An error occurred while submitting the order.',
+                confirmButtonText: 'OK',
+            });
+        }
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Submission Failed',
+            text: 'Failed to submit order. Please try again later.',
+            confirmButtonText: 'OK',
+        });
+    }
 };
-
 
   return (
     <div className="flex min-h-screen flex-col bg-gray-100">

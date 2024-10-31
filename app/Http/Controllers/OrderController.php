@@ -20,43 +20,6 @@ class OrderController extends Controller
         $this->middleware('auth');
     }
 
-    // public function index()
-    // {
-    //     // Ambil semua pesanan pengguna yang terautentikasi dan load relasi produk
-    //     $orders = Order::where('user_id', Auth::id())->with('product')->get();
-
-    //     // Mengambil data produk dari pesanan
-    //     $cartItems = $orders->map(function ($order) {
-    //         return [
-    //             'id' => $order->id,
-    //             'product' => [
-    //                 'name' => $order->product->name, // Menggunakan relasi product
-    //                 'price' => $order->product->price,
-    //                 'image_url' => $order->product->image_url,
-    //             ],
-    //             'quantity' => $order->quantity,
-    //         ];
-    //     });
-
-    //     // Mengambil data dari tabel header_order
-    //     $headerOrder = HeaderOrder::first();
-
-    //     return Inertia::render('Order/Index', [
-    //         'dataHeaderOrder' => $headerOrder,
-    //         'orders' => $orders,
-    //         'auth' => [
-    //             'user' => Auth::user(),
-    //         ],
-    //         'cartItems' => $cartItems,
-    //         'orderInfo' => [
-    //             'total_price' => $cartItems->sum(function ($item) {
-    //                 return $item['product']['price'] * $item['quantity'];
-    //             }),
-    //             'item_count' => $cartItems->count(),
-    //         ],
-    //     ]);
-    // }
-
     public function index()
     {
         // Ambil item dari cart, bukan order
@@ -144,7 +107,6 @@ class OrderController extends Controller
     {
         // Validasi input
         $request->validate([
-            'order_id' => 'required|exists:orders,id', // Pastikan order_id valid
             'recipientName' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'provinceId' => 'required|integer',
@@ -156,15 +118,15 @@ class OrderController extends Controller
         ]);
 
         try {
-            // Ambil ID order dari request
-            $orderId = $request->order_id;
+            // Buat order baru
+            $order = Order::create([
+                'user_id' => auth()->id(), // Asumsi user sedang login
+                'status' => 'pending',
+            ]);
 
-            // Cek apakah order dengan ID tersebut ada di database
-            $order = Order::findOrFail($orderId);
-
-            // Buat detail pesanan baru
+            // Simpan detail pesanan dengan order_id dari pesanan yang baru dibuat
             $orderDetail = OrderDetail::create([
-                'order_id' => $order->id, // Ambil ID dari order yang valid
+                'order_id' => $order->id, // Gunakan $order->id sebagai order_id
                 'recipient_name' => $request->recipientName,
                 'email' => $request->email,
                 'province_id' => $request->provinceId,
@@ -175,11 +137,22 @@ class OrderController extends Controller
                 'notes' => $request->notes,
             ]);
 
-            return response()->json(['success' => true, 'message' => 'Order details saved successfully!', 'orderDetail' => $orderDetail], 200);
+            return response()->json([
+                'success' => true,
+                'message' => 'Order and order details saved successfully!',
+                'orderDetail' => $orderDetail,
+                'order' => $order,
+            ], 200);
         } catch (\Exception $e) {
-            // Log error untuk debugging
-            Log::error('Failed to save order details: ' . $e->getMessage());
-            return response()->json(['success' => false, 'message' => 'Failed to save order details'], 500);
+            // Catat kesalahan dalam log
+            Log::error('Failed to save order and order details: ' . $e->getMessage());
+
+            // Berikan respons kesalahan yang lebih informatif
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to save order details',
+                'error' => $e->getMessage(),
+            ], 500);
         }
     }
 }

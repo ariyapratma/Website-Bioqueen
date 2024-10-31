@@ -55,9 +55,8 @@ Route::get('/maklon', [MaklonController::class, 'index'])->name('maklon');
 Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
+    Route::post('/order-details', [OrderController::class, 'storeDetails'])->name('order.storeDetails');
 });
-
-Route::post('/order-details', [OrderController::class, 'storeDetails']);
 
 // Route ProductCategory User
 Route::get('/product/{slug}', [ProductController::class, 'showCategory'])->name('products.category');
