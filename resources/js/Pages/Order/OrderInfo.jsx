@@ -25,21 +25,8 @@ const OrderInfo = ({ auth }) => {
   const [districts, setDistricts] = useState([]);
   const [villages, setVillages] = useState([]);
 
-  const [product_id, setProductId] = useState(null); // Pastikan ini ada
-    const [quantity, setQuantity] = useState(1); // Inisialisasi dengan nilai default
-    const [total_price, setTotalPrice] = useState(0); // Hitung total harga sesuai logika Anda
-
   // Mengambil cartItems dari usePage().props
   const { cartItems } = usePage().props;
-
-  const [orderId, setOrderId] = useState(null);
-  const [selectedOrderId, setSelectedOrderId] = useState(null);
-
-  useEffect(() => {
-    // Simulating fetching order ID from an API or local storage
-    const fetchedOrderId = "123456"; // Example order ID
-    setOrderId(fetchedOrderId);
-  }, []);
 
   // Fetch Provinces dari API
   useEffect(() => {
@@ -157,12 +144,65 @@ const OrderInfo = ({ auth }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!recipientName || !email || !provinceId || !regencyId || !districtId || !villageId || !postalCode) {
-        console.log("Incomplete Form Data: ", { recipientName, email, provinceId, regencyId, districtId, villageId, postalCode });
+    // Check for empty fields
+    if (
+        !recipientName ||
+        !email ||
+        !provinceId ||
+        !regencyId ||
+        !districtId ||
+        !villageId ||
+        !postalCode
+    ) {
+        console.log("Incomplete Form Data: ", {
+            recipientName,
+            email,
+            provinceId,
+            regencyId,
+            districtId,
+            villageId,
+            postalCode,
+        });
+        Swal.fire({
+            icon: "error",
+            title: "Incomplete Form",
+            text: "Please fill out all required fields.",
+            confirmButtonText: "OK",
+        });
         return;
     }
 
-    // Ambil CSRF token
+    // Ensure orderItems is populated correctly
+    const orderItems = cartItems.map((item) => ({
+        product_id: item.product?.id, // Check if product and id exist
+        quantity: item.quantity,
+    }));
+
+    // Check if any product_id is missing
+    const missingProductId = orderItems.some(item => !item.product_id);
+    if (missingProductId) {
+        console.error("Missing product_id in orderItems:", orderItems);
+        Swal.fire({
+            icon: "error",
+            title: "Missing Product ID",
+            text: "Please ensure all items in the cart have a valid product ID.",
+            confirmButtonText: "OK",
+        });
+        return;
+    }
+
+    // Check if orderItems is empty
+    if (orderItems.length === 0) {
+        Swal.fire({
+            icon: "error",
+            title: "No Items in Cart",
+            text: "Please add items to your cart before placing an order.",
+            confirmButtonText: "OK",
+        });
+        return;
+    }
+
+    // CSRF token retrieval
     const csrfToken = document
         .querySelector('meta[name="csrf-token"]')
         ?.getAttribute("content");
@@ -177,57 +217,74 @@ const OrderInfo = ({ auth }) => {
         return;
     }
 
-    // Objek data order yang hanya berisi kolom-kolom yang diperlukan
-    const orderData = {
-        recipientName,
-        email,
-        provinceId,
-        regencyId,
-        districtId,
-        villageId,
-        postalCode,
-        notes,
-    };
-
     try {
-        const response = await fetch('/order-details', {
-            method: 'POST',
+        // Send data to the order endpoint
+        const orderResponse = await fetch("/order", {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-                'X-CSRF-TOKEN': csrfToken,
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                "X-CSRF-TOKEN": csrfToken,
             },
-            body: JSON.stringify(orderData),
-            credentials: 'same-origin',
+            body: JSON.stringify({
+                orderItems, // Ensure this is populated correctly
+            }),
+            credentials: "same-origin",
         });
 
-        const result = await response.json();
+        const orderResult = await orderResponse.json();
 
-        if (response.ok) {
+        if (!orderResponse.ok) {
+            throw new Error(orderResult.message || "Failed to create order.");
+        }
+
+        // Get orderId from the response
+        const orderId = orderResult.orderIds; // Dapatkan ID pesanan yang dibuat
+
+        // Send order details to the order-details endpoint
+        const detailsResponse = await fetch("/order-details", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                "X-CSRF-TOKEN": csrfToken,
+            },
+            body: JSON.stringify({
+                orderId, // Pastikan orderId disesuaikan
+                recipientName,
+                email,
+                provinceId,
+                regencyId,
+                districtId,
+                villageId,
+                postalCode,
+                notes,
+            }),
+            credentials: "same-origin",
+        });
+
+        const detailsResult = await detailsResponse.json();
+
+        if (detailsResponse.ok) {
             Swal.fire({
-                icon: 'success',
-                title: 'Order Submitted',
-                text: result.message || 'Order and order details saved successfully!',
-                confirmButtonText: 'OK',
+                icon: "success",
+                title: "Order Submitted",
+                text: detailsResult.message || "Order and order details saved successfully!",
+                confirmButtonText: "OK",
             });
         } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'Submission Failed',
-                text: result.message || 'An error occurred while submitting the order.',
-                confirmButtonText: 'OK',
-            });
+            throw new Error(detailsResult.message || "Failed to submit order details.");
         }
     } catch (error) {
         Swal.fire({
-            icon: 'error',
-            title: 'Submission Failed',
-            text: 'Failed to submit order. Please try again later.',
-            confirmButtonText: 'OK',
+            icon: "error",
+            title: "Submission Failed",
+            text: error.message || "An error occurred while submitting the order.",
+            confirmButtonText: "OK",
         });
     }
 };
-
+  
   return (
     <div className="flex min-h-screen flex-col bg-gray-100">
       <div className="flex-1 bg-neutral-50 p-6">

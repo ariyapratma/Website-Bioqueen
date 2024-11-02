@@ -87,7 +87,50 @@ const CartIndex = ({ cartItems, auth }) => {
     }
   }, [cartItems, flash]);
 
+  // const handleContinue = () => {
+  //   const orderData = updatedItems.map((item) => ({
+  //     product_id: item.product?.id,
+  //     product_name: item.product?.name,
+  //     product_price: item.product?.price,
+  //     quantity: item.quantity,
+  //   }));
+
+  //   console.log("Order Data:", orderData);
+
+  //   Inertia.post(
+  //     "/order",
+  //     {
+  //       orderItems: orderData,
+  //     },
+  //     {
+  //       onSuccess: (response) => {
+  //         if (response.props?.flash?.success) {
+  //           Swal.fire({
+  //             title: "Success!",
+  //             text: response.props.flash.success,
+  //             icon: "success",
+  //             confirmButtonText: "OK",
+  //           }).then(() => {
+  //             // Optionally redirect to another page or do something else
+  //             Inertia.visit("/order");
+  //           });
+  //         }
+  //       },
+  //       onError: (errors) => {
+  //         Swal.fire({
+  //           title: "Error!",
+  //           text: "There was an error processing your order.",
+  //           icon: "error",
+  //           confirmButtonText: "OK",
+  //         });
+  //       },
+  //     },
+  //   );
+  // };
+
   const handleContinue = () => {
+    console.log("Updated Items:", updatedItems); // Debugging log
+
     const orderData = updatedItems.map((item) => ({
       product_id: item.product?.id,
       product_name: item.product?.name,
@@ -95,7 +138,18 @@ const CartIndex = ({ cartItems, auth }) => {
       quantity: item.quantity,
     }));
 
-    console.log("Order Data:", orderData);
+    console.log("Order Data:", orderData); // Debugging log
+
+    if (!orderData.every((item) => item.product_id)) {
+      console.error("Missing product_id in orderData:", orderData);
+      Swal.fire({
+        title: "Error!",
+        text: "Some products are missing a product ID.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
 
     Inertia.post(
       "/order",
@@ -111,7 +165,6 @@ const CartIndex = ({ cartItems, auth }) => {
               icon: "success",
               confirmButtonText: "OK",
             }).then(() => {
-              // Optionally redirect to another page or do something else
               Inertia.visit("/order");
             });
           }

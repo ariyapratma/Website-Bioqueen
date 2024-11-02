@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('order_details', function (Blueprint $table) {
-            $table->foreignId('order_id')->constrained()->onDelete('cascade');
+            $table->id();
+            $table->foreignId('order_id')->constrained('orders')->onDelete('cascade'); // Referensi ke id di tabel orders
             $table->string('recipient_name');
             $table->string('email');
             $table->integer('province_id');
