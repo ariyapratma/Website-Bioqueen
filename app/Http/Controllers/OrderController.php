@@ -54,57 +54,9 @@ class OrderController extends Controller
         ]);
     }
 
-    // public function store(Request $request)
-    // {
-    //     // Validasi input
-    //     $request->validate([
-    //         'orderItems' => 'required|array',
-    //         'orderItems.*.product_id' => 'required|exists:products,id',
-    //         'orderItems.*.quantity' => 'required|integer|min:1',
-    //     ]);
-
-    //     foreach ($request->orderItems as $item) {
-    //         // Ambil produk berdasarkan id
-    //         $product = Product::find($item['product_id']);
-
-    //         if ($product) {
-    //             // Cek apakah ada pesanan dengan produk yang sama dan status 'pending' untuk user yang sama
-    //             $existingOrder = Order::where('user_id', Auth::id())
-    //                 ->where('product_id', $item['product_id'])
-    //                 ->where('status', 'pending')
-    //                 ->first();
-
-    //             // Jika pesanan sudah ada, update kuantitas dan total harga
-    //             if ($existingOrder) {
-    //                 // Pastikan hanya menyimpan kuantitas yang diberikan, tidak menggandakan
-    //                 $existingOrder->quantity = $item['quantity'];
-
-    //                 // Hitung total harga berdasarkan kuantitas dan harga produk
-    //                 $existingOrder->total_price = $product->price * $existingOrder->quantity;
-
-    //                 // Simpan perubahan
-    //                 $existingOrder->save();
-    //             } else {
-    //                 // Jika pesanan belum ada, buat pesanan baru dengan status 'pending'
-    //                 $totalPrice = $product->price * $item['quantity'];
-
-    //                 Order::create([
-    //                     'user_id' => Auth::id(),
-    //                     'product_id' => $item['product_id'],
-    //                     'quantity' => $item['quantity'],
-    //                     'total_price' => $totalPrice,
-    //                     'status' => 'pending', // Status default adalah 'pending'
-    //                 ]);
-    //             }
-    //         }
-    //     }
-
-    //     // Redirect ke halaman pesanan dengan pesan sukses
-    //     return redirect()->route('order.index')->with('success', 'Order placed successfully.');
-    // }
-
     public function store(Request $request)
     {
+        // Validasi input
         $request->validate([
             'orderItems' => 'required|array',
             'orderItems.*.product_id' => 'required|exists:products,id',
@@ -112,40 +64,44 @@ class OrderController extends Controller
         ]);
 
         foreach ($request->orderItems as $item) {
+            // Ambil produk berdasarkan id
             $product = Product::find($item['product_id']);
 
-            if (!$product) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Invalid product ID: ' . $item['product_id'],
-                ], 400);
-            }
+            if ($product) {
+                // Cek apakah ada pesanan dengan produk yang sama dan status 'pending' untuk user yang sama
+                $existingOrder = Order::where('user_id', Auth::id())
+                    ->where('product_id', $item['product_id'])
+                    ->where('status', 'pending')
+                    ->first();
 
-            // Cek apakah ada pesanan dengan produk yang sama dan status 'pending' untuk user yang sama
-            $existingOrder = Order::where('user_id', Auth::id())
-                ->where('product_id', $item['product_id'])
-                ->where('status', 'pending')
-                ->first();
+                // Jika pesanan sudah ada, update kuantitas dan total harga
+                if ($existingOrder) {
+                    // Pastikan hanya menyimpan kuantitas yang diberikan, tidak menggandakan
+                    $existingOrder->quantity = $item['quantity'];
 
-            if ($existingOrder) {
-                $existingOrder->quantity = $item['quantity'];
-                $existingOrder->total_price = $product->price * $existingOrder->quantity;
-                $existingOrder->save();
-            } else {
-                $totalPrice = $product->price * $item['quantity'];
-                Order::create([
-                    'user_id' => Auth::id(),
-                    'product_id' => $item['product_id'],
-                    'quantity' => $item['quantity'],
-                    'total_price' => $totalPrice,
-                    'status' => 'pending',
-                ]);
+                    // Hitung total harga berdasarkan kuantitas dan harga produk
+                    $existingOrder->total_price = $product->price * $existingOrder->quantity;
+
+                    // Simpan perubahan
+                    $existingOrder->save();
+                } else {
+                    // Jika pesanan belum ada, buat pesanan baru dengan status 'pending'
+                    $totalPrice = $product->price * $item['quantity'];
+
+                    Order::create([
+                        'user_id' => Auth::id(),
+                        'product_id' => $item['product_id'],
+                        'quantity' => $item['quantity'],
+                        'total_price' => $totalPrice,
+                        'status' => 'pending', // Status default adalah 'pending'
+                    ]);
+                }
             }
         }
 
+        // Redirect ke halaman pesanan dengan pesan sukses
         return redirect()->route('order.index')->with('success', 'Order placed successfully.');
     }
-
 
     public function storeDetails(Request $request)
     {
@@ -159,13 +115,15 @@ class OrderController extends Controller
             'villageId' => 'required|integer',
             'postalCode' => 'required|string|max:10',
             'notes' => 'nullable|string',
-            'orderId' => 'required|integer|exists:orders,id', // Tambahkan untuk memastikan order_id ada
+            'orderId' => 'required|integer|exists:orders,id',
+            'productId' => 'required|integer|exists:products,id',
         ]);
 
         try {
             // Simpan detail pesanan menggunakan `orderId` dari request
             $orderDetail = OrderDetail::create([
-                'order_id' => $request->orderId, // Gunakan orderId dari request
+                'order_id' => $request->orderId,
+                'product_id' => $request->productId,
                 'recipient_name' => $request->recipientName,
                 'email' => $request->email,
                 'province_id' => $request->provinceId,

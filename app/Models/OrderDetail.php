@@ -15,6 +15,7 @@ class OrderDetail extends Model
     // Kolom-kolom yang dapat diisi melalui mass assignment
     protected $fillable = [
         'order_id',
+        'product_id',
         'recipient_name',
         'email',
         'province_id',
@@ -29,5 +30,10 @@ class OrderDetail extends Model
     public function order()
     {
         return $this->belongsTo(Order::class);
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
     }
 }

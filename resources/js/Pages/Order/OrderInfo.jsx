@@ -172,11 +172,16 @@ const OrderInfo = ({ auth }) => {
         return;
     }
 
-    // Ensure orderItems is populated correctly
-    const orderItems = cartItems.map((item) => ({
-        product_id: item.product?.id, // Check if product and id exist
-        quantity: item.quantity,
-    }));
+    const orderItems = cartItems.map((item) => {
+      if (!item.product || !item.product.id) {
+          console.error("Invalid product for item:", item);
+      }
+      return {
+          product_id: item.product?.id || null, // Set null jika tidak ada product.id
+          quantity: item.quantity,
+      };
+  });
+  
 
     // Check if any product_id is missing
     const missingProductId = orderItems.some(item => !item.product_id);
@@ -259,6 +264,7 @@ const OrderInfo = ({ auth }) => {
                 villageId,
                 postalCode,
                 notes,
+                productId: orderItems.map(item => item.product_id),
             }),
             credentials: "same-origin",
         });

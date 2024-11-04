@@ -12,17 +12,44 @@ use Illuminate\Support\Facades\Log;
 class CartController extends Controller
 {
 
+    // public function getCartItems(Request $request)
+    // {
+    //     // Cek jika permintaan adalah AJAX atau dari API
+    //     if ($request->expectsJson()) {
+    //         $cartItems = Cart::where('user_id', auth()->id())->get();
+    //         return response()->json($cartItems);
+    //     }
+
+    //     // Jika permintaan tidak melalui API, lempar error
+    //     return response()->json(['message' => 'Invalid request'], 400);
+    // }
+
     public function getCartItems(Request $request)
     {
         // Cek jika permintaan adalah AJAX atau dari API
         if ($request->expectsJson()) {
-            $cartItems = Cart::where('user_id', auth()->id())->get();
+            // Ambil item keranjang dengan relasi produk
+            $cartItems = Cart::with('product') // Mengambil relasi produk
+                ->where('user_id', auth()->id())
+                ->get()
+                ->map(function ($cart) {
+                    return [
+                        'id' => $cart->id, // ID keranjang
+                        'product_id' => $cart->product_id, // ID produk
+                        'product_name' => $cart->product->name, // Nama produk (jika ada)
+                        'quantity' => $cart->quantity, // Jumlah
+                        'price' => $cart->price, // Harga
+                        'image_url' => $cart->product->image_url, // URL gambar produk (jika ada)
+                    ];
+                });
+
             return response()->json($cartItems);
         }
 
         // Jika permintaan tidak melalui API, lempar error
         return response()->json(['message' => 'Invalid request'], 400);
     }
+
 
     public function addToCart(Request $request)
     {
