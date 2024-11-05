@@ -11,7 +11,12 @@ import {
 } from "react-icons/fa";
 
 const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
-  const user = auth?.user || null;
+  console.log(auth); // Check if auth is defined and has user
+  const user = auth?.user; // Safely access user
+
+  if (!user) {
+    return null; // Or a loading state / fallback UI
+  }
   const [dropdownHomeOpen, setDropdownHomeOpen] = useState(false);
   const [dropdownAboutUsOpen, setDropdownAboutUsOpen] = useState(false);
   const [dropdownContactOpen, setDropdownContactOpen] = useState(false);
@@ -100,7 +105,7 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
         </li>
 
         {/* Dropdown for Home Page Content */}
-        {user && user.role === "admin" && (
+        {user.role === "admin" && (
           <li>
             <div
               onClick={() => setDropdownHomeOpen(!dropdownHomeOpen)}
@@ -161,7 +166,7 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
         )}
 
         {/* Dropdown for About Us Page Content */}
-        {user && user.role === "admin" && (
+        {user.role === "admin" && (
           <li>
             <div
               onClick={() => setDropdownAboutUsOpen(!dropdownAboutUsOpen)}
@@ -242,7 +247,7 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
         )}
 
         {/* Dropdown for Contact Page Content */}
-        {user && user.role === "admin" && (
+        {user.role === "admin" && (
           <li>
             <div
               onClick={() => setDropdownContactOpen(!dropdownContactOpen)}
@@ -284,7 +289,7 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
         )}
 
         {/* Dropdown for Product Page Content */}
-        {user && user.role === "admin" && (
+        {user.role === "admin" && (
           <li>
             <div
               onClick={() => setDropdownProductOpen(!dropdownProductOpen)}
@@ -352,7 +357,7 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
         )}
 
         {/* Dropdown for Order Page Content */}
-        {user && user.role === "admin" && (
+        {user.role === "admin" && (
           <li>
             <div
               onClick={() => setDropdownOrderOpen(!dropdownOrderOpen)}
@@ -394,7 +399,7 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
         )}
 
         {/* Dropdown for Maklon Page Content */}
-        {user && user.role === "admin" && (
+        {user.role === "admin" && (
           <li>
             <div
               onClick={() => setDropdownMaklonOpen(!dropdownMaklonOpen)}
@@ -436,7 +441,7 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
         )}
 
         {/* Dropdown for Order Page Content */}
-        {user && user.role === "user" && (
+        {user.role === "user" && (
           <li>
             <Link
               href="/view-order"

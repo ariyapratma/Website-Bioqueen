@@ -25,12 +25,13 @@ export default function Dashboard({ auth }) {
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
-      {/* <Sidebar activeMenu={activeMenu} /> */}
-      <Sidebar
-        auth={auth}
-        activeMenu={activeMenu}
-        setActiveMenu={setActiveMenu}
-      />
+      {auth && (
+        <Sidebar
+          auth={auth}
+          activeMenu={activeMenu}
+          setActiveMenu={setActiveMenu}
+        />
+      )}
 
       {/* Main Content */}
       <div className="flex-1 bg-neutral-50 p-6">

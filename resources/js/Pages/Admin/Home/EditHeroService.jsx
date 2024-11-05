@@ -62,7 +62,13 @@ const EditHeroService = ({ dataHeroService, auth }) => {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      <Sidebar activeMenu={activeMenu} />
+      {auth && (
+        <Sidebar
+          auth={auth}
+          activeMenu={activeMenu}
+          setActiveMenu={setActiveMenu}
+        />
+      )}
 
       <div className="flex-1 bg-neutral-50 p-6">
         <Head title="Edit Hero Service | PT Ratu Bio Indonesia" />

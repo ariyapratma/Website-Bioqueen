@@ -28,6 +28,15 @@ const OrderInfo = ({ auth }) => {
   // Mengambil cartItems dari usePage().props
   const { cartItems } = usePage().props;
 
+  useEffect(() => {
+    console.log("Cart Items:", cartItems);
+  }, [cartItems]);
+
+  if (!Array.isArray(cartItems)) {
+    console.error("cartItems is not an array or is undefined");
+  }
+  
+
   // Fetch Provinces dari API
   useEffect(() => {
     const fetchProvinces = async () => {
@@ -142,6 +151,10 @@ const OrderInfo = ({ auth }) => {
   };
 
   const handleSubmit = async (e) => {
+    if (cartItems.length === 0) {
+      console.error("Cannot submit an empty cart");
+      return;
+    }
     e.preventDefault();
 
     // Check for empty fields
@@ -172,15 +185,29 @@ const OrderInfo = ({ auth }) => {
         return;
     }
 
-    const orderItems = cartItems.map((item) => {
-      if (!item.product || !item.product.id) {
-          console.error("Invalid product for item:", item);
-      }
-      return {
-          product_id: item.product?.id || null, // Set null jika tidak ada product.id
-          quantity: item.quantity,
-      };
-  });
+  //   const orderItems = cartItems.map((item) => {
+  //     if (!item.product || !item.product.id) {
+  //         console.error("Invalid product for item:", item);
+  //         console.log("Cart Items:", cartItems);
+  //     }
+  //     return {
+  //         product_id: item.product?.id || null, // Set null jika tidak ada product.id
+  //         quantity: item.quantity,
+  //     };
+  // });
+
+  const orderItems = cartItems.map((item) => {
+    if (!item.product || !item.product.id) {
+        console.error("Invalid product for item:", item);
+        // Jika ingin melewati item yang tidak valid, gunakan return di sini
+        return null; // atau sesuai kebutuhan
+    }
+    return {
+        product_id: item.product.id, // pastikan ini diakses dengan benar
+        quantity: item.quantity,
+    };
+}).filter(item => item !== null); // menghapus item yang tidak valid dari array
+
   
 
     // Check if any product_id is missing
