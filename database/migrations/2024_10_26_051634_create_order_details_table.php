@@ -17,12 +17,9 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->string('recipient_name');
             $table->string('email');
-            $table->integer('province_id');
-            $table->integer('regency_id');
-            $table->integer('district_id');
-            $table->integer('village_id');
+            $table->text('notes');
+            $table->text('address');
             $table->string('postal_code', 10);
-            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

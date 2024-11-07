@@ -87,47 +87,6 @@ const CartIndex = ({ cartItems, auth }) => {
     }
   }, [cartItems, flash]);
 
-  // const handleContinue = () => {
-  //   const orderData = updatedItems.map((item) => ({
-  //     product_id: item.product?.id,
-  //     product_name: item.product?.name,
-  //     product_price: item.product?.price,
-  //     quantity: item.quantity,
-  //   }));
-
-  //   console.log("Order Data:", orderData);
-
-  //   Inertia.post(
-  //     "/order",
-  //     {
-  //       orderItems: orderData,
-  //     },
-  //     {
-  //       onSuccess: (response) => {
-  //         if (response.props?.flash?.success) {
-  //           Swal.fire({
-  //             title: "Success!",
-  //             text: response.props.flash.success,
-  //             icon: "success",
-  //             confirmButtonText: "OK",
-  //           }).then(() => {
-  //             // Optionally redirect to another page or do something else
-  //             Inertia.visit("/order");
-  //           });
-  //         }
-  //       },
-  //       onError: (errors) => {
-  //         Swal.fire({
-  //           title: "Error!",
-  //           text: "There was an error processing your order.",
-  //           icon: "error",
-  //           confirmButtonText: "OK",
-  //         });
-  //       },
-  //     },
-  //   );
-  // };
-
   const handleContinue = () => {
     console.log("Updated Items:", updatedItems); // Debugging log
 
@@ -219,7 +178,7 @@ const CartIndex = ({ cartItems, auth }) => {
       <Head title="Cart | PT Ratu Bio Indonesia" />
       <Navbar auth={auth} />
       <main className="flex-grow py-32">
-        <div className="container mx-auto mb-24 px-4">
+        <div className="container mx-auto mb-44 px-4">
           <h1 className="mb-8 text-center font-lexend text-4xl font-bold text-gray-800">
             Your Cart
           </h1>
@@ -271,7 +230,7 @@ const CartIndex = ({ cartItems, auth }) => {
                         />
                         <button
                           onClick={() => saveCart(item.id)}
-                          className="ml-2 rounded bg-blue-600 px-4 py-1 text-white transition duration-200 hover:bg-blue-700"
+                          className="ml-2 rounded bg-blue-600 px-2 py-2 text-white transition duration-200 hover:bg-blue-700"
                         >
                           Save
                         </button>
@@ -280,8 +239,7 @@ const CartIndex = ({ cartItems, auth }) => {
                         Rp{" "}
                         {(item.product?.price * item.quantity).toLocaleString(
                           "id-ID",
-                        )}{" "}
-                        {/* Hitung total berdasarkan kuantitas */}
+                        )}
                       </td>
                       <td className="px-6 py-4 text-center">
                         <button
@@ -303,20 +261,24 @@ const CartIndex = ({ cartItems, auth }) => {
                       Total:
                     </td>
                     <td className="px-6 py-4 text-sm font-medium text-gray-800">
-                      Rp {totalPrice.toLocaleString("id-ID")}
+                      Rp{" "}
+                      {totalPrice.toLocaleString("id-ID")}
                     </td>
-                    <td className="px-6 py-4"></td>
                   </tr>
                 </tfoot>
               </table>
-
-              {/* Tombol Continue di luar tabel */}
-              <div className="mt-6 text-right">
+              <div className="mt-8 flex justify-between gap-4">
+                <button
+                  onClick={() => Inertia.get("product")}
+                  className="w-full rounded bg-black py-2 px-4 text-white transition duration-200 hover:bg-gray-900"
+                >
+                  Continue Shopping
+                </button>
                 <button
                   onClick={handleContinue}
-                  className="rounded bg-green-600 px-6 py-2 text-white transition duration-200 hover:bg-green-700"
+                  className="w-full rounded bg-green-600 py-2 px-4 text-white transition duration-200 hover:bg-green-700"
                 >
-                  Continue
+                  Proceed to Checkout
                 </button>
               </div>
             </div>

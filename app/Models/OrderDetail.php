@@ -18,10 +18,8 @@ class OrderDetail extends Model
         'product_id',
         'recipient_name',
         'email',
-        'province_id',
-        'regency_id',
-        'district_id',
-        'village_id',
+        'notes',
+        'address',
         'postal_code',
         'notes',
     ];
@@ -35,5 +33,10 @@ class OrderDetail extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function cart()
+    {
+        return $this->belongsTo(Cart::class);
     }
 }

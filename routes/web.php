@@ -84,8 +84,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->middleware('role:admin|user')->name('dashboard');
 
     // Rute untuk menambahkan review, hanya user dan admin yang bisa mengakses
-    Route::middleware(['auth', 'role:user'])->group(function () {
-        // Route HeroReview User
+    // Route::middleware(['auth', 'role:user'])->group(function () {
+    //     // Route HeroReview User
+    //     Route::post('/hero-review', [HeroReviewController::class, 'store'])->name('hero-review.store');
+    // });
+    Route::middleware(['auth', 'role:user|admin'])->group(function () {
         Route::post('/hero-review', [HeroReviewController::class, 'store'])->name('hero-review.store');
     });
 

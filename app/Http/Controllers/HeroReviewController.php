@@ -66,7 +66,7 @@ class HeroReviewController extends Controller
         ]);
 
         // Cek apakah pengguna memiliki avatar di storage
-        $avatarPath = "storage/avatars/" . Auth::user()->id . ".png";
+        $avatarPath = "avatars/" . Auth::user()->id . ".png";
         if (!file_exists(public_path($avatarPath))) {
             // Jika tidak ada avatar, generate avatar menggunakan Laravolt
             $avatar = Avatar::create(Auth::user()->name)->toBase64();

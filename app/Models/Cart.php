@@ -37,4 +37,9 @@ class Cart extends Model
     {
         return $this->quantity * $this->price;
     }
+
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class);
+    }
 }
