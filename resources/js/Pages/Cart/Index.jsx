@@ -7,13 +7,10 @@ import { useState, useEffect } from "react";
 import { Head, usePage } from "@inertiajs/react";
 
 const CartIndex = ({ cartItems, auth }) => {
+  const user = auth.user;
   const { flash } = usePage().props;
   const [updatedItems, setUpdatedItems] = useState(cartItems);
-
-  // Ambil method delete dari useForm di sini
   const { delete: destroy } = useForm();
-
-  // Hitung total harga berdasarkan kuantitas dan harga produk
   const totalPrice = updatedItems.reduce(
     (sum, item) => sum + item.product?.price * item.quantity,
     0,
@@ -40,9 +37,7 @@ const CartIndex = ({ cartItems, auth }) => {
         `/carts/update/${itemId}`,
         { quantity: itemToSave.quantity },
         {
-          // Hapus onSuccess dan onError di sini
           onSuccess: (response) => {
-            // Tampilkan SweetAlert tanpa mengembalikan respons ke Inertia
             Swal.fire({
               title: "Updated!",
               text:
@@ -50,7 +45,6 @@ const CartIndex = ({ cartItems, auth }) => {
               icon: "success",
               confirmButtonText: "OK",
             }).then(() => {
-              // Mengunjungi ulang halaman untuk mendapatkan data terbaru
               Inertia.visit("/carts");
             });
           },
@@ -60,7 +54,6 @@ const CartIndex = ({ cartItems, auth }) => {
   };
 
   useEffect(() => {
-    // Jika ada flash message sukses, tampilkan SweetAlert
     if (flash?.success) {
       Swal.fire({
         icon: "success",
@@ -75,7 +68,6 @@ const CartIndex = ({ cartItems, auth }) => {
   useEffect(() => {
     setUpdatedItems(cartItems);
 
-    // Display SweetAlert for flash message
     if (flash?.success) {
       Swal.fire({
         icon: "success",
@@ -88,22 +80,26 @@ const CartIndex = ({ cartItems, auth }) => {
   }, [cartItems, flash]);
 
   const handleContinue = () => {
-    console.log("Updated Items:", updatedItems); // Debugging log
+    // Debugging log
+    console.log("Updated Items:", updatedItems);
+
+    const totalPrice = updatedItems.reduce((sum, item) => {
+      return sum + (item.product?.price || 0) * (item.quantity || 0);
+    }, 0);
 
     const orderData = updatedItems.map((item) => ({
       product_id: item.product?.id,
-      product_name: item.product?.name,
-      product_price: item.product?.price,
       quantity: item.quantity,
+      price: item.product?.price,
     }));
 
-    console.log("Order Data:", orderData); // Debugging log
+    // Debugging log
+    console.log("Order Data:", orderData);
 
-    if (!orderData.every((item) => item.product_id)) {
-      console.error("Missing product_id in orderData:", orderData);
+    if (!orderData.every((item) => item.product_id && item.quantity >= 1)) {
       Swal.fire({
         title: "Error!",
-        text: "Some products are missing a product ID.",
+        text: "All products must have a valid product ID and quantity.",
         icon: "error",
         confirmButtonText: "OK",
       });
@@ -114,6 +110,7 @@ const CartIndex = ({ cartItems, auth }) => {
       "/order",
       {
         orderItems: orderData,
+        total_price: totalPrice,
       },
       {
         onSuccess: (response) => {
@@ -150,13 +147,12 @@ const CartIndex = ({ cartItems, auth }) => {
       cancelButtonText: "Cancel",
     }).then((result) => {
       if (result.isConfirmed) {
-        // Gunakan destroy dari useForm untuk melakukan request delete
         destroy(`/carts/remove/${itemId}`, {
           onSuccess: () => {
             Swal.fire({
               title: "Deleted!",
               text: "The item has been removed successfully.",
-              icon: "success", // Menambahkan ikon sukses
+              icon: "success",
               confirmButtonText: "OK",
             });
           },
@@ -164,7 +160,7 @@ const CartIndex = ({ cartItems, auth }) => {
             Swal.fire({
               title: "Error!",
               text: "Failed to remove the item.",
-              icon: "error", // Menambahkan ikon error
+              icon: "error",
               confirmButtonText: "OK",
             });
           },
@@ -226,7 +222,7 @@ const CartIndex = ({ cartItems, auth }) => {
                           onChange={(e) =>
                             updateQuantity(item.id, Math.max(1, e.target.value))
                           }
-                          className="w-16 rounded border border-gray-300 p-1"
+                          className="w-16 rounded border border-gray-300 p-2"
                         />
                         <button
                           onClick={() => saveCart(item.id)}
@@ -237,14 +233,14 @@ const CartIndex = ({ cartItems, auth }) => {
                       </td>
                       <td className="px-6 py-4 text-sm font-medium text-gray-800">
                         Rp{" "}
-                        {(item.product?.price * item.quantity).toLocaleString(
-                          "id-ID",
-                        )}
+                        {(
+                          parseFloat(item.product?.price) * item.quantity
+                        ).toLocaleString("id-ID")}
                       </td>
                       <td className="px-6 py-4 text-center">
                         <button
                           onClick={() => removeFromCart(item.id)}
-                          className="rounded bg-red-600 px-4 py-1 text-white transition duration-200 hover:bg-red-700"
+                          className="text-red-500 hover:text-red-700"
                         >
                           Remove
                         </button>
@@ -252,33 +248,23 @@ const CartIndex = ({ cartItems, auth }) => {
                     </tr>
                   ))}
                 </tbody>
-                <tfoot>
-                  <tr>
-                    <td
-                      colSpan="3"
-                      className="px-6 py-4 text-right font-bold text-gray-800"
-                    >
-                      Total:
-                    </td>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-800">
-                      Rp{" "}
-                      {totalPrice.toLocaleString("id-ID")}
-                    </td>
-                  </tr>
-                </tfoot>
               </table>
-              <div className="mt-8 flex justify-between gap-4">
-                <button
-                  onClick={() => Inertia.get("product")}
-                  className="w-full rounded bg-black py-2 px-4 text-white transition duration-200 hover:bg-gray-900"
-                >
-                  Continue Shopping
-                </button>
+              <div className="border-t px-6 py-4">
+                <div className="flex justify-between">
+                  <span className="text-lg font-semibold text-gray-800">
+                    Total:
+                  </span>
+                  <span className="text-lg font-semibold text-gray-800">
+                    Rp {totalPrice.toLocaleString("id-ID")}
+                  </span>
+                </div>
+              </div>
+              <div className="px-6 py-4 text-center">
                 <button
                   onClick={handleContinue}
-                  className="w-full rounded bg-green-600 py-2 px-4 text-white transition duration-200 hover:bg-green-700"
+                  className="mt-6 w-full rounded-lg bg-custom-yellow py-3 text-lg font-semibold text-black"
                 >
-                  Proceed to Checkout
+                  Continue to Checkout
                 </button>
               </div>
             </div>

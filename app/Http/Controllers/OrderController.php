@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use Inertia\Inertia;
 use App\Models\Order;
-use App\Models\Product;
 use App\Models\HeaderOrder;
 use App\Models\OrderDetail;
 use Illuminate\Http\Request;
@@ -22,10 +21,7 @@ class OrderController extends Controller
 
     public function index()
     {
-        // Ambil item dari cart, bukan order
         $cartItems = Cart::where('user_id', Auth::id())->with('product')->get();
-
-        // Mengambil data dari tabel header_order
         $headerOrder = HeaderOrder::first();
 
         return Inertia::render('Order/Index', [
@@ -46,12 +42,12 @@ class OrderController extends Controller
                         'price' => $cartItem->price,
                     ];
                 }
-                return null; // Return null jika produk tidak ditemukan
+                return null;
             })->filter(),
 
             'orderInfo' => [
                 'total_price' => $cartItems->sum(function ($item) {
-                    return $item->price; // Menghitung total harga
+                    return $item->price;
                 }),
                 'item_count' => $cartItems->count(),
             ],
@@ -60,241 +56,54 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
-        // Validasi input
-        $request->validate([
+        $validated = $request->validate([
             'orderItems' => 'required|array',
             'orderItems.*.product_id' => 'required|exists:products,id',
             'orderItems.*.quantity' => 'required|integer|min:1',
+            'total_price' => 'required|numeric|min:0',
         ]);
 
-        foreach ($request->orderItems as $item) {
-            // Ambil produk berdasarkan id
-            $product = Product::find($item['product_id']);
+        $existingOrder = Order::where('user_id', auth()->id())
+            ->first();
 
-            if ($product) {
-                // Cek apakah ada pesanan dengan produk yang sama dan status 'pending' untuk user yang sama
-                $existingOrder = Order::where('user_id', Auth::id())
-                    ->where('product_id', $item['product_id'])
-                    ->where('status', 'pending')
-                    ->first();
+        if ($existingOrder) {
+            $existingOrder->total_price = $validated['total_price'];
+            $existingOrder->save();
 
-                // Jika pesanan sudah ada, update kuantitas dan total harga
-                if ($existingOrder) {
-                    // Pastikan hanya menyimpan kuantitas yang diberikan, tidak menggandakan
-                    $existingOrder->quantity = $item['quantity'];
+            return redirect()->route('order.index')->with('success', 'Order sudah diperbarui!');
+        } else {
+            $order = Order::create([
+                'user_id' => auth()->id(),
+                'total_price' => $validated['total_price'],
+            ]);
 
-                    // Hitung total harga berdasarkan kuantitas dan harga produk
-                    $existingOrder->total_price = $product->price * $existingOrder->quantity;
-
-                    // Simpan perubahan
-                    $existingOrder->save();
-                } else {
-                    // Jika pesanan belum ada, buat pesanan baru dengan status 'pending'
-                    $totalPrice = $product->price * $item['quantity'];
-
-                    Order::create([
-                        'user_id' => Auth::id(),
-                        'product_id' => $item['product_id'],
-                        'quantity' => $item['quantity'],
-                        'total_price' => $totalPrice,
-                        'status' => 'pending', // Status default adalah 'pending'
-                    ]);
-                }
-            }
+            return redirect()->route('order.index')->with('success', 'Order berhasil dibuat!');
         }
-
-        // Redirect ke halaman pesanan dengan pesan sukses
-        return redirect()->route('order.index')->with('success', 'Order placed successfully.');
     }
 
     public function storeDetails(Request $request)
     {
-        // Validasi input
         $validatedData = $request->validate([
-            'recipient_name' => 'string|max:255',
-            'email' => 'email|max:255',
-            'notes' => 'nullable|string',
+            'recipient_name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'notes' => 'required|string',
             'address' => 'required|string|max:255',
-            'postal_code' => 'numeric|max:10',
+            'postal_code' => 'required|numeric|digits_between:1,10',
         ]);
 
         try {
-            // Membuat order baru, yang akan menghasilkan order_id otomatis
-            $order = Order::create([
-                'user_id' => auth()->id(), // Menggunakan ID pengguna yang login
-                'status' => 'pending', // Status order, misalnya pending
-            ]);
-
-            // Setelah order dibuat, simpan order details menggunakan order_id yang baru saja dibuat
-            $orderDetail = OrderDetail::create([
-                'order_id' => $order->id, // Menggunakan order_id yang baru
+            OrderDetail::create([
                 'recipient_name' => $validatedData['recipient_name'],
                 'email' => $validatedData['email'],
-                'notes' => $validatedData['notes'],
+                'notes' => $validatedData['notes'] ?? null,
                 'address' => $validatedData['address'],
                 'postal_code' => $validatedData['postal_code'],
             ]);
 
-            // Return response sukses jika berhasil disimpan
-            return response()->json([
-                'success' => true,
-                'message' => 'Order details saved successfully!',
-                'orderDetail' => $orderDetail,
-                'order_id' => $order->id, // Mengembalikan ID order yang baru dibuat
-            ], 200);
-        } catch (\Illuminate\Database\QueryException $e) {
-            // Tangani kesalahan database
-            Log::error('Database query error: ' . $e->getMessage());
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Database error occurred',
-                'error' => $e->getMessage(),
-            ], 500);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            // Tangani kesalahan jika model tidak ditemukan
-            Log::error('Model not found: ' . $e->getMessage());
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Model not found',
-                'error' => $e->getMessage(),
-            ], 404); // Ubah status code jadi 404 karena model tidak ditemukan
+            return response()->json(['message' => 'Order detail saved successfully.'], 201);
         } catch (\Exception $e) {
-            // Tangani kesalahan umum
-            Log::error('Failed to save order details: ' . $e->getMessage());
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to save order details',
-                'error' => $e->getMessage(),
-            ], 500);
+            Log::error('Error saving order detail: ' . $e->getMessage());
+            return response()->json(['message' => 'Failed to save order detail.', 'error' => $e->getMessage()], 500);
         }
     }
-
-
-    // public function storeDetails(Request $request)
-    // {
-    //     // Validasi input
-    //     $request->validate([
-    //         'recipientName' => 'required|string|max:255',
-    //         'email' => 'required|email|max:255',
-    //         'notes' => 'nullable|string',
-    //         'address' => 'required|string|max:255',
-    //         'postalCode' => 'required|string|max:10',
-    //         'orderId' => 'required|integer|exists:orders,id',
-    //         'productId' => 'required|integer|exists:products,id',
-    //     ]);
-
-    //     try {
-    //         // Simpan detail pesanan menggunakan `orderId` dan `productId` dari request
-    //         $orderDetail = OrderDetail::create([
-    //             'order_id' => $request->orderId,
-    //             'product_id' => $request->productId,
-    //             'recipient_name' => $request->recipientName,
-    //             'email' => $request->email,
-    //             'notes' => $request->notes,
-    //             'address' => $request->address,
-    //             'postal_code' => $request->postalCode,
-    //         ]);
-
-    //         // Return response sukses jika berhasil disimpan
-    //         return response()->json([
-    //             'success' => true,
-    //             'message' => 'Order details saved successfully!',
-    //             'orderDetail' => $orderDetail,
-    //         ], 200);
-    //     } catch (\Illuminate\Database\QueryException $e) {
-    //         // Tangani kesalahan database
-    //         Log::error('Database query error: ' . $e->getMessage());
-
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'Database error occurred',
-    //             'error' => $e->getMessage(),
-    //         ], 500);
-    //     } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-    //         // Tangani kesalahan jika model tidak ditemukan
-    //         Log::error('Model not found: ' . $e->getMessage());
-
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'Model not found',
-    //             'error' => $e->getMessage(),
-    //         ], 500);
-    //     } catch (\Exception $e) {
-    //         // Tangani kesalahan umum
-    //         Log::error('Failed to save order details: ' . $e->getMessage());
-
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'Failed to save order details',
-    //             'error' => $e->getMessage(),
-    //         ], 500);
-    //     }
-    // }
 }
-
-
-// public function storeDetails(Request $request)
-    // {
-    //     // Validasi input
-    //     $request->validate([
-    //         'recipientName' => 'required|string|max:255',
-    //         'email' => 'required|email|max:255',
-    //         'provinceId' => 'required|integer',
-    //         'regencyId' => 'required|integer',
-    //         'districtId' => 'required|integer',
-    //         'villageId' => 'required|integer',
-    //         'postalCode' => 'required|string|max:10',
-    //         'notes' => 'nullable|string',
-    //         'orderId' => 'required|integer|exists:orders,id',
-    //         'productId' => 'required|integer|exists:products,id',
-    //     ]);
-
-    //     try {
-    //         // Simpan detail pesanan menggunakan `orderId` dari request
-    //         $orderDetail = OrderDetail::create([
-    //             'order_id' => $request->orderId,
-    //             'product_id' => $request->productId,
-    //             'recipient_name' => $request->recipientName,
-    //             'email' => $request->email,
-    //             'province_id' => $request->provinceId,
-    //             'regency_id' => $request->regencyId,
-    //             'district_id' => $request->districtId,
-    //             'village_id' => $request->villageId,
-    //             'postal_code' => $request->postalCode,
-    //             'notes' => $request->notes,
-    //         ]);
-
-    //         return response()->json([
-    //             'success' => true,
-    //             'message' => 'Order details saved successfully!',
-    //             'orderDetail' => $orderDetail,
-    //         ], 200);
-    //     } catch (\Illuminate\Database\QueryException $e) {
-    //         Log::error('Database query error: ' . $e->getMessage());
-
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'Database error occurred',
-    //             'error' => $e->getMessage(),
-    //         ], 500);
-    //     } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-    //         Log::error('Model not found: ' . $e->getMessage());
-
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'Model not found',
-    //             'error' => $e->getMessage(),
-    //         ], 500);
-    //     } catch (\Exception $e) {
-    //         Log::error('Failed to save order details: ' . $e->getMessage());
-
-    //         return response()->json([
-    //             'success' => false,
-    //             'message' => 'Failed to save order details',
-    //             'error' => $e->getMessage(),
-    //         ], 500);
-    //     }
-    // }

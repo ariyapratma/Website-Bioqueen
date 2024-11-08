@@ -9,19 +9,14 @@ class OrderDetail extends Model
 {
     use HasFactory;
 
-    // Tentukan tabel yang akan digunakan
     protected $table = 'order_details';
 
-    // Kolom-kolom yang dapat diisi melalui mass assignment
     protected $fillable = [
-        'order_id',
-        'product_id',
         'recipient_name',
         'email',
         'notes',
         'address',
         'postal_code',
-        'notes',
     ];
 
     // Relasi dengan model Order
