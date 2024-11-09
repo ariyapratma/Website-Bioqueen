@@ -106,4 +106,14 @@ class OrderController extends Controller
             return response()->json(['message' => 'Failed to save order detail.', 'error' => $e->getMessage()], 500);
         }
     }
+
+    public function myOrder()
+    {
+        $orders = Order::where('user_id', auth()->user()->id)->get();
+
+        return Inertia::render('User/Order/MyOrder', [
+            'orders' => $orders,
+            'cartItems' => $orders->flatMap->items,
+        ]);
+    }
 }

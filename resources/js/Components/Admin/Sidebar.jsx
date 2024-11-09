@@ -68,6 +68,7 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
     // Buka dropdown Order jika ada submenu yang aktif
     setDropdownOrderOpen(
       activeMenu.startsWith("order") || activeMenu.startsWith("header-order"),
+      activeMenu.startsWith("my-order"),
     );
 
     // Buka dropdown Maklon jika ada submenu yang aktif
@@ -444,16 +445,16 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
         {user.role === "user" && (
           <li>
             <Link
-              href="/view-order"
-              onClick={() => setActiveMenu("view-order")}
+              href="/my-order"
+              onClick={() => setActiveMenu("my-order")}
               className={`flex items-center rounded-full p-2 ${
-                activeMenu === "view-order"
+                activeMenu === "my-order"
                   ? "bg-custom-yellow font-lexend text-black"
                   : "text-gray-600"
               }`}
             >
               <FaClipboardList className="mr-2" />
-              View Order
+              My Order
             </Link>
           </li>
         )}

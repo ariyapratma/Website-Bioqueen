@@ -56,6 +56,8 @@ Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
     Route::post('/order-details', [OrderController::class, 'storeDetails'])->name('order.storeDetails');
+    Route::get('/my-order', [OrderController::class, 'myOrder'])->name('order.view');
+
 });
 
 // Route ProductCategory User
@@ -83,11 +85,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('Dashboard');
     })->middleware('role:admin|user')->name('dashboard');
 
-    // Rute untuk menambahkan review, hanya user dan admin yang bisa mengakses
-    // Route::middleware(['auth', 'role:user'])->group(function () {
-    //     // Route HeroReview User
-    //     Route::post('/hero-review', [HeroReviewController::class, 'store'])->name('hero-review.store');
-    // });
     Route::middleware(['auth', 'role:user|admin'])->group(function () {
         Route::post('/hero-review', [HeroReviewController::class, 'store'])->name('hero-review.store');
     });
