@@ -111,7 +111,7 @@ class ProductListController extends Controller
      * Update the specified resource in storage.
      */
 
-    public function update(Request $request, ProductList $productList)
+    public function update(Request $request, Product $product)
     {
         // Preprocess harga agar menghapus karakter yang tidak diperlukan (Rp, titik, dan spasi)
         $request->merge([
@@ -121,58 +121,49 @@ class ProductListController extends Controller
         // Validasi data input
         $request->validate([
             'category_id' => 'required|exists:hero_categories,id',
-            'slug' => 'nullable|string|unique:hero_categories,slug',
-            'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Image tidak selalu required
+            'slug' => 'nullable|string|unique:products,slug,' . $product->id,
+            'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'price' => 'required|numeric', // Pastikan setelah di-preprocess, ini berupa angka
+            'price' => 'required|numeric',
         ]);
 
-        // Buat slug jika tidak diberikan
-        $slug = $request->slug ? Str::slug($request->slug) : $productList->slug;
-
-        // Ambil data yang sudah divalidasi, kecuali 'image_url' (jika tidak ada file baru)
+        // Update data produk
         $data = $request->only(['category_id', 'slug', 'name', 'description', 'price']);
 
-        // Handle image upload jika ada gambar baru
+        // Handle gambar jika ada
         if ($request->hasFile('image_url')) {
-            // Hapus gambar lama jika ada
-            if ($productList->image_url && Storage::exists(str_replace('storage/', 'public/', $productList->image_url))) {
-                Storage::delete(str_replace('storage/', 'public/', $productList->image_url));
+            if ($product->image_url && Storage::exists(str_replace('storage/', 'public/', $product->image_url))) {
+                Storage::delete(str_replace('storage/', 'public/', $product->image_url));
             }
 
-            // Upload gambar baru
             $file = $request->file('image_url');
-            $filename = $file->getClientOriginalName();
-            $path = 'public/product_list/' . $filename;
+            $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $extension = $file->getClientOriginalExtension();
+            $path = 'public/products/' . $filename . '.' . $extension;
 
-            // Tambahkan logika untuk menangani nama file yang sama
             $counter = 1;
             while (Storage::exists($path)) {
-                $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . " ($counter)." . $file->getClientOriginalExtension();
-                $path = 'public/product_list/' . $filename;
+                $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME) . " ($counter)";
+                $path = 'public/products/' . $filename . '.' . $extension;
                 $counter++;
             }
 
-            // Simpan file
-            $file->storeAs('public/product_list', $filename);
-            $data['image_url'] = 'storage/product_list/' . $filename;
+            $file->storeAs('public/products', $filename . '.' . $extension);
+            $data['image_url'] = 'storage/products/' . $filename . '.' . $extension;
         } else {
-            // Gunakan gambar yang ada jika tidak ada gambar baru yang diupload
-            $data['image_url'] = $productList->image_url;
+            $data['image_url'] = $product->image_url;
         }
 
-        // Update model dengan data baru
-        $productList->update($data);
+        $product->update($data);
 
-        // Redirect ke halaman daftar product list setelah update berhasil
-        return redirect()->route('product-list.index')->with('success', 'Product list updated successfully.');
+        return redirect()->route('product-list.index')->with('success', 'Product updated successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ProductList $id)
+    public function destroy($id)
     {
         $product = Product::findOrFail($id);
         $product->delete();

@@ -159,7 +159,9 @@ const ManageProductList = ({ products, auth }) => {
                 </td>
                 <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
                   <a
-                    href={product.image_url}
+                    href={
+                      product.image_url ? `/storage/${product.image_url}` : "#"
+                    }
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 hover:underline"
@@ -174,7 +176,7 @@ const ManageProductList = ({ products, auth }) => {
                   {product.description}
                 </td>
                 <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
-                  {product.price}
+                  Rp {parseFloat(product.price).toLocaleString("id-ID")}
                 </td>
                 <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm font-medium">
                   <Link
