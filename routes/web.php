@@ -271,6 +271,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/header-order/{headerOrder}', [HeaderOrderController::class, 'update'])->name('header-order.update');
         Route::delete('/header-order/{id}', [HeaderOrderController::class, 'destroy'])->name('header-order.destroy');
 
+        // Route Manage Orders Page
+        Route::get('/manage-order-products', [OrderController::class, 'manageOrders'])
+            ->name('admin.manage.orders');
+
         // Maklon Page :
 
         // Route HeaderMaklon

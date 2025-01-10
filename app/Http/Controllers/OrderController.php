@@ -125,4 +125,30 @@ class OrderController extends Controller
             'cartItems' => $orders->flatMap->items,
         ]);
     }
+
+    public function manageOrders()
+    {
+        $orders = Order::all();
+        $orderDetails = OrderDetail::all();
+
+        return Inertia::render('Admin/Order/ManageOrderProducts', [
+            'orders' => $orders->map(function ($order) use ($orderDetails) {
+                $details = $orderDetails->filter(function ($detail) use ($order) {
+                    return $detail->order_id === $order->id;
+                });
+
+                return [
+                    'id' => $order->id,
+                    'recipient_name' => $details->first()->recipient_name ?? '',
+                    'email' => $details->first()->email ?? '',
+                    'address' => $details->first()->address ?? '',
+                    'postal_code' => $details->first()->postal_code ?? '',
+                    'notes' => $details->first()->notes ?? '',
+                    'total_price' => $order->total_price,
+                    'created_at' => $order->created_at->format('Y-m-d H:i:s'),
+                    'status' => $order->status,
+                ];
+            }),
+        ]);
+    }
 }
