@@ -57,7 +57,6 @@ Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
     Route::post('/order-details', [OrderController::class, 'storeDetails'])->name('order.storeDetails');
     Route::get('/my-order', [OrderController::class, 'myOrder'])->name('order.view');
-
 });
 
 // Route ProductCategory User
@@ -272,7 +271,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/header-order/{headerOrder}', [HeaderOrderController::class, 'update'])->name('header-order.update');
         Route::delete('/header-order/{id}', [HeaderOrderController::class, 'destroy'])->name('header-order.destroy');
 
-        // Order Page :
+        // Maklon Page :
 
         // Route HeaderMaklon
         Route::get('/header-maklon', [HeaderMaklonController::class, 'index'])->name('header-maklon.index');

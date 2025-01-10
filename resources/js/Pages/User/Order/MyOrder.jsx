@@ -92,31 +92,31 @@ const MyOrder = ({ orders, auth }) => {
               <th className="px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                 Order ID
               </th>
-              <th className="px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
-                Status
-              </th>
               <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
                 Total Price
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
                 Order Date
               </th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                Status
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
-            {(orders).map((order) => (
+            {orders.map((order) => (
               <tr key={order.id}>
                 <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
                   {order.id}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm font-medium text-red-500">
-                  {order.status || "Need Payments"}
                 </td>
                 <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
                   Rp {parseFloat(order.total_price).toLocaleString("id-ID")}
                 </td>
                 <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
                   {new Date(order.created_at).toLocaleDateString()}
+                </td>
+                <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm font-medium text-gray-700">
+                  {order.status || "Pending"}{" "}
                 </td>
               </tr>
             ))}

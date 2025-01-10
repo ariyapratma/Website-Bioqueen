@@ -68,14 +68,23 @@ class OrderController extends Controller
 
         if ($existingOrder) {
             $existingOrder->total_price = $validated['total_price'];
+            $existingOrder->product_id = $validated['orderItems'][0]['product_id'];
+            $existingOrder->save();
+
+            $existingOrder->status = 'Processing';
             $existingOrder->save();
 
             return redirect()->route('order.index')->with('success', 'Order sudah diperbarui!');
         } else {
             $order = Order::create([
                 'user_id' => auth()->id(),
+                'product_id' => $validated['orderItems'][0]['product_id'],
                 'total_price' => $validated['total_price'],
+                'status' => 'pending',
             ]);
+
+            $order->status = 'Processing';
+            $order->save();
 
             return redirect()->route('order.index')->with('success', 'Order berhasil dibuat!');
         }

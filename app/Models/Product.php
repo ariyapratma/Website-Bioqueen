@@ -27,10 +27,15 @@ class Product extends Model
         return $this->belongsTo(HeroCategories::class, 'category_id');
     }
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
     // Setter untuk otomatis membuat slug berdasarkan nama
     public function setNameAttribute($value)
     {
         $this->attributes['name'] = $value;
-        $this->attributes['slug'] = Str::slug($value); // Otomatis membuat slug dari nama produk
+        $this->attributes['slug'] = Str::slug($value);
     }
 }

@@ -22,6 +22,7 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
   const [dropdownContactOpen, setDropdownContactOpen] = useState(false);
   const [dropdownProductOpen, setDropdownProductOpen] = useState(false);
   const [dropdownOrderOpen, setDropdownOrderOpen] = useState(false);
+  const [dropdownMyOrderOpen, setDropdownMyOrderOpen] = useState(false);
   const [dropdownMaklonOpen, setDropdownMaklonOpen] = useState(false);
 
   useEffect(() => {
@@ -67,8 +68,15 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
 
     // Buka dropdown Order jika ada submenu yang aktif
     setDropdownOrderOpen(
-      activeMenu.startsWith("order") || activeMenu.startsWith("header-order"),
-      activeMenu.startsWith("my-order"),
+      activeMenu.startsWith("order") ||
+        activeMenu.startsWith("header-order") ||
+        activeMenu.startsWith("manage-order-products"),
+    );
+
+    // Buka dropdown MyOrder jika ada submenu yang aktif
+    setDropdownMyOrderOpen(
+      activeMenu.startsWith("my-order-details") ||
+        activeMenu.startsWith("my-order"),
     );
 
     // Buka dropdown Maklon jika ada submenu yang aktif
@@ -394,6 +402,19 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
                     Manage Header Order
                   </Link>
                 </li>
+                <li>
+                  <Link
+                    href="/manage-order-products"
+                    onClick={() => setActiveMenu("manage-order-products")}
+                    className={`flex items-center p-2 text-sm ${
+                      activeMenu === "manage-order-products"
+                        ? "bg-custom-yellow font-lexend text-black"
+                        : "text-gray-600"
+                    }`}
+                  >
+                    Manage Order Products
+                  </Link>
+                </li>
               </ul>
             )}
           </li>
@@ -441,21 +462,45 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
           </li>
         )}
 
-        {/* Dropdown for Order Page Content */}
+        {/* Dropdown for My Order Page Content */}
         {user.role === "user" && (
           <li>
-            <Link
-              href="/my-order"
-              onClick={() => setActiveMenu("my-order")}
-              className={`flex items-center rounded-full p-2 ${
-                activeMenu === "my-order"
+            <div
+              onClick={() => setDropdownMyOrderOpen(!dropdownMyOrderOpen)}
+              className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
+                dropdownMyOrderOpen
                   ? "bg-custom-yellow font-lexend text-black"
                   : "text-gray-600"
               }`}
             >
-              <FaClipboardList className="mr-2" />
-              My Order
-            </Link>
+              <span className="flex items-center">
+                <FaClipboardList className="mr-2" />
+                My Order Details
+              </span>
+              <FaChevronDown
+                className={`ml-2 transition-transform ${
+                  dropdownMyOrderOpen ? "rotate-180" : ""
+                }`}
+              />
+            </div>
+            {/* Submenu (Dropdown Content) */}
+            {dropdownMyOrderOpen && (
+              <ul className="ml-4 space-y-1">
+                <li>
+                  <Link
+                    href="/my-order"
+                    onClick={() => setActiveMenu("my-order")}
+                    className={`flex items-center p-2 text-sm ${
+                      activeMenu === "my-order"
+                        ? "bg-custom-yellow font-lexend text-black"
+                        : "text-gray-600"
+                    }`}
+                  >
+                    Manage Order Details
+                  </Link>
+                </li>
+              </ul>
+            )}
           </li>
         )}
       </ul>
