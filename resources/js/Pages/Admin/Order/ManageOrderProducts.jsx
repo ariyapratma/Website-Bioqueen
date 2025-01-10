@@ -45,7 +45,7 @@ const ManageOrderProducts = ({ orders, auth }) => {
 
       {/* Main Content */}
       <div className="flex-1 bg-neutral-50 p-6">
-        <Head title="Manage Orders | Admin" />
+        <Head title="Manage Order Products | Admin" />
 
         {/* Header */}
         <div className="mb-4 flex w-full items-center justify-between">
@@ -107,7 +107,9 @@ const ManageOrderProducts = ({ orders, auth }) => {
         </div>
 
         {/* Title */}
-        <h2 className="mb-4 font-lexend text-xl font-bold">Manage Orders</h2>
+        <h2 className="mb-4 font-lexend text-xl font-bold">
+          Manage Order Products
+        </h2>
 
         {/* Table */}
         <table className="min-w-full divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-md">
@@ -129,7 +131,13 @@ const ManageOrderProducts = ({ orders, auth }) => {
                 Postal Code
               </th>
               <th className="px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                Notes
+              </th>
+              <th className="px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                 Total Price
+              </th>
+              <th className="px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                Order Date
               </th>
               <th className="px-6 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                 Status
@@ -158,7 +166,13 @@ const ManageOrderProducts = ({ orders, auth }) => {
                   {order.postal_code}
                 </td>
                 <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
-                  ${order.total_price}
+                  {order.notes}
+                </td>
+                <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
+                  Rp {parseFloat(order.total_price).toLocaleString("id-ID")}
+                </td>
+                <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
+                  {new Date(order.created_at).toLocaleDateString()}
                 </td>
                 <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
                   {order.status}
