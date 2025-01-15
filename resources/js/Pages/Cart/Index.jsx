@@ -6,8 +6,8 @@ import Swal from "sweetalert2";
 import { useState, useEffect } from "react";
 import { Head, usePage } from "@inertiajs/react";
 
-const CartIndex = ({ cartItems, auth }) => {
-  const user = auth.user;
+const CartIndex = ({ auth, cartItems }) => {
+  const { user } = auth;
   const { flash } = usePage().props;
   const [updatedItems, setUpdatedItems] = useState(cartItems);
   const { delete: destroy } = useForm();
@@ -15,6 +15,7 @@ const CartIndex = ({ cartItems, auth }) => {
     (sum, item) => sum + item.product?.price * item.quantity,
     0,
   );
+  const [activeTab, setActiveTab] = useState(1);
 
   const updateQuantity = (itemId, quantity) => {
     const updated = updatedItems.map((item) =>
@@ -178,6 +179,47 @@ const CartIndex = ({ cartItems, auth }) => {
           <h1 className="mb-8 text-center font-lexend text-4xl font-bold text-gray-800">
             Your Cart
           </h1>
+
+          {/* Menu Navigasi Tahapan */}
+          <div className="mb-4 py-4">
+            <div className="container mx-auto flex justify-center space-x-8">
+              {/* Button untuk Cart */}
+              <button
+                onClick={() => setActiveTab(1)}
+                className={`${
+                  activeTab === 1
+                    ? "bg-custom-yellow text-black"
+                    : "border border-custom-yellow bg-white text-black"
+                } text-md rounded-full px-6 py-2 font-bold transition duration-300`}
+              >
+                1. Cart
+              </button>
+
+              {/* Button untuk Order Info */}
+              <button
+                onClick={() => setActiveTab(2)}
+                className={`${
+                  activeTab === 2
+                    ? "bg-custom-yellow text-black"
+                    : "border border-custom-yellow bg-white text-black"
+                } text-md rounded-full px-6 py-2 font-bold transition duration-300`}
+              >
+                2. Order Info
+              </button>
+
+              {/* Button untuk Payment */}
+              <button
+                onClick={() => setActiveTab(3)}
+                className={`${
+                  activeTab === 3
+                    ? "bg-custom-yellow text-black"
+                    : "border border-custom-yellow bg-white text-black"
+                } text-md rounded-full px-6 py-2 font-bold transition duration-300`}
+              >
+                3. Payment
+              </button>
+            </div>
+          </div>
 
           {updatedItems.length === 0 ? (
             <div className="text-center">

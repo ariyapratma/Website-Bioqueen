@@ -21,7 +21,7 @@ const data = [
     icon: MdOutlineStarRate,
     title: "Premium Quality",
     description:
-      "Keamanan dan kualitas premium yang tidak bisa ditemui di Perusahaan Kosmetik lain.",
+      "Keamanan dan kualitas premium yang tidak bisa ditemui di Perusahaan maklon lain.",
   },
 ];
 

@@ -6,12 +6,12 @@ export default function HeroTeamValue() {
       {
         heading: "Tim Riset Profesional",
         content:
-          "Memiliki tim riset ahli dan profesional di industri kimia untuk membuat produk kosmetik yang inovatif. Menjamin keamanan produk yang dihasilkan dengan uji laboraturium sesuai dengan standart.",
+          "Kami memiliki tim riset ahli dan profesional di bidang industri kimia untuk mengembangkan produk home care, cleaning, dan aromaterapi yang inovatif. Produk kami dijamin aman melalui uji laboratorium sesuai standar Kemenkes RI.",
       },
       {
         heading: "Kontrol Kualitas yang Ketat",
         content:
-          "Memiliki tim QC khusus yang bertugas memantau seluruh proses produksi dan memastikan seluruh proses dilakukan sesuai dengan standar Cara Pembuatan Kosmetik yang Baik (CPKB).",
+          "Kami memiliki tim QC khusus yang memantau setiap tahap proses produksi untuk memastikan semuanya berjalan sesuai dengan standar Kemenkes RI, sehingga kualitas produk home care, cleaning, dan aromaterapi tetap terjaga.",
       },
     ],
     images: [

@@ -2,7 +2,7 @@ export default function HeaderProduct() {
   const data = {
     title: "Product",
     description:
-      "Jelajahi perjalanan produk Anda dari awal hingga siap dipasarkan. Kami memastikan setiap langkah produksi berjalan dengan kualitas terbaik, menghadirkan produk yang memenuhi standar tinggi dan kebutuhan pasar.",
+      "Solusi Maklon Terbaik untuk Kebutuhan Produk Anda",
     imageUrl: "/public/Maklon Main Content Fix.jpg",
   };
 

@@ -50,6 +50,10 @@ Route::get('/about', [AboutUsController::class, 'index'])->name('about');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::get('/product', [ProductController::class, 'index'])->name('product');
 Route::get('/maklon', [MaklonController::class, 'index'])->name('maklon');
+// Route AddCart and CartDetail
+Route::get('/carts', [CartController::class, 'index'])->name('carts.index');
+Route::put('/carts/update/{id}', [CartController::class, 'update'])->name('carts.update');
+Route::delete('/carts/remove/{id}', [CartController::class, 'removeFromCart'])->name('carts.remove');
 
 // Route untuk Order hanya dapat diakses oleh pengguna dengan peran 'user'
 Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
@@ -64,14 +68,9 @@ Route::get('/product/{slug}', [ProductController::class, 'showCategory'])->name(
 // Route ProductDetail User
 Route::get('/product/{category}/{product}', [ProductController::class, 'showProduct'])->name('product.detail');
 
-// Route AddCart and CartDetail
-Route::get('/carts', [CartController::class, 'index'])->name('carts.index');
-Route::put('/carts/update/{id}', [CartController::class, 'update'])->name('carts.update');
-Route::delete('/carts/remove/{id}', [CartController::class, 'removeFromCart'])->name('carts.remove');
-
 // Route API yang mengembalikan JSON biasa
 // Route AddCart User
-Route::middleware('auth')->group(function () {
+Route::middleware('auth', 'verified')->group(function () {
     Route::get('/api/cart/items', [CartController::class, 'getCartItems']);
     Route::post('/api/cart/add', [CartController::class, 'addToCart']);
 });

@@ -6,7 +6,7 @@ export default function HeroWhyChooseValue() {
       {
         heading: "Kustom Produk",
         content:
-          "Kami bisa mewujudkan produk kosmetik impian Anda dengan aneka macam bahan aktif, warna, aroma, kemasan yang selalu mengikuti tren pasar kosmetik dengan berstandar CPKB Grade A dan BPOM.",
+          "Kami siap mewujudkan produk home care, cleaning, dan aromaterapi sesuai keinginan Anda, dengan berbagai pilihan bahan aktif, warna, aroma, dan kemasan yang mengikuti tren. Semua produk kami diproduksi sesuai standar Kemenkes RI. Kami juga membantu pendaftaran merek dan izin edar, sehingga produk Anda legal dipasarkan.",
       },
       {
         heading: "Minimum Kuantiti Pemesanan Bervariasi",

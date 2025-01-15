@@ -49,13 +49,14 @@ export default function Navbar({ auth }) {
     { name: "Product", path: "/product" },
     { name: "Order", path: "/order" },
     { name: "Maklon", path: "/maklon" },
+    { name: "Cart", path: "/carts" },
   ];
 
   // Tambahkan kondisi untuk link Login dan Register
-  if (!user) {
+  if (!user && url !== "/carts") {
     menuItems.push(
       { name: "Login", path: "/login" },
-      { name: "Register", path: "/register" }
+      { name: "Register", path: "/register" },
     );
   }
 

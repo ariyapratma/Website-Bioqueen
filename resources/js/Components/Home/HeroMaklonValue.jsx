@@ -5,13 +5,13 @@ export default function HeroMaklonValue() {
       {
         heading: "Harga Bersaing",
         content:
-          "Kami bisa menyesuaikan anggaran produk maklonmu mulai dari bahan baku hingga kemasan dengan biaya yang dapat disepakati bersama untuk memulai bisnis sabun.",
+          "Kami dapat menyesuaikan anggaran produk makion Anda, mulai dari bahan baku hingga kemasan, dengan biaya yang fleksibel dan dapat disepakati bersama, sehingga memudahkan Anda memulai bisnis produk home care, cleaning, dan aromaterapi.",
         images: "/Home/HeroMaklonValue/HeroMaklonValue1.jpg",
       },
       {
         heading: "Jaminan Aman dan Berkualitas",
         content:
-          "Kami bisa menyesuaikan anggaran produk maklonmu mulai dari bahan baku hingga kemasan dengan biaya yang dapat disepakati bersama untuk memulai bisnis sabun.",
+          "Produk maklon kami diproduksi dengan standar Kemenkes RI untuk memastikan keamanan dan kualitasnya. Kami menyediakan berbagai pilihan bahan baku dan kemasan dengan anggaran yang fleksibel dan dapat disesuaikan, membantu Anda memulai bisnis produk home care, cleaning, dan aromaterapi dengan percaya diri",
         images: "/Home/HeroMaklonValue/HeroMaklonValue2.jpg",
       },
     ],
