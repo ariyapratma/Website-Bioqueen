@@ -87,16 +87,13 @@ const CartIndex = ({ auth, cartItems }) => {
     } else {
       Swal.fire({
         icon: "warning",
-        title: "Akses Ditolak",
-        text: "Harap selesaikan langkah sebelumnya terlebih dahulu!",
+        title: "Access Denied",
+        text: "Please complete the previous step first!",
       });
     }
   };
 
   const handleContinue = () => {
-    // Debugging log
-    console.log("Updated Items:", updatedItems);
-
     const totalPrice = updatedItems.reduce((sum, item) => {
       return sum + (item.product?.price || 0) * (item.quantity || 0);
     }, 0);
@@ -106,9 +103,6 @@ const CartIndex = ({ auth, cartItems }) => {
       quantity: item.quantity,
       price: item.product?.price,
     }));
-
-    // Debugging log
-    console.log("Order Data:", orderData);
 
     if (!orderData.every((item) => item.product_id && item.quantity >= 1)) {
       Swal.fire({
@@ -189,50 +183,44 @@ const CartIndex = ({ auth, cartItems }) => {
     <div className="flex min-h-screen flex-col">
       <Head title="Cart | PT Ratu Bio Indonesia" />
       <Navbar auth={auth} />
-      <main className="flex-grow py-32">
-        <div className="container mx-auto mb-44 px-4">
-          <h1 className="mb-8 text-center font-lexend text-4xl font-bold text-gray-800">
+      <main className="flex-grow px-4 py-16 md:px-4 md:py-32">
+        <div className="container mx-auto mb-16 px-4">
+          <h1 className="mb-8 text-center font-lexend text-2xl font-bold text-gray-800 sm:text-4xl">
             Your Cart
           </h1>
 
           {/* Menu Navigasi Tahapan */}
           <div className="mb-4 py-4">
-            <div className="container mx-auto flex justify-center space-x-8">
-              {/* Button untuk Cart */}
+            <div className="container mx-auto flex flex-wrap justify-center space-x-4 space-y-4 lg:space-y-0">
               <button
                 onClick={() => handleTabClick(1)}
                 className={`${
                   activeMenu === 1
                     ? "bg-custom-yellow text-black"
                     : "border border-custom-yellow bg-white text-black opacity-50"
-                } text-md rounded-full px-6 py-2 font-bold transition duration-300`}
-                disabled={completedStep < 1}
+                } text-md md:w-50 w-44 rounded-full px-6 py-2 font-bold transition duration-300 sm:w-48`}
               >
                 1. Cart
               </button>
 
-              {/* Button untuk Order Info */}
               <button
                 onClick={() => handleTabClick(2)}
                 className={`${
                   activeMenu === 2
                     ? "bg-custom-yellow text-black"
                     : "cursor-not-allowed border border-custom-yellow bg-gray-300 text-gray-500"
-                } text-md rounded-full px-6 py-2 font-bold transition duration-300`}
-                disabled={completedStep < 2}
+                } text-md md:w-50 w-44 rounded-full px-6 py-2 font-bold transition duration-300 sm:w-48`}
               >
                 2. Order Info
               </button>
 
-              {/* Button untuk Payment */}
               <button
                 onClick={() => handleTabClick(3)}
                 className={`${
                   activeMenu === 3
                     ? "bg-custom-yellow text-black"
                     : "cursor-not-allowed border border-custom-yellow bg-gray-300 text-gray-500"
-                } text-md rounded-full px-6 py-2 font-bold transition duration-300`}
-                disabled={completedStep < 3}
+                } text-md md:w-50 w-44 rounded-full px-6 py-2 font-bold transition duration-300 sm:w-48`}
               >
                 3. Payment
               </button>
@@ -244,7 +232,7 @@ const CartIndex = ({ auth, cartItems }) => {
               <p className="text-lg text-gray-500">Your cart is empty.</p>
             </div>
           ) : (
-            <div className="overflow-hidden rounded-lg bg-white font-lexend shadow-lg">
+            <div className="overflow-x-auto rounded-lg bg-white font-lexend shadow-lg">
               <table className="min-w-full border-collapse">
                 <thead className="bg-custom-yellow text-left text-sm font-medium text-black">
                   <tr>
@@ -275,57 +263,82 @@ const CartIndex = ({ auth, cartItems }) => {
                         )}
                       </td>
                       <td className="px-6 py-4 text-sm font-medium text-gray-800">
-                        <input
-                          type="number"
-                          min="1"
-                          value={item.quantity}
-                          onChange={(e) =>
-                            updateQuantity(item.id, Math.max(1, e.target.value))
-                          }
-                          className="w-16 rounded border border-gray-300 p-2"
-                        />
-                        <button
-                          onClick={() => saveCart(item.id)}
-                          className="ml-2 rounded bg-blue-600 px-2 py-2 text-white transition duration-200 hover:bg-blue-700"
-                        >
-                          Save
-                        </button>
+                        <div className="flex items-center justify-center space-x-4">
+                          <button
+                            onClick={() =>
+                              updateQuantity(
+                                item.id,
+                                Math.max(1, item.quantity - 1),
+                              )
+                            }
+                            className="rounded-lg bg-gray-200 px-4 py-2 text-lg font-bold text-gray-700 hover:bg-gray-300 focus:outline-none"
+                          >
+                            -
+                          </button>
+
+                          <input
+                            type="number"
+                            min="1"
+                            value={item.quantity}
+                            onChange={(e) =>
+                              updateQuantity(
+                                item.id,
+                                Math.max(1, e.target.value),
+                              )
+                            }
+                            className="w-16 rounded-md border p-2 text-center text-lg font-medium text-gray-800 focus:ring-2 focus:ring-custom-yellow"
+                          />
+
+                          <button
+                            onClick={() =>
+                              updateQuantity(item.id, item.quantity + 1)
+                            }
+                            className="rounded-lg bg-gray-200 px-4 py-2 text-lg font-bold text-gray-700 hover:bg-gray-300 focus:outline-none"
+                          >
+                            +
+                          </button>
+                        </div>
                       </td>
+
                       <td className="px-6 py-4 text-sm font-medium text-gray-800">
                         Rp{" "}
-                        {(
-                          parseFloat(item.product?.price) * item.quantity
+                        {parseFloat(
+                          item.product?.price * item.quantity,
                         ).toLocaleString("id-ID")}
                       </td>
-                      <td className="px-6 py-4 text-center">
+                      <td className="px-6 py-4 text-center text-sm font-medium">
                         <button
                           onClick={() => removeFromCart(item.id)}
                           className="text-red-500 hover:text-red-700"
                         >
                           Remove
                         </button>
+                        <button
+                          onClick={() => saveCart(item.id)}
+                          className="ml-2 rounded px-2 py-2 text-green-500 transition duration-200"
+                        >
+                          Save
+                        </button>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-              <div className="border-t px-6 py-4">
-                <div className="flex justify-between">
-                  <span className="text-lg font-semibold text-gray-800">
-                    Total:
-                  </span>
-                  <span className="text-lg font-semibold text-gray-800">
-                    Rp {totalPrice.toLocaleString("id-ID")}
-                  </span>
+
+              <div className="mt-8 flex justify-between px-6 py-4 text-sm font-semibold text-black">
+                <div>
+                  <p className="font-semibold text-gray-800">
+                    Total Price: Rp {totalPrice.toLocaleString("id-ID")}
+                  </p>
                 </div>
-              </div>
-              <div className="px-6 py-4 text-center">
-                <button
-                  onClick={handleContinue}
-                  className="mt-6 w-full rounded-lg bg-custom-yellow py-3 text-lg font-semibold text-black"
-                >
-                  Continue to Checkout
-                </button>
+                <div>
+                  <button
+                    onClick={handleContinue}
+                    className="rounded-lg bg-custom-yellow px-6 py-3 font-semibold text-black"
+                  >
+                    Continue
+                  </button>
+                </div>
               </div>
             </div>
           )}

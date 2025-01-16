@@ -7,11 +7,10 @@ import { useState, useEffect } from "react";
 const ProductDetail = () => {
   const { props } = usePage();
   const { product, auth, category } = props;
-  const [quantity, setQuantity] = useState(1); // Menyimpan jumlah barang
-  const [totalPrice, setTotalPrice] = useState(product.price); // Menyimpan total harga
-  const [cartItems, setCartItems] = useState(0); // Menyimpan jumlah item di cart
+  const [quantity, setQuantity] = useState(1);
+  const [totalPrice, setTotalPrice] = useState(product.price);
+  const [cartItems, setCartItems] = useState(0);
 
-  // Mendapatkan jumlah item di cart dari server saat komponen pertama kali dimuat
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
