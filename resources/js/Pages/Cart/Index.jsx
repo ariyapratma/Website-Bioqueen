@@ -8,6 +8,8 @@ import { Head, usePage } from "@inertiajs/react";
 
 const CartIndex = ({ auth, cartItems }) => {
   const { user } = auth;
+  const [activeMenu, setActiveMenu] = useState(1);
+  const [completedStep, setCompletedStep] = useState(1);
   const { flash } = usePage().props;
   const [updatedItems, setUpdatedItems] = useState(cartItems);
   const { delete: destroy } = useForm();
@@ -15,7 +17,6 @@ const CartIndex = ({ auth, cartItems }) => {
     (sum, item) => sum + item.product?.price * item.quantity,
     0,
   );
-  const [activeTab, setActiveTab] = useState(1);
 
   const updateQuantity = (itemId, quantity) => {
     const updated = updatedItems.map((item) =>
@@ -80,6 +81,18 @@ const CartIndex = ({ auth, cartItems }) => {
     }
   }, [cartItems, flash]);
 
+  const handleTabClick = (menuIndex) => {
+    if (menuIndex <= completedStep) {
+      setActiveMenu(menuIndex);
+    } else {
+      Swal.fire({
+        icon: "warning",
+        title: "Akses Ditolak",
+        text: "Harap selesaikan langkah sebelumnya terlebih dahulu!",
+      });
+    }
+  };
+
   const handleContinue = () => {
     // Debugging log
     console.log("Updated Items:", updatedItems);
@@ -136,6 +149,8 @@ const CartIndex = ({ auth, cartItems }) => {
         },
       },
     );
+    setCompletedStep((prev) => Math.max(prev, activeMenu + 1));
+    setActiveMenu((prev) => prev + 1);
   };
 
   const removeFromCart = (itemId) => {
@@ -185,36 +200,39 @@ const CartIndex = ({ auth, cartItems }) => {
             <div className="container mx-auto flex justify-center space-x-8">
               {/* Button untuk Cart */}
               <button
-                onClick={() => setActiveTab(1)}
+                onClick={() => handleTabClick(1)}
                 className={`${
-                  activeTab === 1
+                  activeMenu === 1
                     ? "bg-custom-yellow text-black"
-                    : "border border-custom-yellow bg-white text-black"
+                    : "border border-custom-yellow bg-white text-black opacity-50"
                 } text-md rounded-full px-6 py-2 font-bold transition duration-300`}
+                disabled={completedStep < 1}
               >
                 1. Cart
               </button>
 
               {/* Button untuk Order Info */}
               <button
-                onClick={() => setActiveTab(2)}
+                onClick={() => handleTabClick(2)}
                 className={`${
-                  activeTab === 2
+                  activeMenu === 2
                     ? "bg-custom-yellow text-black"
-                    : "border border-custom-yellow bg-white text-black"
+                    : "cursor-not-allowed border border-custom-yellow bg-gray-300 text-gray-500"
                 } text-md rounded-full px-6 py-2 font-bold transition duration-300`}
+                disabled={completedStep < 2}
               >
                 2. Order Info
               </button>
 
               {/* Button untuk Payment */}
               <button
-                onClick={() => setActiveTab(3)}
+                onClick={() => handleTabClick(3)}
                 className={`${
-                  activeTab === 3
+                  activeMenu === 3
                     ? "bg-custom-yellow text-black"
-                    : "border border-custom-yellow bg-white text-black"
+                    : "cursor-not-allowed border border-custom-yellow bg-gray-300 text-gray-500"
                 } text-md rounded-full px-6 py-2 font-bold transition duration-300`}
+                disabled={completedStep < 3}
               >
                 3. Payment
               </button>

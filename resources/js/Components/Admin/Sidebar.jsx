@@ -11,11 +11,10 @@ import {
 } from "react-icons/fa";
 
 const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
-  console.log(auth); // Check if auth is defined and has user
-  const user = auth?.user; // Safely access user
-
+  console.log(auth);
+  const user = auth?.user;
   if (!user) {
-    return null; // Or a loading state / fallback UI
+    return null;
   }
   const [dropdownHomeOpen, setDropdownHomeOpen] = useState(false);
   const [dropdownAboutUsOpen, setDropdownAboutUsOpen] = useState(false);

@@ -50,10 +50,13 @@ Route::get('/about', [AboutUsController::class, 'index'])->name('about');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::get('/product', [ProductController::class, 'index'])->name('product');
 Route::get('/maklon', [MaklonController::class, 'index'])->name('maklon');
-// Route AddCart and CartDetail
-Route::get('/carts', [CartController::class, 'index'])->name('carts.index');
-Route::put('/carts/update/{id}', [CartController::class, 'update'])->name('carts.update');
-Route::delete('/carts/remove/{id}', [CartController::class, 'removeFromCart'])->name('carts.remove');
+
+Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
+    // Route AddCart and CartDetail
+    Route::get('/carts', [CartController::class, 'index'])->name('carts.index');
+    Route::put('/carts/update/{id}', [CartController::class, 'update'])->name('carts.update');
+    Route::delete('/carts/remove/{id}', [CartController::class, 'removeFromCart'])->name('carts.remove');
+});
 
 // Route untuk Order hanya dapat diakses oleh pengguna dengan peran 'user'
 Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
