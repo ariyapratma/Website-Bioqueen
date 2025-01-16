@@ -6,7 +6,7 @@ use App\Models\Cart;
 use Inertia\Inertia;
 use App\Models\Order;
 use App\Models\HeaderOrder;
-use App\Models\OrderDetail;
+use App\Models\OrderInformation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -90,29 +90,30 @@ class OrderController extends Controller
         }
     }
 
-    public function storeDetails(Request $request)
+    public function storeInformations(Request $request)
     {
-        $validatedData = $request->validate([
-            'recipient_name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'notes' => 'required|string',
-            'address' => 'required|string|max:255',
-            'postal_code' => 'required|numeric|digits_between:1,10',
+        $validated = $request->validate([
+            'recipient_name' => 'required|string',
+            'email' => 'required|email',
+            'notes' => 'nullable|string',
+            'address' => 'required|string',
+            'postal_code' => 'required|numeric',
         ]);
 
         try {
-            OrderDetail::create([
-                'recipient_name' => $validatedData['recipient_name'],
-                'email' => $validatedData['email'],
-                'notes' => $validatedData['notes'] ?? null,
-                'address' => $validatedData['address'],
-                'postal_code' => $validatedData['postal_code'],
-            ]);
+            $orderInformation = OrderInformation::create($validated);
 
-            return response()->json(['message' => 'Order detail saved successfully.'], 201);
+            return response()->json([
+                'message' => 'Order information submitted successfully!',
+                'orderInformation' => $orderInformation
+            ]);
         } catch (\Exception $e) {
-            Log::error('Error saving order detail: ' . $e->getMessage());
-            return response()->json(['message' => 'Failed to save order detail.', 'error' => $e->getMessage()], 500);
+            Log::error($e->getMessage());
+
+            return response()->json([
+                'message' => 'Failed to submit order information.',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 
@@ -129,21 +130,21 @@ class OrderController extends Controller
     public function manageOrders()
     {
         $orders = Order::all();
-        $orderDetails = OrderDetail::all();
+        $orderInformations = OrderInformation::all();
 
         return Inertia::render('Admin/Order/ManageOrderProducts', [
-            'orders' => $orders->map(function ($order) use ($orderDetails) {
-                $details = $orderDetails->filter(function ($detail) use ($order) {
-                    return $detail->order_id === $order->id;
+            'orders' => $orders->map(function ($order) use ($orderInformations) {
+                $informations = $orderInformations->filter(function ($information) use ($order) {
+                    return $information->order_id === $order->id;
                 });
 
                 return [
                     'id' => $order->id,
-                    'recipient_name' => $details->first()->recipient_name ?? '',
-                    'email' => $details->first()->email ?? '',
-                    'address' => $details->first()->address ?? '',
-                    'postal_code' => $details->first()->postal_code ?? '',
-                    'notes' => $details->first()->notes ?? '',
+                    'recipient_name' => $informations->first()->recipient_name ?? '',
+                    'email' => $informations->first()->email ?? '',
+                    'address' => $informations->first()->address ?? '',
+                    'postal_code' => $informations->first()->postal_code ?? '',
+                    'notes' => $informations->first()->notes ?? '',
                     'total_price' => $order->total_price,
                     'created_at' => $order->created_at->format('Y-m-d H:i:s'),
                     'status' => $order->status,

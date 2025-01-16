@@ -9,18 +9,15 @@ class Cart extends Model
 {
     use HasFactory;
 
-    // Tentukan tabel yang digunakan jika tidak mengikuti konvensi penamaan Laravel
     protected $table = 'carts';
 
-    // Kolom yang bisa diisi
     protected $fillable = [
-        'user_id',        // ID pengguna yang memiliki keranjang
-        'product_id',     // ID produk yang ditambahkan ke keranjang
-        'quantity',       // Jumlah produk yang ditambahkan
-        'price',          // Harga produk saat ditambahkan ke keranjang
+        'user_id',
+        'product_id',
+        'quantity',
+        'price',
     ];
 
-    // Relasi ke pengguna (user)
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -32,14 +29,13 @@ class Cart extends Model
         return $this->belongsTo(Product::class);
     }
 
-    // Metode untuk menghitung total harga item dalam keranjang
     public function getTotalPriceAttribute()
     {
         return $this->quantity * $this->price;
     }
 
-    public function orderDetails()
+    public function OrderInformations()
     {
-        return $this->hasMany(OrderDetail::class);
+        return $this->hasMany(OrderInformation::class);
     }
 }

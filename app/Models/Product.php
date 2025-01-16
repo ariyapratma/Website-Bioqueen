@@ -21,7 +21,6 @@ class Product extends Model
         'price',
     ];
 
-    // Relasi ke kategori
     public function category()
     {
         return $this->belongsTo(HeroCategories::class, 'category_id');
@@ -32,7 +31,6 @@ class Product extends Model
         return $this->hasMany(Order::class);
     }
 
-    // Setter untuk otomatis membuat slug berdasarkan nama
     public function setNameAttribute($value)
     {
         $this->attributes['name'] = $value;

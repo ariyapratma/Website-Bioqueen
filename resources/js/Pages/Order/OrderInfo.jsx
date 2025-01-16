@@ -63,7 +63,7 @@ const OrderInfo = ({ auth }) => {
     }
 
     try {
-      const response = await fetch("/order-details", {
+      const response = await fetch("/order-informations", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -90,7 +90,9 @@ const OrderInfo = ({ auth }) => {
           confirmButtonText: "OK",
         });
       } else {
-        throw new Error(result.message || "Failed to submit order details.");
+        throw new Error(
+          result.message || "Failed to submit order informations.",
+        );
       }
     } catch (error) {
       Swal.fire({
@@ -177,16 +179,16 @@ const OrderInfo = ({ auth }) => {
                       <table className="min-w-full divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-md">
                         <thead>
                           <tr className="border bg-custom-yellow">
-                            <th className="px-6 py-3 text-left font-lexend font-medium tracking-wider text-black">
+                            <th className="px-6 py-3 text-left font-lexend font-semibold tracking-wider text-black">
                               Product
                             </th>
-                            <th className="px-6 py-3 text-left font-lexend font-medium tracking-wider text-black">
+                            <th className="px-6 py-3 text-left font-lexend font-semibold tracking-wider text-black">
                               Price
                             </th>
-                            <th className="px-6 py-3 text-left font-lexend font-medium tracking-wider text-black">
+                            <th className="px-6 py-3 text-left font-lexend font-semibold tracking-wider text-black">
                               Quantity
                             </th>
-                            <th className="px-6 py-3 text-left font-lexend font-medium tracking-wider text-black">
+                            <th className="px-6 py-3 text-left font-lexend font-semibold tracking-wider text-black">
                               Total
                             </th>
                           </tr>
@@ -194,19 +196,19 @@ const OrderInfo = ({ auth }) => {
                         <tbody>
                           {orderItems.map((item, index) => (
                             <tr key={index}>
-                              <td className="whitespace-nowrap border px-6 py-4 font-lexend text-sm text-gray-700">
+                              <td className="whitespace-nowrap border px-6 py-4 font-lexend font-semibold text-sm text-black">
                                 {item.product.name}
                               </td>
-                              <td className="whitespace-nowrap border px-6 py-4 font-lexend text-sm text-gray-700">
+                              <td className="whitespace-nowrap border px-6 py-4 font-semibold text-sm text-black">
                                 Rp{" "}
                                 {parseFloat(item.product.price).toLocaleString(
                                   "id-ID",
                                 )}
                               </td>
-                              <td className="whitespace-nowrap border px-6 py-4 font-lexend text-sm text-gray-700">
+                              <td className="whitespace-nowrap border px-6 py-4 font-semibold text-sm text-black">
                                 {item.quantity}
                               </td>
-                              <td className="whitespace-nowrap border px-6 py-4 font-lexend text-sm text-gray-700">
+                              <td className="whitespace-nowrap border px-6 py-4 font-semibold text-sm text-black">
                                 Rp{" "}
                                 {parseFloat(
                                   item.product.price * item.quantity,
