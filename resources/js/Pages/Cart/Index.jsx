@@ -19,39 +19,55 @@ const CartIndex = ({ auth, cartItems }) => {
   );
 
   const updateQuantity = (itemId, quantity) => {
-    const updated = updatedItems.map((item) =>
+    // Validasi quantity (misalnya, lebih besar dari 0)
+    if (quantity <= 0) {
+      Swal.fire({
+        title: "Error!",
+        text: "Quantity must be greater than 0.",
+        icon: "error",
+        confirmButtonText: "OK",
+      });
+      return;
+    }
+
+    // Mencari item yang akan diperbarui di updatedItems
+    const newUpdatedItems = updatedItems.map((item) =>
       item.id === itemId
         ? {
             ...item,
-            quantity,
-            price: item.product?.price * quantity,
+            quantity: quantity,
+            price: item.product?.price * quantity, // Update harga berdasarkan quantity baru
           }
         : item,
     );
-    setUpdatedItems(updated);
-  };
 
-  const saveCart = (itemId) => {
-    const itemToSave = updatedItems.find((item) => item.id === itemId);
+    // Update state dengan newUpdatedItems
+    setUpdatedItems(newUpdatedItems);
 
-    if (itemToSave) {
-      Inertia.put(
-        `/carts/update/${itemId}`,
-        { quantity: itemToSave.quantity },
-        {
-          onSuccess: (response) => {
-            Swal.fire({
-              title: "Updated!",
-              text:
-                response.message || "Quantity and price updated successfully.",
-              icon: "success",
-              confirmButtonText: "OK",
-            }).then(() => {
-              Inertia.visit("/carts");
-            });
-          },
-        },
-      );
+    // Melakukan request PUT untuk mengupdate kuantitas dan harga
+    const itemToUpdate = newUpdatedItems.find((item) => item.id === itemId);
+
+    if (itemToUpdate) {
+      // Menggunakan Inertia untuk mengirimkan data ke server
+      Inertia.put(`/carts/update/${itemId}`, {
+        quantity: itemToUpdate.quantity,
+      })
+        .then((response) => {
+          Swal.fire({
+            title: "Updated!",
+            text: response.data.message,
+            icon: "success",
+            confirmButtonText: "OK",
+          });
+        })
+        .catch((error) => {
+          Swal.fire({
+            title: "Error!",
+            text: error.response.data.message,
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+        });
     }
   };
 
@@ -309,15 +325,9 @@ const CartIndex = ({ auth, cartItems }) => {
                       <td className="px-6 py-4 text-center text-sm font-medium">
                         <button
                           onClick={() => removeFromCart(item.id)}
-                          className="text-red-500 hover:text-red-700"
+                          className="text-red-500 font-semibold"
                         >
                           Remove
-                        </button>
-                        <button
-                          onClick={() => saveCart(item.id)}
-                          className="ml-2 rounded px-2 py-2 text-green-500 transition duration-200"
-                        >
-                          Save
                         </button>
                       </td>
                     </tr>
