@@ -46,10 +46,10 @@ export default function Navbar({ auth }) {
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
     { name: "Contact", path: "/contact" },
-    { name: "Product", path: "/product" },
-    { name: "Order", path: "/order" },
     { name: "Maklon", path: "/maklon" },
+    { name: "Product", path: "/product" },
     { name: "Cart", path: "/carts" },
+    { name: "Order", path: "/order" },
   ];
 
   // Tambahkan kondisi untuk link Login dan Register
