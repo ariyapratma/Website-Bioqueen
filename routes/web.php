@@ -32,6 +32,7 @@ use App\Http\Controllers\HeroMaklonValueController;
 use App\Http\Controllers\HeroVisionMisionController;
 use App\Http\Controllers\HeroExcellenceValueController;
 use App\Http\Controllers\HeroFacilitiesValueController;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -287,6 +288,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/header-maklon{headerMaklon}', [HeaderMaklonController::class, 'update'])->name('header-maklon.update');
         Route::delete('/header-maklon/{id}', [HeaderMaklonController::class, 'destroy'])->name('header-maklon.destroy');
     });
+
+    // Route Payment
+    // Menampilkan halaman pembayaran untuk order tertentu
+    Route::get('/payment/{orderId}', [PaymentController::class, 'index'])->name('payment.index');
+    // Proses transaksi pembayaran
+    Route::post('/create-transaction', [PaymentController::class, 'createTransaction'])->name('payment.createTransaction');
 
     // Profil pengguna, hanya untuk pengguna yang sudah login
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

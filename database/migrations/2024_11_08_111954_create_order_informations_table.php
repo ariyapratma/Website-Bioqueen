@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::rename('order_informations', function (Blueprint $table) {
+        Schema::create('order_informations', function (Blueprint $table) {
             $table->id();
             $table->string('recipient_name');
             $table->string('email');
