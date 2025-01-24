@@ -196,19 +196,19 @@ const OrderInfo = ({ auth }) => {
                         <tbody>
                           {orderItems.map((item, index) => (
                             <tr key={index}>
-                              <td className="whitespace-nowrap border px-6 py-4 font-lexend font-semibold text-sm text-black">
+                              <td className="whitespace-nowrap border px-6 py-4 font-lexend text-sm font-semibold text-black">
                                 {item.product.name}
                               </td>
-                              <td className="whitespace-nowrap border px-6 py-4 font-semibold text-sm text-black">
+                              <td className="whitespace-nowrap border px-6 py-4 text-sm font-semibold text-black">
                                 Rp{" "}
                                 {parseFloat(item.product.price).toLocaleString(
                                   "id-ID",
                                 )}
                               </td>
-                              <td className="whitespace-nowrap border px-6 py-4 font-semibold text-sm text-black">
+                              <td className="whitespace-nowrap border px-6 py-4 text-sm font-semibold text-black">
                                 {item.quantity}
                               </td>
-                              <td className="whitespace-nowrap border px-6 py-4 font-semibold text-sm text-black">
+                              <td className="whitespace-nowrap border px-6 py-4 text-sm font-semibold text-black">
                                 Rp{" "}
                                 {parseFloat(
                                   item.product.price * item.quantity,

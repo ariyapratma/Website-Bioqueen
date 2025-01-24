@@ -33,4 +33,5 @@ class OrderInformation extends Model
     {
         return $this->belongsTo(Cart::class);
     }
+    
 }

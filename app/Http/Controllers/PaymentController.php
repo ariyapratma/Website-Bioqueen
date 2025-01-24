@@ -2,67 +2,71 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\OrderInformation;
+use App\Models\Order;
 use Illuminate\Http\Request;
-use Midtrans\Snap;
-use Midtrans\Config;
 use Midtrans\Transaction;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
-    public function __construct()
-    {
-        // Set your server key
-        Config::$serverKey = config('midtrans.server_key');
-        Config::$clientKey = config('midtrans.client_key');
-        Config::$isProduction = config('midtrans.is_production');
-        Config::$isSanitized = true;
-        Config::$is3ds = true;
-    }
-
     public function index($orderId)
     {
-        // Ambil data order dari database
-        $order = OrderInformation::findOrFail($orderId);
-
-        // Kirim data order ke halaman React menggunakan Inertia
-        return Inertia::render('Payment/Payment', [
+        $order = Order::findOrFail($orderId);
+        $totalPrice = optional($order->orderItems)->sum(function ($item) {
+            return $item->price * $item->quantity;
+        });
+        return Inertia::render('Payment/Index', [
             'order' => $order,
+            'orderItems' => $order->orderItems,
+            'totalPrice' => $totalPrice,
+            'cartItems' => $order->orderItems,
+            'auth' => [
+                'user' => Auth::user(),
+            ],
         ]);
     }
 
-    public function createTransaction(Request $request)
-    {
-        $orderId = $request->order_id;
-        $order = OrderInformation::findOrFail($orderId);
 
-        // Create transaction params
-        $params = [
-            'transaction_details' => [
-                'order_id' => 'order-' . $order->id,
-                'gross_amount' => $order->total_amount, // Anda bisa menambahkan logika untuk menghitung total_amount
-            ],
-            'customer_details' => [
+    public function process(Request $request)
+    {
+        $order = Order::findOrFail($request->order_id);
+        $transaction = Transaction::status($order->transaction_id);
+
+        // Set your Merchant Server Key
+        \Midtrans\Config::$serverKey = config('midtrans.serverKey');
+        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+        \Midtrans\Config::$isProduction = false;
+        // Set sanitization on (default)
+        \Midtrans\Config::$isSanitized = true;
+        // Set 3DS transaction for credit card to true
+        \Midtrans\Config::$is3ds = true;
+
+        $params = array(
+            'transaction_details' => array(
+                'order_id' => rand(),
+                'gross_amount' => $order->total_price,
+            ),
+            'customer_details' => array(
                 'first_name' => $order->recipient_name,
                 'email' => $order->email,
-                'shipping_address' => [
+                'shipping_address' => array(
                     'address' => $order->address,
-                    'city' => $order->city ?? '',
+                    'city' => $order->city,
                     'postal_code' => $order->postal_code,
-                ],
-            ],
-        ];
+                ),
+            ),
+        );
 
-        try {
-            $snapToken = Snap::getSnapToken($params);
-            return response()->json([
-                'token' => $snapToken
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        $snapToken = \Midtrans\Snap::getSnapToken($params);
+        $order->snap_token = $snapToken;
+        $order->save();
+
+        return Inertia::render('Payment/Index', [
+            'order' => $order,
+            'orderItems' => $order->orderItems,
+            'totalPrice' => $order->total_price,
+            'cartItems' => $order->orderItems,
+        ]);
     }
 }

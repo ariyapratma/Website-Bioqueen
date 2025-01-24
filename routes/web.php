@@ -290,10 +290,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     // Route Payment
-    // Menampilkan halaman pembayaran untuk order tertentu
-    Route::get('/payment/{orderId}', [PaymentController::class, 'index'])->name('payment.index');
-    // Proses transaksi pembayaran
-    Route::post('/create-transaction', [PaymentController::class, 'createTransaction'])->name('payment.createTransaction');
+    Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
+        Route::get('/payment/{orderId}', [PaymentController::class, 'index'])->name('payment.index');
+    });
 
     // Profil pengguna, hanya untuk pengguna yang sudah login
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

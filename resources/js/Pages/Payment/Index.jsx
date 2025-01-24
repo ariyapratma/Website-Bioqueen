@@ -1,66 +1,34 @@
-import React, { useState } from "react";
-import Swal from "sweetalert2";
+import React, { useState, useEffect } from "react";
 import { Head } from "@inertiajs/react";
+import Navbar from "@/Components/Navbar/Navbar";
 
-const Payment = ({ order }) => {
+const Index = ({ order, orderItems, totalPrice, auth }) => {
   const [paymentLink, setPaymentLink] = useState("");
+  const [calculatedTotalPrice, setCalculatedTotalPrice] = useState(
+    totalPrice || 0,
+  );
 
-  const createTransaction = async () => {
-    const orderData = {
-      order_id: order.id,
-      total_amount: order.total_amount,
-      recipient_name: order.recipient_name,
-      email: order.email,
-      address: order.address,
-      city: order.city,
-      postal_code: order.postal_code,
-    };
-
-    try {
-      const response = await fetch("/create-transaction", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
-            .content,
-        },
-        body: JSON.stringify(orderData),
-      });
-
-      const data = await response.json();
-
-      if (data.token) {
-        setPaymentLink(data.token);
-        Swal.fire({
-          icon: "success",
-          title: "Payment Created",
-          text: "Please proceed to payment.",
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Payment Error",
-          text: "Failed to create payment.",
-        });
-      }
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: error.message,
-      });
+  useEffect(() => {
+    if (orderItems && orderItems.length > 0) {
+      const total = orderItems.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0,
+      );
+      setCalculatedTotalPrice(total);
+    } else {
+      setCalculatedTotalPrice(0);
     }
-  };
+  }, [orderItems]);
 
-  const handlePayment = () => {
-    if (paymentLink) {
-      window.location.href = paymentLink;
-    }
+  const formatPrice = (price) => {
+    const validPrice = price && !isNaN(price) ? price : 0;
+    return validPrice.toLocaleString("id-ID");
   };
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100 p-6">
       <Head title="Payment | PT Ratu Bio Indonesia" />
+      <Navbar auth={auth} />
       <div className="w-full max-w-lg rounded-lg bg-white p-6 shadow-md">
         <h1 className="mb-4 text-2xl font-semibold text-gray-700">
           Payment for Order #{order.id}
@@ -94,21 +62,23 @@ const Payment = ({ order }) => {
               </tr>
               <tr>
                 <td className="p-2 font-medium text-gray-600">Total Amount:</td>
-                <td className="p-2 text-gray-800">Rp {order.total_amount}</td>
+                <td className="p-2 text-gray-800">
+                  Rp {formatPrice(parseFloat(order.total_price))}
+                </td>
+              </tr>
+              <tr className="bg-gray-50">
+                <td className="p-2 font-medium text-gray-600">Cart Total:</td>
+                <td className="p-2 text-gray-800">
+                  Rp {formatPrice(calculatedTotalPrice)}{" "}
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
-        <button
-          onClick={createTransaction}
-          className="w-full rounded bg-custom-yellow px-6 py-3 font-semibold text-black"
-        >
-          Create Payment
-        </button>
         {paymentLink && (
           <div className="mt-4">
             <button
-              onClick={handlePayment}
+              onClick={() => (window.location.href = paymentLink)}
               className="w-full rounded bg-blue-500 px-6 py-3 font-medium text-white hover:bg-blue-600"
             >
               Pay Now
@@ -120,4 +90,4 @@ const Payment = ({ order }) => {
   );
 };
 
-export default Payment;
+export default Index;
