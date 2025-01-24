@@ -26,8 +26,8 @@ const HeroExcellenceValue = () => {
       <div className="flex flex-wrap justify-center gap-6 sm:gap-8">
         {/* Bagian 1 */}
         <div className="flex max-w-[85%] transform flex-col items-center rounded-lg bg-white p-4 text-center shadow-lg transition-transform duration-300 hover:scale-105 sm:max-w-xs">
-          <div className="mb-2 text-3xl text-custom-yellow sm:mb-4 sm:text-4xl">
-            <RiCustomerService2Line />
+          <div className="mb-4 rounded-full bg-custom-yellow p-4">
+            <RiCustomerService2Line size="32" />
           </div>
           <h6 className="mb-1 font-lexend text-lg font-medium text-black sm:mb-2 sm:text-xl">
             {dataHeroExcellenceValue?.heading1 || "No heading available"}
@@ -39,8 +39,8 @@ const HeroExcellenceValue = () => {
 
         {/* Bagian 2 */}
         <div className="flex max-w-[85%] transform flex-col items-center rounded-lg bg-white p-4 text-center shadow-lg transition-transform duration-300 hover:scale-105 sm:max-w-xs">
-          <div className="mb-2 text-3xl text-custom-yellow sm:mb-4 sm:text-4xl">
-            <PiCertificate />
+          <div className="mb-4 rounded-full bg-custom-yellow p-4">
+            <PiCertificate size="32" />
           </div>
           <h6 className="mb-1 font-lexend text-lg font-medium text-black sm:mb-2 sm:text-xl">
             {dataHeroExcellenceValue?.heading2 || "No heading available"}
@@ -52,8 +52,8 @@ const HeroExcellenceValue = () => {
 
         {/* Bagian 3 */}
         <div className="flex max-w-[85%] transform flex-col items-center rounded-lg bg-white p-4 text-center shadow-lg transition-transform duration-300 hover:scale-105 sm:max-w-xs">
-          <div className="mb-2 text-3xl text-custom-yellow sm:mb-4 sm:text-4xl">
-            <MdSupportAgent />
+          <div className="mb-4 rounded-full bg-custom-yellow p-4">
+            <MdSupportAgent size="32" />
           </div>
           <h6 className="mb-1 font-lexend text-lg font-medium text-black sm:mb-2 sm:text-xl">
             {dataHeroExcellenceValue?.heading3 || "No heading available"}
@@ -65,8 +65,8 @@ const HeroExcellenceValue = () => {
 
         {/* Bagian 4 */}
         <div className="flex max-w-[85%] transform flex-col items-center rounded-lg bg-white p-4 text-center shadow-lg transition-transform duration-300 hover:scale-105 sm:max-w-xs">
-          <div className="mb-2 text-3xl text-custom-yellow sm:mb-4 sm:text-4xl">
-            <FaCheckCircle />
+          <div className="mb-4 rounded-full bg-custom-yellow p-4">
+            <FaCheckCircle size="32" />
           </div>
           <h6 className="mb-1 font-lexend text-lg font-medium text-black sm:mb-2 sm:text-xl">
             {dataHeroExcellenceValue?.heading4 || "No heading available"}

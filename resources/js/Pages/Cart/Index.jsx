@@ -19,7 +19,6 @@ const CartIndex = ({ auth, cartItems }) => {
   );
 
   const updateQuantity = (itemId, quantity) => {
-    // Validasi quantity (misalnya, lebih besar dari 0)
     if (quantity <= 0) {
       Swal.fire({
         title: "Error!",
@@ -30,25 +29,20 @@ const CartIndex = ({ auth, cartItems }) => {
       return;
     }
 
-    // Mencari item yang akan diperbarui di updatedItems
     const newUpdatedItems = updatedItems.map((item) =>
       item.id === itemId
         ? {
             ...item,
             quantity: quantity,
-            price: item.product?.price * quantity, // Update harga berdasarkan quantity baru
+            price: item.product?.price * quantity,
           }
         : item,
     );
 
-    // Update state dengan newUpdatedItems
     setUpdatedItems(newUpdatedItems);
-
-    // Melakukan request PUT untuk mengupdate kuantitas dan harga
     const itemToUpdate = newUpdatedItems.find((item) => item.id === itemId);
 
     if (itemToUpdate) {
-      // Menggunakan Inertia untuk mengirimkan data ke server
       Inertia.put(`/carts/update/${itemId}`, {
         quantity: itemToUpdate.quantity,
       })
@@ -325,7 +319,7 @@ const CartIndex = ({ auth, cartItems }) => {
                       <td className="px-6 py-4 text-center text-sm font-medium">
                         <button
                           onClick={() => removeFromCart(item.id)}
-                          className="text-red-500 font-semibold"
+                          className="font-semibold text-red-500"
                         >
                           Remove
                         </button>
@@ -344,7 +338,7 @@ const CartIndex = ({ auth, cartItems }) => {
                 <div>
                   <button
                     onClick={handleContinue}
-                    className="rounded-lg bg-custom-yellow px-6 py-3 font-semibold text-black"
+                    className="rounded-lg bg-custom-yellow px-6 py-3 font-semibold text-black transition hover:bg-yellow-600"
                   >
                     Continue
                   </button>

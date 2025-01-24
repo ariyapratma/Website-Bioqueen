@@ -205,18 +205,12 @@ const ProductDetail = () => {
               </div>
 
               {/* Tombol Add to Cart dan Order Now */}
-              <div className="mt-6 flex space-x-4 font-lexend font-medium">
+              <div className="mt-6 flex space-x-4 font-lexend font-semibold">
                 <button
                   onClick={addToCart}
-                  className="flex-1 rounded-lg bg-custom-yellow px-6 py-3 text-black transition duration-300 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-opacity-50"
+                  className="w-full rounded-lg bg-custom-yellow py-3 font-semibold text-black transition hover:bg-yellow-600"
                 >
                   Add to Cart
-                </button>
-                <button
-                  onClick={orderNow}
-                  className="flex-1 rounded-lg bg-black px-6 py-3 text-white transition duration-300 hover:bg-black focus:outline-none focus:ring-2 focus:ring-black focus:ring-opacity-50"
-                >
-                  Order Now
                 </button>
               </div>
             </div>

@@ -291,7 +291,7 @@ const OrderInfo = ({ auth }) => {
                 <div className="mt-4 flex justify-between">
                   <button
                     type="submit"
-                    className="inline-flex items-center justify-center rounded-md border border-transparent bg-custom-yellow px-6 py-3 text-base font-medium text-black shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-custom-yellow focus:ring-offset-2"
+                    className="inline-flex items-center justify-center rounded-md border border-transparent bg-custom-yellow px-6 py-3 text-base font-semibold text-black shadow-sm hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-custom-yellow focus:ring-offset-2"
                   >
                     Submit Order
                   </button>

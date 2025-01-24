@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order;
-use Illuminate\Http\Request;
-use Midtrans\Transaction;
 use Inertia\Inertia;
+use App\Models\Order;
+use Midtrans\Transaction;
+use Illuminate\Http\Request;
+use App\Models\OrderInformation;
 use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
@@ -13,12 +14,14 @@ class PaymentController extends Controller
     public function index($orderId)
     {
         $order = Order::findOrFail($orderId);
+        $orderInformation = OrderInformation::findOrFail($orderId);
         $totalPrice = optional($order->orderItems)->sum(function ($item) {
             return $item->price * $item->quantity;
         });
         return Inertia::render('Payment/Index', [
             'order' => $order,
             'orderItems' => $order->orderItems,
+            'orderInformation' => $orderInformation,
             'totalPrice' => $totalPrice,
             'cartItems' => $order->orderItems,
             'auth' => [

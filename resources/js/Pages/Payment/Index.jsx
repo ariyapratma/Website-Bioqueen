@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Head } from "@inertiajs/react";
 import Navbar from "@/Components/Navbar/Navbar";
 
-const Index = ({ order, orderItems, totalPrice, auth }) => {
+const Index = ({ order, orderItems, orderInformation, totalPrice, auth }) => {
   const [paymentLink, setPaymentLink] = useState("");
   const [calculatedTotalPrice, setCalculatedTotalPrice] = useState(
     totalPrice || 0,
@@ -40,24 +40,30 @@ const Index = ({ order, orderItems, totalPrice, auth }) => {
                 <td className="p-2 font-medium text-gray-600">
                   Recipient Name:
                 </td>
-                <td className="p-2 text-gray-800">{order.recipient_name}</td>
+                <td className="p-2 text-gray-800">
+                  {orderInformation.recipient_name}
+                </td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="p-2 font-medium text-gray-600">Email:</td>
-                <td className="p-2 text-gray-800">{order.email}</td>
+                <td className="p-2 text-gray-800">{orderInformation.email}</td>
               </tr>
               <tr>
                 <td className="p-2 font-medium text-gray-600">Address:</td>
-                <td className="p-2 text-gray-800">{order.address}</td>
+                <td className="p-2 text-gray-800">
+                  {orderInformation.address}
+                </td>
               </tr>
               <tr>
                 <td className="p-2 font-medium text-gray-600">Postal Code:</td>
-                <td className="p-2 text-gray-800">{order.postal_code}</td>
+                <td className="p-2 text-gray-800">
+                  {orderInformation.postal_code}
+                </td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="p-2 font-medium text-gray-600">Notes:</td>
                 <td className="p-2 text-gray-800">
-                  {order.notes || "No notes provided"}
+                  {orderInformation.notes || "No notes provided"}
                 </td>
               </tr>
               <tr>
@@ -66,20 +72,28 @@ const Index = ({ order, orderItems, totalPrice, auth }) => {
                   Rp {formatPrice(parseFloat(order.total_price))}
                 </td>
               </tr>
-              <tr className="bg-gray-50">
-                <td className="p-2 font-medium text-gray-600">Cart Total:</td>
-                <td className="p-2 text-gray-800">
-                  Rp {formatPrice(calculatedTotalPrice)}{" "}
-                </td>
-              </tr>
             </tbody>
           </table>
         </div>
+
+        {/* Pay Now Button */}
         {paymentLink && (
           <div className="mt-4">
             <button
               onClick={() => (window.location.href = paymentLink)}
               className="w-full rounded bg-blue-500 px-6 py-3 font-medium text-white hover:bg-blue-600"
+            >
+              Pay Now
+            </button>
+          </div>
+        )}
+
+        {/* Alternatively, if you want the button visible always */}
+        {!paymentLink && (
+          <div className="mt-4">
+            <button
+              onClick={() => alert("Payment process coming soon!")}
+              className="w-full rounded-lg bg-custom-yellow py-3 font-semibold text-black transition hover:bg-yellow-600"
             >
               Pay Now
             </button>

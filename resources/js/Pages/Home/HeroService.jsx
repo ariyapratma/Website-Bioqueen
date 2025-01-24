@@ -38,10 +38,10 @@ const HeroService = () => {
       {/* Service Cards */}
       <div className="flex flex-wrap justify-center gap-6 px-4 sm:px-6 md:px-8">
         <div
-          className="flex max-w-xs transform flex-col items-center rounded-lg bg-white p-4 text-center text-custom-yellow shadow-lg transition-transform duration-300 hover:scale-105 sm:p-6"
+          className="flex max-w-xs transform flex-col items-center rounded-lg bg-white p-4 text-center text-black shadow-lg transition-transform duration-300 hover:scale-105 sm:p-6"
           style={{ minHeight: "250px" }}
         >
-          <div className="mb-4">
+          <div className="mb-4 rounded-full bg-custom-yellow p-4">
             <MdOutlineCleanHands size="48" />
           </div>
           <h6 className="mb-2 font-lexend text-lg font-medium sm:text-xl">
@@ -53,10 +53,10 @@ const HeroService = () => {
         </div>
 
         <div
-          className="flex max-w-xs transform flex-col items-center rounded-lg bg-white p-4 text-center text-custom-yellow shadow-lg transition-transform duration-300 hover:scale-105 sm:p-6"
+          className="flex max-w-xs transform flex-col items-center rounded-lg bg-white p-4 text-center text-black shadow-lg transition-transform duration-300 hover:scale-105 sm:p-6"
           style={{ minHeight: "250px" }}
         >
-          <div className="mb-4">
+          <div className="mb-4 rounded-full bg-custom-yellow p-4">
             <MdOutlineMedicalServices size="48" />
           </div>
           <h6 className="mb-2 font-lexend text-lg font-medium sm:text-xl">
@@ -68,10 +68,10 @@ const HeroService = () => {
         </div>
 
         <div
-          className="flex max-w-xs transform flex-col items-center rounded-lg bg-white p-4 text-center text-custom-yellow shadow-lg transition-transform duration-300 hover:scale-105 sm:p-6"
+          className="flex max-w-xs transform flex-col items-center rounded-lg bg-white p-4 text-center text-black shadow-lg transition-transform duration-300 hover:scale-105 sm:p-6"
           style={{ minHeight: "250px" }}
         >
-          <div className="mb-4">
+          <div className="mb-4 rounded-full bg-custom-yellow p-4">
             <MdOutlineStarRate size="48" />
           </div>
           <h6 className="mb-2 font-lexend text-lg font-medium sm:text-xl">

@@ -1,7 +1,7 @@
 import { Head } from "@inertiajs/react";
 import Navbar from "@/Components/Navbar/Navbar";
 import HeaderOrder from "./HeaderOrder";
-import OrderInfo from "./OrderInfo";
+import OrderInfo from "./OrderInformation";
 import Footer from "@/Components/Footer/Footer";
 
 const Order = ({ auth }) => {

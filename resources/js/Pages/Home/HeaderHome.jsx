@@ -33,7 +33,7 @@ const HeaderHome = () => {
           onClick={() => {
             window.location.href = dataHeaderHome?.whatsapp_link;
           }}
-          className="text-base-content font-regular rounded-lg bg-custom-yellow px-4 py-2 font-lexend text-base text-black transition-colors hover:bg-yellow-400 sm:px-6 sm:py-3 sm:text-lg"
+          className="text-base-content rounded-lg bg-custom-yellow px-4 py-2 font-lexend text-base font-semibold text-black transition-colors hover:bg-yellow-600 sm:px-6 sm:py-3 sm:text-lg"
         >
           Konsultasikan Sekarang
         </button>

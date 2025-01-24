@@ -1,4 +1,4 @@
-import { Link, Head } from "@inertiajs/react";
+import { Head } from "@inertiajs/react";
 import Navbar from "@/Components/Navbar/Navbar";
 import { usePage } from "@inertiajs/react";
 import HeaderHome from "./HeaderHome";

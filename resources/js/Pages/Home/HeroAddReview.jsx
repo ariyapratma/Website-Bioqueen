@@ -127,7 +127,7 @@ export default function HeroAddReview() {
           </div>
           <button
             type="submit"
-            className={`w-full rounded-md bg-custom-yellow px-6 py-3 font-semibold text-white transition-colors hover:bg-yellow-400`}
+            className={`w-full rounded-md bg-custom-yellow px-6 py-3 font-semibold text-black transition-colors hover:bg-yellow-600`}
           >
             Send Review
           </button>
