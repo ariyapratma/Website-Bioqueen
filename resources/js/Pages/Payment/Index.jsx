@@ -18,6 +18,52 @@ const Index = ({ order, orderItems, orderInformation, auth }) => {
     }
   }, [orderItems]);
 
+  // const handlePayment = async () => {
+  //   if (isLoading) return;
+  //   setIsLoading(true);
+
+  //   try {
+  //     const response = await fetch(`/payment/${order.id}`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Accept: "application/json",
+  //         "X-CSRF-TOKEN": document
+  //           .querySelector('meta[name="csrf-token"]')
+  //           .getAttribute("content"),
+  //       },
+  //       body: JSON.stringify({
+  //         total_price: calculatedTotalPrice,
+  //       }),
+  //     });
+
+  //     if (!response.ok) {
+  //       const errorData = await response.json();
+  //       console.error("Error response:", errorData);
+  //       throw new Error("Failed to fetch SnapToken");
+  //     }
+
+  //     const data = await response.json();
+  //     console.log("SnapToken received:", data.snap_token);
+
+  //     window.snap.pay(data.snap_token, {
+  //       onSuccess: (result) => console.log("Payment success", result),
+  //       onPending: (result) => console.log("Payment pending", result),
+  //       onError: (result) => console.error("Payment error", result),
+  //     });
+  //   } catch (error) {
+  //     console.error("Error fetching SnapToken:", error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
+  // const handlePayment = () => {
+  //   // Redirect the user to the Midtrans payment link
+  //   window.location.href =
+  //     "https://app.sandbox.midtrans.com/payment-links/1737781247148";
+  // };
+
   const handlePayment = async () => {
     if (isLoading) return;
     setIsLoading(true);
@@ -46,6 +92,7 @@ const Index = ({ order, orderItems, orderInformation, auth }) => {
       const data = await response.json();
       console.log("SnapToken received:", data.snap_token);
 
+      // Use the Snap Token to initiate payment
       window.snap.pay(data.snap_token, {
         onSuccess: (result) => console.log("Payment success", result),
         onPending: (result) => console.log("Payment pending", result),
