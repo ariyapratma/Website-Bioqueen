@@ -2,14 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Head } from "@inertiajs/react";
 import Navbar from "@/Components/Navbar/Navbar";
 
-const Index = ({ order, orderItems, orderInformation, totalPrice, auth }) => {
-  const [calculatedTotalPrice, setCalculatedTotalPrice] = useState(
-    totalPrice || 0,
-  );
+const Index = ({ order, orderItems, orderInformation, auth }) => {
+  const [calculatedTotalPrice, setCalculatedTotalPrice] = useState(0);
   const [snapToken, setSnapToken] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Hitung total harga jika `orderItems` berubah
+  // Hitung total harga dari `orderItems`
   useEffect(() => {
     if (orderItems && orderItems.length > 0) {
       const total = orderItems.reduce(
@@ -17,54 +15,47 @@ const Index = ({ order, orderItems, orderInformation, totalPrice, auth }) => {
         0,
       );
       setCalculatedTotalPrice(total);
-    } else {
-      setCalculatedTotalPrice(0);
     }
   }, [orderItems]);
 
-  // Fetch SnapToken dari backend
-  useEffect(() => {
+  const handlePayment = async () => {
+    if (isLoading) return;
     setIsLoading(true);
-    fetch("/payment/process", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "X-CSRF-TOKEN": document
-          .querySelector('meta[name="csrf-token"]')
-          .getAttribute("content"),
-      },
-      body: JSON.stringify({ order_id: order.id }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch SnapToken");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setSnapToken(data.snapToken);
-      })
-      .catch((err) => console.error("Error fetching SnapToken:", err))
-      .finally(() => setIsLoading(false));
-  }, [order.id]);
 
-  const handlePayment = () => {
-    if (!snapToken) {
-      alert("SnapToken is not yet available. Please try again later.");
-      return;
+    try {
+      const response = await fetch(`/payment/${order.id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "X-CSRF-TOKEN": document
+            .querySelector('meta[name="csrf-token"]')
+            .getAttribute("content"),
+        },
+        body: JSON.stringify({
+          total_price: calculatedTotalPrice,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error response:", errorData);
+        throw new Error("Failed to fetch SnapToken");
+      }
+
+      const data = await response.json();
+      console.log("SnapToken received:", data.snap_token);
+
+      window.snap.pay(data.snap_token, {
+        onSuccess: (result) => console.log("Payment success", result),
+        onPending: (result) => console.log("Payment pending", result),
+        onError: (result) => console.error("Payment error", result),
+      });
+    } catch (error) {
+      console.error("Error fetching SnapToken:", error);
+    } finally {
+      setIsLoading(false);
     }
-    window.snap.pay(snapToken, {
-      onSuccess: function (result) {
-        console.log("Payment success", result);
-      },
-      onPending: function (result) {
-        console.log("Payment pending", result);
-      },
-      onError: function (result) {
-        console.error("Payment error", result);
-      },
-    });
   };
 
   const formatPrice = (price) => {
@@ -114,7 +105,7 @@ const Index = ({ order, orderItems, orderInformation, totalPrice, auth }) => {
                 </td>
               </tr>
               <tr>
-                <td className="p-2 font-medium text-gray-600">Total Amount:</td>
+                <td className="p-2 font-medium text-gray-600">Total P:</td>
                 <td className="p-2 text-gray-800">
                   Rp {formatPrice(parseFloat(order.total_price))}
                 </td>
@@ -130,12 +121,12 @@ const Index = ({ order, orderItems, orderInformation, totalPrice, auth }) => {
             onClick={handlePayment}
             className={`w-full rounded-lg px-6 py-3 font-semibold text-black ${
               isLoading
-                ? "cursor-not-allowed bg-gray-300"
+                ? "cursor-not-allowed bg-green-600"
                 : "bg-custom-yellow hover:bg-yellow-600"
             }`}
             disabled={isLoading}
           >
-            {isLoading ? "Loading..." : "Pay Now"}
+            {isLoading ? "Processing..." : "Pay Now"}
           </button>
         </div>
       </div>
