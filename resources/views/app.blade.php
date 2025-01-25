@@ -25,6 +25,8 @@
 
 <body class="font-lexend antialiased">
     @inertia
+    <!-- Snap.js Script -->
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
     @yield('scripts')
 </body>
 

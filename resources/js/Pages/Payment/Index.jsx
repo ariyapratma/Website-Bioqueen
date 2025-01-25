@@ -2,107 +2,63 @@ import React, { useState, useEffect } from "react";
 import { Head } from "@inertiajs/react";
 import Navbar from "@/Components/Navbar/Navbar";
 
-const Index = ({ order, orderItems, orderInformation, auth }) => {
-  const [calculatedTotalPrice, setCalculatedTotalPrice] = useState(0);
+const Index = ({ order, orderInformation, auth }) => {
   const [snapToken, setSnapToken] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Hitung total harga dari `orderItems`
+  // Mendapatkan Snap Token secara otomatis
   useEffect(() => {
-    if (orderItems && orderItems.length > 0) {
-      const total = orderItems.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0,
-      );
-      setCalculatedTotalPrice(total);
-    }
-  }, [orderItems]);
+    const fetchSnapToken = async () => {
+      if (!order || !order.id) return;
 
-  // const handlePayment = async () => {
-  //   if (isLoading) return;
-  //   setIsLoading(true);
+      setIsLoading(true);
 
-  //   try {
-  //     const response = await fetch(`/payment/${order.id}`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Accept: "application/json",
-  //         "X-CSRF-TOKEN": document
-  //           .querySelector('meta[name="csrf-token"]')
-  //           .getAttribute("content"),
-  //       },
-  //       body: JSON.stringify({
-  //         total_price: calculatedTotalPrice,
-  //       }),
-  //     });
+      try {
+        const response = await fetch(`/payment/${order.id}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": document
+              .querySelector('meta[name="csrf-token"]')
+              .getAttribute("content"),
+          },
+          body: JSON.stringify({
+            total_price: order.total_price,
+          }),
+        });
 
-  //     if (!response.ok) {
-  //       const errorData = await response.json();
-  //       console.error("Error response:", errorData);
-  //       throw new Error("Failed to fetch SnapToken");
-  //     }
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("Error response:", errorData);
+          throw new Error("Failed to fetch SnapToken");
+        }
 
-  //     const data = await response.json();
-  //     console.log("SnapToken received:", data.snap_token);
-
-  //     window.snap.pay(data.snap_token, {
-  //       onSuccess: (result) => console.log("Payment success", result),
-  //       onPending: (result) => console.log("Payment pending", result),
-  //       onError: (result) => console.error("Payment error", result),
-  //     });
-  //   } catch (error) {
-  //     console.error("Error fetching SnapToken:", error);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  // const handlePayment = () => {
-  //   // Redirect the user to the Midtrans payment link
-  //   window.location.href =
-  //     "https://app.sandbox.midtrans.com/payment-links/1737781247148";
-  // };
-
-  const handlePayment = async () => {
-    if (isLoading) return;
-    setIsLoading(true);
-
-    try {
-      const response = await fetch(`/payment/${order.id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "X-CSRF-TOKEN": document
-            .querySelector('meta[name="csrf-token"]')
-            .getAttribute("content"),
-        },
-        body: JSON.stringify({
-          total_price: calculatedTotalPrice,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Error response:", errorData);
-        throw new Error("Failed to fetch SnapToken");
+        const data = await response.json();
+        console.log("SnapToken received:", data.snap_token);
+        setSnapToken(data.snap_token);
+      } catch (error) {
+        console.error("Error fetching SnapToken:", error);
+      } finally {
+        setIsLoading(false);
       }
+    };
 
-      const data = await response.json();
-      console.log("SnapToken received:", data.snap_token);
+    fetchSnapToken();
+  }, [order]);
 
-      // Use the Snap Token to initiate payment
-      window.snap.pay(data.snap_token, {
-        onSuccess: (result) => console.log("Payment success", result),
-        onPending: (result) => console.log("Payment pending", result),
-        onError: (result) => console.error("Payment error", result),
-      });
-    } catch (error) {
-      console.error("Error fetching SnapToken:", error);
-    } finally {
-      setIsLoading(false);
+  // Fungsi untuk memproses pembayaran
+  const handlePayment = () => {
+    if (!snapToken) {
+      alert("SnapToken belum tersedia. Silakan coba lagi.");
+      return;
     }
+
+    window.snap.pay(snapToken, {
+      onSuccess: (result) => console.log("Payment success", result),
+      onPending: (result) => console.log("Payment pending", result),
+      onError: (result) => console.error("Payment error", result),
+    });
   };
 
   const formatPrice = (price) => {
@@ -152,7 +108,7 @@ const Index = ({ order, orderItems, orderInformation, auth }) => {
                 </td>
               </tr>
               <tr>
-                <td className="p-2 font-medium text-gray-600">Total P:</td>
+                <td className="p-2 font-medium text-gray-600">Total Price:</td>
                 <td className="p-2 text-gray-800">
                   Rp {formatPrice(parseFloat(order.total_price))}
                 </td>
@@ -171,9 +127,13 @@ const Index = ({ order, orderItems, orderInformation, auth }) => {
                 ? "cursor-not-allowed bg-green-600"
                 : "bg-custom-yellow hover:bg-yellow-600"
             }`}
-            disabled={isLoading}
+            disabled={isLoading || !snapToken}
           >
-            {isLoading ? "Processing..." : "Pay Now"}
+            {isLoading
+              ? "Processing..."
+              : !snapToken
+                ? "SnapToken belum tersedia"
+                : "Pay Now"}
           </button>
         </div>
       </div>
