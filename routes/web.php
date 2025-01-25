@@ -292,6 +292,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Route Payment
     Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
         Route::get('/payment/{orderId}', [PaymentController::class, 'index'])->name('payment.index');
+        Route::post('/payment/process', [PaymentController::class, 'process'])->name('payment.process');
     });
 
     // Profil pengguna, hanya untuk pengguna yang sudah login

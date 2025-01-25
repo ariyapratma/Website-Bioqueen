@@ -25,6 +25,7 @@
 
 <body class="font-lexend antialiased">
     @inertia
+    @yield('scripts')
 </body>
 
 </html>

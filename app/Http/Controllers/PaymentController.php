@@ -27,49 +27,43 @@ class PaymentController extends Controller
             'auth' => [
                 'user' => Auth::user(),
             ],
-        ]);
+        ])->withViewData(['layout' => 'layouts.app']);
     }
-
 
     public function process(Request $request)
     {
+        // Find order based on ID
         $order = Order::findOrFail($request->order_id);
-        $transaction = Transaction::status($order->transaction_id);
 
-        // Set your Merchant Server Key
-        \Midtrans\Config::$serverKey = config('midtrans.serverKey');
-        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+        // Midtrans configuration using .env variables
+        \Midtrans\Config::$serverKey = 'SB-Mid-server-v_CWiXT88eK2aWCna2pmraKe';
+        \Midtrans\Config::$clientKey = 'SB-Mid-client-rt_DUdvnps2sazPn';
         \Midtrans\Config::$isProduction = false;
-        // Set sanitization on (default)
         \Midtrans\Config::$isSanitized = true;
-        // Set 3DS transaction for credit card to true
         \Midtrans\Config::$is3ds = true;
 
-        $params = array(
-            'transaction_details' => array(
-                'order_id' => rand(),
-                'gross_amount' => $order->total_price,
-            ),
-            'customer_details' => array(
+        // Parameters for Midtrans transaction
+        $params = [
+            'transaction_details' => [
+                'order_id' => $order->id, // Use the order ID as order_id
+                'gross_amount' => $order->total_price, // Total price
+            ],
+            'customer_details' => [
                 'first_name' => $order->recipient_name,
                 'email' => $order->email,
-                'shipping_address' => array(
+                'shipping_address' => [
                     'address' => $order->address,
                     'city' => $order->city,
                     'postal_code' => $order->postal_code,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
+        // Generate Snap Token
         $snapToken = \Midtrans\Snap::getSnapToken($params);
+
+        // Save the Snap Token in the database (optional)
         $order->snap_token = $snapToken;
         $order->save();
-
-        return Inertia::render('Payment/Index', [
-            'order' => $order,
-            'orderItems' => $order->orderItems,
-            'totalPrice' => $order->total_price,
-            'cartItems' => $order->orderItems,
-        ]);
     }
 }

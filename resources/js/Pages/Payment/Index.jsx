@@ -3,11 +3,13 @@ import { Head } from "@inertiajs/react";
 import Navbar from "@/Components/Navbar/Navbar";
 
 const Index = ({ order, orderItems, orderInformation, totalPrice, auth }) => {
-  const [paymentLink, setPaymentLink] = useState("");
   const [calculatedTotalPrice, setCalculatedTotalPrice] = useState(
     totalPrice || 0,
   );
+  const [snapToken, setSnapToken] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
+  // Hitung total harga jika `orderItems` berubah
   useEffect(() => {
     if (orderItems && orderItems.length > 0) {
       const total = orderItems.reduce(
@@ -19,6 +21,51 @@ const Index = ({ order, orderItems, orderInformation, totalPrice, auth }) => {
       setCalculatedTotalPrice(0);
     }
   }, [orderItems]);
+
+  // Fetch SnapToken dari backend
+  useEffect(() => {
+    setIsLoading(true);
+    fetch("/payment/process", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "X-CSRF-TOKEN": document
+          .querySelector('meta[name="csrf-token"]')
+          .getAttribute("content"),
+      },
+      body: JSON.stringify({ order_id: order.id }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch SnapToken");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setSnapToken(data.snapToken);
+      })
+      .catch((err) => console.error("Error fetching SnapToken:", err))
+      .finally(() => setIsLoading(false));
+  }, [order.id]);
+
+  const handlePayment = () => {
+    if (!snapToken) {
+      alert("SnapToken is not yet available. Please try again later.");
+      return;
+    }
+    window.snap.pay(snapToken, {
+      onSuccess: function (result) {
+        console.log("Payment success", result);
+      },
+      onPending: function (result) {
+        console.log("Payment pending", result);
+      },
+      onError: function (result) {
+        console.error("Payment error", result);
+      },
+    });
+  };
 
   const formatPrice = (price) => {
     const validPrice = price && !isNaN(price) ? price : 0;
@@ -77,29 +124,27 @@ const Index = ({ order, orderItems, orderInformation, totalPrice, auth }) => {
         </div>
 
         {/* Pay Now Button */}
-        {paymentLink && (
-          <div className="mt-4">
-            <button
-              onClick={() => (window.location.href = paymentLink)}
-              className="w-full rounded bg-blue-500 px-6 py-3 font-medium text-white hover:bg-blue-600"
-            >
-              Pay Now
-            </button>
-          </div>
-        )}
-
-        {/* Alternatively, if you want the button visible always */}
-        {!paymentLink && (
-          <div className="mt-4">
-            <button
-              onClick={() => alert("Payment process coming soon!")}
-              className="w-full rounded-lg bg-custom-yellow py-3 font-semibold text-black transition hover:bg-yellow-600"
-            >
-              Pay Now
-            </button>
-          </div>
-        )}
+        <div className="mt-4">
+          <button
+            id="pay-button"
+            onClick={handlePayment}
+            className={`w-full rounded-lg px-6 py-3 font-semibold text-black ${
+              isLoading
+                ? "cursor-not-allowed bg-gray-300"
+                : "bg-custom-yellow hover:bg-yellow-600"
+            }`}
+            disabled={isLoading}
+          >
+            {isLoading ? "Loading..." : "Pay Now"}
+          </button>
+        </div>
       </div>
+
+      {/* Script Snap.js */}
+      <script
+        src="https://app.sandbox.midtrans.com/snap/snap.js"
+        data-client-key={import.meta.env.VITE_MIDTRANS_CLIENT_KEY}
+      ></script>
     </div>
   );
 };

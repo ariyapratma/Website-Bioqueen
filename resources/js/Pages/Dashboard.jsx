@@ -17,7 +17,7 @@ export default function Dashboard({ auth }) {
     Swal.fire({
       icon: "success",
       title: `Selamat Datang, ${user?.name}!`,
-      text: `Anda login sebagai ${user?.role}.`,
+      // text: `Anda login sebagai ${user?.role}.`,
       confirmButtonText: "OK",
     });
   }, []);
