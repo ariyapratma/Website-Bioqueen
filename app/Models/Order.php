@@ -2,14 +2,18 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids;
 
     protected $fillable = ['user_id', 'total_price', 'product_id', 'status'];
+
+    protected $keyType = 'string';
+    public $incrementing = false;
 
     public function user()
     {
@@ -25,5 +29,4 @@ class Order extends Model
     {
         return $this->hasMany(OrderInformation::class);
     }
-    
 }

@@ -77,6 +77,7 @@ class OrderController extends Controller
             return redirect()->route('order.index')->with('success', 'Order sudah diperbarui!');
         } else {
             $order = Order::create([
+                'id' => (string) \Illuminate\Support\Str::uuid(),
                 'user_id' => auth()->id(),
                 'product_id' => $validated['orderItems'][0]['product_id'],
                 'total_price' => $validated['total_price'],
