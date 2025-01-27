@@ -14,7 +14,7 @@ const CreateProductList = ({ auth }) => {
     slug: "",
     name: "",
     description: "",
-    price: "", // price disimpan sebagai string untuk format Rp.
+    price: "",
   });
 
   const [activeMenu, setActiveMenu] = useState("product-list");
@@ -56,7 +56,7 @@ const CreateProductList = ({ auth }) => {
     formData.append("image_url", data.image_url);
     formData.append("name", data.name);
     formData.append("description", data.description);
-    formData.append("price", formattedPrice); // kirimkan harga tanpa format Rp.
+    formData.append("price", formattedPrice);
 
     post("/product-list", {
       data: formData,

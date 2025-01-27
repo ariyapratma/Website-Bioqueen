@@ -53,7 +53,7 @@ class OrderController extends Controller
             ],
         ]);
     }
-    
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -121,6 +121,7 @@ class OrderController extends Controller
     public function myOrder()
     {
         $orders = Order::where('user_id', auth()->user()->id)->get();
+        $orders = Order::with('product')->where('user_id', auth()->id())->get();
 
         return Inertia::render('User/Order/MyOrder', [
             'orders' => $orders,

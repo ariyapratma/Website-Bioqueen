@@ -112,6 +112,15 @@ const MyOrder = ({ orders = [], auth }) => {
           <thead>
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500">
+                Product Id
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500">
+                Product Name
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500">
+                Product Image
+              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500">
                 Total Price
               </th>
             </tr>
@@ -119,6 +128,20 @@ const MyOrder = ({ orders = [], auth }) => {
           <tbody className="divide-y divide-gray-200 bg-white">
             {orders.map((order) => (
               <tr key={order.id}>
+                <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
+                  {order.product_id}
+                </td>
+                <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
+                  {order.product?.name || "Product name not available"}
+                </td>
+                <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
+                  <img
+                    src={`/storage/${order.product?.image_url}`}
+                    alt={order.name}
+                    className="h-24 w-24 rounded-t-lg object-contain"
+                    style={{ aspectRatio: "1 / 1" }}
+                  />
+                </td>
                 <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
                   Rp {parseFloat(order.total_price).toLocaleString("id-ID")}
                 </td>
