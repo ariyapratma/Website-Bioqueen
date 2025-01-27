@@ -53,7 +53,7 @@ class OrderController extends Controller
             ],
         ]);
     }
-
+    
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -63,21 +63,21 @@ class OrderController extends Controller
             'total_price' => 'required|numeric|min:0',
         ]);
 
-        $existingOrder = Order::where('user_id', auth()->id())
-            ->first();
+        $existingOrder = Order::where('user_id', auth()->id())->first();
 
         if ($existingOrder) {
             $existingOrder->total_price = $validated['total_price'];
             $existingOrder->product_id = $validated['orderItems'][0]['product_id'];
-            $existingOrder->save();
-
             $existingOrder->status = 'Processing';
             $existingOrder->save();
 
             return redirect()->route('order.index')->with('success', 'Order sudah diperbarui!');
         } else {
+            do {
+                $randomId = random_int(1000000000, 9999999999);
+            } while (Order::where('id', $randomId)->exists());
+
             $order = Order::create([
-                'id' => (string) \Illuminate\Support\Str::uuid(),
                 'user_id' => auth()->id(),
                 'product_id' => $validated['orderItems'][0]['product_id'],
                 'total_price' => $validated['total_price'],
