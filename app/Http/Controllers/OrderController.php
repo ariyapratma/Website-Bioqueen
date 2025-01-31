@@ -71,7 +71,7 @@ class OrderController extends Controller
             $existingOrder->status = 'Processing';
             $existingOrder->save();
 
-            return redirect()->route('order.index')->with('success', 'Order sudah diperbarui!');
+            return redirect()->route('order.index')->with('success', 'Order successfully placed!');
         } else {
             do {
                 $randomId = random_int(1000000000, 9999999999);
@@ -87,7 +87,7 @@ class OrderController extends Controller
             $order->status = 'Processing';
             $order->save();
 
-            return redirect()->route('order.index')->with('success', 'Order berhasil dibuat!');
+            return redirect()->route('order.index')->with('success', 'Order successfully placed!');
         }
     }
 

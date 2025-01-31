@@ -3,7 +3,7 @@ import { usePage } from "@inertiajs/react";
 import Swal from "sweetalert2";
 import { Inertia } from "@inertiajs/inertia";
 
-const OrderInfo = ({ auth }) => {
+const OrderInformation = ({ auth }) => {
   const user = auth.user;
   const [activeMenu, setActiveMenu] = useState(2);
   const [orderItems, setOrderItems] = useState([]);
@@ -305,4 +305,4 @@ const OrderInfo = ({ auth }) => {
   );
 };
 
-export default OrderInfo;
+export default OrderInformation;
