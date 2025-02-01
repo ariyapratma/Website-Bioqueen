@@ -252,7 +252,9 @@ class OrderController extends Controller
     public function myOrder()
     {
         $orders = Order::with('product')->where('user_id', auth()->id())->get();
-        $orderInformations = OrderInformation::where('id', $orders->pluck('id'))->get();
+        $orderInformations = $orders->isNotEmpty()
+            ? OrderInformation::whereIn('order_id', $orders->pluck('id'))->get()
+            : collect();
 
         $orders = $orders->map(function ($order) use ($orderInformations) {
             $information = $orderInformations->firstWhere('order_id', $order->id);
