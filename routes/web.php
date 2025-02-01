@@ -52,7 +52,7 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::get('/product', [ProductController::class, 'index'])->name('product');
 Route::get('/maklon', [MaklonController::class, 'index'])->name('maklon');
 
-Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
+Route::middleware(['auth', 'verified', 'role:admin|user'])->group(function () {
     // Route AddCart and CartDetail
     Route::get('/carts', [CartController::class, 'index'])->name('carts.index');
     Route::put('/carts/update/{id}', [CartController::class, 'update'])->name('carts.update');
@@ -60,7 +60,7 @@ Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
 });
 
 // Route untuk Order hanya dapat diakses oleh pengguna dengan peran 'user'
-Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
+Route::middleware(['auth', 'verified', 'role:admin|user'])->group(function () {
     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
     Route::post('/order-informations', [OrderController::class, 'storeInformations'])->name('order.storeInformations');

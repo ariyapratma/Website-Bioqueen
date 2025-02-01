@@ -9,38 +9,41 @@ export default function Navbar({ auth }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [cartItems, setCartItems] = useState(0);
   const { url } = usePage();
-  const user = auth.user;
+  const user = auth?.user;
 
   useEffect(() => {
-    const fetchCartItems = async () => {
-      try {
-        const response = await fetch("/api/cart/items", {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": document
-              .querySelector('meta[name="csrf-token"]')
-              .getAttribute("content"),
-          },
-          credentials: "include",
-        });
+    if (user) {
+      fetchCartItems();
+    }
+  }, [user]);
 
-        if (!response.ok) {
-          throw new Error(
-            `Failed to fetch cart items: ${response.status} ${response.statusText}`,
-          );
-        }
+  const fetchCartItems = async () => {
+    try {
+      const response = await fetch("/api/cart/items", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${user?.token}`,
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": document
+            .querySelector('meta[name="csrf-token"]')
+            ?.getAttribute("content"),
+        },
+        credentials: "include",
+      });
 
-        const data = await response.json();
-        setCartItems(data.length);
-      } catch (error) {
-        console.error("Failed to fetch cart items:", error);
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch cart items: ${response.status} ${response.statusText}`
+        );
       }
-    };
 
-    fetchCartItems();
-  }, []);
+      const data = await response.json();
+      setCartItems(data.length);
+    } catch (error) {
+      console.error("Failed to fetch cart items:", error);
+    }
+  };
 
   const menuItems = [
     { name: "Home", path: "/" },
@@ -228,24 +231,6 @@ export default function Navbar({ auth }) {
                 >
                   Dashboard
                 </Link>
-              </li>
-            )}
-            {/* Avatar and User Info in Mobile Menu */}
-            {user && (
-              <li className="mt-4 flex flex-col items-center">
-                <img
-                  className="h-10 w-10 rounded-full"
-                  src={`/storage/avatars/${auth.user.id}.png`}
-                  alt={auth.user.name}
-                />
-                <div className="pt-2">
-                  <div className="font-lexend text-base font-medium text-gray-800">
-                    {user.name}
-                  </div>
-                  <div className="font-lexend text-sm font-medium text-gray-600">
-                    {user.email}
-                  </div>
-                </div>
               </li>
             )}
           </ul>

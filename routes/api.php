@@ -8,37 +8,17 @@ use App\Http\Controllers\VillageController;
 use App\Http\Controllers\DistrictController;
 use App\Http\Controllers\ProvinceController;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
-
-
-// Rute untuk mengambil informasi pengguna yang terautentikasi
-Route::middleware('auth')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return response()->json($request->user());
 });
 
-// Rute untuk cart
-// Rute cart di api.php
-Route::middleware('auth')->group(function () {
-    // Route API yang mengembalikan JSON biasa untuk Cart
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('/cart/items', [CartController::class, 'getCartItems']);
     Route::post('/cart/add', [CartController::class, 'addToCart']);
 });
 
-
-// Route API yang mengembalikan JSON biasa untuk Data Provinsi
+// Rute API untuk data provinsi
 Route::get('/provinces', [ProvinceController::class, 'index']);
-// Route API yang mengembalikan JSON biasa untuk Data Kota/Kabupaten
 Route::get('/regencies/{provinceId}', [RegencyController::class, 'getRegenciesByProvince']);
-// Route API yang mengembalikan JSON biasa untuk Data Kecamatan
 Route::get('/districts', [DistrictController::class, 'index']);
-// Route API yang mengembalikan JSON biasa untuk Data Kelurahan
 Route::get('/villages', [VillageController::class, 'index']);
