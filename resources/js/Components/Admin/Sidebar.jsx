@@ -11,7 +11,6 @@ import {
 } from "react-icons/fa";
 
 const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
-  console.log(auth);
   const user = auth?.user;
   if (!user) {
     return null;

@@ -2,7 +2,6 @@ import { usePage } from "@inertiajs/react";
 
 const HeroVideo = () => {
   const { props } = usePage();
-  console.log(props);
   const { dataHeroVideo } = props;
 
   return (

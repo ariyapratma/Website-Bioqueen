@@ -107,7 +107,7 @@ const MyOrder = ({ orders = [], auth }) => {
 
         {/* Title */}
         <h2 className="mb-4 font-lexend text-xl font-bold">Order Summary</h2>
-        {/* Order Details */}
+        {/* Order Summary */}
         <table className="min-w-full divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-md">
           <thead>
             <tr>
@@ -164,6 +164,9 @@ const MyOrder = ({ orders = [], auth }) => {
               <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500">
                 Order Date
               </th>
+              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500">
+                Notes
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
@@ -181,6 +184,9 @@ const MyOrder = ({ orders = [], auth }) => {
                     minute: "2-digit",
                     hour12: true,
                   })}
+                </td>
+                <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
+                  {order.orderInformation?.notes}
                 </td>
               </tr>
             ))}

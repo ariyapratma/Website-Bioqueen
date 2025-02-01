@@ -8,7 +8,6 @@ import { usePage } from "@inertiajs/react";
 
 const HeroService = () => {
   const { props } = usePage();
-  console.log(props);
   const { dataHeroService } = props;
 
   return (

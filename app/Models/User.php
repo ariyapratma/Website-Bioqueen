@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use App\Models\Cart;
 
 class User extends Authenticatable
 {
@@ -44,10 +45,19 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // Model User.php
-
+    /**
+     * Relasi dengan Cart (satu user bisa memiliki banyak cart items).
+     */
     public function cartItems()
     {
         return $this->hasMany(Cart::class);
+    }
+
+    /**
+     * Get the user's avatar or return a default one.
+     */
+    public function getAvatarAttribute($value)
+    {
+        return $value ?? asset('storage/avatars/default.png');
     }
 }
