@@ -12,6 +12,7 @@ const Product = ({ auth }) => {
       <main className="flex-grow">
         {/*HeaderProduct*/}
         <HeaderProduct />
+        {/*HeroCategories*/}
         <HeroCategories />
       </main>
       <Footer />

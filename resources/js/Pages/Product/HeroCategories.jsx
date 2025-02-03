@@ -3,8 +3,6 @@ import { usePage, Link, router } from "@inertiajs/react";
 const HeroCategories = () => {
   const { props } = usePage();
   const dataHeroCategories = props.dataHeroCategories || [];
-
-  // Fungsi untuk menangani klik kategori
   const handleCategoryClick = (category) => {
     router.get(`/product/${category.slug}`);
   };
@@ -59,7 +57,7 @@ const HeroCategories = () => {
             </div>
           ))
         ) : (
-          <p className="text-center text-gray-500">No categories available</p>
+          <p className="text-center text-gray-500">No categories available.</p>
         )}
       </div>
     </div>
