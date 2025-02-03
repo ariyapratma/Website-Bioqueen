@@ -8,7 +8,7 @@ import Notification from "@/Components/Admin/Notification";
 import Dropdown from "@/Components/Dropdown";
 import Swal from "sweetalert2";
 
-export default function Dashboard({ auth }) {
+export default function Dashboard({ orders = [], dataHeroReview = [], auth }) {
   const [activeMenu, setActiveMenu] = useState("dashboard");
   const user = auth.user;
 
@@ -17,7 +17,6 @@ export default function Dashboard({ auth }) {
     Swal.fire({
       icon: "success",
       title: `Selamat Datang, ${user?.name}!`,
-      // text: `Anda login sebagai ${user?.role}.`,
       confirmButtonText: "OK",
     });
   }, []);
@@ -144,35 +143,44 @@ export default function Dashboard({ auth }) {
           {/* User Cards */}
           {user.role === "user" && (
             <>
-              {/* Card 1: Informasi Pengguna */}
+              {/* Card 1: User Information */}
               <div className="rounded-lg bg-white p-6 shadow-md">
                 <h3 className="font-lexend text-lg font-semibold">
-                  Informasi Pengguna
+                  User Information
                 </h3>
                 <div className="mt-4">
-                  <p>Nama: {user.name}</p>
+                  <p>Name: {user.name}</p>
                   <p>Email: {user.email}</p>
                 </div>
               </div>
 
-              {/* Card 2: Riwayat Pesanan */}
+              {/* Card 2: Order History */}
               <div className="rounded-lg bg-white p-6 shadow-md">
                 <h3 className="font-lexend text-lg font-semibold">
-                  Riwayat Pesanan
+                  Order History
                 </h3>
                 <div className="mt-4">
-                  <p>Jumlah Pesanan: 3</p>
-                  {/* Tempatkan grafik atau informasi lain */}
+                  {orders.length === 0 ? (
+                    <p className="text-red-500">
+                      There is no order history yet.
+                    </p>
+                  ) : (
+                    <p>Jumlah Pesanan: {orders.length}</p>
+                  )}
                 </div>
               </div>
-              {/* Card 3: Riwayat Komentar */}
+
+              {/* Card 3: Comment History */}
               <div className="rounded-lg bg-white p-6 shadow-md">
                 <h3 className="font-lexend text-lg font-semibold">
-                  Riwayat Komentar
+                  Comment History
                 </h3>
                 <div className="mt-4">
-                  <p>Jumlah Komentar: 13</p>
-                  {/* Tempatkan grafik atau informasi lain */}
+                  {dataHeroReview.length === 0 ? (
+                    <p className="text-red-500">No comment yet.</p>
+                  ) : (
+                    <p>Total Comments: {dataHeroReview.length}</p>
+                  )}
                 </div>
               </div>
             </>

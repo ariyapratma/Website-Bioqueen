@@ -9,7 +9,6 @@ const HeroReview = () => {
   const { dataHeroReview = [], success } = props;
 
   useEffect(() => {
-    // Menampilkan pesan sukses menggunakan SweetAlert
     if (success) {
       Swal.fire({
         title: "Success!",
