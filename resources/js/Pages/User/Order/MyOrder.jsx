@@ -114,7 +114,7 @@ const MyOrder = ({ orders = [], auth }) => {
         </div>
 
         {/* Title */}
-        <h2 className="mb-4 font-lexend text-xl font-bold">Order Summary</h2>
+        <h2 className="mb-6 font-lexend text-xl font-bold">Order Summary</h2>
 
         {/* Order Summary */}
         <div className="overflow-hidden rounded-lg bg-white shadow-md">
@@ -178,7 +178,7 @@ const MyOrder = ({ orders = [], auth }) => {
         </div>
 
         {/* Title */}
-        <h2 className="mb-4 mt-4 font-lexend text-xl font-bold">
+        <h2 className="mb-6 mt-6 font-lexend text-xl font-bold">
           Order Details
         </h2>
 
