@@ -11,16 +11,16 @@ const HeroAboutUs = () => {
         {/* Text Section */}
         <div className="flex flex-col p-6 lg:w-1/2">
           <h1 className="mb-4 font-lexend text-3xl font-bold text-black sm:text-4xl">
-            {dataHeroAboutUs?.title || "No title available"}
+            {dataHeroAboutUs?.title || "No title available."}
           </h1>
           <p className="mb-4 font-lexend font-medium text-gray-600">
-            {dataHeroAboutUs?.description1 || "No description available"}
+            {dataHeroAboutUs?.description1 || "No description available."}
           </p>
           <p className="mb-4 font-lexend font-medium text-gray-600">
-            {dataHeroAboutUs?.description2 || "No description available"}
+            {dataHeroAboutUs?.description2 || "No description available."}
           </p>
           <p className="font-lexend font-medium text-gray-600">
-            {dataHeroAboutUs?.description3 || "No description available"}
+            {dataHeroAboutUs?.description3 || "No description available."}
           </p>
         </div>
         {/* Image Section */}

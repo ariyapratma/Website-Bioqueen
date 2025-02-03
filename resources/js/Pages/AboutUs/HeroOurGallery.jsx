@@ -11,10 +11,10 @@ const HeroOurGallery = () => {
     <div className="mx-auto mb-24 px-6 py-4">
       <div className="container mx-auto text-center">
         <h1 className="mb-6 font-lexend text-4xl font-bold text-black lg:text-5xl">
-          {dataHeroOurGallery?.title || "No title available"}
+          {dataHeroOurGallery?.title || "No title available."}
         </h1>
         <p className="mb-10 font-lexend text-lg text-gray-500">
-          {dataHeroOurGallery?.subtitle || "No subtitle available"}
+          {dataHeroOurGallery?.subtitle || "No subtitle available."}
         </p>
 
         {/* Grid untuk menampilkan gambar secara terpisah */}
@@ -36,7 +36,7 @@ const HeroOurGallery = () => {
                 <div className="absolute bottom-4 left-4">
                   <h3 className="font-lexend text-xl font-semibold text-white">
                     {dataHeroOurGallery?.title_image_url1 ||
-                      "No title image available"}
+                      "No title image available."}
                   </h3>
                 </div>
               </div>
@@ -64,7 +64,7 @@ const HeroOurGallery = () => {
                 <div className="absolute bottom-4 left-4">
                   <h3 className="font-lexend text-xl font-semibold text-white">
                     {dataHeroOurGallery?.title_image_url2 ||
-                      "No title image available"}
+                      "No title image available."}
                   </h3>
                 </div>
               </div>
@@ -92,7 +92,7 @@ const HeroOurGallery = () => {
                 <div className="absolute bottom-4 left-4">
                   <h3 className="font-lexend text-xl font-semibold text-white">
                     {dataHeroOurGallery?.title_image_url3 ||
-                      "No title image available"}
+                      "No title image available."}
                   </h3>
                 </div>
               </div>

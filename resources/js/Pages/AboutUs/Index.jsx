@@ -25,7 +25,7 @@ const Index = ({ auth }) => {
         {/* HeroOurGallery */}
         <HeroOurGallery />
       </main>
-      <Footer/>
+      <Footer />
     </div>
   );
 };

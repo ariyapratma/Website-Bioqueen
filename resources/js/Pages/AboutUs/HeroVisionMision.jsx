@@ -11,29 +11,29 @@ const HeroVisionMision = () => {
         {/* Text Section */}
         <div className="flex flex-col p-6 lg:w-1/2">
           <h1 className="mb-4 font-lexend text-3xl font-bold text-black sm:text-4xl">
-            {dataHeroVisionMision?.title || "No title available"}
+            {dataHeroVisionMision?.title || "No title available."}
           </h1>
           <p className="mb-4 font-lexend font-medium text-gray-600">
-            {dataHeroVisionMision?.subtitle || "No subtitle available"}
+            {dataHeroVisionMision?.subtitle || "No subtitle available."}
           </p>
           <div className="space-y-2 font-lexend font-medium text-gray-600">
             <p>
-              {dataHeroVisionMision?.description1 || "No description available"}
+              {dataHeroVisionMision?.description1 || "No description available."}
             </p>
             <p>
-              {dataHeroVisionMision?.description2 || "No description available"}
+              {dataHeroVisionMision?.description2 || "No description available."}
             </p>
             <p>
-              {dataHeroVisionMision?.description3 || "No description available"}
+              {dataHeroVisionMision?.description3 || "No description available."}
             </p>
             <p>
-              {dataHeroVisionMision?.description4 || "No description available"}
+              {dataHeroVisionMision?.description4 || "No description available."}
             </p>
             <p>
-              {dataHeroVisionMision?.description5 || "No description available"}
+              {dataHeroVisionMision?.description5 || "No description available."}
             </p>
             <p>
-              {dataHeroVisionMision?.description6 || "No description available"}
+              {dataHeroVisionMision?.description6 || "No description available."}
             </p>
           </div>
         </div>
