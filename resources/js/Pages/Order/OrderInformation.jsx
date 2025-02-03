@@ -22,92 +22,9 @@ const OrderInformation = ({ auth }) => {
     }
   }, [cartItems]);
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   // Check for empty fields
-  //   if (!recipientName || !email || !postalCode || !address) {
-  //     Swal.fire({
-  //       icon: "error",
-  //       title: "Incomplete Form",
-  //       text: "Please fill out all required fields.",
-  //       confirmButtonText: "OK",
-  //     });
-  //     return;
-  //   }
-
-  //   // Ensure orderItems is defined
-  //   if (!cartItems || cartItems.length === 0) {
-  //     Swal.fire({
-  //       icon: "error",
-  //       title: "No items in cart",
-  //       text: "Please add items to your cart before submitting.",
-  //       confirmButtonText: "OK",
-  //     });
-  //     return;
-  //   }
-
-  //   // CSRF token retrieval
-  //   const csrfToken = document
-  //     .querySelector('meta[name="csrf-token"]')
-  //     ?.getAttribute("content");
-
-  //   if (!csrfToken) {
-  //     Swal.fire({
-  //       icon: "error",
-  //       title: "CSRF Token Missing",
-  //       text: "Please refresh the page and try again.",
-  //       confirmButtonText: "OK",
-  //     });
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await fetch("/order-informations", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Accept: "application/json",
-  //         "X-CSRF-TOKEN": csrfToken,
-  //       },
-  //       body: JSON.stringify({
-  //         recipient_name: recipientName,
-  //         email: email,
-  //         notes: notes,
-  //         address: address,
-  //         postal_code: postalCode,
-  //       }),
-  //       credentials: "same-origin",
-  //     });
-
-  //     const result = await response.json();
-
-  //     if (response.ok) {
-  //       Swal.fire({
-  //         icon: "success",
-  //         title: "Order Submitted",
-  //         text: result.message || "Order submitted successfully!",
-  //         confirmButtonText: "OK",
-  //       });
-  //     } else {
-  //       throw new Error(
-  //         result.message || "Failed to submit order informations.",
-  //       );
-  //     }
-  //   } catch (error) {
-  //     Swal.fire({
-  //       icon: "error",
-  //       title: "Submission Failed",
-  //       text: error.message || "An error occurred while submitting the order.",
-  //       confirmButtonText: "OK",
-  //     });
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check for empty fields
     if (!recipientName || !email || !postalCode || !address) {
       Swal.fire({
         icon: "error",
@@ -118,7 +35,6 @@ const OrderInformation = ({ auth }) => {
       return;
     }
 
-    // Ensure orderItems is defined
     if (!cartItems || cartItems.length === 0) {
       Swal.fire({
         icon: "error",
@@ -129,7 +45,6 @@ const OrderInformation = ({ auth }) => {
       return;
     }
 
-    // CSRF token retrieval
     const csrfToken = document
       .querySelector('meta[name="csrf-token"]')
       ?.getAttribute("content");
@@ -164,17 +79,16 @@ const OrderInformation = ({ auth }) => {
 
       const result = await response.json();
 
-      if (response.ok) {
-        Swal.fire({
-          icon: "success",
-          title: "Order Submitted",
-          text: result.message || "Order submitted successfully!",
-          confirmButtonText: "OK",
-        });
-      } else {
-        console.error("Error in response:", result);
-        throw new Error(result.message || "Failed to submit order information.");
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to submit order information.");
       }
+
+      Swal.fire({
+        icon: "success",
+        title: "Order Submitted",
+        text: result.message || "Order submitted successfully!",
+        confirmButtonText: "OK",
+      });
     } catch (error) {
       console.error("Error during fetch:", error);
       Swal.fire({
@@ -184,8 +98,7 @@ const OrderInformation = ({ auth }) => {
         confirmButtonText: "OK",
       });
     }
-};
-
+  };
 
   const handleTabClick = (menuIndex) => {
     if (menuIndex === 1) {

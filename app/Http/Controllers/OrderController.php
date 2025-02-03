@@ -91,121 +91,6 @@ class OrderController extends Controller
         }
     }
 
-    // public function storeInformations(Request $request)
-    // {
-    //     $validated = $request->validate([
-    //         'recipient_name' => 'required|string',
-    //         'email' => 'required|email',
-    //         'notes' => 'nullable|string',
-    //         'address' => 'required|string',
-    //         'postal_code' => 'required|numeric',
-    //     ]);
-
-    //     try {
-    //         $orderInformation = OrderInformation::create($validated);
-
-    //         return response()->json([
-    //             'message' => 'Order information submitted successfully!',
-    //             'orderInformation' => $orderInformation
-    //         ]);
-    //     } catch (\Exception $e) {
-    //         Log::error($e->getMessage());
-
-    //         return response()->json([
-    //             'message' => 'Failed to submit order information.',
-    //             'error' => $e->getMessage()
-    //         ], 500);
-    //     }
-    // }
-
-    // public function storeInformations(Request $request)
-    // {
-    //     $validated = $request->validate([
-    //         'recipient_name' => 'required|string',
-    //         'email' => 'required|email',
-    //         'notes' => 'nullable|string',
-    //         'address' => 'required|string',
-    //         'postal_code' => 'required|numeric',
-    //     ]);
-
-    //     try {
-    //         // Ambil order yang sudah ada atau baru dibuat
-    //         $existingOrder = Order::where('user_id', auth()->id())->where('status', 'Processing')->first();
-
-    //         if (!$existingOrder) {
-    //             return response()->json([
-    //                 'message' => 'No active order found.',
-    //             ], 400);
-    //         }
-
-    //         // Tambahkan order_id dari order yang sudah ada atau baru saja diproses
-    //         $validated['order_id'] = $existingOrder->id;
-
-    //         // Simpan data informasi order
-    //         $orderInformation = OrderInformation::create($validated);
-
-    //         return response()->json([
-    //             'message' => 'Order information submitted successfully!',
-    //             'orderInformation' => $orderInformation
-    //         ]);
-    //     } catch (\Exception $e) {
-    //         Log::error($e->getMessage());
-
-    //         return response()->json([
-    //             'message' => 'Failed to submit order information.',
-    //             'error' => $e->getMessage()
-    //         ], 500);
-    //     }
-    // }
-
-    // public function storeInformations(Request $request)
-    // {
-    //     $validated = $request->validate([
-    //         'recipient_name' => 'required|string',
-    //         'email' => 'required|email',
-    //         'notes' => 'nullable|string',
-    //         'address' => 'required|string',
-    //         'postal_code' => 'required|numeric',
-    //     ]);
-
-    //     try {
-    //         // Retrieve the currently "Processing" order
-    //         $existingOrder = Order::where('user_id', auth()->id())
-    //             ->where('status', 'Processing')
-    //             ->first();
-
-    //         if (!$existingOrder) {
-    //             return response()->json([
-    //                 'message' => 'No active order found.',
-    //             ], 400);  // Return 400 if no active order is found
-    //         }
-
-    //         // Generate a custom ID, could be UUID or any other custom logic
-    //         // Example: Using UUID (you could also use something like random_int)
-    //         $customId = (string) \Str::uuid();  // Laravel's UUID helper
-
-    //         // Add the order_id from the existing order
-    //         $validated['order_id'] = $existingOrder->id;
-    //         $validated['id'] = $customId;  // Set the custom id
-
-    //         // Create the OrderInformation, using custom ID
-    //         $orderInformation = OrderInformation::create($validated);
-
-    //         return response()->json([
-    //             'message' => 'Order information submitted successfully!',
-    //             'orderInformation' => $orderInformation
-    //         ]);
-    //     } catch (\Exception $e) {
-    //         // Log any errors that occur during the process
-    //         Log::error($e->getMessage());
-
-    //         return response()->json([
-    //             'message' => 'Failed to submit order information.',
-    //             'error' => $e->getMessage()
-    //         ], 500);  // Return 500 if there is a server error
-    //     }
-    // }
-
     public function storeInformations(Request $request)
     {
         $validated = $request->validate([
@@ -217,7 +102,7 @@ class OrderController extends Controller
         ]);
 
         try {
-            // Retrieve the currently "Processing" order
+            // Cek apakah ada order yang sedang dalam status "Processing"
             $existingOrder = Order::where('user_id', auth()->id())
                 ->where('status', 'Processing')
                 ->first();
@@ -225,13 +110,14 @@ class OrderController extends Controller
             if (!$existingOrder) {
                 return response()->json([
                     'message' => 'No active order found.',
-                ], 400);  // Return 400 if no active order is found
+                    'error' => 'Order with status Processing not found.'
+                ], 400);
             }
 
-            // Assign the order's id directly, since 'order_id' is actually 'id' in the `orders` table
-            $validated['order_id'] = $existingOrder->id; // Use the `id` from the `orders` table
+            // Assign ID order
+            $validated['order_id'] = $existingOrder->id;
 
-            // Create the OrderInformation, using the order_id to link to the order
+            // Simpan informasi order
             $orderInformation = OrderInformation::create($validated);
 
             return response()->json([
@@ -239,13 +125,12 @@ class OrderController extends Controller
                 'orderInformation' => $orderInformation
             ]);
         } catch (\Exception $e) {
-            // Log any errors that occur during the process
-            Log::error($e->getMessage());
+            Log::error("Order Information Error: " . $e->getMessage());
 
             return response()->json([
                 'message' => 'Failed to submit order information.',
                 'error' => $e->getMessage()
-            ], 500);  // Return 500 if there is a server error
+            ], 500);
         }
     }
 
