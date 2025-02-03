@@ -30,7 +30,7 @@ const HeroExcellenceValue = () => {
             <RiCustomerService2Line size="32" />
           </div>
           <h6 className="mb-1 font-lexend text-lg font-medium text-black sm:mb-2 sm:text-xl">
-            {dataHeroExcellenceValue?.heading1 || "No heading available"}
+            {dataHeroExcellenceValue?.heading1 || "No heading available."}
           </h6>
           <p className="font-lexend text-xs text-gray-600 sm:text-sm">
             {dataHeroExcellenceValue?.content1 || "No content available."}
@@ -43,7 +43,7 @@ const HeroExcellenceValue = () => {
             <PiCertificate size="32" />
           </div>
           <h6 className="mb-1 font-lexend text-lg font-medium text-black sm:mb-2 sm:text-xl">
-            {dataHeroExcellenceValue?.heading2 || "No heading available"}
+            {dataHeroExcellenceValue?.heading2 || "No heading available."}
           </h6>
           <p className="font-lexend text-xs text-gray-600 sm:text-sm">
             {dataHeroExcellenceValue?.content2 || "No content available."}
@@ -56,7 +56,7 @@ const HeroExcellenceValue = () => {
             <MdSupportAgent size="32" />
           </div>
           <h6 className="mb-1 font-lexend text-lg font-medium text-black sm:mb-2 sm:text-xl">
-            {dataHeroExcellenceValue?.heading3 || "No heading available"}
+            {dataHeroExcellenceValue?.heading3 || "No heading available."}
           </h6>
           <p className="font-lexend text-xs text-gray-600 sm:text-sm">
             {dataHeroExcellenceValue?.content3 || "No content available."}
@@ -69,7 +69,7 @@ const HeroExcellenceValue = () => {
             <FaCheckCircle size="32" />
           </div>
           <h6 className="mb-1 font-lexend text-lg font-medium text-black sm:mb-2 sm:text-xl">
-            {dataHeroExcellenceValue?.heading4 || "No heading available"}
+            {dataHeroExcellenceValue?.heading4 || "No heading available."}
           </h6>
           <p className="font-lexend text-xs text-gray-600 sm:text-sm">
             {dataHeroExcellenceValue?.content4 || "No content available."}

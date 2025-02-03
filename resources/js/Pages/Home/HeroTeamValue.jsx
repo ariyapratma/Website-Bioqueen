@@ -44,22 +44,22 @@ const HeroTeamValue = () => {
               <span className="font-bold">PT Ratu Bio Indonesia?</span>
             </h1>
             <h6 className="mb-8 rounded-xl bg-custom-yellow p-4 text-left font-lexend text-xl font-bold text-black sm:p-6 sm:text-xl">
-              {dataHeroTeamValue?.subtitle || "No subtitle available"}
+              {dataHeroTeamValue?.subtitle || "No subtitle available."}
             </h6>
             <div className="mb-8">
               <h6 className="mb-2 text-left font-lexend text-xl font-medium text-black sm:text-2xl">
-                {dataHeroTeamValue?.heading1 || "No heading available"}
+                {dataHeroTeamValue?.heading1 || "No heading available."}
               </h6>
               <p className="font-regular mb-8 text-left font-lexend text-sm text-gray-600 sm:text-lg">
-                {dataHeroTeamValue?.content1 || "No content available"}
+                {dataHeroTeamValue?.content1 || "No content available."}
               </p>
             </div>
             <div>
               <h6 className="mb-2 text-left font-lexend text-xl font-medium text-black sm:text-2xl">
-                {dataHeroTeamValue?.heading2 || "No heading available"}
+                {dataHeroTeamValue?.heading2 || "No heading available."}
               </h6>
               <p className="font-regular mb-8 text-left font-lexend text-sm text-gray-600 sm:text-lg">
-                {dataHeroTeamValue?.content2 || "No content available"}
+                {dataHeroTeamValue?.content2 || "No content available."}
               </p>
             </div>
           </div>

@@ -9,10 +9,10 @@ const HeroCertificate = () => {
       <div className="flex w-full max-w-5xl flex-col items-center p-4 sm:p-6">
         {/* Title dan Subtitle */}
         <h1 className="mb-6 text-center font-lexend text-3xl font-medium text-black sm:mb-8 sm:text-4xl md:text-5xl">
-          {dataHeroCertificate?.title || "No title available"}
+          {dataHeroCertificate?.title || "No title available."}
         </h1>
         <p className="mb-8 max-w-xl text-center font-lexend text-sm text-gray-600 sm:mb-10 md:text-base">
-          {dataHeroCertificate?.subtitle || "No subtitle available"}
+          {dataHeroCertificate?.subtitle || "No subtitle available."}
         </p>
 
         {/* Menampilkan gambar sertifikat */}

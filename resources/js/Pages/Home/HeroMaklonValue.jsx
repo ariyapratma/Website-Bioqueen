@@ -9,7 +9,7 @@ const HeroMaklonValue = () => {
       <div className="w-full max-w-7xl p-4 sm:p-6">
         {/* Title Section */}
         <h1 className="mx-auto mb-8 rounded-xl bg-custom-yellow p-4 text-center font-lexend text-2xl font-bold text-black sm:text-3xl md:text-4xl">
-          {dataHeroMaklonValue?.title || "No title available"}
+          {dataHeroMaklonValue?.title || "No title available."}
         </h1>
 
         {/* Content Section */}
@@ -29,10 +29,10 @@ const HeroMaklonValue = () => {
               </p>
             )}
             <h6 className="mb-2 text-center font-lexend text-xl font-medium text-black sm:text-2xl md:text-3xl lg:text-left">
-              {dataHeroMaklonValue?.heading1 || "No heading available"}
+              {dataHeroMaklonValue?.heading1 || "No heading available."}
             </h6>
             <p className="font-regular mb-4 text-center font-lexend text-sm text-gray-600 sm:text-base md:text-lg lg:text-left">
-              {dataHeroMaklonValue?.content1 || "No content available"}
+              {dataHeroMaklonValue?.content1 || "No content available."}
             </p>
           </div>
 
@@ -51,10 +51,10 @@ const HeroMaklonValue = () => {
               </p>
             )}
             <h6 className="mb-2 text-center font-lexend text-xl font-medium text-black sm:text-2xl md:text-3xl lg:text-left">
-              {dataHeroMaklonValue?.heading2 || "No heading available"}
+              {dataHeroMaklonValue?.heading2 || "No heading available."}
             </h6>
             <p className="font-regular mb-4 text-center font-lexend text-sm text-gray-600 sm:text-base md:text-lg lg:text-left">
-              {dataHeroMaklonValue?.content2 || "No content available"}
+              {dataHeroMaklonValue?.content2 || "No content available."}
             </p>
           </div>
         </div>

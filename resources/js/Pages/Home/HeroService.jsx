@@ -29,7 +29,7 @@ const HeroService = () => {
         <div className="absolute inset-0 z-0 rounded-md bg-black bg-opacity-50"></div>
         <div className="relative z-10 flex h-full flex-col items-center justify-center p-6 text-custom-yellow">
           <h1 className="text-center font-lexend text-xl font-medium sm:text-3xl md:text-4xl lg:text-5xl">
-            {dataHeroService?.title || "No title available"}
+            {dataHeroService?.title || "No title available."}
           </h1>
         </div>
       </div>
@@ -44,10 +44,10 @@ const HeroService = () => {
             <MdOutlineCleanHands size="48" />
           </div>
           <h6 className="mb-2 font-lexend text-lg font-medium sm:text-xl">
-            {dataHeroService?.heading1 || "No heading available"}
+            {dataHeroService?.heading1 || "No heading available."}
           </h6>
           <p className="font-lexend text-sm text-gray-600 sm:text-base">
-            {dataHeroService?.content1 || "No content available"}
+            {dataHeroService?.content1 || "No content available."}
           </p>
         </div>
 
@@ -59,10 +59,10 @@ const HeroService = () => {
             <MdOutlineMedicalServices size="48" />
           </div>
           <h6 className="mb-2 font-lexend text-lg font-medium sm:text-xl">
-            {dataHeroService?.heading2 || "No heading available"}
+            {dataHeroService?.heading2 || "No heading available."}
           </h6>
           <p className="font-lexend text-sm text-gray-600 sm:text-base">
-            {dataHeroService?.content2 || "No content available"}
+            {dataHeroService?.content2 || "No content available."}
           </p>
         </div>
 
@@ -74,10 +74,10 @@ const HeroService = () => {
             <MdOutlineStarRate size="48" />
           </div>
           <h6 className="mb-2 font-lexend text-lg font-medium sm:text-xl">
-            {dataHeroService?.heading3 || "No heading available"}
+            {dataHeroService?.heading3 || "No heading available."}
           </h6>
           <p className="font-lexend text-sm text-gray-600 sm:text-base">
-            {dataHeroService?.content3 || "No content available"}
+            {dataHeroService?.content3 || "No content available."}
           </p>
         </div>
       </div>

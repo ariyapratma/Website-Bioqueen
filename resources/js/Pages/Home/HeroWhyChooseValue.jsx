@@ -43,22 +43,22 @@ const HeroWhyChooseValue = () => {
               <span className="font-bold">PT Ratu Bio Indonesia?</span>
             </h1>
             <h6 className="mb-8 rounded-xl bg-custom-yellow p-4 text-left font-lexend text-xl font-bold text-black sm:p-6 sm:text-xl">
-              {dataHeroWhyChoose?.subtitle || "No subtitle available"}
+              {dataHeroWhyChoose?.subtitle || "No subtitle available."}
             </h6>
             <div className="mb-8">
               <h6 className="mb-2 text-left font-lexend text-xl font-medium text-black sm:text-2xl">
-                {dataHeroWhyChoose?.heading1 || "No heading available"}
+                {dataHeroWhyChoose?.heading1 || "No heading available."}
               </h6>
               <p className="font-regular mb-8 text-left font-lexend text-sm text-gray-600 sm:text-lg">
-                {dataHeroWhyChoose?.content1 || "No content available"}
+                {dataHeroWhyChoose?.content1 || "No content available."}
               </p>
             </div>
             <div>
               <h6 className="mb-2 text-left font-lexend text-xl font-medium text-black sm:text-2xl">
-                {dataHeroWhyChoose?.heading2 || "No heading available"}
+                {dataHeroWhyChoose?.heading2 || "No heading available."}
               </h6>
               <p className="font-regular mb-8 text-left font-lexend text-sm text-gray-600 sm:text-lg">
-                {dataHeroWhyChoose?.content2 || "No content available"}
+                {dataHeroWhyChoose?.content2 || "No content available."}
               </p>
             </div>
           </div>
