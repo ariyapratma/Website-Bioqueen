@@ -86,23 +86,30 @@ const MyOrder = ({ orders = [], auth }) => {
         </div>
 
         {/* Order Status */}
-        <div className="mb-6 text-center">
+        <div className="mb-6 mt-8 text-center">
           <h2 className="font-lexend text-2xl font-bold">Order Status</h2>
-          <span
-            className={`mt-2 inline-flex items-center rounded-full px-4 py-2 text-sm font-medium ${
-              orders[0]?.status === "Pending"
-                ? "bg-yellow-100 text-yellow-800"
-                : orders[0]?.status === "Processing"
-                  ? "bg-blue-100 text-blue-800"
-                  : orders[0]?.status === "Completed"
-                    ? "bg-green-100 text-green-800"
-                    : orders[0]?.status === "Cancelled"
-                      ? "bg-red-100 text-red-800"
-                      : "bg-gray-100 text-gray-800"
-            }`}
-          >
-            {orders[0]?.status}
-          </span>
+
+          {orders.length === 0 ? (
+            <p className="mt-2 text-center font-lexend text-sm font-medium text-red-500">
+              No order status available.
+            </p>
+          ) : (
+            <span
+              className={`mt-2 inline-flex items-center rounded-full px-4 py-2 text-sm font-medium ${
+                orders[0]?.status === "Pending"
+                  ? "bg-yellow-100 text-yellow-800"
+                  : orders[0]?.status === "Processing"
+                    ? "bg-blue-100 text-blue-800"
+                    : orders[0]?.status === "Completed"
+                      ? "bg-green-100 text-green-800"
+                      : orders[0]?.status === "Cancelled"
+                        ? "bg-red-100 text-red-800"
+                        : "bg-gray-100 text-gray-800"
+              }`}
+            >
+              {orders[0]?.status}
+            </span>
+          )}
         </div>
 
         {/* Title */}
