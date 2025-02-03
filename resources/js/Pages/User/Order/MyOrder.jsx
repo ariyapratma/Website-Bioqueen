@@ -87,6 +87,7 @@ const MyOrder = ({ orders = [], auth }) => {
 
         {/* Order Status */}
         <div className="mb-6 mt-8 text-center">
+          {/* Title */}
           <h2 className="font-lexend text-2xl font-bold">Order Status</h2>
 
           {orders.length === 0 ? (
@@ -114,91 +115,127 @@ const MyOrder = ({ orders = [], auth }) => {
 
         {/* Title */}
         <h2 className="mb-4 font-lexend text-xl font-bold">Order Summary</h2>
+
         {/* Order Summary */}
-        <table className="min-w-full divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-md">
-          <thead>
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500">
-                Product Id
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500">
-                Product Name
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500">
-                Product Image
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500">
-                Total Price
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200 bg-white">
-            {orders.map((order) => (
-              <tr key={order.id}>
-                <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
-                  {order.product_id}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
-                  {order.product?.name || "Product name not available"}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
-                  <img
-                    src={`/storage/${order.product?.image_url}`}
-                    alt={order.name}
-                    className="h-24 w-24 rounded-t-lg object-contain"
-                    style={{ aspectRatio: "1 / 1" }}
-                  />
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
-                  Rp {parseFloat(order.total_price).toLocaleString("id-ID")}
-                </td>
+        <div className="overflow-hidden rounded-lg bg-white shadow-md">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead>
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500">
+                  Product Id
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500">
+                  Product Name
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500">
+                  Product Image
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500">
+                  Total Price
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody className="divide-y divide-gray-200 bg-white">
+              {orders.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan="4"
+                    className="px-6 py-4 text-center text-gray-500"
+                  >
+                    No order summary available.
+                  </td>
+                </tr>
+              ) : (
+                orders.map((order) => (
+                  <tr key={order.id}>
+                    <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
+                      {order.product_id}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
+                      {order.product?.name || "Product name not available"}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
+                      <img
+                        src={
+                          order.product?.image_url
+                            ? `/storage/${order.product.image_url}`
+                            : "/default-image.jpg"
+                        }
+                        alt={order.product?.name || "No Image"}
+                        className="h-24 w-24 rounded-t-lg object-contain"
+                        style={{ aspectRatio: "1 / 1" }}
+                      />
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
+                      Rp {parseFloat(order.total_price).toLocaleString("id-ID")}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
 
         {/* Title */}
         <h2 className="mb-4 mt-4 font-lexend text-xl font-bold">
           Order Details
         </h2>
+
         {/* Order Details */}
-        <table className="min-w-full divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-md">
-          <thead>
-            <tr>
-              <th className="px-6 py-3 text-left font-lexend text-xs font-medium tracking-wider text-gray-500">
-                Order Number
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500">
-                Order Date
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500">
-                Notes
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200 bg-white">
-            {orders.map((order) => (
-              <tr key={order.id}>
-                <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
-                  {order.id}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
-                  {new Date(order.created_at).toLocaleString("en-US", {
-                    day: "2-digit",
-                    month: "long",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: true,
-                  })}
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
-                  {order.orderInformation?.notes}
-                </td>
+        <div className="overflow-hidden rounded-lg bg-white shadow-md">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead>
+              <tr>
+                <th className="px-6 py-3 text-left font-lexend text-xs font-medium tracking-wider text-gray-500">
+                  Order Number
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500">
+                  Order Date
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500">
+                  Notes
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody className="divide-y divide-gray-200 bg-white">
+              {orders.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan="3"
+                    className="px-6 py-4 text-center text-gray-500"
+                  >
+                    No order details available.
+                  </td>
+                </tr>
+              ) : (
+                orders.map((order) => (
+                  <tr key={order.id}>
+                    <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
+                      {order.id}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
+                      {order.created_at
+                        ? new Date(order.created_at).toLocaleString("en-US", {
+                            day: "2-digit",
+                            month: "long",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: true,
+                          })
+                        : "Date not available"}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
+                      {order.orderInformation?.notes || "No notes available"}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
