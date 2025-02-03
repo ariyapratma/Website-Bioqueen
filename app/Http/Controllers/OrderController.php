@@ -102,7 +102,6 @@ class OrderController extends Controller
         ]);
 
         try {
-            // Cek apakah ada order dengan status "Processing"
             $existingOrder = Order::where('user_id', auth()->id())
                 ->where('status', 'Processing')
                 ->first();
@@ -114,7 +113,6 @@ class OrderController extends Controller
                 ], 400);
             }
 
-            // Pastikan order_id selalu ada
             $orderInformation = new OrderInformation($validated);
             $orderInformation->order_id = $existingOrder->id;
             $orderInformation->save();
@@ -145,11 +143,6 @@ class OrderController extends Controller
 
             return [
                 'id' => $order->id,
-                'recipient_name' => $information->recipient_name ?? '',
-                'email' => $information->email ?? '',
-                'address' => $information->address ?? '',
-                'postal_code' => $information->postal_code ?? '',
-                'notes' => $information->notes ?? '',
                 'created_at' => $order->created_at->format('Y-m-d H:i:s'),
                 'status' => $order->status,
                 'product_id' => $order->product->id ?? null,
@@ -158,6 +151,13 @@ class OrderController extends Controller
                     'image_url' => $order->product->image_url,
                 ] : null,
                 'total_price' => $order->total_price,
+                'informations' => $information ? [
+                    'recipient_name' => $information->recipient_name,
+                    'email' => $information->email,
+                    'address' => $information->address,
+                    'postal_code' => $information->postal_code,
+                    'notes' => $information->notes,
+                ] : null,
             ];
         });
 
@@ -165,7 +165,6 @@ class OrderController extends Controller
             'orders' => $orders,
         ]);
     }
-
 
     public function manageOrders()
     {

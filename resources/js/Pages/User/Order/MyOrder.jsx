@@ -196,6 +196,9 @@ const MyOrder = ({ orders = [], auth }) => {
                   Order Date
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500">
+                  Recipient Name
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500">
                   Notes
                 </th>
               </tr>
@@ -227,10 +230,14 @@ const MyOrder = ({ orders = [], auth }) => {
                             minute: "2-digit",
                             hour12: true,
                           })
-                        : "Date not available"}
+                        : "Date not available."}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
-                      {order.informations?.notes || "No notes available"}
+                      {order.informations?.recipient_name ||
+                        "No recipient name available."}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
+                      {order.informations?.notes || "No notes available."}
                     </td>
                   </tr>
                 ))
