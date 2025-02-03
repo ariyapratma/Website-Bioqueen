@@ -31,7 +31,7 @@ const data = [
 
 export default function Footer() {
   return (
-    <footer className="text-base-content bg-gray-100 py-10">
+    <footer className="text-base-content bg-custom-yellow py-10">
       <div className="container mx-auto grid grid-cols-1 gap-8 px-5 sm:grid-cols-2 md:grid-cols-3 md:px-20">
         {/* Section 1: PT Ratu Bio Indonesia */}
         <div className="flex flex-col items-center space-y-4 md:items-start">
