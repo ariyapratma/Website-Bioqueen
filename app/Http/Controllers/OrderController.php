@@ -102,7 +102,7 @@ class OrderController extends Controller
         ]);
 
         try {
-            // Cek apakah ada order yang sedang dalam status "Processing"
+            // Cek apakah ada order dengan status "Processing"
             $existingOrder = Order::where('user_id', auth()->id())
                 ->where('status', 'Processing')
                 ->first();
@@ -114,11 +114,10 @@ class OrderController extends Controller
                 ], 400);
             }
 
-            // Assign ID order
-            $validated['order_id'] = $existingOrder->id;
-
-            // Simpan informasi order
-            $orderInformation = OrderInformation::create($validated);
+            // Pastikan order_id selalu ada
+            $orderInformation = new OrderInformation($validated);
+            $orderInformation->order_id = $existingOrder->id;
+            $orderInformation->save();
 
             return response()->json([
                 'message' => 'Order information submitted successfully!',
@@ -153,14 +152,20 @@ class OrderController extends Controller
                 'notes' => $information->notes ?? '',
                 'created_at' => $order->created_at->format('Y-m-d H:i:s'),
                 'status' => $order->status,
+                'product_id' => $order->product->id ?? null,
+                'product' => $order->product ? [
+                    'name' => $order->product->name,
+                    'image_url' => $order->product->image_url,
+                ] : null,
+                'total_price' => $order->total_price,
             ];
         });
 
         return Inertia::render('User/Order/MyOrder', [
             'orders' => $orders,
-            'cartItems' => $orders->flatMap->items,
         ]);
     }
+
 
     public function manageOrders()
     {

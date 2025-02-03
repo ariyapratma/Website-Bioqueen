@@ -150,25 +150,27 @@ const MyOrder = ({ orders = [], auth }) => {
                 orders.map((order) => (
                   <tr key={order.id}>
                     <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
-                      {order.product_id}
+                      {order.product_id || "Product id not available."}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
-                      {order.product?.name || "Product name not available"}
+                      {order.product?.name || "Product name not available."}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
                       <img
                         src={
-                          order.product?.image_url
-                            ? `/storage/${order.product.image_url}`
+                          order.product?.image_url || "No image available."
+                            ? `/storage/${order.product?.image_url}`
                             : "/default-image.jpg"
                         }
-                        alt={order.product?.name || "No Image"}
                         className="h-24 w-24 rounded-t-lg object-contain"
                         style={{ aspectRatio: "1 / 1" }}
                       />
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
-                      Rp {parseFloat(order.total_price).toLocaleString("id-ID")}
+                      Rp{" "}
+                      {parseFloat(
+                        order.total_price || "No total price available.",
+                      ).toLocaleString("id-ID")}
                     </td>
                   </tr>
                 ))
@@ -228,7 +230,7 @@ const MyOrder = ({ orders = [], auth }) => {
                         : "Date not available"}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
-                      {order.orderInformation?.notes || "No notes available"}
+                      {order.informations?.notes || "No notes available"}
                     </td>
                   </tr>
                 ))
