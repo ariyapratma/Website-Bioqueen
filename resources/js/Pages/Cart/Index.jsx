@@ -20,8 +20,7 @@ const Index = ({ auth, cartItems }) => {
 
   const updateQuantity = (itemId, quantity) => {
     if (quantity <= 0) {
-      Swa;
-      l.fire({
+      Swal.fire({
         title: "Error!",
         text: "Quantity must be greater than 0.",
         icon: "error",
@@ -75,8 +74,7 @@ const Index = ({ auth, cartItems }) => {
 
   useEffect(() => {
     if (flash?.success) {
-      Swa;
-      l.fire({
+      Swal.fire({
         icon: "success",
         title: "Success!",
         text: flash.success,
