@@ -168,7 +168,8 @@ class OrderController extends Controller
 
     public function manageOrders()
     {
-        $orders = Order::all();
+        // $orders = Order::all();
+        $orders = Order::with('product')->get();
         $orderInformations = OrderInformation::all();
 
         return Inertia::render('Admin/Order/ManageOrderProducts', [
@@ -187,6 +188,11 @@ class OrderController extends Controller
                     'total_price' => $order->total_price,
                     'created_at' => $order->created_at->format('Y-m-d H:i:s'),
                     'status' => $order->status,
+                    'product_id' => $order->product->id ?? null,
+                    'product' => $order->product ? [
+                        'name' => $order->product->name,
+                        'image_url' => $order->product->image_url,
+                    ] : null,
                 ];
             }),
         ]);
