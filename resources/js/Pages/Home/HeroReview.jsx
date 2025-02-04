@@ -36,7 +36,7 @@ const HeroReview = () => {
               key={index}
               className="flex max-w-[85%] transform flex-col items-center rounded-lg bg-white p-4 text-center shadow-lg transition-transform duration-300 hover:scale-105 sm:max-w-xs"
             >
-              <Avatar
+              {/* <Avatar
                 name={dataHeroReview?.name}
                 src={
                   dataHeroReview?.avatar
@@ -46,7 +46,7 @@ const HeroReview = () => {
                 size="64"
                 round={true}
                 className="mb-4"
-              />
+              /> */}
               <h6 className="mb-1 font-lexend text-lg font-medium sm:mb-2 sm:text-xl">
                 {dataHeroReview?.name}
               </h6>

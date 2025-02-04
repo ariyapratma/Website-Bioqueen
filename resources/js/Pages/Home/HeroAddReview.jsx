@@ -39,6 +39,9 @@ export default function HeroAddReview() {
           text: "Review has been added successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           reset();
           setErrors({});
@@ -50,6 +53,9 @@ export default function HeroAddReview() {
           text: "There was an error adding the Review.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });

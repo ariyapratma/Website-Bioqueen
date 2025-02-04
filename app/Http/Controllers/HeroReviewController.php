@@ -7,6 +7,8 @@ use App\Models\HeroReview;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravolt\Avatar\Facade as Avatar;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
 
 class HeroReviewController extends Controller
 {
@@ -15,24 +17,17 @@ class HeroReviewController extends Controller
      */
     public function index()
     {
-        // Mengambil semua ulasan dari database
         $heroReview = HeroReview::all();
 
-        // Periksa apakah pengguna sudah terautentikasi
         if (Auth::check()) {
             $user = Auth::user();
 
-            // Jika pengguna belum memiliki role 'user', berikan role tersebut
             if (!$user->hasRole('user')) {
                 $user->assignRole('user');
             }
-
-            // Logika untuk menetapkan role 'admin' berdasarkan email tertentu
             if ($user->email === 'adminbioqueen@indonesia.com' && !$user->hasRole('admin')) {
                 $user->assignRole('admin');
             }
-
-            // Periksa peran pengguna
             if ($user->hasRole('admin')) {
                 return Inertia::render('Admin/Home/ManageHeroReview', [
                     'dataHeroReview' => $heroReview,
@@ -40,7 +35,6 @@ class HeroReviewController extends Controller
             }
         }
 
-        // Jika bukan admin, kembalikan tampilan biasa
         return Inertia::render('Home/Index', [
             'dataHeroReview' => $heroReview,
         ]);
@@ -59,34 +53,24 @@ class HeroReviewController extends Controller
      */
     public function store(Request $request)
     {
-        // Validasi input review
         $request->validate([
             'rating' => 'required|integer|min:1|max:5',
             'comment' => 'required|string|max:255',
         ]);
 
-        // Cek apakah pengguna memiliki avatar di storage
-        $avatarPath = "avatars/" . Auth::user()->id . ".png";
-        if (!file_exists(public_path($avatarPath))) {
-            // Jika tidak ada avatar, generate avatar menggunakan Laravolt
-            $avatar = Avatar::create(Auth::user()->name)->toBase64();
-        } else {
-            $avatar = $avatarPath;
-        }
+        $avatarPath = 'avatars/' . Auth::user()->id . '.png';
+        $avatarUrl = asset('storage/' . $avatarPath);
 
-        // Simpan review ke database
         HeroReview::create([
             'name' => Auth::user()->name,
-            'avatar' => $avatar,
+            'avatar' => $avatarUrl,
             'rating' => $request->rating,
             'comment' => $request->comment,
             'user_id' => Auth::id(),
         ]);
 
-        // Kembali ke halaman sebelumnya (Home/Index)
         return redirect()->route('index');
     }
-
 
     /**
      * Display the specified resource.
@@ -111,19 +95,15 @@ class HeroReviewController extends Controller
      */
     public function update(Request $request, HeroReview $heroReview)
     {
-        // Validasi input
         $request->validate([
             'rating' => 'required|integer|min:1|max:5',
             'comment' => 'required|string|max:255',
         ]);
 
-        // Update data ulasan
         $heroReview->update([
             'rating' => $request->rating,
             'comment' => $request->comment,
         ]);
-
-        // Redirect ke halaman manage review
         return redirect()->route('hero-review.index');
     }
 
