@@ -20,7 +20,8 @@ const Index = ({ auth, cartItems }) => {
 
   const updateQuantity = (itemId, quantity) => {
     if (quantity <= 0) {
-      Swal.fire({
+      Swa;
+      l.fire({
         title: "Error!",
         text: "Quantity must be greater than 0.",
         icon: "error",
@@ -52,6 +53,8 @@ const Index = ({ auth, cartItems }) => {
             text: response.data.message,
             icon: "success",
             confirmButtonText: "OK",
+            scrollbarPadding: false,
+            backdrop: false,
           });
         })
         .catch((error) => {
@@ -60,6 +63,8 @@ const Index = ({ auth, cartItems }) => {
             text: error.response.data.message,
             icon: "error",
             confirmButtonText: "OK",
+            scrollbarPadding: false,
+            backdrop: false,
           });
         });
     }
@@ -67,12 +72,14 @@ const Index = ({ auth, cartItems }) => {
 
   useEffect(() => {
     if (flash?.success) {
-      Swal.fire({
+      Swa;
+      l.fire({
         icon: "success",
         title: "Success!",
         text: flash.success,
         timer: 2000,
         showConfirmButton: false,
+        scrollbarPadding: false,
       });
     }
   }, [flash]);
@@ -87,6 +94,8 @@ const Index = ({ auth, cartItems }) => {
         text: flash.success,
         timer: 2000,
         showConfirmButton: false,
+        scrollbarPadding: false,
+        backdrop: false,
       });
     }
   }, [cartItems, flash]);
@@ -99,6 +108,8 @@ const Index = ({ auth, cartItems }) => {
         icon: "warning",
         title: "Access Denied",
         text: "Please complete the previous step first!",
+        scrollbarPadding: false,
+        backdrop: false,
       });
     }
   };
@@ -120,6 +131,8 @@ const Index = ({ auth, cartItems }) => {
         text: "All products must have a valid product ID and quantity.",
         icon: "error",
         confirmButtonText: "OK",
+        scrollbarPadding: false,
+        backdrop: false,
       });
       return;
     }
@@ -138,6 +151,8 @@ const Index = ({ auth, cartItems }) => {
               text: response.props.flash.success,
               icon: "success",
               confirmButtonText: "OK",
+              scrollbarPadding: false,
+              backdrop: false,
             }).then(() => {
               Inertia.visit("/order");
             });
@@ -149,6 +164,8 @@ const Index = ({ auth, cartItems }) => {
             text: "There was an error processing your order.",
             icon: "error",
             confirmButtonText: "OK",
+            scrollbarPadding: false,
+            backdrop: false,
           });
         },
       },
@@ -165,6 +182,8 @@ const Index = ({ auth, cartItems }) => {
       showCancelButton: true,
       confirmButtonText: "Yes, remove it!",
       cancelButtonText: "Cancel",
+      scrollbarPadding: false,
+      backdrop: false,
     }).then((result) => {
       if (result.isConfirmed) {
         destroy(`/carts/remove/${itemId}`, {
@@ -174,6 +193,8 @@ const Index = ({ auth, cartItems }) => {
               text: "The item has been removed successfully.",
               icon: "success",
               confirmButtonText: "OK",
+              scrollbarPadding: false,
+              backdrop: false,
             });
           },
           onError: () => {
@@ -182,6 +203,8 @@ const Index = ({ auth, cartItems }) => {
               text: "Failed to remove the item.",
               icon: "error",
               confirmButtonText: "OK",
+              scrollbarPadding: false,
+              backdrop: false,
             });
           },
         });
@@ -246,10 +269,10 @@ const Index = ({ auth, cartItems }) => {
               <table className="min-w-full border-collapse">
                 <thead className="bg-custom-yellow text-left text-sm font-medium text-black">
                   <tr>
-                    <th className="px-6 py-4">Product</th>
-                    <th className="px-6 py-4">Price</th>
-                    <th className="px-6 py-4">Quantity</th>
-                    <th className="px-6 py-4">Total</th>
+                    <th className="px-6 py-3 text-center">Product</th>
+                    <th className="px-6 py-3 text-center">Price</th>
+                    <th className="px-6 py-3 text-center">Quantity</th>
+                    <th className="px-6 py-3 text-center">Total</th>
                     <th className="px-6 py-4 text-center">Action</th>
                   </tr>
                 </thead>
@@ -262,11 +285,11 @@ const Index = ({ auth, cartItems }) => {
                           alt={item.product?.name}
                           className="h-16 w-16 rounded object-cover"
                         />
-                        <span className="ml-4 text-sm font-medium text-gray-800">
+                        <span className="ml-4 text-center text-sm font-medium text-gray-800">
                           {item.product?.name}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-sm font-medium text-gray-800">
+                      <td className="px-6 py-4 text-center text-sm font-medium text-gray-800">
                         Rp{" "}
                         {parseFloat(item.product?.price).toLocaleString(
                           "id-ID",
@@ -310,7 +333,7 @@ const Index = ({ auth, cartItems }) => {
                         </div>
                       </td>
 
-                      <td className="px-6 py-4 text-sm font-medium text-gray-800">
+                      <td className="px-6 py-4 text-center text-sm font-medium text-gray-800">
                         Rp{" "}
                         {parseFloat(
                           item.product?.price * item.quantity,

@@ -34,7 +34,7 @@ export default function Navbar({ auth }) {
 
       if (!response.ok) {
         throw new Error(
-          `Failed to fetch cart items: ${response.status} ${response.statusText}`
+          `Failed to fetch cart items: ${response.status} ${response.statusText}`,
         );
       }
 
@@ -80,7 +80,7 @@ export default function Navbar({ auth }) {
         </Link>
 
         {/* Navigation Links */}
-        <div className="hidden flex-grow justify-center gap-6 text-sm md:flex md:text-base">
+        <div className="hidden flex-grow items-center justify-center gap-6 text-sm md:flex md:text-base">
           {menuItems.map(({ name, path }) => (
             <Link
               key={path}
