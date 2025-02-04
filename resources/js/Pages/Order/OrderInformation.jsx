@@ -6,6 +6,7 @@ import { Inertia } from "@inertiajs/inertia";
 const OrderInformation = ({ auth }) => {
   const user = auth.user;
   const [activeMenu, setActiveMenu] = useState(2);
+  const [completedStep, setCompletedStep] = useState(2);
   const [orderItems, setOrderItems] = useState([]);
   const [recipientName, setRecipientName] = useState(user?.name || "");
   const [email, setEmail] = useState(user?.email || "");
@@ -101,12 +102,15 @@ const OrderInformation = ({ auth }) => {
   };
 
   const handleTabClick = (menuIndex) => {
-    if (menuIndex === 1) {
-      // Navigasi ke halaman cart jika menu pertama diklik
+    if (menuIndex <= completedStep) {
+      setActiveMenu(menuIndex);
       Inertia.visit("/carts");
     } else {
-      // Jika tidak, set menu aktif sesuai menu yang diklik
-      setActiveMenu(menuIndex);
+      Swal.fire({
+        icon: "warning",
+        title: "Access Denied",
+        text: "Please complete the previous step first!",
+      });
     }
   };
 
