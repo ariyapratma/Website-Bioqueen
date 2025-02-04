@@ -26,6 +26,7 @@ const Index = ({ auth, cartItems }) => {
         text: "Quantity must be greater than 0.",
         icon: "error",
         confirmButtonText: "OK",
+        confirmButtonColor: "#000000",
       });
       return;
     }
@@ -53,6 +54,7 @@ const Index = ({ auth, cartItems }) => {
             text: response.data.message,
             icon: "success",
             confirmButtonText: "OK",
+            confirmButtonColor: "#000000",
             scrollbarPadding: false,
             backdrop: false,
           });
@@ -63,6 +65,7 @@ const Index = ({ auth, cartItems }) => {
             text: error.response.data.message,
             icon: "error",
             confirmButtonText: "OK",
+            confirmButtonColor: "#000000",
             scrollbarPadding: false,
             backdrop: false,
           });
@@ -79,6 +82,7 @@ const Index = ({ auth, cartItems }) => {
         text: flash.success,
         timer: 2000,
         showConfirmButton: false,
+        confirmButtonColor: "#000000",
         scrollbarPadding: false,
       });
     }
@@ -94,6 +98,7 @@ const Index = ({ auth, cartItems }) => {
         text: flash.success,
         timer: 2000,
         showConfirmButton: false,
+        confirmButtonColor: "#000000",
         scrollbarPadding: false,
         backdrop: false,
       });
@@ -108,6 +113,7 @@ const Index = ({ auth, cartItems }) => {
         icon: "warning",
         title: "Access Denied",
         text: "Please complete the previous step first!",
+        confirmButtonColor: "#000000",
         scrollbarPadding: false,
         backdrop: false,
       });
@@ -131,6 +137,7 @@ const Index = ({ auth, cartItems }) => {
         text: "All products must have a valid product ID and quantity.",
         icon: "error",
         confirmButtonText: "OK",
+        confirmButtonColor: "#000000",
         scrollbarPadding: false,
         backdrop: false,
       });
@@ -151,6 +158,7 @@ const Index = ({ auth, cartItems }) => {
               text: response.props.flash.success,
               icon: "success",
               confirmButtonText: "OK",
+              confirmButtonColor: "#000000",
               scrollbarPadding: false,
               backdrop: false,
             }).then(() => {
@@ -164,6 +172,7 @@ const Index = ({ auth, cartItems }) => {
             text: "There was an error processing your order.",
             icon: "error",
             confirmButtonText: "OK",
+            confirmButtonColor: "#000000",
             scrollbarPadding: false,
             backdrop: false,
           });
@@ -181,6 +190,7 @@ const Index = ({ auth, cartItems }) => {
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Yes, remove it!",
+      confirmButtonColor: "#000000",
       cancelButtonText: "Cancel",
       scrollbarPadding: false,
       backdrop: false,
@@ -193,6 +203,7 @@ const Index = ({ auth, cartItems }) => {
               text: "The item has been removed successfully.",
               icon: "success",
               confirmButtonText: "OK",
+              confirmButtonColor: "#000000",
               scrollbarPadding: false,
               backdrop: false,
             });
@@ -203,6 +214,7 @@ const Index = ({ auth, cartItems }) => {
               text: "Failed to remove the item.",
               icon: "error",
               confirmButtonText: "OK",
+              confirmButtonColor: "#000000",
               scrollbarPadding: false,
               backdrop: false,
             });
