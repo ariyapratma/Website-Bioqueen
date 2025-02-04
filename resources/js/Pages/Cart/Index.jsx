@@ -26,6 +26,8 @@ const Index = ({ auth, cartItems }) => {
         icon: "error",
         confirmButtonText: "OK",
         confirmButtonColor: "#000000",
+        scrollbarPadding: false,
+        backdrop: false,
       });
       return;
     }
@@ -82,6 +84,7 @@ const Index = ({ auth, cartItems }) => {
         showConfirmButton: false,
         confirmButtonColor: "#000000",
         scrollbarPadding: false,
+        backdrop: false,
       });
     }
   }, [flash]);
