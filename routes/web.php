@@ -52,6 +52,18 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::get('/product', [ProductController::class, 'index'])->name('product');
 Route::get('/maklon', [MaklonController::class, 'index'])->name('maklon');
 
+// Route ProductCategory User
+Route::get('/product/{slug}', [ProductController::class, 'showCategory'])->name('products.category');
+// Route ProductDetail User
+Route::get('/product/{category}/{product}', [ProductController::class, 'showProduct'])->name('product.detail');
+
+// Route AddCart User
+Route::middleware('auth', 'verified')->group(function () {
+    Route::get('/api/cart/items', [CartController::class, 'getCartItems']);
+    Route::post('/api/cart/add', [CartController::class, 'addToCart']);
+});
+
+// Cart Page : 
 Route::middleware(['auth', 'verified', 'role:admin|user'])->group(function () {
     // Route AddCart and CartDetail
     Route::get('/carts', [CartController::class, 'index'])->name('carts.index');
@@ -65,18 +77,6 @@ Route::middleware(['auth', 'verified', 'role:admin|user'])->group(function () {
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
     Route::post('/order-informations', [OrderController::class, 'storeInformations'])->name('order.storeInformations');
     Route::get('/my-order', [OrderController::class, 'myOrder'])->name('order.view');
-});
-
-// Route ProductCategory User
-Route::get('/product/{slug}', [ProductController::class, 'showCategory'])->name('products.category');
-// Route ProductDetail User
-Route::get('/product/{category}/{product}', [ProductController::class, 'showProduct'])->name('product.detail');
-
-// Route API yang mengembalikan JSON biasa
-// Route AddCart User
-Route::middleware('auth', 'verified')->group(function () {
-    Route::get('/api/cart/items', [CartController::class, 'getCartItems']);
-    Route::post('/api/cart/add', [CartController::class, 'addToCart']);
 });
 
 // Route khusus untuk pengguna yang terautentikasi (auth) dan terverifikasi
@@ -238,6 +238,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/header-contact/{headerContact}', [HeaderContactController::class, 'update'])->name('header-contact.update');
         Route::delete('/header-contact/{id}', [HeaderContactController::class, 'destroy'])->name('header-contact.destroy');
 
+        // Maklon Page :
+
+        // Route HeaderMaklon
+        Route::get('/header-maklon', [HeaderMaklonController::class, 'index'])->name('header-maklon.index');
+        Route::get('/header-maklon/create', [HeaderMaklonController::class, 'create'])->name('header-maklon.create');
+        Route::post('/header-maklon', [HeaderMaklonController::class, 'store'])->name('header-maklon.store');
+        Route::get('/header-maklon/{headerMaklon}/edit', [HeaderMaklonController::class, 'edit'])->name('header-maklon.edit');
+        Route::put('/header-maklon{headerMaklon}', [HeaderMaklonController::class, 'update'])->name('header-maklon.update');
+        Route::delete('/header-maklon/{id}', [HeaderMaklonController::class, 'destroy'])->name('header-maklon.destroy');
+
         // Product Page :
 
         // Route HeaderProduct
@@ -277,16 +287,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Route Manage Orders Page
         Route::get('/manage-order-products', [OrderController::class, 'manageOrders'])
             ->name('admin.manage.orders');
-
-        // Maklon Page :
-
-        // Route HeaderMaklon
-        Route::get('/header-maklon', [HeaderMaklonController::class, 'index'])->name('header-maklon.index');
-        Route::get('/header-maklon/create', [HeaderMaklonController::class, 'create'])->name('header-maklon.create');
-        Route::post('/header-maklon', [HeaderMaklonController::class, 'store'])->name('header-maklon.store');
-        Route::get('/header-maklon/{headerMaklon}/edit', [HeaderMaklonController::class, 'edit'])->name('header-maklon.edit');
-        Route::put('/header-maklon{headerMaklon}', [HeaderMaklonController::class, 'update'])->name('header-maklon.update');
-        Route::delete('/header-maklon/{id}', [HeaderMaklonController::class, 'destroy'])->name('header-maklon.destroy');
     });
 
     // Route Payment
