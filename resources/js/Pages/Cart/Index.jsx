@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import { useState, useEffect } from "react";
 import { Head, usePage } from "@inertiajs/react";
 
-const CartIndex = ({ auth, cartItems }) => {
+const Index = ({ auth, cartItems }) => {
   const { user } = auth;
   const [activeMenu, setActiveMenu] = useState(1);
   const [completedStep, setCompletedStep] = useState(1);
@@ -353,4 +353,4 @@ const CartIndex = ({ auth, cartItems }) => {
   );
 };
 
-export default CartIndex;
+export default Index;

@@ -7,117 +7,23 @@ use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
-
-    public function getCartItems(Request $request)
-    {
-        if ($request->expectsJson()) {
-            $cartItems = Cart::with('product')
-                ->where('user_id', auth()->id())
-                ->get()
-                ->map(function ($cart) {
-                    return [
-                        'id' => $cart->id,
-                        'product_id' => $cart->product_id,
-                        'product_name' => $cart->product->name,
-                        'quantity' => $cart->quantity,
-                        'price' => $cart->price,
-                        'image_url' => $cart->product->image_url,
-                    ];
-                });
-
-            return response()->json($cartItems);
-        }
-
-        return response()->json(['message' => 'Invalid request'], 400);
-    }
-
-    public function addToCart(Request $request)
-    {
-        $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'quantity' => 'required|integer|min:1',
-            'price' => 'required|numeric|min:0',
-        ]);
-
-        try {
-            $cart = Cart::where('user_id', auth()->id())
-                ->where('product_id', $request->product_id)
-                ->first();
-
-            if ($cart) {
-                $cart->quantity += $request->quantity;
-
-                $cart->price = $cart->quantity * $request->price;
-
-                $cart->save();
-
-                return response()->json([
-                    'message' => 'Product quantity and price updated successfully',
-                    'isNewProduct' => false,
-                ]);
-            } else {
-                Cart::create([
-                    'user_id' => auth()->id(),
-                    'product_id' => $request->product_id,
-                    'quantity' => $request->quantity,
-                    'price' => $request->price,
-                ]);
-
-                return response()->json([
-                    'message' => 'Product added to cart successfully',
-                    'isNewProduct' => true,
-                ]);
-            }
-        } catch (\Exception $e) {
-            // Log error untuk debugging
-            Log::error('Failed to add product to cart: ' . $e->getMessage());
-
-            return response()->json([
-                'message' => 'Error adding product to cart',
-                'error' => $e->getMessage(),
-            ], 409); // Gunakan kode status 409 untuk konflik
-        }
-    }
-
-    public function removeFromCart($id)
-    {
-        $cartItem = Cart::where('user_id', auth()->id())->findOrFail($id);
-        $productId = $cartItem->product_id;
-        $cartItem->delete();
-
-        $order = Order::where('user_id', auth()->id())
-            ->whereHas('orderDetails', function ($query) use ($productId) {
-                $query->where('product_id', $productId);
-            })
-            ->first();
-
-        if ($order) {
-            $order->orderDetails()->where('product_id', $productId)->delete();
-
-            if ($order->orderDetails->isEmpty()) {
-                $order->delete();
-            }
-        }
-
-        return redirect()->route('carts.index')->with('success', 'Item removed from cart and order updated.');
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $cartItems = Cart::where('user_id', auth()->id())->with('product')->get();
+        $cartItems = Cart::where('user_id', Auth::id())->with('product')->get();
         return inertia('Cart/Index', [
             'cartItems' => $cartItems,
-            'user' => auth()->user(),
-            'auth' => auth()->check(),
+            'auth' => [
+                'user' => Auth::user(),
+            ],
         ]);
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -227,5 +133,99 @@ class CartController extends Controller
     public function destroy(Cart $cart)
     {
         //
+    }
+
+    public function getCartItems(Request $request)
+    {
+        if ($request->expectsJson()) {
+            $cartItems = Cart::with('product')
+                ->where('user_id', auth()->id())
+                ->get()
+                ->map(function ($cart) {
+                    return [
+                        'id' => $cart->id,
+                        'product_id' => $cart->product_id,
+                        'product_name' => $cart->product->name,
+                        'quantity' => $cart->quantity,
+                        'price' => $cart->price,
+                        'image_url' => $cart->product->image_url,
+                    ];
+                });
+
+            return response()->json($cartItems);
+        }
+
+        return response()->json(['message' => 'Invalid request'], 400);
+    }
+
+    public function addToCart(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'quantity' => 'required|integer|min:1',
+            'price' => 'required|numeric|min:0',
+        ]);
+
+        try {
+            $cart = Cart::where('user_id', auth()->id())
+                ->where('product_id', $request->product_id)
+                ->first();
+
+            if ($cart) {
+                $cart->quantity += $request->quantity;
+
+                $cart->price = $cart->quantity * $request->price;
+
+                $cart->save();
+
+                return response()->json([
+                    'message' => 'Product quantity and price updated successfully',
+                    'isNewProduct' => false,
+                ]);
+            } else {
+                Cart::create([
+                    'user_id' => auth()->id(),
+                    'product_id' => $request->product_id,
+                    'quantity' => $request->quantity,
+                    'price' => $request->price,
+                ]);
+
+                return response()->json([
+                    'message' => 'Product added to cart successfully',
+                    'isNewProduct' => true,
+                ]);
+            }
+        } catch (\Exception $e) {
+            // Log error untuk debugging
+            Log::error('Failed to add product to cart: ' . $e->getMessage());
+
+            return response()->json([
+                'message' => 'Error adding product to cart',
+                'error' => $e->getMessage(),
+            ], 409);
+        }
+    }
+
+    public function removeFromCart($id)
+    {
+        $cartItem = Cart::where('user_id', auth()->id())->findOrFail($id);
+        $productId = $cartItem->product_id;
+        $cartItem->delete();
+
+        $order = Order::where('user_id', auth()->id())
+            ->whereHas('orderDetails', function ($query) use ($productId) {
+                $query->where('product_id', $productId);
+            })
+            ->first();
+
+        if ($order) {
+            $order->orderDetails()->where('product_id', $productId)->delete();
+
+            if ($order->orderDetails->isEmpty()) {
+                $order->delete();
+            }
+        }
+
+        return redirect()->route('carts.index')->with('success', 'Item removed from cart and order updated.');
     }
 }
