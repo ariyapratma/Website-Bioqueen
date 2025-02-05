@@ -1,7 +1,7 @@
 export default function HeaderHome() {
   const data = {
     title: "Jasa Maklon Sanitasi dan Higiene",
-    description: "Mau Buat Brand Sabun, Kosmetik Dan Skincare Kamu Sendiri?",
+    description: "Mau Buat Brand Sabun Kamu Sendiri?",
     buttonText: "Konsultasikan Sekarang",
     imageUrl: "/Home/HeaderHome/HeaderHome.jpg",
     whatsappLink: "https://wa.me/6282162637186",
