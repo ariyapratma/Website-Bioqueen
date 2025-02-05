@@ -35,6 +35,9 @@ const EditHeroReview = ({ dataHeroReview, auth }) => {
           text: "Hero Review has been updated successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/hero-review");
         });
@@ -45,6 +48,9 @@ const EditHeroReview = ({ dataHeroReview, auth }) => {
           text: "There was an error updating the Hero Review.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });

@@ -49,6 +49,9 @@ const EditHeroExcellenceValue = ({ dataHeroExcellenceValue, auth }) => {
           text: "Hero Excellence Value has been updated successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/hero-excellence-value");
         });
@@ -59,6 +62,9 @@ const EditHeroExcellenceValue = ({ dataHeroExcellenceValue, auth }) => {
           text: "There was an error updating the Hero Excellence Value.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });

@@ -37,6 +37,9 @@ const EditHeaderHome = ({ dataHeaderHome, auth }) => {
           text: "Header Home has been updated successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/header-home");
         });
@@ -47,6 +50,9 @@ const EditHeaderHome = ({ dataHeaderHome, auth }) => {
           text: "There was an error updating the Header Home.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });

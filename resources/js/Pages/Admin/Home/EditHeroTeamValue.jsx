@@ -45,6 +45,9 @@ const EditHeroTeamValue = ({ dataHeroTeamValue, auth }) => {
           text: "Hero Team Value has been updated successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/hero-team-value");
         });
@@ -55,6 +58,9 @@ const EditHeroTeamValue = ({ dataHeroTeamValue, auth }) => {
           text: "There was an error updating the Hero Team Value.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });

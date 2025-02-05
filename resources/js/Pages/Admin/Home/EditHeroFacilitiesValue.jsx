@@ -43,6 +43,9 @@ const EditHeroFacilitiesValue = ({ dataHeroFacilitiesValue, auth }) => {
           text: "Hero Facilities Value has been updated successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/hero-facilities-value");
         });
@@ -53,6 +56,9 @@ const EditHeroFacilitiesValue = ({ dataHeroFacilitiesValue, auth }) => {
           text: "There was an error updating the Hero Facilities Value.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });

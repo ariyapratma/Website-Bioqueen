@@ -43,6 +43,9 @@ const EditHeroCertificate = ({ dataHeroCertificate, auth }) => {
           text: "Hero Certificate has been updated successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/hero-certificate");
         });
@@ -53,6 +56,9 @@ const EditHeroCertificate = ({ dataHeroCertificate, auth }) => {
           text: "There was an error updating the Hero Certificate.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });

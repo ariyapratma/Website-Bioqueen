@@ -35,6 +35,9 @@ const EditHeroVideo = ({ dataHeroVideo, auth }) => {
           text: "Hero Video has been updated successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/hero-video");
         });
@@ -45,6 +48,9 @@ const EditHeroVideo = ({ dataHeroVideo, auth }) => {
           text: "There was an error updating the Hero Video.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });

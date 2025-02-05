@@ -45,6 +45,9 @@ const EditHeroWhyChoose = ({ dataHeroWhyChoose, auth }) => {
           text: "Hero Why Choose has been updated successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/hero-why-choose");
         });
@@ -55,6 +58,9 @@ const EditHeroWhyChoose = ({ dataHeroWhyChoose, auth }) => {
           text: "There was an error updating the Hero Why Choose.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });
