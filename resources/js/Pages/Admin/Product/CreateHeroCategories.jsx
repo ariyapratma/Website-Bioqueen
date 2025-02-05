@@ -21,12 +21,11 @@ const CreateHeroCategories = ({ auth }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Menggunakan FormData untuk menangani pengunggahan file
     const formData = new FormData();
     formData.append("slug", data.slug);
     formData.append("image_url", data.image_url);
-    formData.append("name", data.name); // Menambahkan field name ke formData
-    formData.append("description_categories", data.description_categories); // Menambahkan field description_categories ke formData
+    formData.append("name", data.name);
+    formData.append("description_categories", data.description_categories);
 
     post("/hero-categories", {
       data: formData,
@@ -36,6 +35,9 @@ const CreateHeroCategories = ({ auth }) => {
           text: "Hero Categories has been added successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/hero-categories");
         });
@@ -46,6 +48,9 @@ const CreateHeroCategories = ({ auth }) => {
           text: "There was an error adding the Hero Categories.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });

@@ -62,6 +62,9 @@ const EditProductList = ({ products, auth }) => {
           text: "Product List has been updated successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/product-list");
         });
@@ -72,6 +75,9 @@ const EditProductList = ({ products, auth }) => {
           text: "There was an error updating the Product List.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });

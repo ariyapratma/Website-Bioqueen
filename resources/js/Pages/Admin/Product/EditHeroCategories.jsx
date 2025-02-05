@@ -37,6 +37,9 @@ const EditHeroCategories = ({ dataHeroCategories, auth }) => {
           text: "Hero Categories has been updated successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/hero-categories");
         });
@@ -47,6 +50,9 @@ const EditHeroCategories = ({ dataHeroCategories, auth }) => {
           text: "There was an error updating the Hero Categories.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });
@@ -197,8 +203,8 @@ const EditHeroCategories = ({ dataHeroCategories, auth }) => {
             </label>
             <input
               id="image_url"
-              type="file" // Change type to file
-              onChange={(e) => setData("image_url", e.target.files[0])} // Handle file input
+              type="file"
+              onChange={(e) => setData("image_url", e.target.files[0])}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
             />
             {errors.image_url && (

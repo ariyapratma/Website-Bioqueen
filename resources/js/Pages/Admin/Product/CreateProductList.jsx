@@ -66,6 +66,9 @@ const CreateProductList = ({ auth }) => {
           text: "Product List has been added successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/product-list");
         });
@@ -76,6 +79,9 @@ const CreateProductList = ({ auth }) => {
           text: "There was an error adding the Product List.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });

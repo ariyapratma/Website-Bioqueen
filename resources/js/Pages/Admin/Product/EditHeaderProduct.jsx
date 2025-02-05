@@ -35,6 +35,9 @@ const EditHeaderProduct = ({ dataHeaderProduct, auth }) => {
           text: "Header Product has been updated successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/header-product");
         });
@@ -45,6 +48,9 @@ const EditHeaderProduct = ({ dataHeaderProduct, auth }) => {
           text: "There was an error updating the Header Product.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });

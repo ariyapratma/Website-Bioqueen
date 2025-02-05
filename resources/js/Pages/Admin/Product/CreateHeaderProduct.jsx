@@ -35,6 +35,9 @@ const CreateHeaderProduct = ({ auth }) => {
           text: "Header Product has been added successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/header-product");
         });
@@ -45,6 +48,9 @@ const CreateHeaderProduct = ({ auth }) => {
           text: "There was an error adding the Header Product.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });
