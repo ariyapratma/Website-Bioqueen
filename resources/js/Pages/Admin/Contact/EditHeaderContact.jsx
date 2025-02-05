@@ -35,6 +35,9 @@ const EditHeaderContact = ({ dataHeaderContact, auth }) => {
           text: "Header Contact has been updated successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/header-contact");
         });
@@ -45,6 +48,9 @@ const EditHeaderContact = ({ dataHeaderContact, auth }) => {
           text: "There was an error updating the Header Contact.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });
