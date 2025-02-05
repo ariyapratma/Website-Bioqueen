@@ -39,6 +39,9 @@ const EditHeroAboutUs = ({ dataHeroAboutUs, auth }) => {
           text: "Hero AboutUs has been updated successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/hero-about-us");
         });
@@ -49,6 +52,9 @@ const EditHeroAboutUs = ({ dataHeroAboutUs, auth }) => {
           text: "There was an error updating the Hero AboutUs.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });

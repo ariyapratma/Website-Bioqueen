@@ -35,6 +35,9 @@ const CreateHeaderAboutUs = ({ auth }) => {
           text: "Header AboutUs has been added successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/header-about-us");
         });
@@ -45,6 +48,9 @@ const CreateHeaderAboutUs = ({ auth }) => {
           text: "There was an error adding the Header AboutUs.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });

@@ -39,6 +39,9 @@ const CreateHeroAboutUs = ({ auth }) => {
           text: "Header AboutUs has been added successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/hero-about-us");
         });
@@ -49,6 +52,9 @@ const CreateHeroAboutUs = ({ auth }) => {
           text: "There was an error adding the Header AboutUs.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });

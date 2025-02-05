@@ -47,6 +47,9 @@ const EditHeroVisionMision = ({ dataHeroVisionMision, auth }) => {
           text: "Hero Vision Mision has been updated successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/hero-vision-mision");
         });
@@ -57,6 +60,9 @@ const EditHeroVisionMision = ({ dataHeroVisionMision, auth }) => {
           text: "There was an error updating the Hero Vision Mision.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });

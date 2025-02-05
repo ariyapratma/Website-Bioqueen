@@ -45,6 +45,9 @@ const CreateHeroOurGallery = ({ auth }) => {
           text: "Hero Our Gallery has been added successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/hero-our-gallery");
         });
@@ -55,6 +58,9 @@ const CreateHeroOurGallery = ({ auth }) => {
           text: "There was an error adding the Hero Our Gallery.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });

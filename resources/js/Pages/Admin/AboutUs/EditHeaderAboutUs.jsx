@@ -35,6 +35,9 @@ const EditHeaderAboutUs = ({ dataHeaderAboutUs, auth }) => {
           text: "Header AboutUs has been updated successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/header-about-us");
         });
@@ -45,6 +48,9 @@ const EditHeaderAboutUs = ({ dataHeaderAboutUs, auth }) => {
           text: "There was an error updating the Header AboutUs.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });

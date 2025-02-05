@@ -47,6 +47,9 @@ const CreateHeroVisionMision = ({ auth }) => {
           text: "Header Vision Mision has been added successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/hero-vision-mision");
         });
@@ -57,6 +60,9 @@ const CreateHeroVisionMision = ({ auth }) => {
           text: "There was an error adding the Header Vision Mision.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });
