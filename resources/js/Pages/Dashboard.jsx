@@ -18,6 +18,9 @@ export default function Dashboard({ orders = [], dataHeroReview = [], auth }) {
       icon: "success",
       title: `Selamat Datang, ${user?.name}!`,
       confirmButtonText: "OK",
+      confirmButtonColor: "#000000",
+      scrollbarPadding: false,
+      backdrop: false,
     });
   }, []);
 

@@ -49,6 +49,9 @@ const CreateHeroExcellenceValue = ({ auth }) => {
           text: "Hero Excellence Value has been added successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/hero-excellence-value");
         });
@@ -59,6 +62,9 @@ const CreateHeroExcellenceValue = ({ auth }) => {
           text: "There was an error adding the Hero Excellence Value.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });

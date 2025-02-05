@@ -31,6 +31,9 @@ const CreateHeroFlyer = ({ auth }) => {
           text: "Hero Flyer has been added successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/hero-flyer");
         });
@@ -41,6 +44,9 @@ const CreateHeroFlyer = ({ auth }) => {
           text: "There was an error adding the Hero Flyer.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });

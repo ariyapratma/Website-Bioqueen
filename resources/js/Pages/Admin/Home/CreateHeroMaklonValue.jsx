@@ -43,6 +43,9 @@ const CreateHeroMaklonValue = ({ auth }) => {
           text: "Hero Maklon Value has been added successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/hero-maklon-value");
         });
@@ -53,6 +56,9 @@ const CreateHeroMaklonValue = ({ auth }) => {
           text: "There was an error adding the Hero Maklon Value.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });

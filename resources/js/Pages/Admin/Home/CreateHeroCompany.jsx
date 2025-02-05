@@ -37,6 +37,9 @@ const CreateHeroCompany = ({ auth }) => {
           text: "Hero Company has been added successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/hero-company");
         });
@@ -47,6 +50,9 @@ const CreateHeroCompany = ({ auth }) => {
           text: "There was an error adding the Hero Company.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });

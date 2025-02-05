@@ -37,6 +37,9 @@ const CreateHeaderHome = ({ auth }) => {
           text: "Header Home has been added successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/header-home");
         });
@@ -47,6 +50,9 @@ const CreateHeaderHome = ({ auth }) => {
           text: "There was an error adding the Header Home.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });
@@ -56,8 +62,12 @@ const CreateHeaderHome = ({ auth }) => {
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
       {auth && (
-      <Sidebar auth={auth} activeMenu={activeMenu} setActiveMenu={setActiveMenu} />
-    )}
+        <Sidebar
+          auth={auth}
+          activeMenu={activeMenu}
+          setActiveMenu={setActiveMenu}
+        />
+      )}
 
       {/* Main Content */}
       <div className="flex-1 bg-neutral-50 p-6">

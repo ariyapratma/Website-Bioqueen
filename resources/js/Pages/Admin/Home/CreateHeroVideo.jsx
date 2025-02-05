@@ -35,6 +35,9 @@ const CreateHeroVideo = ({ auth }) => {
           text: "Hero Video has been added successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/hero-video");
         });
@@ -45,6 +48,9 @@ const CreateHeroVideo = ({ auth }) => {
           text: "There was an error adding the Hero Video.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });

@@ -45,6 +45,9 @@ const CreateHeroService = ({ auth }) => {
           text: "Hero Service has been added successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/hero-service");
         });
@@ -55,6 +58,9 @@ const CreateHeroService = ({ auth }) => {
           text: "There was an error adding the Hero Service.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });
