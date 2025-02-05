@@ -19,9 +19,11 @@ const ManageHeaderOrder = ({ dataHeaderOrder, auth }) => {
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
+      confirmButtonColor: "#000000",
+      scrollbarPadding: false,
+      backdrop: false,
     }).then((result) => {
       if (result.isConfirmed) {
         deleteRecord(`/header-order/${id}`, {

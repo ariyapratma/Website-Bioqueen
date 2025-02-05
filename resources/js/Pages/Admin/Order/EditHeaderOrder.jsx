@@ -35,6 +35,9 @@ const EditHeaderOrder = ({ dataHeaderOrder, auth }) => {
           text: "Header Order has been updated successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/header-order");
         });
@@ -45,6 +48,9 @@ const EditHeaderOrder = ({ dataHeaderOrder, auth }) => {
           text: "There was an error updating the Header Order.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });
