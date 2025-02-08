@@ -1,6 +1,5 @@
 import { Head, Link } from "@inertiajs/react";
 import { useState, useEffect } from "react";
-import { IoChevronBackOutline } from "react-icons/io5";
 import Sidebar from "@/Components/Admin/Sidebar";
 import Swal from "sweetalert2";
 import Navbar from "@/Components/Navbar/Navbar";
@@ -35,21 +34,10 @@ export default function Dashboard({ orders = [], dataHeroReview = [], auth }) {
       {/* Main Content */}
       <div className="flex-1 bg-neutral-50 p-6">
         <Head title="Dashboard | PT Ratu Bio Indonesia" />
-         <Navbar auth={auth} />
-
-        {/* Header */}
-        <div className="mb-4 mt-16 flex w-full items-center justify-between">
-          {/* Back Button on the Left */}
-          <Link
-            href="/dashboard"
-            className="rounded bg-custom-yellow px-4 py-2 text-black hover:bg-yellow-500"
-          >
-            <IoChevronBackOutline className="h-4 w-4" />
-          </Link>
-        </div>
+        <Navbar auth={auth} />
 
         {/* Title Dashboard */}
-        <h2 className="mb-4 font-lexend text-xl font-bold">
+        <h2 className="mb-4 mt-16 font-lexend text-xl font-bold">
           Dashboard {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
         </h2>
 

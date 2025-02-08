@@ -74,7 +74,7 @@ export default function Navbar({ auth }) {
         {/* Logo */}
         <Link href="/" className="flex items-center">
           <img
-            className="w-10 md:w-12"
+            className="w-14 md:w-14"
             src="/Navbar/NavbarLogo.png"
             alt="Logo"
           />

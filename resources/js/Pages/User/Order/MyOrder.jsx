@@ -1,11 +1,7 @@
 import { Link, Head } from "@inertiajs/react";
 import { useState } from "react";
-import { IoChevronBackOutline } from "react-icons/io5";
-import { FaChevronDown } from "react-icons/fa";
 import Sidebar from "@/Components/Admin/Sidebar";
-import Searchbar from "@/Components/Admin/Searchbar";
-import Notification from "@/Components/Admin/Notification";
-import Dropdown from "@/Components/Dropdown";
+import Navbar from "@/Components/Navbar/Navbar";
 
 const MyOrder = ({ orders = [], auth }) => {
   const [activeMenu, setActiveMenu] = useState("my-order");
@@ -25,68 +21,10 @@ const MyOrder = ({ orders = [], auth }) => {
       {/* Main Content */}
       <div className="flex-1 bg-neutral-50 p-6">
         <Head title="View My Order | PT Ratu Bio Indonesia" />
-
-        {/* Header */}
-        <div className="mb-4 flex w-full items-center justify-between">
-          {/* Back Button */}
-          <Link
-            href="/dashboard"
-            className="rounded bg-custom-yellow px-4 py-2 text-black hover:bg-yellow-500"
-          >
-            <IoChevronBackOutline className="h-4 w-4" />
-          </Link>
-
-          {/* Search Bar */}
-          <Searchbar />
-
-          {/* Admin Notification and Avatar */}
-          <div className="flex items-center">
-            <Notification />
-            <div className="relative ms-3">
-              <Dropdown>
-                <Dropdown.Trigger>
-                  <span className="inline-flex rounded-md">
-                    <button
-                      type="button"
-                      className="inline-flex items-center rounded-md border border-transparent px-3 py-2 font-lexend text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
-                    >
-                      {user?.name}
-                      <img
-                        src={`/storage/avatars/${user?.id}.png`}
-                        alt={user?.name || "User"}
-                        className="mx-2 h-10 w-10 rounded-full border border-custom-yellow"
-                      />
-                      <FaChevronDown
-                        className="ml-2 h-2 w-2"
-                        aria-hidden="true"
-                      />
-                    </button>
-                  </span>
-                </Dropdown.Trigger>
-
-                <Dropdown.Content>
-                  <Dropdown.Link
-                    href={route("profile.edit")}
-                    className="font-lexend"
-                  >
-                    Profile
-                  </Dropdown.Link>
-                  <Dropdown.Link
-                    href={route("logout")}
-                    className="font-lexend"
-                    method="post"
-                    as="button"
-                  >
-                    Log Out
-                  </Dropdown.Link>
-                </Dropdown.Content>
-              </Dropdown>
-            </div>
-          </div>
-        </div>
+        <Navbar auth={auth} />
 
         {/* Order Status */}
-        <div className="mb-6 mt-8 text-center">
+        <div className="mb-6 mt-16 text-center">
           {/* Title */}
           <h2 className="font-lexend text-2xl font-bold">Order Status</h2>
 
