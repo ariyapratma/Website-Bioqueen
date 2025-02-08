@@ -86,14 +86,7 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
   return (
     // Sidebar
     <div className="flex w-48 flex-col items-center bg-white p-4 shadow-lg">
-      <h2 className="mb-4 font-lexend text-lg font-bold text-black">
-        <Link href="/">
-          <img
-            src="/LogoDashboardAdmin/LogoDashboardAdmin.jpeg"
-            loading="lazy"
-            className="block h-20 w-auto"
-          />
-        </Link>
+      <h2 className="mb-4 mt-12 font-lexend text-lg font-bold text-black">
       </h2>
       <ul className="space-y-2">
         <li>

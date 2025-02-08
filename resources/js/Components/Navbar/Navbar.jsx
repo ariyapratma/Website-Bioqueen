@@ -3,6 +3,7 @@ import { Link, usePage } from "@inertiajs/react";
 import Dropdown from "@/Components/Dropdown";
 import { FaChevronDown } from "react-icons/fa";
 import { BsCart } from "react-icons/bs";
+import Notification from "../Admin/Notification";
 
 export default function Navbar({ auth }) {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -69,11 +70,11 @@ export default function Navbar({ auth }) {
         isScrolled ? "bg-white text-gray-800" : "text-base-content bg-white"
       }`}
     >
-      <div className="container mx-auto flex items-center justify-between p-2 md:p-4">
+      <div className="container mx-auto flex items-center justify-between p-1 md:p-2">
         {/* Logo */}
         <Link href="/" className="flex items-center">
           <img
-            className="w-14 md:w-16"
+            className="w-10 md:w-12"
             src="/Navbar/NavbarLogo.png"
             alt="Logo"
           />
@@ -108,23 +109,22 @@ export default function Navbar({ auth }) {
           )}
         </div>
 
-        {/* Cart Icon */}
+        {/*Notification and Cart Icon */}
         <div className="flex items-center">
+          <div
+            className={`relative flex items-center justify-center rounded-full p-2 transition-all duration-300 ${url === "/notifications" ? "border-2 border-custom-yellow text-black" : "hover:bg-gray-100"}`}
+          >
+            <Notification className="h-6 w-6 text-gray-700 transition-colors duration-300" />
+          </div>
           <Link
             href="/carts"
-            className={`relative flex items-center justify-center rounded-full p-2 transition-all duration-300 ${
-              url === "/carts"
-                ? "border-2 border-custom-yellow text-black"
-                : "hover:bg-gray-100"
-            }`}
+            className={`relative flex items-center justify-center rounded-full p-2 transition-all duration-300 ${url === "/carts" ? "border-2 border-custom-yellow text-black" : "hover:bg-gray-100"}`}
           >
             <BsCart
-              className={`h-6 w-6 transition-colors duration-300 ${
-                url === "/carts" ? "text-black" : "text-gray-700"
-              }`}
+              className={`h-6 w-6 transition-colors duration-300 ${url === "/carts" ? "text-black" : "text-gray-700"}`}
             />
             {cartItems > 0 && (
-              <span className="absolute -right-2 -top-2 rounded-full bg-red-500 px-2 py-1 text-xs text-white">
+              <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
                 {cartItems}
               </span>
             )}
