@@ -32,7 +32,7 @@ export default function Dashboard({ orders = [], dataHeroReview = [], auth }) {
       )}
 
       {/* Main Content */}
-      <div className="flex-1 bg-neutral-50 p-6">
+      <div className="flex-1 bg-neutral-50 p-6 overflow-y-auto h-screen">
         <Head title="Dashboard | PT Ratu Bio Indonesia" />
         <Navbar auth={auth} />
 
