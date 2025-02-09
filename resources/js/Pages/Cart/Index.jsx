@@ -226,7 +226,7 @@ const Index = ({ auth, cartItems }) => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col overflow-x-hidden">
       <Head title="Cart | PT Ratu Bio Indonesia" />
       <Navbar auth={auth} />
       <main className="flex-grow px-4 py-16 md:px-4 md:py-32">

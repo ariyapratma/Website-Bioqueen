@@ -118,7 +118,7 @@ export default function Navbar({ auth }) {
           </div>
           <Link
             href="/carts"
-            className={`relative flex items-center justify-center rounded-full p-2 transition-all duration-300 ${url === "/carts" ? "border-2 border-custom-yellow text-black" : "hover:bg-gray-100"}`}
+            className={`relative flex items-center justify-center rounded-full p-2 transition-all duration-300 ${url === "/carts" ? " text-black" : "hover:bg-gray-100"}`}
           >
             <BsCart
               className={`h-6 w-6 transition-colors duration-300 ${url === "/carts" ? "text-black" : "text-gray-700"}`}
