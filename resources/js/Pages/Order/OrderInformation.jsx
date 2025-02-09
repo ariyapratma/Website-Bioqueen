@@ -295,6 +295,14 @@ const OrderInformation = ({ auth }) => {
                   >
                     Submit Order
                   </button>
+                  {completedStep >= 2 && (
+                    <button
+                      onClick={() => Inertia.visit("/payment/{orderId}")}
+                      className="ml-4 inline-flex items-center justify-center rounded-md border border-transparent bg-black px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-gray-900"
+                    >
+                      Go to Payment
+                    </button>
+                  )}
                 </div>
               </form>
             </div>

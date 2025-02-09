@@ -59,8 +59,8 @@ export default function Navbar({ auth }) {
   // Tambahkan kondisi untuk link Login dan Register
   if (!user && url !== "/carts") {
     menuItems.push(
-      { name: "Login", path: "/login" },
       { name: "Register", path: "/register" },
+      { name: "Login", path: "/login" },
     );
   }
 

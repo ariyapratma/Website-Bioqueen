@@ -124,13 +124,13 @@ const Index = ({ order, orderInformation, auth }) => {
             onClick={handlePayment}
             className={`w-full rounded-lg px-6 py-3 font-semibold text-black ${
               isLoading
-                ? "cursor-not-allowed bg-green-600"
+                ? "cursor-not-allowed bg-custom-yellow"
                 : "bg-custom-yellow hover:bg-yellow-600"
             }`}
             disabled={isLoading || !snapToken}
           >
             {isLoading
-              ? "Processing..."
+              ? "Loading..."
               : !snapToken
                 ? "SnapToken belum tersedia"
                 : "Pay Now"}
