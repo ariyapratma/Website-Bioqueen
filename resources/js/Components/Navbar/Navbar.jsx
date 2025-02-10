@@ -52,11 +52,9 @@ export default function Navbar({ auth }) {
     { name: "Contact", path: "/contact" },
     { name: "Maklon", path: "/maklon" },
     { name: "Product", path: "/product" },
-    { name: "Cart", path: "/carts" },
     { name: "Order", path: "/order" },
   ];
 
-  // Tambahkan kondisi untuk link Login dan Register
   if (!user && url !== "/carts") {
     menuItems.push(
       { name: "Register", path: "/register" },
@@ -96,17 +94,6 @@ export default function Navbar({ auth }) {
               {name}
             </Link>
           ))}
-          {/* Dashboard Link */}
-          {user && (
-            <Link
-              href="/dashboard"
-              className={`font-regular font-lexend transition-colors hover:text-gray-800 ${
-                url === "/dashboard" ? "font-lexend font-bold text-black" : ""
-              }`}
-            >
-              Dashboard
-            </Link>
-          )}
         </div>
 
         {/*Notification and Cart Icon */}
@@ -118,7 +105,7 @@ export default function Navbar({ auth }) {
           </div>
           <Link
             href="/carts"
-            className={`relative flex items-center justify-center rounded-full p-2 transition-all duration-300 ${url === "/carts" ? " text-black" : "hover:bg-gray-100"}`}
+            className={`relative flex items-center justify-center rounded-full p-2 transition-all duration-300 ${url === "/carts" ? "text-black" : "hover:bg-gray-100"}`}
           >
             <BsCart
               className={`h-6 w-6 transition-colors duration-300 ${url === "/carts" ? "text-black" : "text-gray-700"}`}
@@ -157,6 +144,9 @@ export default function Navbar({ auth }) {
                 </Dropdown.Trigger>
 
                 <Dropdown.Content>
+                  <Dropdown.Link href="/dashboard" className="font-lexend">
+                    Dashboard
+                  </Dropdown.Link>
                   <Dropdown.Link
                     href={route("profile.edit")}
                     className="font-lexend"
