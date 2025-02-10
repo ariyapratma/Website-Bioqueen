@@ -8,13 +8,13 @@ use Illuminate\Http\Request;
 
 class ContactController extends Controller
 {
-    public function index()
-    {
-        // Mengambil data dari tabel header_contact
-        $headerContact = HeaderContact::first();
-        return Inertia::render('Contact/Index', [
-            'dataHeaderContact' => $headerContact,
+    // public function index()
+    // {
+    //     // Mengambil data dari tabel header_contact
+    //     $headerContact = HeaderContact::first();
+    //     return Inertia::render('Contact/Index', [
+    //         'dataHeaderContact' => $headerContact,
 
-        ]);
-    }
+    //     ]);
+    // }
 }

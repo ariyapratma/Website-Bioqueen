@@ -35,6 +35,9 @@ const EditHeaderMaklon = ({ dataHeaderMaklon, auth }) => {
           text: "Header Maklon has been updated successfully.",
           icon: "success",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         }).then(() => {
           Inertia.visit("/header-maklon");
         });
@@ -45,6 +48,9 @@ const EditHeaderMaklon = ({ dataHeaderMaklon, auth }) => {
           text: "There was an error updating the Header Maklon.",
           icon: "error",
           confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
         });
       },
     });

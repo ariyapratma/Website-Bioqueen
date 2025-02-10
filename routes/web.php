@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\MaklonController;
+// use App\Http\Controllers\MaklonController;
 use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProductController;
@@ -48,9 +48,9 @@ use App\Http\Controllers\PaymentController;
 // Route yang bisa diakses oleh semua pengguna (Guest, User, Admin)
 Route::get('/', [HomeController::class, 'index'])->name('index');
 Route::get('/about', [AboutUsController::class, 'index'])->name('about');
-Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+// Route::get('/contact', [ContactController::class, 'index'])->name('contact');
 Route::get('/product', [ProductController::class, 'index'])->name('product');
-Route::get('/maklon', [MaklonController::class, 'index'])->name('maklon');
+// Route::get('/maklon', [MaklonController::class, 'index'])->name('maklon');
 
 // Route ProductCategory User
 Route::get('/product/{slug}', [ProductController::class, 'showCategory'])->name('products.category');
@@ -245,7 +245,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/header-maklon/create', [HeaderMaklonController::class, 'create'])->name('header-maklon.create');
         Route::post('/header-maklon', [HeaderMaklonController::class, 'store'])->name('header-maklon.store');
         Route::get('/header-maklon/{headerMaklon}/edit', [HeaderMaklonController::class, 'edit'])->name('header-maklon.edit');
-        Route::put('/header-maklon{headerMaklon}', [HeaderMaklonController::class, 'update'])->name('header-maklon.update');
+        Route::put('/header-maklon/{headerMaklon}', [HeaderMaklonController::class, 'update'])->name('header-maklon.update');
         Route::delete('/header-maklon/{id}', [HeaderMaklonController::class, 'destroy'])->name('header-maklon.destroy');
 
         // Product Page :

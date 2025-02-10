@@ -49,8 +49,8 @@ export default function Navbar({ auth }) {
   const menuItems = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
-    { name: "Contact", path: "/contact" },
-    { name: "Maklon", path: "/maklon" },
+    // { name: "Contact", path: "/contact" },
+    // { name: "Maklon", path: "/maklon" },
     { name: "Product", path: "/product" },
     { name: "Order", path: "/order" },
   ];
