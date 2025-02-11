@@ -82,8 +82,9 @@ export default function Navbar({ auth }) {
           ))}
         </div>
 
-        {/*Notification and Cart Icon */}
-        <div className="flex items-center">
+        {/* Notification dan Cart tetap tampil untuk semua user */}
+        <div className="flex items-center gap-4">
+          {/* Notification Icon */}
           <div
             className={`relative flex items-center justify-center rounded-full p-2 transition-all duration-300 ${
               url === "/notifications"
@@ -93,6 +94,8 @@ export default function Navbar({ auth }) {
           >
             <Notification className="h-6 w-6 text-gray-700 transition-colors duration-300" />
           </div>
+
+          {/* Cart Icon */}
           <Link
             href="/carts"
             className={`relative flex items-center justify-center rounded-full p-2 transition-all duration-300 ${
@@ -110,7 +113,8 @@ export default function Navbar({ auth }) {
               </span>
             )}
           </Link>
-          {/* Register & Login (Tampil jika user belum login dan bukan di halaman /carts) */}
+
+          {/* Jika user belum login, tampilkan Register & Login */}
           {!user && url !== "/carts" && (
             <div className="flex items-center gap-2">
               <Link
@@ -127,31 +131,27 @@ export default function Navbar({ auth }) {
               </Link>
             </div>
           )}
-        </div>
 
-        {/* Admin and Avatar */}
-        {user && (
-          <div className="flex items-center">
-            <div className="relative ms-3">
+          {/* Jika user sudah login, tampilkan dropdown profil */}
+          {user && (
+            <div className="relative">
               <Dropdown>
                 <Dropdown.Trigger>
-                  <span className="inline-flex rounded-md">
-                    <button
-                      type="button"
-                      className="inline-flex items-center rounded-md border border-transparent px-3 py-2 font-lexend text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
-                    >
-                      {user?.name}
-                      <img
-                        src={`/storage/avatars/${auth.user.id}.png`}
-                        alt={auth.user.name}
-                        className="mx-2 h-10 w-10 rounded-full border border-custom-yellow"
-                      />
-                      <FaChevronDown
-                        className="ml-2 h-2 w-2"
-                        aria-hidden="true"
-                      />
-                    </button>
-                  </span>
+                  <button
+                    type="button"
+                    className="inline-flex items-center rounded-md border border-transparent px-3 py-2 font-lexend text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
+                  >
+                    {user?.name}
+                    <img
+                      src={`/storage/avatars/${auth.user.id}.png`}
+                      alt={auth.user.name}
+                      className="mx-2 h-10 w-10 rounded-full border border-custom-yellow"
+                    />
+                    <FaChevronDown
+                      className="ml-2 h-2 w-2"
+                      aria-hidden="true"
+                    />
+                  </button>
                 </Dropdown.Trigger>
 
                 <Dropdown.Content>
@@ -175,9 +175,8 @@ export default function Navbar({ auth }) {
                 </Dropdown.Content>
               </Dropdown>
             </div>
-          </div>
-        )}
-
+          )}
+        </div>
         {/* Mobile Menu Button */}
         <div className="flex items-center md:hidden">
           <button
