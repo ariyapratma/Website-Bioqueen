@@ -10,7 +10,6 @@ const Index = ({ auth, cartItems }) => {
   const { user } = auth;
   const [activeMenu, setActiveMenu] = useState(1);
   const [completedStep, setCompletedStep] = useState(1);
-  const { flash } = usePage().props;
   const [updatedItems, setUpdatedItems] = useState(cartItems);
   const { delete: destroy } = useForm();
   const totalPrice = updatedItems.reduce(
@@ -46,65 +45,39 @@ const Index = ({ auth, cartItems }) => {
     const itemToUpdate = newUpdatedItems.find((item) => item.id === itemId);
 
     if (itemToUpdate) {
-      Inertia.put(`/carts/update/${itemId}`, {
-        quantity: itemToUpdate.quantity,
-      })
-        .then((response) => {
-          Swal.fire({
-            title: "Updated!",
-            text: response.data.message,
-            icon: "success",
-            confirmButtonText: "OK",
-            confirmButtonColor: "#000000",
-            scrollbarPadding: false,
-            backdrop: false,
-          });
-        })
-        .catch((error) => {
-          Swal.fire({
-            title: "Error!",
-            text: error.response.data.message,
-            icon: "error",
-            confirmButtonText: "OK",
-            confirmButtonColor: "#000000",
-            scrollbarPadding: false,
-            backdrop: false,
-          });
-        });
+      Inertia.put(
+        `/carts/update/${itemId}`,
+        {
+          quantity: itemToUpdate.quantity,
+        },
+        {
+          onSuccess: () => {
+            Swal.fire({
+              title: "Updated!",
+              text: "Quantity updated successfully.",
+              icon: "success",
+              confirmButtonText: "OK",
+              confirmButtonColor: "#000000",
+              scrollbarPadding: false,
+              backdrop: false,
+            });
+          },
+          onError: (errors) => {
+            Swal.fire({
+              title: "Error!",
+              text: errors?.message || "Failed to update quantity.",
+              icon: "error",
+              confirmButtonText: "OK",
+              confirmButtonColor: "#000000",
+              scrollbarPadding: false,
+              backdrop: false,
+            });
+          },
+        }
+      );      
     }
   };
 
-  useEffect(() => {
-    if (flash?.success) {
-      Swal.fire({
-        icon: "success",
-        title: "Success!",
-        text: flash.success,
-        timer: 2000,
-        showConfirmButton: false,
-        confirmButtonColor: "#000000",
-        scrollbarPadding: false,
-        backdrop: false,
-      });
-    }
-  }, [flash]);
-
-  useEffect(() => {
-    setUpdatedItems(cartItems);
-
-    if (flash?.success) {
-      Swal.fire({
-        icon: "success",
-        title: "Success!",
-        text: flash.success,
-        timer: 2000,
-        showConfirmButton: false,
-        confirmButtonColor: "#000000",
-        scrollbarPadding: false,
-        backdrop: false,
-      });
-    }
-  }, [cartItems, flash]);
 
   const handleTabClick = (menuIndex) => {
     if (menuIndex <= completedStep) {
@@ -183,7 +156,7 @@ const Index = ({ auth, cartItems }) => {
     setCompletedStep((prev) => Math.max(prev, activeMenu + 1));
     setActiveMenu((prev) => prev + 1);
   };
-
+  
   const removeFromCart = (itemId) => {
     Swal.fire({
       title: "Are you sure?",

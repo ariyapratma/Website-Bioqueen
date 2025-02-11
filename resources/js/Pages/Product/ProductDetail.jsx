@@ -42,7 +42,6 @@ const ProductDetail = () => {
     fetchCartItems();
   }, []);
 
-  // Update total harga setiap kali jumlah barang berubah
   const updateTotalPrice = (newQuantity) => {
     setTotalPrice(product.price * newQuantity);
   };
@@ -52,7 +51,7 @@ const ProductDetail = () => {
       const csrfToken = document
         .querySelector('meta[name="csrf-token"]')
         .getAttribute("content");
-
+  
       const response = await fetch("/api/cart/add", {
         method: "POST",
         headers: {
@@ -67,39 +66,42 @@ const ProductDetail = () => {
         }),
         credentials: "include",
       });
-
+  
       if (!response.ok) {
-        throw new Error(
-          `Failed to add product to cart: ${response.statusText}`,
-        );
+        throw new Error(`Failed to add product to cart: ${response.statusText}`);
       }
-
+  
       const data = await response.json();
       console.log("Product added to cart:", data);
-
-      // Update jumlah item di keranjang jika produk baru ditambahkan
+  
       if (data.isNewProduct) {
         setCartItems((prevCount) => prevCount + 1);
       }
-
+  
       Swal.fire({
         title: "Success!",
         text: `${product.name} has been added to your cart with quantity ${quantity}.`,
         icon: "success",
         confirmButtonText: "OK",
+        confirmButtonColor: "#000000",
+        scrollbarPadding: false,
+        backdrop: false,
       });
     } catch (error) {
       console.error("Failed to add product to cart. Please try again.", error);
-
+  
       Swal.fire({
         title: "Error!",
         text: "Failed to add product to cart. Please try again.",
         icon: "error",
         confirmButtonText: "OK",
+        confirmButtonColor: "#000000",
+        scrollbarPadding: false,
+        backdrop: false,
       });
     }
   };
-
+  
   const orderNow = () => {
     Swal.fire({
       title: "Order Initiated",
@@ -111,7 +113,7 @@ const ProductDetail = () => {
   const increaseQuantity = () => {
     setQuantity((prevQuantity) => {
       const newQuantity = prevQuantity + 1;
-      updateTotalPrice(newQuantity); // Update total harga
+      updateTotalPrice(newQuantity);
       return newQuantity;
     });
   };
@@ -120,7 +122,7 @@ const ProductDetail = () => {
     if (quantity > 1) {
       setQuantity((prevQuantity) => {
         const newQuantity = prevQuantity - 1;
-        updateTotalPrice(newQuantity); // Update total harga
+        updateTotalPrice(newQuantity); 
         return newQuantity;
       });
     }

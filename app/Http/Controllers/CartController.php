@@ -78,12 +78,10 @@ class CartController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        // Validasi kuantitas
         $request->validate([
             'quantity' => 'required|integer|min:1',
         ]);
 
-        // Cari item di keranjang berdasarkan ID
         $cartItem = Cart::where('id', $id)->where('user_id', auth()->id())->first();
 
         if (!$cartItem) {
@@ -173,15 +171,10 @@ class CartController extends Controller
 
             if ($cart) {
                 $cart->quantity += $request->quantity;
-
                 $cart->price = $cart->quantity * $request->price;
-
                 $cart->save();
 
-                return response()->json([
-                    'message' => 'Product quantity and price updated successfully',
-                    'isNewProduct' => false,
-                ]);
+                $message = 'Product quantity and price updated successfully.';
             } else {
                 Cart::create([
                     'user_id' => auth()->id(),
@@ -190,19 +183,28 @@ class CartController extends Controller
                     'price' => $request->price,
                 ]);
 
+                $message = 'Product added to cart successfully.';
+            }
+            if ($request->expectsJson()) {
                 return response()->json([
-                    'message' => 'Product added to cart successfully',
-                    'isNewProduct' => true,
+                    'success' => true,
+                    'message' => $message,
                 ]);
             }
+
+            return redirect()->route('carts.index')->with('success', $message);
         } catch (\Exception $e) {
-            // Log error untuk debugging
             Log::error('Failed to add product to cart: ' . $e->getMessage());
 
-            return response()->json([
-                'message' => 'Error adding product to cart',
-                'error' => $e->getMessage(),
-            ], 409);
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error adding product to cart',
+                    'error' => $e->getMessage(),
+                ], 409);
+            }
+
+            return redirect()->route('carts.index')->with('error', 'Error adding product to cart.');
         }
     }
 
@@ -211,19 +213,12 @@ class CartController extends Controller
         $cartItem = Cart::where('user_id', auth()->id())->findOrFail($id);
         $productId = $cartItem->product_id;
         $cartItem->delete();
-
         $order = Order::where('user_id', auth()->id())
-            ->whereHas('orderDetails', function ($query) use ($productId) {
-                $query->where('product_id', $productId);
-            })
+            ->where('product_id', $productId)
             ->first();
 
         if ($order) {
-            $order->orderDetails()->where('product_id', $productId)->delete();
-
-            if ($order->orderDetails->isEmpty()) {
-                $order->delete();
-            }
+            $order->delete();
         }
 
         return redirect()->route('carts.index')->with('success', 'Item removed from cart and order updated.');
