@@ -59,25 +59,22 @@ export default function Navbar({ auth }) {
         isScrolled ? "bg-white text-gray-800" : "text-base-content bg-white"
       }`}
     >
-      <div className="container mx-auto flex items-center justify-between px-4 md:px-8 py-2 relative">
+      <div className="container relative mx-auto flex items-center justify-between px-4 py-2 md:px-8">
         {/* Logo */}
-          <img
-            className="w-14 md:w-14 flex items-center"
-            src="/Navbar/NavbarLogo.png"
-            alt="Logo"
-          />
+        <img
+          className="flex w-14 items-center md:w-14"
+          src="/Navbar/NavbarLogo.png"
+          alt="Logo"
+        />
 
         {/* Navigation Links */}
-        <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 gap-10 text-sm md:text-base">
+        <div className="absolute left-1/2 hidden -translate-x-1/2 transform items-center gap-2 text-sm md:flex md:text-base">
           {menuItems.map(({ name, path }) => (
             <Link
               key={path}
               href={path}
-              className={`font-regular font-lexend transition-colors hover:text-gray-800 ${
-                url === path ||
-                (url.startsWith("/product") && path === "/product")
-                  ? "font-lexend font-bold text-black"
-                  : ""
+              className={`rounded-lg px-4 py-2 font-lexend text-sm text-gray-700 transition-all duration-300 hover:text-black ${
+                url === path ? "font-semibold text-black" : ""
               }`}
             >
               {name}
@@ -88,16 +85,24 @@ export default function Navbar({ auth }) {
         {/*Notification and Cart Icon */}
         <div className="flex items-center">
           <div
-            className={`relative flex items-center justify-center rounded-full p-2 transition-all duration-300 ${url === "/notifications" ? "border-2 border-custom-yellow text-black" : "hover:bg-gray-100"}`}
+            className={`relative flex items-center justify-center rounded-full p-2 transition-all duration-300 ${
+              url === "/notifications"
+                ? "border-2 border-custom-yellow text-black"
+                : "hover:bg-gray-100"
+            }`}
           >
             <Notification className="h-6 w-6 text-gray-700 transition-colors duration-300" />
           </div>
           <Link
             href="/carts"
-            className={`relative flex items-center justify-center rounded-full p-2 transition-all duration-300 ${url === "/carts" ? "text-black" : "hover:bg-gray-100"}`}
+            className={`relative flex items-center justify-center rounded-full p-2 transition-all duration-300 ${
+              url === "/carts" ? "text-black" : "hover:bg-gray-100"
+            }`}
           >
             <BsCart
-              className={`h-6 w-6 transition-colors duration-300 ${url === "/carts" ? "text-black" : "text-gray-700"}`}
+              className={`h-6 w-6 transition-colors duration-300 ${
+                url === "/carts" ? "text-black" : "text-gray-700"
+              }`}
             />
             {cartItems > 0 && (
               <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
@@ -107,7 +112,7 @@ export default function Navbar({ auth }) {
           </Link>
           {/* Register & Login (Tampil jika user belum login dan bukan di halaman /carts) */}
           {!user && url !== "/carts" && (
-            <div className="fle items-center gap-2">
+            <div className="flex items-center gap-2">
               <Link
                 href="/register"
                 className="px-3 py-1 font-lexend text-sm text-gray-700 transition-all duration-300 hover:text-black"
