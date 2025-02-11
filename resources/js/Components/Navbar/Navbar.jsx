@@ -49,18 +49,9 @@ export default function Navbar({ auth }) {
   const menuItems = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
-    // { name: "Contact", path: "/contact" },
-    // { name: "Maklon", path: "/maklon" },
     { name: "Product", path: "/product" },
     { name: "Order", path: "/order" },
   ];
-
-  if (!user && url !== "/carts") {
-    menuItems.push(
-      { name: "Register", path: "/register" },
-      { name: "Login", path: "/login" },
-    );
-  }
 
   return (
     <nav
@@ -68,18 +59,16 @@ export default function Navbar({ auth }) {
         isScrolled ? "bg-white text-gray-800" : "text-base-content bg-white"
       }`}
     >
-      <div className="container mx-auto flex items-center justify-between p-1 md:p-2">
+      <div className="container mx-auto flex items-center justify-between px-4 md:px-8 py-2 relative">
         {/* Logo */}
-        <Link href="/" className="flex items-center">
           <img
-            className="w-14 md:w-14"
+            className="w-14 md:w-14 flex items-center"
             src="/Navbar/NavbarLogo.png"
             alt="Logo"
           />
-        </Link>
 
         {/* Navigation Links */}
-        <div className="hidden flex-grow items-center justify-center gap-6 text-sm md:flex md:text-base">
+        <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 gap-10 text-sm md:text-base">
           {menuItems.map(({ name, path }) => (
             <Link
               key={path}
@@ -116,6 +105,23 @@ export default function Navbar({ auth }) {
               </span>
             )}
           </Link>
+          {/* Register & Login (Tampil jika user belum login dan bukan di halaman /carts) */}
+          {!user && url !== "/carts" && (
+            <div className="fle items-center gap-2">
+              <Link
+                href="/register"
+                className="px-3 py-1 font-lexend text-sm text-gray-700 transition-all duration-300 hover:text-black"
+              >
+                Register
+              </Link>
+              <Link
+                href="/login"
+                className="px-3 py-1 font-lexend text-sm text-gray-700 transition-all duration-300 hover:text-black"
+              >
+                Login
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* Admin and Avatar */}
