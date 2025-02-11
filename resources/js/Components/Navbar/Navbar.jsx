@@ -86,24 +86,22 @@ export default function Navbar({ auth }) {
         <div className="flex items-center gap-4">
           {/* Notification Icon */}
           <div
-            className={`relative flex items-center justify-center rounded-full p-2 transition-all duration-300 ${
-              url === "/notifications"
-                ? "border-2 border-custom-yellow text-black"
-                : "hover:bg-gray-100"
+            className={`relative flex items-center justify-center rounded-full transition-all duration-300 ${
+              url === "/notifications" ? "text-black" : "hover:bg-gray-100"
             }`}
           >
-            <Notification className="h-6 w-6 text-gray-700 transition-colors duration-300" />
+            <Notification />
           </div>
 
           {/* Cart Icon */}
           <Link
             href="/carts"
-            className={`relative flex items-center justify-center rounded-full p-2 transition-all duration-300 ${
+            className={`relative flex items-center justify-center rounded-full transition-all duration-300 ${
               url === "/carts" ? "text-black" : "hover:bg-gray-100"
             }`}
           >
             <BsCart
-              className={`h-6 w-6 transition-colors duration-300 ${
+              className={`h-5 w-5 transition-colors duration-300 ${
                 url === "/carts" ? "text-black" : "text-gray-700"
               }`}
             />
