@@ -55,7 +55,7 @@ export default function Navbar({ auth }) {
 
   return (
     <nav
-      className={`fixed left-0 top-0 z-50 w-full transition-colors duration-300 ${
+      className={`fixed left-0 top-0 z-50 w-full shadow-md transition-colors duration-300 ${
         isScrolled ? "bg-white text-gray-800" : "text-base-content bg-white"
       }`}
     >
@@ -74,7 +74,10 @@ export default function Navbar({ auth }) {
               key={path}
               href={path}
               className={`rounded-lg px-4 py-2 font-lexend text-sm text-gray-700 transition-all duration-300 hover:text-black ${
-                url === path ? "font-semibold text-black" : ""
+                url === path ||
+                (path === "/product" && url.startsWith("/product"))
+                  ? "font-semibold text-black"
+                  : ""
               }`}
             >
               {name}

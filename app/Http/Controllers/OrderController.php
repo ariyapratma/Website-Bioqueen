@@ -168,7 +168,6 @@ class OrderController extends Controller
 
     public function manageOrders()
     {
-        // $orders = Order::all();
         $orders = Order::with('product')->get();
         $orderInformations = OrderInformation::all();
 

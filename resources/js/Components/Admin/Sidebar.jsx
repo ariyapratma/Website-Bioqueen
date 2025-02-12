@@ -84,7 +84,7 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
   }, [activeMenu]);
 
   return (
-    <div className="bg-neutral-70 flex w-48 flex-col items-center p-4 shadow-lg">
+    <div className="bg-white flex w-48 flex-col items-center p-4">
       <h2 className="mb-4 mt-12 font-lexend text-lg font-bold text-black"></h2>
       <ul className="space-y-2">
         <li>

@@ -4,11 +4,10 @@ import Sidebar from "@/Components/Admin/Sidebar";
 import Swal from "sweetalert2";
 import Navbar from "@/Components/Navbar/Navbar";
 
-export default function Dashboard({ orders = [], dataHeroReview = [], auth }) {
+export default function Dashboard({ auth }) {
   const [activeMenu, setActiveMenu] = useState("dashboard");
   const user = auth.user;
 
-  // SweetAlert on load
   useEffect(() => {
     Swal.fire({
       icon: "success",
@@ -32,7 +31,7 @@ export default function Dashboard({ orders = [], dataHeroReview = [], auth }) {
       )}
 
       {/* Main Content */}
-      <div className="flex-1 bg-neutral-50 p-6 overflow-y-auto h-screen">
+      <div className="h-screen flex-1 overflow-y-auto bg-neutral-50 p-6">
         <Head title="Dashboard | PT Ratu Bio Indonesia" />
         <Navbar auth={auth} />
 
@@ -46,36 +45,14 @@ export default function Dashboard({ orders = [], dataHeroReview = [], auth }) {
           {/* Admin Cards */}
           {user.role === "admin" && (
             <>
-              {/* Card 1: Ringkasan Penjualan */}
+              {/* Card 1: User Information */}
               <div className="rounded-lg bg-white p-6 shadow-md">
                 <h3 className="font-lexend text-lg font-semibold">
-                  Ringkasan Penjualan
+                  User Information
                 </h3>
                 <div className="mt-4">
-                  {/* Tempatkan grafik atau informasi ringkasan */}
-                  <p>Total Penjualan: 1000</p>
-                </div>
-              </div>
-
-              {/* Card 2: Ringkasan Pesanan */}
-              <div className="rounded-lg bg-white p-6 shadow-md">
-                <h3 className="font-lexend text-lg font-semibold">
-                  Ringkasan Pesanan
-                </h3>
-                <div className="mt-4">
-                  {/* Tempatkan grafik atau informasi ringkasan */}
-                  <p>Total Pesanan: 150</p>
-                </div>
-              </div>
-
-              {/* Card 3: Jumlah Pengguna */}
-              <div className="rounded-lg bg-white p-6 shadow-md">
-                <h3 className="font-lexend text-lg font-semibold">
-                  Jumlah Pengguna
-                </h3>
-                <div className="mt-4">
-                  {/* Tempatkan grafik atau informasi ringkasan */}
-                  <p>Total Pengguna: 500</p>
+                  <p>Name: {user.name}</p>
+                  <p>Email: {user.email}</p>
                 </div>
               </div>
             </>
@@ -92,36 +69,6 @@ export default function Dashboard({ orders = [], dataHeroReview = [], auth }) {
                 <div className="mt-4">
                   <p>Name: {user.name}</p>
                   <p>Email: {user.email}</p>
-                </div>
-              </div>
-
-              {/* Card 2: Order History */}
-              <div className="rounded-lg bg-white p-6 shadow-md">
-                <h3 className="font-lexend text-lg font-semibold">
-                  Order History
-                </h3>
-                <div className="mt-4">
-                  {orders.length === 0 ? (
-                    <p className="text-red-500">
-                      There is no order history yet.
-                    </p>
-                  ) : (
-                    <p>Jumlah Pesanan: {orders.length}</p>
-                  )}
-                </div>
-              </div>
-
-              {/* Card 3: Comment History */}
-              <div className="rounded-lg bg-white p-6 shadow-md">
-                <h3 className="font-lexend text-lg font-semibold">
-                  Comment History
-                </h3>
-                <div className="mt-4">
-                  {dataHeroReview.length === 0 ? (
-                    <p className="text-red-500">No comment yet.</p>
-                  ) : (
-                    <p>Total Comments: {dataHeroReview.length}</p>
-                  )}
                 </div>
               </div>
             </>
