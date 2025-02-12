@@ -32,6 +32,9 @@ const OrderInformation = ({ auth }) => {
         title: "Incomplete Form",
         text: "Please fill out all required fields.",
         confirmButtonText: "OK",
+        confirmButtonColor: "#000000",
+        scrollbarPadding: false,
+        backdrop: false,
       });
       return;
     }
@@ -42,6 +45,9 @@ const OrderInformation = ({ auth }) => {
         title: "No items in cart",
         text: "Please add items to your cart before submitting.",
         confirmButtonText: "OK",
+        confirmButtonColor: "#000000",
+        scrollbarPadding: false,
+        backdrop: false,
       });
       return;
     }
@@ -56,6 +62,9 @@ const OrderInformation = ({ auth }) => {
         title: "CSRF Token Missing",
         text: "Please refresh the page and try again.",
         confirmButtonText: "OK",
+        confirmButtonColor: "#000000",
+        scrollbarPadding: false,
+        backdrop: false,
       });
       return;
     }
@@ -89,6 +98,9 @@ const OrderInformation = ({ auth }) => {
         title: "Order Submitted",
         text: result.message || "Order submitted successfully!",
         confirmButtonText: "OK",
+        confirmButtonColor: "#000000",
+        scrollbarPadding: false,
+        backdrop: false,
       });
     } catch (error) {
       console.error("Error during fetch:", error);
@@ -97,6 +109,9 @@ const OrderInformation = ({ auth }) => {
         title: "Submission Failed",
         text: error.message || "An error occurred while submitting the order.",
         confirmButtonText: "OK",
+        confirmButtonColor: "#000000",
+        scrollbarPadding: false,
+        backdrop: false,
       });
     }
   };
@@ -110,6 +125,9 @@ const OrderInformation = ({ auth }) => {
         icon: "warning",
         title: "Access Denied",
         text: "Please complete the previous step first!",
+        confirmButtonColor: "#000000",
+        scrollbarPadding: false,
+        backdrop: false,
       });
     }
   };
