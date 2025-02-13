@@ -166,18 +166,25 @@ class OrderController extends Controller
         ]);
     }
 
-    public function destroy()
+    public function cancel(Request $request)
     {
         try {
             $orders = Order::where('user_id', auth()->id())->get();
-            OrderInformation::whereIn('order_id', $orders->pluck('id'))->delete();
-            $orders->each->delete();
 
-            return redirect()->route('myorder.index')->with('success', 'All orders have been successfully canceled!');
+            if ($orders->isEmpty()) {
+                return back()->with('error', 'No orders found to cancel.');
+            }
+
+            // Update status menjadi Cancelled
+            foreach ($orders as $order) {
+                $order->update(['status' => 'Cancelled']);
+            }
+
+            return back()->with('success', 'All orders have been successfully cancelled!');
         } catch (\Exception $e) {
-            Log::error("Error canceling all orders: " . $e->getMessage());
+            Log::error("Error cancelling orders: " . $e->getMessage());
 
-            return redirect()->route('myorder.index')->with('error', 'Failed to cancel all orders.');
+            return back()->with('error', 'Failed to cancel orders.');
         }
     }
 

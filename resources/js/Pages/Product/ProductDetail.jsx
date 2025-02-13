@@ -9,31 +9,30 @@ const ProductDetail = () => {
   const { product, auth, category } = props;
   const [quantity, setQuantity] = useState(1);
   const [totalPrice, setTotalPrice] = useState(product.price);
-  const [cartItems, setCartItems] = useState(0);
+  const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
-        const response = await fetch("/api/cart/items", {
+        const response = await fetch("/cart/items", {
           method: "GET",
           headers: {
             Accept: "application/json",
-            "Content-Type": "application/json",
+            "X-Requested-With": "XMLHttpRequest",
             "X-CSRF-TOKEN": document
               .querySelector('meta[name="csrf-token"]')
-              .getAttribute("content"),
+              ?.getAttribute("content"),
           },
           credentials: "include",
         });
 
         if (!response.ok) {
-          throw new Error(
-            `Failed to fetch cart items: ${response.status} ${response.statusText}`,
-          );
+          console.error(`Failed to fetch cart items: ${response.status} ${response.statusText}`);
+          return;
         }
 
         const data = await response.json();
-        setCartItems(data.length); // Update cart items count from server data
+        setCartItems(data.length);
       } catch (error) {
         console.error("Failed to fetch cart items:", error);
       }
@@ -48,66 +47,34 @@ const ProductDetail = () => {
 
   const addToCart = async () => {
     try {
-      const csrfToken = document
-        .querySelector('meta[name="csrf-token"]')
-        .getAttribute("content");
-  
-      const response = await fetch("/api/cart/add", {
+      const response = await fetch("/cart/add", {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          "X-CSRF-TOKEN": csrfToken,
+          "X-CSRF-TOKEN": document
+            .querySelector('meta[name="csrf-token"]')
+            ?.getAttribute("content"),
         },
         body: JSON.stringify({
           product_id: product.id,
           quantity: quantity,
           price: product.price,
         }),
-        credentials: "include",
+        credentials: "same-origin",
       });
-  
-      if (!response.ok) {
-        throw new Error(`Failed to add product to cart: ${response.statusText}`);
+
+      const result = await response.json();
+
+      if (response.ok) {
+        Swal.fire("Success", result.message, "success");
+      } else {
+        Swal.fire("Error", result.error || "Something went wrong", "error");
       }
-  
-      const data = await response.json();
-      console.log("Product added to cart:", data);
-  
-      if (data.isNewProduct) {
-        setCartItems((prevCount) => prevCount + 1);
-      }
-  
-      Swal.fire({
-        title: "Success!",
-        text: `${product.name} has been added to your cart with quantity ${quantity}.`,
-        icon: "success",
-        confirmButtonText: "OK",
-        confirmButtonColor: "#000000",
-        scrollbarPadding: false,
-        backdrop: false,
-      });
     } catch (error) {
-      console.error("Failed to add product to cart. Please try again.", error);
-  
-      Swal.fire({
-        title: "Error!",
-        text: "Failed to add product to cart. Please try again.",
-        icon: "error",
-        confirmButtonText: "OK",
-        confirmButtonColor: "#000000",
-        scrollbarPadding: false,
-        backdrop: false,
-      });
+      console.error("Failed to add product to cart:", error);
+      Swal.fire("Error", "Failed to add product to cart", "error");
     }
-  };
-  
-  const orderNow = () => {
-    Swal.fire({
-      title: "Order Initiated",
-      text: `Order for ${product.name} with quantity ${quantity} and total price Rp ${parseFloat(totalPrice).toLocaleString("id-ID")}!`,
-      icon: "info",
-    });
   };
 
   const increaseQuantity = () => {
@@ -122,7 +89,7 @@ const ProductDetail = () => {
     if (quantity > 1) {
       setQuantity((prevQuantity) => {
         const newQuantity = prevQuantity - 1;
-        updateTotalPrice(newQuantity); 
+        updateTotalPrice(newQuantity);
         return newQuantity;
       });
     }
@@ -206,7 +173,7 @@ const ProductDetail = () => {
                 </button>
               </div>
 
-              {/* Tombol Add to Cart dan Order Now */}
+              {/* Tombol Add to Cart */}
               <div className="mt-6 flex space-x-4 font-lexend font-semibold">
                 <button
                   onClick={addToCart}

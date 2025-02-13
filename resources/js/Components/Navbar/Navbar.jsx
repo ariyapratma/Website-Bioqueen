@@ -20,11 +20,10 @@ export default function Navbar({ auth }) {
 
   const fetchCartItems = async () => {
     try {
-      const response = await fetch("/api/cart/items", {
+      const response = await fetch("/cart/items", {
         method: "GET",
         headers: {
           Accept: "application/json",
-          Authorization: `Bearer ${user?.token}`,
           "Content-Type": "application/json",
           "X-CSRF-TOKEN": document
             .querySelector('meta[name="csrf-token"]')
@@ -32,20 +31,20 @@ export default function Navbar({ auth }) {
         },
         credentials: "include",
       });
-
+  
       if (!response.ok) {
         throw new Error(
-          `Failed to fetch cart items: ${response.status} ${response.statusText}`,
+          `Failed to fetch cart items: ${response.status} ${response.statusText}`
         );
       }
-
+  
       const data = await response.json();
       setCartItems(data.length);
     } catch (error) {
       console.error("Failed to fetch cart items:", error);
     }
   };
-
+  
   const menuItems = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },

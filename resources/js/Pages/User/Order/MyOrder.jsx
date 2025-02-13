@@ -15,36 +15,23 @@ const MyOrder = ({ orders = [], auth }) => {
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
-      cancelButtonColor: "#d33",
       confirmButtonText: "Yes, cancel all orders!",
       confirmButtonColor: "#000000",
-      scrollbarPadding: false,
-      backdrop: false,
+      cancelButtonColor: "#d33",
     }).then((result) => {
       if (result.isConfirmed) {
-        Inertia.delete("/my-order", {
+        Inertia.patch("/my-order/cancel", {}, {
           onSuccess: () => {
-            Swal.fire({
-              title: "Success!",
-              text: "All orders have been canceled.",
-              icon: "success",
-              confirmButtonColor: "#000000",
-            });
-            Inertia.reload();
+            Swal.fire("Cancelled!", "Your order has been cancelled.", "success");
           },
           onError: () => {
-            Swal.fire({
-              title: "Error!",
-              text: "Failed to cancel all orders.",
-              icon: "error",
-              confirmButtonColor: "#000000",
-            });
-          },
+            Swal.fire("Error!", "Failed to cancel orders.", "error");
+          }
         });
       }
     });
   };
-
+    
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}

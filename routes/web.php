@@ -55,29 +55,35 @@ Route::get('/product/{slug}', [ProductController::class, 'showCategory'])->name(
 // Route ProductDetail User
 Route::get('/product/{category}/{product}', [ProductController::class, 'showProduct'])->name('product.detail');
 
-// Route AddCart User
-Route::middleware('auth', 'verified')->group(function () {
-    Route::get('/api/cart/items', [CartController::class, 'getCartItems']);
-    Route::post('/api/cart/add', [CartController::class, 'addToCart']);
-});
-
 // Cart Page : 
 Route::middleware(['auth', 'verified', 'role:admin|user'])->group(function () {
     // Route AddCart and CartDetail
     Route::get('/carts', [CartController::class, 'index'])->name('carts.index');
+    Route::get('/cart/items', [CartController::class, 'getCartItems'])->name('cart.items');
+    Route::post('/cart/add', [CartController::class, 'store'])->name('cart.add');
     Route::put('/carts/update/{id}', [CartController::class, 'update'])->name('carts.update');
     Route::delete('/carts/remove/{id}', [CartController::class, 'removeFromCart'])->name('carts.remove');
 });
 
 // Route untuk Order hanya dapat diakses oleh pengguna dengan peran 'user'
+// Route::middleware(['auth', 'verified', 'role:admin|user'])->group(function () {
+//     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
+//     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
+//     Route::post('/order-informations', [OrderController::class, 'storeInformations'])->name('order.storeInformations');
+
+//     Route::get('/my-order', [OrderController::class, 'myOrder'])->name('myorder.index');
+//     Route::patch('/my-order/cancel', [OrderController::class, 'cancel'])->name('order.cancel');
+// });
+
 Route::middleware(['auth', 'verified', 'role:admin|user'])->group(function () {
     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
     Route::post('/order-informations', [OrderController::class, 'storeInformations'])->name('order.storeInformations');
 
-    Route::get('/my-order', [OrderController::class, 'myOrder'])->name('myorder.index');
-    Route::delete('/my-order', [OrderController::class, 'destroy'])->name('my-order.destroy');
+    Route::get('/my-order', [OrderController::class, 'myOrder'])->name('order.myorder');
+    Route::patch('/my-order/cancel', [OrderController::class, 'cancel'])->name('order.cancel');
 });
+
 
 // Route khusus untuk pengguna yang terautentikasi (auth) dan terverifikasi
 Route::middleware(['auth', 'verified'])->group(function () {
