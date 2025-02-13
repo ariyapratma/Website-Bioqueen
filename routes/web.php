@@ -5,9 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
-// use App\Http\Controllers\MaklonController;
 use App\Http\Controllers\AboutUsController;
-use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HeroFlyerController;
@@ -76,7 +74,9 @@ Route::middleware(['auth', 'verified', 'role:admin|user'])->group(function () {
     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
     Route::post('/order-informations', [OrderController::class, 'storeInformations'])->name('order.storeInformations');
-    Route::get('/my-order', [OrderController::class, 'myOrder'])->name('order.view');
+
+    Route::get('/my-order', [OrderController::class, 'myOrder'])->name('myorder.index');
+    Route::delete('/my-order', [OrderController::class, 'destroy'])->name('my-order.destroy');
 });
 
 // Route khusus untuk pengguna yang terautentikasi (auth) dan terverifikasi

@@ -2,10 +2,48 @@ import { Link, Head } from "@inertiajs/react";
 import { useState } from "react";
 import Sidebar from "@/Components/Admin/Sidebar";
 import Navbar from "@/Components/Navbar/Navbar";
+import Swal from "sweetalert2";
+import { Inertia } from "@inertiajs/inertia";
 
 const MyOrder = ({ orders = [], auth }) => {
   const [activeMenu, setActiveMenu] = useState("my-order");
   const user = auth?.user;
+
+  const handleCancelOrders = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, cancel all orders!",
+      confirmButtonColor: "#000000",
+      scrollbarPadding: false,
+      backdrop: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Inertia.delete("/my-order", {
+          onSuccess: () => {
+            Swal.fire({
+              title: "Success!",
+              text: "All orders have been canceled.",
+              icon: "success",
+              confirmButtonColor: "#000000",
+            });
+            Inertia.reload();
+          },
+          onError: () => {
+            Swal.fire({
+              title: "Error!",
+              text: "Failed to cancel all orders.",
+              icon: "error",
+              confirmButtonColor: "#000000",
+            });
+          },
+        });
+      }
+    });
+  };
 
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -52,7 +90,23 @@ const MyOrder = ({ orders = [], auth }) => {
         </div>
 
         {/* Title */}
-        <h2 className="mb-6 font-lexend text-xl font-bold">Order Summary</h2>
+        <h2 className="mb-2 font-lexend text-xl font-bold">Order Summary</h2>
+
+        {/* Button Payment And Cancel */}
+        <div className="mb-6 flex justify-end">
+          <button
+            onClick={() => Inertia.visit(`/payment/${orders.id}`)}
+            className="ml-4 inline-flex items-center justify-center rounded-md border border-transparent bg-black px-6 py-3 text-base font-semibold text-white shadow-sm transition duration-300 hover:bg-gray-900"
+          >
+            Payment
+          </button>
+          <button
+            onClick={handleCancelOrders}
+            className="ml-4 inline-flex items-center justify-center rounded-md border border-red-600 bg-white px-6 py-3 text-base font-semibold text-red-600 shadow-sm transition duration-300 hover:bg-red-50"
+          >
+            Cancel
+          </button>
+        </div>
 
         {/* Order Summary */}
         <div className="overflow-hidden rounded-lg bg-white shadow-md">

@@ -166,6 +166,21 @@ class OrderController extends Controller
         ]);
     }
 
+    public function destroy()
+    {
+        try {
+            $orders = Order::where('user_id', auth()->id())->get();
+            OrderInformation::whereIn('order_id', $orders->pluck('id'))->delete();
+            $orders->each->delete();
+
+            return redirect()->route('myorder.index')->with('success', 'All orders have been successfully canceled!');
+        } catch (\Exception $e) {
+            Log::error("Error canceling all orders: " . $e->getMessage());
+
+            return redirect()->route('myorder.index')->with('error', 'Failed to cancel all orders.');
+        }
+    }
+
     public function manageOrders()
     {
         $orders = Order::with('product')->get();
