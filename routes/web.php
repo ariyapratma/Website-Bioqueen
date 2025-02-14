@@ -65,16 +65,7 @@ Route::middleware(['auth', 'verified', 'role:admin|user'])->group(function () {
     Route::delete('/carts/remove/{id}', [CartController::class, 'removeFromCart'])->name('carts.remove');
 });
 
-// Route untuk Order hanya dapat diakses oleh pengguna dengan peran 'user'
-// Route::middleware(['auth', 'verified', 'role:admin|user'])->group(function () {
-//     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
-//     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
-//     Route::post('/order-informations', [OrderController::class, 'storeInformations'])->name('order.storeInformations');
-
-//     Route::get('/my-order', [OrderController::class, 'myOrder'])->name('myorder.index');
-//     Route::patch('/my-order/cancel', [OrderController::class, 'cancel'])->name('order.cancel');
-// });
-
+// Order Page : 
 Route::middleware(['auth', 'verified', 'role:admin|user'])->group(function () {
     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');

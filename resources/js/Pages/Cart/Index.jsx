@@ -94,69 +94,66 @@ const Index = ({ auth, cartItems }) => {
     }
   };
 
-  const handleContinue = () => {
-    const totalPrice = updatedItems.reduce((sum, item) => {
-      return sum + (item.product?.price || 0) * (item.quantity || 0);
-    }, 0);
+  const handleCheckout = async () => {
+    if (updatedItems.length === 0) {
+        Swal.fire({
+            title: "Error!",
+            text: "Your cart is empty.",
+            icon: "error",
+            confirmButtonText: "OK",
+            confirmButtonColor: "#000000",
+        });
+        return;
+    }
 
     const orderData = updatedItems.map((item) => ({
-      product_id: item.product?.id,
-      quantity: item.quantity,
-      price: item.product?.price,
+        product_id: item.product?.id,
+        quantity: item.quantity,
+        price: item.product?.price,
     }));
 
     if (!orderData.every((item) => item.product_id && item.quantity >= 1)) {
-      Swal.fire({
-        title: "Error!",
-        text: "All products must have a valid product ID and quantity.",
-        icon: "error",
-        confirmButtonText: "OK",
-        confirmButtonColor: "#000000",
-        scrollbarPadding: false,
-        backdrop: false,
-      });
-      return;
+        Swal.fire({
+            title: "Error!",
+            text: "All products must have a valid product ID and quantity.",
+            icon: "error",
+            confirmButtonText: "OK",
+            confirmButtonColor: "#000000",
+        });
+        return;
     }
 
-    Inertia.post(
-      "/order",
-      {
-        orderItems: orderData,
-        total_price: totalPrice,
-      },
-      {
-        onSuccess: (response) => {
-          if (response.props?.flash?.success) {
-            Swal.fire({
-              title: "Success!",
-              text: response.props.flash.success,
-              icon: "success",
-              confirmButtonText: "OK",
-              confirmButtonColor: "#000000",
-              scrollbarPadding: false,
-              backdrop: false,
-            }).then(() => {
-              Inertia.visit("/order");
-            });
-          }
-        },
-        onError: (errors) => {
-          Swal.fire({
+    const totalPrice = orderData.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+    try {
+        await Inertia.post("/order", {
+            orderItems: orderData,
+            total_price: totalPrice,
+        });
+
+        Swal.fire({
+            title: "Success!",
+            text: "Your order has been placed successfully.",
+            icon: "success",
+            confirmButtonText: "OK",
+            confirmButtonColor: "#000000",
+        }).then(() => {
+            Inertia.visit("/order");
+        });
+
+        setCompletedStep((prev) => Math.max(prev, activeMenu + 1));
+        setActiveMenu((prev) => prev + 1);
+    } catch (error) {
+        Swal.fire({
             title: "Error!",
             text: "There was an error processing your order.",
             icon: "error",
             confirmButtonText: "OK",
             confirmButtonColor: "#000000",
-            scrollbarPadding: false,
-            backdrop: false,
-          });
-        },
-      },
-    );
-    setCompletedStep((prev) => Math.max(prev, activeMenu + 1));
-    setActiveMenu((prev) => prev + 1);
-  };
-  
+        });
+    }
+};
+
   const removeFromCart = (itemId) => {
     Swal.fire({
       title: "Are you sure?",
@@ -346,10 +343,10 @@ const Index = ({ auth, cartItems }) => {
                 </div>
                 <div>
                   <button
-                    onClick={handleContinue}
+                    onClick={handleCheckout}
                     className="rounded-lg bg-custom-yellow px-6 py-3 font-semibold text-black transition hover:bg-yellow-600"
                   >
-                    Continue
+                    Checkout
                   </button>
                 </div>
               </div>

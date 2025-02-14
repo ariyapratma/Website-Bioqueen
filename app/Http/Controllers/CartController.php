@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Product;
@@ -13,14 +14,24 @@ class CartController extends Controller
     /**
      * Display the user's cart items.
      */
+
     public function index()
     {
         $cartItems = Cart::where('user_id', Auth::id())->with('product')->get();
-        return inertia('Cart/Index', [
+        return Inertia::render('Cart/Index', [
             'cartItems' => $cartItems,
             'auth' => ['user' => Auth::user()],
+
         ]);
     }
+    // public function index()
+    // {
+    //     $cartItems = Cart::where('user_id', Auth::id())->with('product')->get();
+    //     return Inertia::render('Cart/Index', [
+    //         'cartItems' => $cartItems,
+    //         'auth' => ['user' => Auth::user()],
+    //     ]);
+    // }
 
     /**
      * Store a new cart item or update an existing one.

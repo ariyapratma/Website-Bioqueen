@@ -3,22 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
-use Inertia\Inertia;
 use App\Models\Order;
 use App\Models\HeaderOrder;
 use App\Models\OrderInformation;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
-
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
     public function index()
     {
         $cartItems = Cart::where('user_id', Auth::id())->with('product')->get();
@@ -26,29 +20,15 @@ class OrderController extends Controller
 
         return Inertia::render('Order/Index', [
             'dataHeaderOrder' => $headerOrder,
-            'auth' => [
-                'user' => Auth::user(),
-            ],
-            'cartItems' => $cartItems->map(function ($cartItem) {
-                if ($cartItem->product) {
-                    return [
-                        'id' => $cartItem->id,
-                        'product' => [
-                            'name' => $cartItem->product->name,
-                            'price' => $cartItem->product->price,
-                            'image_url' => $cartItem->product->image_url,
-                        ],
-                        'quantity' => $cartItem->quantity,
-                        'price' => $cartItem->price,
-                    ];
-                }
-                return null;
-            })->filter(),
-
+            'auth' => ['user' => Auth::user()],
+            'cartItems' => $cartItems->map(fn($cartItem) => [
+                'id' => $cartItem->id,
+                'product' => optional($cartItem->product)->only(['name', 'price', 'image_url']),
+                'quantity' => $cartItem->quantity,
+                'price' => $cartItem->price,
+            ])->filter(),
             'orderInfo' => [
-                'total_price' => $cartItems->sum(function ($item) {
-                    return $item->price;
-                }),
+                'total_price' => $cartItems->sum('price'),
                 'item_count' => $cartItems->count(),
             ],
         ]);
@@ -63,32 +43,17 @@ class OrderController extends Controller
             'total_price' => 'required|numeric|min:0',
         ]);
 
-        $existingOrder = Order::where('user_id', auth()->id())->first();
-
-        if ($existingOrder) {
-            $existingOrder->total_price = $validated['total_price'];
-            $existingOrder->product_id = $validated['orderItems'][0]['product_id'];
-            $existingOrder->status = 'Processing';
-            $existingOrder->save();
-
-            return redirect()->route('order.index')->with('success', 'Order successfully placed!');
-        } else {
-            do {
-                $randomId = random_int(1000000000, 9999999999);
-            } while (Order::where('id', $randomId)->exists());
-
-            $order = Order::create([
+        foreach ($validated['orderItems'] as $item) {
+            Order::create([
                 'user_id' => auth()->id(),
-                'product_id' => $validated['orderItems'][0]['product_id'],
-                'total_price' => $validated['total_price'],
-                'status' => 'pending',
+                'product_id' => $item['product_id'],
+                'quantity' => $item['quantity'],
+                'total_price' => $item['price'] * $item['quantity'],
+                'status' => 'Processing',
             ]);
-
-            $order->status = 'Processing';
-            $order->save();
-
-            return redirect()->route('order.index')->with('success', 'Order successfully placed!');
         }
+
+        return redirect()->route('order.index')->with('success', 'Order successfully placed!');
     }
 
     public function storeInformations(Request $request)
@@ -101,121 +66,65 @@ class OrderController extends Controller
             'postal_code' => 'required|numeric',
         ]);
 
-        try {
-            $existingOrder = Order::where('user_id', auth()->id())
-                ->where('status', 'Processing')
-                ->first();
+        $existingOrder = Order::where('user_id', auth()->id())->where('status', 'Processing')->first();
 
-            if (!$existingOrder) {
-                return response()->json([
-                    'message' => 'No active order found.',
-                    'error' => 'Order with status Processing not found.'
-                ], 400);
-            }
-
-            $orderInformation = new OrderInformation($validated);
-            $orderInformation->order_id = $existingOrder->id;
-            $orderInformation->save();
-
-            return response()->json([
-                'message' => 'Order information submitted successfully!',
-                'orderInformation' => $orderInformation
-            ]);
-        } catch (\Exception $e) {
-            Log::error("Order Information Error: " . $e->getMessage());
-
-            return response()->json([
-                'message' => 'Failed to submit order information.',
-                'error' => $e->getMessage()
-            ], 500);
+        if (!$existingOrder) {
+            return response()->json(['message' => 'No active order found.'], 400);
         }
+
+        $orderInformation = $existingOrder->orderInformation()->create($validated);
+
+        return response()->json(['message' => 'Order information submitted successfully!', 'orderInformation' => $orderInformation]);
     }
 
     public function myOrder()
     {
         $orders = Order::with('product')->where('user_id', auth()->id())->get();
-        $orderInformations = $orders->isNotEmpty()
-            ? OrderInformation::whereIn('order_id', $orders->pluck('id'))->get()
-            : collect();
+        $orderInformations = OrderInformation::whereIn('order_id', $orders->pluck('id'))->get()->keyBy('order_id');
 
-        $orders = $orders->map(function ($order) use ($orderInformations) {
-            $information = $orderInformations->firstWhere('order_id', $order->id);
-
-            return [
+        return Inertia::render('User/Order/MyOrder', [
+            'orders' => $orders->map(fn($order) => [
                 'id' => $order->id,
                 'created_at' => $order->created_at->format('Y-m-d H:i:s'),
                 'status' => $order->status,
-                'product_id' => $order->product->id ?? null,
-                'product' => $order->product ? [
-                    'name' => $order->product->name,
-                    'image_url' => $order->product->image_url,
-                ] : null,
+                'product' => optional($order->product)->only(['id', 'name', 'image_url']),
                 'total_price' => $order->total_price,
-                'informations' => $information ? [
-                    'recipient_name' => $information->recipient_name,
-                    'email' => $information->email,
-                    'address' => $information->address,
-                    'postal_code' => $information->postal_code,
-                    'notes' => $information->notes,
-                ] : null,
-            ];
-        });
-
-        return Inertia::render('User/Order/MyOrder', [
-            'orders' => $orders,
+                'informations' => optional($orderInformations->get($order->id))->only(['recipient_name', 'email', 'address', 'postal_code', 'notes']),
+            ]),
         ]);
     }
 
-    public function cancel(Request $request)
+    public function cancel()
     {
-        try {
-            $orders = Order::where('user_id', auth()->id())->get();
+        $orders = Order::where('user_id', auth()->id())->get();
 
-            if ($orders->isEmpty()) {
-                return back()->with('error', 'No orders found to cancel.');
-            }
-
-            // Update status menjadi Cancelled
-            foreach ($orders as $order) {
-                $order->update(['status' => 'Cancelled']);
-            }
-
-            return back()->with('success', 'All orders have been successfully cancelled!');
-        } catch (\Exception $e) {
-            Log::error("Error cancelling orders: " . $e->getMessage());
-
-            return back()->with('error', 'Failed to cancel orders.');
+        if ($orders->isEmpty()) {
+            return back()->with('error', 'No orders found to cancel.');
         }
+
+        $orders->each->update(['status' => 'Cancelled']);
+
+        return back()->with('success', 'All orders have been successfully cancelled!');
     }
 
     public function manageOrders()
     {
         $orders = Order::with('product')->get();
-        $orderInformations = OrderInformation::all();
+        $orderInformations = OrderInformation::all()->keyBy('order_id');
 
         return Inertia::render('Admin/Order/ManageOrderProducts', [
-            'orders' => $orders->map(function ($order) use ($orderInformations) {
-                $informations = $orderInformations->filter(function ($information) use ($order) {
-                    return $information->order_id === $order->id;
-                });
-
-                return [
-                    'id' => $order->id,
-                    'recipient_name' => $informations->first()->recipient_name ?? '',
-                    'email' => $informations->first()->email ?? '',
-                    'address' => $informations->first()->address ?? '',
-                    'postal_code' => $informations->first()->postal_code ?? '',
-                    'notes' => $informations->first()->notes ?? '',
-                    'total_price' => $order->total_price,
-                    'created_at' => $order->created_at->format('Y-m-d H:i:s'),
-                    'status' => $order->status,
-                    'product_id' => $order->product->id ?? null,
-                    'product' => $order->product ? [
-                        'name' => $order->product->name,
-                        'image_url' => $order->product->image_url,
-                    ] : null,
-                ];
-            }),
+            'orders' => $orders->map(fn($order) => [
+                'id' => $order->id,
+                'recipient_name' => optional($orderInformations->get($order->id))->recipient_name,
+                'email' => optional($orderInformations->get($order->id))->email,
+                'address' => optional($orderInformations->get($order->id))->address,
+                'postal_code' => optional($orderInformations->get($order->id))->postal_code,
+                'notes' => optional($orderInformations->get($order->id))->notes,
+                'total_price' => $order->total_price,
+                'created_at' => $order->created_at->format('Y-m-d H:i:s'),
+                'status' => $order->status,
+                'product' => optional($order->product)->only(['id', 'name', 'image_url']),
+            ]),
         ]);
     }
 }
