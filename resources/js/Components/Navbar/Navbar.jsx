@@ -16,6 +16,15 @@ export default function Navbar({ auth }) {
     if (user) {
       fetchCartItems();
     }
+
+    const handleCartUpdate = () => {
+      fetchCartItems();
+    };
+
+    window.addEventListener("cartUpdated", handleCartUpdate);
+    return () => {
+      window.removeEventListener("cartUpdated", handleCartUpdate);
+    };
   }, [user]);
 
   const fetchCartItems = async () => {
@@ -31,20 +40,18 @@ export default function Navbar({ auth }) {
         },
         credentials: "include",
       });
-  
       if (!response.ok) {
         throw new Error(
-          `Failed to fetch cart items: ${response.status} ${response.statusText}`
+          `Failed to fetch cart items: ${response.status} ${response.statusText}`,
         );
       }
-  
       const data = await response.json();
       setCartItems(data.length);
     } catch (error) {
       console.error("Failed to fetch cart items:", error);
     }
   };
-  
+
   const menuItems = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
@@ -97,14 +104,14 @@ export default function Navbar({ auth }) {
 
           {/* Cart Icon */}
           <Link
-            href="/carts"
+            href="/cart"
             className={`relative flex items-center justify-center rounded-full transition-all duration-300 ${
-              url === "/carts" ? "text-black" : "hover:bg-gray-100"
+              url === "/cart" ? "text-black" : "hover:bg-gray-100"
             }`}
           >
             <BsCart
               className={`h-5 w-5 transition-colors duration-300 ${
-                url === "/carts" ? "text-black" : "text-gray-700"
+                url === "/cart" ? "text-black" : "text-gray-700"
               }`}
             />
             {cartItems > 0 && (
@@ -115,7 +122,7 @@ export default function Navbar({ auth }) {
           </Link>
 
           {/* Jika user belum login, tampilkan Register & Login */}
-          {!user && url !== "/carts" && (
+          {!user && url !== "/cart" && (
             <div className="flex items-center gap-2">
               <Link
                 href="/register"

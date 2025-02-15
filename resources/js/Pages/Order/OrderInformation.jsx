@@ -5,8 +5,6 @@ import { Inertia } from "@inertiajs/inertia";
 
 const OrderInformation = ({ auth }) => {
   const user = auth.user;
-  const [activeMenu, setActiveMenu] = useState(2);
-  const [completedStep, setCompletedStep] = useState(2);
   const [orderItems, setOrderItems] = useState([]);
   const [recipientName, setRecipientName] = useState(user?.name || "");
   const [email, setEmail] = useState(user?.email || "");
@@ -116,22 +114,6 @@ const OrderInformation = ({ auth }) => {
     }
   };
 
-  const handleTabClick = (menuIndex) => {
-    if (menuIndex <= completedStep) {
-      setActiveMenu(menuIndex);
-      Inertia.visit("/carts");
-    } else {
-      Swal.fire({
-        icon: "warning",
-        title: "Access Denied",
-        text: "Please complete the previous step first!",
-        confirmButtonColor: "#000000",
-        scrollbarPadding: false,
-        backdrop: false,
-      });
-    }
-  };
-
   return (
     <div className="flex min-h-screen flex-col bg-gray-100">
       <div className="flex-1 bg-neutral-50 p-6">
@@ -141,48 +123,7 @@ const OrderInformation = ({ auth }) => {
               <h1 className="mb-6 text-3xl font-bold text-gray-800">
                 Order Information
               </h1>
-
-              {/* Menu Navigasi Tahapan */}
-              <div className="mb-4 py-4">
-                <div className="container mx-auto flex flex-wrap justify-center space-x-8 space-y-4 lg:space-y-0">
-                  {/* Button untuk Cart */}
-                  <button
-                    onClick={() => handleTabClick(1)}
-                    className={`${
-                      activeMenu === 1
-                        ? "bg-custom-yellow text-black"
-                        : "border border-custom-yellow bg-white text-black opacity-50"
-                    } text-md w-50 rounded-full px-6 py-2 font-bold transition duration-300`}
-                  >
-                    1. Cart
-                  </button>
-
-                  {/* Button untuk Order Info */}
-                  <button
-                    onClick={() => handleTabClick(2)}
-                    className={`${
-                      activeMenu === 2
-                        ? "bg-custom-yellow text-black"
-                        : "cursor-not-allowed border border-custom-yellow bg-gray-300 text-gray-500"
-                    } text-md w-50 rounded-full px-6 py-2 font-bold transition duration-300`}
-                  >
-                    2. Order Info
-                  </button>
-
-                  {/* Button untuk Payment */}
-                  <button
-                    onClick={() => handleTabClick(3)}
-                    className={`${
-                      activeMenu === 3
-                        ? "bg-custom-yellow text-black"
-                        : "cursor-not-allowed border border-custom-yellow bg-gray-300 text-gray-500"
-                    } text-md w-50 rounded-full px-6 py-2 font-bold transition duration-300`}
-                  >
-                    3. Payment
-                  </button>
-                </div>
-              </div>
-
+              
               <form onSubmit={handleSubmit}>
                 {/* Recipient Name */}
                 <div className="mb-4">
@@ -313,14 +254,12 @@ const OrderInformation = ({ auth }) => {
                   >
                     Submit Order
                   </button>
-                  {completedStep >= 2 && (
                     <button
                       onClick={() => Inertia.visit("/payment/{orderId}")}
                       className="ml-4 inline-flex items-center justify-center rounded-md border border-transparent bg-black px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-gray-900"
                     >
                       Go to Payment
                     </button>
-                  )}
                 </div>
               </form>
             </div>

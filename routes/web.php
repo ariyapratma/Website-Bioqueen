@@ -57,12 +57,11 @@ Route::get('/product/{category}/{product}', [ProductController::class, 'showProd
 
 // Cart Page : 
 Route::middleware(['auth', 'verified', 'role:admin|user'])->group(function () {
-    // Route AddCart and CartDetail
-    Route::get('/carts', [CartController::class, 'index'])->name('carts.index');
+    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
     Route::get('/cart/items', [CartController::class, 'getCartItems'])->name('cart.items');
     Route::post('/cart/add', [CartController::class, 'store'])->name('cart.add');
-    Route::put('/carts/update/{id}', [CartController::class, 'update'])->name('carts.update');
-    Route::delete('/carts/remove/{id}', [CartController::class, 'removeFromCart'])->name('carts.remove');
+    Route::put('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/remove/{id}', [CartController::class, 'removeFromCart'])->name('cart.remove');
 });
 
 // Order Page : 

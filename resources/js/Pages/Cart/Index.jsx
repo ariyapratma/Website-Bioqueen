@@ -1,21 +1,34 @@
 import Navbar from "@/Components/Navbar/Navbar";
 import { Inertia } from "@inertiajs/inertia";
-import { useForm } from "@inertiajs/react";
 import Footer from "@/Components/Footer/Footer";
 import Swal from "sweetalert2";
-import { useState, useEffect } from "react";
-import { Head, usePage } from "@inertiajs/react";
+import { useState } from "react";
+import { Head } from "@inertiajs/react";
 
 const Index = ({ auth, cartItems }) => {
   const { user } = auth;
   const [activeMenu, setActiveMenu] = useState(1);
   const [completedStep, setCompletedStep] = useState(1);
   const [updatedItems, setUpdatedItems] = useState(cartItems);
-  const { delete: destroy } = useForm();
   const totalPrice = updatedItems.reduce(
     (sum, item) => sum + item.product?.price * item.quantity,
     0,
   );
+
+  const handleTabClick = (menuIndex) => {
+    if (menuIndex <= completedStep) {
+      setActiveMenu(menuIndex);
+    } else {
+      Swal.fire({
+        icon: "warning",
+        title: "Access Denied",
+        text: "Please complete the previous step first!",
+        confirmButtonColor: "#000000",
+        scrollbarPadding: false,
+        backdrop: false,
+      });
+    }
+  };
 
   const updateQuantity = (itemId, quantity) => {
     if (quantity <= 0) {
@@ -40,18 +53,30 @@ const Index = ({ auth, cartItems }) => {
           }
         : item,
     );
-
     setUpdatedItems(newUpdatedItems);
-    const itemToUpdate = newUpdatedItems.find((item) => item.id === itemId);
 
+    const itemToUpdate = newUpdatedItems.find((item) => item.id === itemId);
     if (itemToUpdate) {
-      Inertia.put(
-        `/carts/update/${itemId}`,
-        {
-          quantity: itemToUpdate.quantity,
+      fetch(`/cart/update/${itemId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": document
+            .querySelector('meta[name="csrf-token"]')
+            .getAttribute("content"),
         },
-        {
-          onSuccess: () => {
+        body: JSON.stringify({
+          quantity: itemToUpdate.quantity,
+        }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to update quantity.");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data.success) {
             Swal.fire({
               title: "Updated!",
               text: "Quantity updated successfully.",
@@ -61,98 +86,85 @@ const Index = ({ auth, cartItems }) => {
               scrollbarPadding: false,
               backdrop: false,
             });
-          },
-          onError: (errors) => {
-            Swal.fire({
-              title: "Error!",
-              text: errors?.message || "Failed to update quantity.",
-              icon: "error",
-              confirmButtonText: "OK",
-              confirmButtonColor: "#000000",
-              scrollbarPadding: false,
-              backdrop: false,
-            });
-          },
-        }
-      );      
-    }
-  };
-
-
-  const handleTabClick = (menuIndex) => {
-    if (menuIndex <= completedStep) {
-      setActiveMenu(menuIndex);
-    } else {
-      Swal.fire({
-        icon: "warning",
-        title: "Access Denied",
-        text: "Please complete the previous step first!",
-        confirmButtonColor: "#000000",
-        scrollbarPadding: false,
-        backdrop: false,
-      });
+          }
+        })
+        .catch((error) => {
+          console.error("Error updating quantity:", error);
+          Swal.fire({
+            title: "Error!",
+            text: error.message || "Failed to update quantity.",
+            icon: "error",
+            confirmButtonText: "OK",
+            confirmButtonColor: "#000000",
+            scrollbarPadding: false,
+            backdrop: false,
+          });
+        });
     }
   };
 
   const handleCheckout = async () => {
     if (updatedItems.length === 0) {
-        Swal.fire({
-            title: "Error!",
-            text: "Your cart is empty.",
-            icon: "error",
-            confirmButtonText: "OK",
-            confirmButtonColor: "#000000",
-        });
-        return;
+      Swal.fire({
+        title: "Error!",
+        text: "Your cart is empty.",
+        icon: "error",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#000000",
+      });
+      return;
     }
 
     const orderData = updatedItems.map((item) => ({
-        product_id: item.product?.id,
-        quantity: item.quantity,
-        price: item.product?.price,
+      product_id: item.product?.id,
+      quantity: item.quantity,
+      price: item.product?.price,
     }));
 
     if (!orderData.every((item) => item.product_id && item.quantity >= 1)) {
-        Swal.fire({
-            title: "Error!",
-            text: "All products must have a valid product ID and quantity.",
-            icon: "error",
-            confirmButtonText: "OK",
-            confirmButtonColor: "#000000",
-        });
-        return;
+      Swal.fire({
+        title: "Error!",
+        text: "All products must have a valid product ID and quantity.",
+        icon: "error",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#000000",
+      });
+      return;
     }
 
-    const totalPrice = orderData.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const totalPrice = orderData.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0,
+    );
 
     try {
-        await Inertia.post("/order", {
-            orderItems: orderData,
-            total_price: totalPrice,
-        });
+      await Inertia.post("/order", {
+        orderItems: orderData,
+        total_price: totalPrice,
+      });
 
-        Swal.fire({
-            title: "Success!",
-            text: "Your order has been placed successfully.",
-            icon: "success",
-            confirmButtonText: "OK",
-            confirmButtonColor: "#000000",
-        }).then(() => {
-            Inertia.visit("/order");
-        });
+      Swal.fire({
+        title: "Success!",
+        text: "Your order has been placed successfully.",
+        icon: "success",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#000000",
+      }).then(() => {
+        Inertia.visit("/order");
+      });
 
-        setCompletedStep((prev) => Math.max(prev, activeMenu + 1));
-        setActiveMenu((prev) => prev + 1);
+      setCompletedStep((prev) => Math.max(prev, activeMenu + 1));
+      setActiveMenu((prev) => prev + 1);
     } catch (error) {
-        Swal.fire({
-            title: "Error!",
-            text: "There was an error processing your order.",
-            icon: "error",
-            confirmButtonText: "OK",
-            confirmButtonColor: "#000000",
-        });
+      Swal.fire({
+        title: "Error!",
+        text: "There was an error processing your order.",
+        icon: "error",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#000000",
+      });
     }
-};
+  };
 
   const removeFromCart = (itemId) => {
     Swal.fire({
@@ -167,30 +179,47 @@ const Index = ({ auth, cartItems }) => {
       backdrop: false,
     }).then((result) => {
       if (result.isConfirmed) {
-        destroy(`/carts/remove/${itemId}`, {
-          onSuccess: () => {
-            Swal.fire({
-              title: "Deleted!",
-              text: "The item has been removed successfully.",
-              icon: "success",
-              confirmButtonText: "OK",
-              confirmButtonColor: "#000000",
-              scrollbarPadding: false,
-              backdrop: false,
-            });
+        fetch(`/cart/remove/${itemId}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": document
+              .querySelector('meta[name="csrf-token"]')
+              .getAttribute("content"),
           },
-          onError: () => {
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Failed to remove the item.");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            if (data.success) {
+              Swal.fire({
+                title: "Deleted!",
+                text: "The item has been removed successfully.",
+                icon: "success",
+                confirmButtonText: "OK",
+                confirmButtonColor: "#000000",
+                scrollbarPadding: false,
+                backdrop: false,
+              });
+              window.dispatchEvent(new Event("cartUpdated")); // Picu event
+            }
+          })
+          .catch((error) => {
+            console.error("Error removing item:", error);
             Swal.fire({
               title: "Error!",
-              text: "Failed to remove the item.",
+              text: error.message || "Failed to remove the item.",
               icon: "error",
               confirmButtonText: "OK",
               confirmButtonColor: "#000000",
               scrollbarPadding: false,
               backdrop: false,
             });
-          },
-        });
+          });
       }
     });
   };

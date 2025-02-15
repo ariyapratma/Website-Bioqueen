@@ -9,35 +9,34 @@ const ProductDetail = () => {
   const { product, auth, category } = props;
   const [quantity, setQuantity] = useState(1);
   const [totalPrice, setTotalPrice] = useState(product.price);
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState(0);
+  const fetchCartItems = async () => {
+    try {
+      const response = await fetch("/cart/items", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "X-Requested-With": "XMLHttpRequest",
+          "X-CSRF-TOKEN": document
+            .querySelector('meta[name="csrf-token"]')
+            ?.getAttribute("content"),
+        },
+        credentials: "include",
+      });
+      if (!response.ok) {
+        console.error(
+          `Failed to fetch cart items: ${response.status} ${response.statusText}`,
+        );
+        return;
+      }
+      const data = await response.json();
+      setCartItems(data.length);
+    } catch (error) {
+      console.error("Failed to fetch cart items:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchCartItems = async () => {
-      try {
-        const response = await fetch("/cart/items", {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "X-Requested-With": "XMLHttpRequest",
-            "X-CSRF-TOKEN": document
-              .querySelector('meta[name="csrf-token"]')
-              ?.getAttribute("content"),
-          },
-          credentials: "include",
-        });
-
-        if (!response.ok) {
-          console.error(`Failed to fetch cart items: ${response.status} ${response.statusText}`);
-          return;
-        }
-
-        const data = await response.json();
-        setCartItems(data.length);
-      } catch (error) {
-        console.error("Failed to fetch cart items:", error);
-      }
-    };
-
     fetchCartItems();
   }, []);
 
@@ -63,17 +62,40 @@ const ProductDetail = () => {
         }),
         credentials: "same-origin",
       });
-
       const result = await response.json();
-
       if (response.ok) {
-        Swal.fire("Success", result.message, "success");
+        Swal.fire({
+          title: "Success!",
+          text: result.message,
+          icon: "success",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
+        });
+        window.dispatchEvent(new Event("cartUpdated")); // Picu event untuk memperbarui jumlah item
       } else {
-        Swal.fire("Error", result.error || "Something went wrong", "error");
+        Swal.fire({
+          title: "Error!",
+          text: result.error || "Something went wrong",
+          icon: "error",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
+        });
       }
     } catch (error) {
       console.error("Failed to add product to cart:", error);
-      Swal.fire("Error", "Failed to add product to cart", "error");
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to add product to cart",
+        icon: "error",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#000000",
+        scrollbarPadding: false,
+        backdrop: false,
+      });
     }
   };
 
@@ -130,7 +152,6 @@ const ProductDetail = () => {
               </li>
             </ul>
           </nav>
-
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             {/* Gambar produk */}
             <div className="flex justify-center">
@@ -143,19 +164,16 @@ const ProductDetail = () => {
                 />
               </div>
             </div>
-
             {/* Detail produk */}
             <div className="flex flex-col justify-center rounded-lg bg-white p-6 shadow-md">
               <h1 className="text-4xl font-bold text-gray-800">
                 {product.name}
               </h1>
               <p className="mt-4 text-gray-600">{product.description}</p>
-
               {/* Harga total */}
               <p className="mt-4 text-2xl font-bold text-gray-800">
                 Rp {parseFloat(totalPrice).toLocaleString("id-ID")}
               </p>
-
               {/* Kontrol Jumlah Barang */}
               <div className="mt-6 flex items-center space-x-4">
                 <button
@@ -172,7 +190,6 @@ const ProductDetail = () => {
                   +
                 </button>
               </div>
-
               {/* Tombol Add to Cart */}
               <div className="mt-6 flex space-x-4 font-lexend font-semibold">
                 <button
