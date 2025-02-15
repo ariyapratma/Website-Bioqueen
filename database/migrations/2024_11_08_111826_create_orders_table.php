@@ -15,8 +15,9 @@ return new class extends Migration
             $table->unsignedBigInteger('id')->primary();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
+            $table->integer('quantity')->unsigned();
             $table->decimal('total_price', 10, 2);
-            $table->string('status')->default('pending');
+            $table->string('status')->default('Processing');
             $table->timestamps();
         });
     }

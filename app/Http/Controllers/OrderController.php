@@ -36,15 +36,19 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
+        // Validasi input
         $validated = $request->validate([
             'orderItems' => 'required|array',
             'orderItems.*.product_id' => 'required|exists:products,id',
             'orderItems.*.quantity' => 'required|integer|min:1',
+            'orderItems.*.price' => 'required|numeric|min:0',
             'total_price' => 'required|numeric|min:0',
         ]);
 
+        // Loop melalui setiap item pesanan dan simpan
         foreach ($validated['orderItems'] as $item) {
             Order::create([
+                'id' => uniqid(),
                 'user_id' => auth()->id(),
                 'product_id' => $item['product_id'],
                 'quantity' => $item['quantity'],
@@ -53,6 +57,7 @@ class OrderController extends Controller
             ]);
         }
 
+        // Redirect ke halaman order dengan pesan sukses
         return redirect()->route('order.index')->with('success', 'Order successfully placed!');
     }
 
