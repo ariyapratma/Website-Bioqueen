@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use Inertia\Inertia;
 use App\Models\Order;
 use App\Models\HeaderOrder;
-use App\Models\OrderInformation;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
+use App\Models\PaymentMethod;
+use App\Models\ShippingMethod;
+use App\Models\OrderInformation;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -31,6 +33,22 @@ class OrderController extends Controller
                 'item_count' => $cartItems->count(),
             ],
         ]);
+    }
+
+    public function getMethods()
+    {
+        try {
+            $paymentMethods = PaymentMethod::all(['id', 'name']);
+            $shippingMethods = ShippingMethod::all(['id', 'name']);
+
+            return response()->json([
+                'payment_methods' => $paymentMethods,
+                'shipping_methods' => $shippingMethods,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error fetching methods:', ['error' => $e->getMessage()]);
+            return response()->json(['error' => 'Failed to fetch methods.'], 500);
+        }
     }
 
     public function store(Request $request)
@@ -59,13 +77,14 @@ class OrderController extends Controller
 
     public function storeInformations(Request $request)
     {
-        // Validasi input
         $validated = $request->validate([
             'recipient_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'notes' => 'nullable|string',
             'address' => 'required|string',
             'postal_code' => 'required|integer',
+            'payment_method_id' => 'required|exists:payment_methods,id',
+            'shipping_method_id' => 'required|exists:shipping_methods,id',
         ]);
 
         $existingOrder = Order::where('user_id', auth()->id())->where('status', 'Processing')->first();
@@ -85,6 +104,7 @@ class OrderController extends Controller
             return response()->json(['error' => 'Failed to save order information.'], 500);
         }
     }
+
     public function myOrder()
     {
         $orders = Order::with('product')->where('user_id', auth()->id())->get();

@@ -89,7 +89,6 @@ const Index = ({ auth, cartItems }) => {
           }
         })
         .catch((error) => {
-          console.error("Error updating quantity:", error);
           Swal.fire({
             title: "Error!",
             text: error.message || "Failed to update quantity.",
@@ -205,11 +204,10 @@ const Index = ({ auth, cartItems }) => {
                 scrollbarPadding: false,
                 backdrop: false,
               });
-              window.dispatchEvent(new Event("cartUpdated")); // Picu event
+              window.dispatchEvent(new Event("cartUpdated"));
             }
           })
           .catch((error) => {
-            console.error("Error removing item:", error);
             Swal.fire({
               title: "Error!",
               text: error.message || "Failed to remove the item.",

@@ -14,6 +14,8 @@ class OrderInformation extends Model
     protected $fillable = [
         'recipient_name',
         'email',
+        'payment_method_id',
+        'shipping_method_id',
         'notes',
         'address',
         'postal_code',
@@ -33,5 +35,4 @@ class OrderInformation extends Model
     {
         return $this->belongsTo(Cart::class);
     }
-    
 }

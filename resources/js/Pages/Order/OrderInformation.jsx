@@ -10,15 +10,27 @@ const OrderInformation = ({ auth }) => {
   const [notes, setNotes] = useState("");
   const [address, setAddress] = useState("");
   const [postalCode, setPostalCode] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("");
+  const [shippingMethod, setShippingMethod] = useState("");
+  const [paymentMethods, setPaymentMethods] = useState([]);
+  const [shippingMethods, setShippingMethods] = useState([]);
   const { cartItems } = usePage().props;
 
   useEffect(() => {
     if (Array.isArray(cartItems)) {
       setOrderItems(cartItems);
     } else {
-      console.error("cartItems is not an array or is undefined");
     }
   }, [cartItems]);
+
+  useEffect(() => {
+    fetch("/api/methods")
+      .then((response) => response.json())
+      .then((data) => {
+        setPaymentMethods(data.payment_methods);
+        setShippingMethods(data.shipping_methods);
+      })
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -54,6 +66,8 @@ const OrderInformation = ({ auth }) => {
           notes: notes,
           address: address,
           postal_code: parseInt(postalCode, 10),
+          payment_method_id: paymentMethod,
+          shipping_method_id: shippingMethod,
         }),
         credentials: "same-origin",
       });
@@ -76,7 +90,6 @@ const OrderInformation = ({ auth }) => {
         backdrop: false,
       });
     } catch (error) {
-      console.error("Error during fetch:", error);
       Swal.fire({
         icon: "error",
         title: "Submission Failed",
@@ -141,6 +154,42 @@ const OrderInformation = ({ auth }) => {
             rows="4"
             placeholder="Add any additional instructions..."
           />
+        </div>
+
+        {/* Payment Method Dropdown */}
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Payment Method</label>
+          <select
+            value={paymentMethod}
+            onChange={(e) => setPaymentMethod(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-black focus:border-black"
+            required
+          >
+            <option value="">Select Payment Method</option>
+            {paymentMethods.map((method) => (
+              <option key={method.id} value={method.id}>
+                {method.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Shipping Method Dropdown */}
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Shipping Method</label>
+          <select
+            value={shippingMethod}
+            onChange={(e) => setShippingMethod(e.target.value)}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-black focus:border-black"
+            required
+          >
+            <option value="">Select Shipping Method</option>
+            {shippingMethods.map((method) => (
+              <option key={method.id} value={method.id}>
+                {method.name}
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* Address */}
