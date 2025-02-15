@@ -9,7 +9,6 @@ use App\Models\OrderInformation;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -36,7 +35,6 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
-        // Validasi input
         $validated = $request->validate([
             'orderItems' => 'required|array',
             'orderItems.*.product_id' => 'required|exists:products,id',
@@ -45,7 +43,6 @@ class OrderController extends Controller
             'total_price' => 'required|numeric|min:0',
         ]);
 
-        // Loop melalui setiap item pesanan dan simpan
         foreach ($validated['orderItems'] as $item) {
             Order::create([
                 'id' => uniqid(),
@@ -57,35 +54,41 @@ class OrderController extends Controller
             ]);
         }
 
-        // Redirect ke halaman order dengan pesan sukses
         return redirect()->route('order.index')->with('success', 'Order successfully placed!');
     }
 
     public function storeInformations(Request $request)
     {
+        // Validasi input
         $validated = $request->validate([
-            'recipient_name' => 'required|string',
-            'email' => 'required|email',
+            'recipient_name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
             'notes' => 'nullable|string',
             'address' => 'required|string',
-            'postal_code' => 'required|numeric',
+            'postal_code' => 'required|integer',
         ]);
 
         $existingOrder = Order::where('user_id', auth()->id())->where('status', 'Processing')->first();
-
         if (!$existingOrder) {
-            return response()->json(['message' => 'No active order found.'], 400);
+            return response()->json(['error' => 'No active order found.'], 400);
         }
 
-        $orderInformation = $existingOrder->orderInformation()->create($validated);
+        try {
+            $orderInformation = $existingOrder->OrderInformations()->create($validated);
 
-        return response()->json(['message' => 'Order information submitted successfully!', 'orderInformation' => $orderInformation]);
+            return response()->json([
+                'message' => 'Order information submitted successfully!',
+                'orderInformation' => $orderInformation,
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error saving order information:', ['error' => $e->getMessage()]);
+            return response()->json(['error' => 'Failed to save order information.'], 500);
+        }
     }
-
     public function myOrder()
     {
         $orders = Order::with('product')->where('user_id', auth()->id())->get();
-        $orderInformations = OrderInformation::whereIn('order_id', $orders->pluck('id'))->get()->keyBy('order_id');
+        $OrderInformations = OrderInformation::whereIn('order_id', $orders->pluck('id'))->get()->keyBy('order_id');
 
         return Inertia::render('User/Order/MyOrder', [
             'orders' => $orders->map(fn($order) => [
@@ -94,7 +97,7 @@ class OrderController extends Controller
                 'status' => $order->status,
                 'product' => optional($order->product)->only(['id', 'name', 'image_url']),
                 'total_price' => $order->total_price,
-                'informations' => optional($orderInformations->get($order->id))->only(['recipient_name', 'email', 'address', 'postal_code', 'notes']),
+                'informations' => optional($OrderInformations->get($order->id))->only(['recipient_name', 'email', 'address', 'postal_code', 'notes']),
             ]),
         ]);
     }
@@ -115,16 +118,16 @@ class OrderController extends Controller
     public function manageOrders()
     {
         $orders = Order::with('product')->get();
-        $orderInformations = OrderInformation::all()->keyBy('order_id');
+        $OrderInformations = OrderInformation::all()->keyBy('order_id');
 
         return Inertia::render('Admin/Order/ManageOrderProducts', [
             'orders' => $orders->map(fn($order) => [
                 'id' => $order->id,
-                'recipient_name' => optional($orderInformations->get($order->id))->recipient_name,
-                'email' => optional($orderInformations->get($order->id))->email,
-                'address' => optional($orderInformations->get($order->id))->address,
-                'postal_code' => optional($orderInformations->get($order->id))->postal_code,
-                'notes' => optional($orderInformations->get($order->id))->notes,
+                'recipient_name' => optional($OrderInformations->get($order->id))->recipient_name,
+                'email' => optional($OrderInformations->get($order->id))->email,
+                'address' => optional($OrderInformations->get($order->id))->address,
+                'postal_code' => optional($OrderInformations->get($order->id))->postal_code,
+                'notes' => optional($OrderInformations->get($order->id))->notes,
                 'total_price' => $order->total_price,
                 'created_at' => $order->created_at->format('Y-m-d H:i:s'),
                 'status' => $order->status,

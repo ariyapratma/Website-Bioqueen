@@ -69,7 +69,6 @@ Route::middleware(['auth', 'verified', 'role:admin|user'])->group(function () {
     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
     Route::post('/order-informations', [OrderController::class, 'storeInformations'])->name('order.storeInformations');
-
     Route::get('/my-order', [OrderController::class, 'myOrder'])->name('order.myorder');
     Route::patch('/my-order/cancel', [OrderController::class, 'cancel'])->name('order.cancel');
 });
