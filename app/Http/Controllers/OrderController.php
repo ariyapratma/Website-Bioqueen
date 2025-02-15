@@ -108,17 +108,32 @@ class OrderController extends Controller
     public function myOrder()
     {
         $orders = Order::with('product')->where('user_id', auth()->id())->get();
-        $OrderInformations = OrderInformation::whereIn('order_id', $orders->pluck('id'))->get()->keyBy('order_id');
+        $OrderInformations = OrderInformation::with(['paymentMethod', 'shippingMethod'])
+            ->whereIn('order_id', $orders->pluck('id'))
+            ->get()
+            ->keyBy('order_id');
 
         return Inertia::render('User/Order/MyOrder', [
-            'orders' => $orders->map(fn($order) => [
-                'id' => $order->id,
-                'created_at' => $order->created_at->format('Y-m-d H:i:s'),
-                'status' => $order->status,
-                'product' => optional($order->product)->only(['id', 'name', 'image_url']),
-                'total_price' => $order->total_price,
-                'informations' => optional($OrderInformations->get($order->id))->only(['recipient_name', 'email', 'address', 'postal_code', 'notes']),
-            ]),
+            'orders' => $orders->map(function ($order) use ($OrderInformations) {
+                $info = optional($OrderInformations->get($order->id));
+                return [
+                    'id' => $order->id,
+                    'created_at' => $order->created_at->format('Y-m-d H:i:s'),
+                    'status' => $order->status,
+                    'product' => optional($order->product)->only(['id', 'name', 'image_url']),
+                    'total_price' => $order->total_price,
+                    'quantity' => $order->quantity,
+                    'informations' => [
+                        'recipient_name' => $info?->recipient_name,
+                        'email' => $info?->email,
+                        'notes' => $info?->notes,
+                        'address' => $info?->address,
+                        'postal_code' => $info?->postal_code,
+                        'payment_method' => optional($info?->paymentMethod)->only(['id', 'name']),
+                        'shipping_method' => optional($info?->shippingMethod)->only(['id', 'name']),
+                    ],
+                ];
+            }),
         ]);
     }
 
