@@ -8,6 +8,7 @@ import {
   FaClipboardList,
   FaIndustry,
   FaChevronDown,
+  FaBars
 } from "react-icons/fa";
 
 const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
@@ -22,9 +23,9 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
   const [dropdownOrderOpen, setDropdownOrderOpen] = useState(false);
   const [dropdownMyOrderOpen, setDropdownMyOrderOpen] = useState(false);
   const [dropdownMaklonOpen, setDropdownMaklonOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
-    // Buka dropdown Home jika ada submenu yang aktif
     setDropdownHomeOpen(
       activeMenu.startsWith("home-page") ||
         activeMenu.startsWith("header-home") ||
@@ -41,7 +42,6 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
         activeMenu.startsWith("hero-review"),
     );
 
-    // Buka dropdown About Us jika ada submenu yang aktif
     setDropdownAboutUsOpen(
       activeMenu.startsWith("about-us") ||
         activeMenu.startsWith("header-about-us") ||
@@ -50,13 +50,11 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
         activeMenu.startsWith("hero-our-gallery"),
     );
 
-    // Buka dropdown Contact jika ada submenu yang aktif
     setDropdownContactOpen(
       activeMenu.startsWith("contact") ||
         activeMenu.startsWith("header-contact"),
     );
 
-    // Buka dropdown Product jika ada submenu yang aktif
     setDropdownProductOpen(
       activeMenu.startsWith("product") ||
         activeMenu.startsWith("header-product") ||
@@ -64,41 +62,126 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
         activeMenu.startsWith("product-list"),
     );
 
-    // Buka dropdown Order jika ada submenu yang aktif
     setDropdownOrderOpen(
       activeMenu.startsWith("order") ||
         activeMenu.startsWith("header-order") ||
         activeMenu.startsWith("manage-order-products"),
     );
 
-    // Buka dropdown MyOrder jika ada submenu yang aktif
     setDropdownMyOrderOpen(
       activeMenu.startsWith("my-order-details") ||
         activeMenu.startsWith("my-order"),
     );
 
-    // Buka dropdown Maklon jika ada submenu yang aktif
     setDropdownMaklonOpen(
       activeMenu.startsWith("maklon") || activeMenu.startsWith("header-maklon"),
     );
   }, [activeMenu]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const sidebar = document.getElementById("sidebar");
+      if (sidebar && !sidebar.contains(event.target)) {
+        setCollapsed(true);
+        setDropdownHomeOpen(false);
+        setDropdownAboutUsOpen(false);
+        setDropdownContactOpen(false);
+        setDropdownProductOpen(false);
+        setDropdownOrderOpen(false);
+        setDropdownMaklonOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
+  const toggleSidebar = () => {
+    setCollapsed(!collapsed);
+    setDropdownHomeOpen(false);
+    setDropdownAboutUsOpen(false);
+    setDropdownContactOpen(false);
+    setDropdownProductOpen(false);
+    setDropdownOrderOpen(false);
+    setDropdownMaklonOpen(false);
+  };
+
+  const toggleDropdownHome = () => {
+    if (collapsed) {
+      setCollapsed(false);
+    }
+    setDropdownHomeOpen(!dropdownHomeOpen);
+  };
+
+  const toggleDropdownAboutUs = () => {
+    if (collapsed) {
+      setCollapsed(false);
+    }
+    setDropdownAboutUsOpen(!dropdownAboutUsOpen);
+  };
+
+  const toggleDropdownContact = () => {
+    if (collapsed) {
+      setCollapsed(false);
+    }
+    setDropdownContactOpen(!dropdownContactOpen);
+  };
+
+  const toggleDropdownProduct = () => {
+    if (collapsed) {
+      setCollapsed(false);
+    }
+    setDropdownProductOpen(!dropdownProductOpen);
+  };
+
+  const toggleDropdownOrder = () => {
+    if (collapsed) {
+      setCollapsed(false);
+    }
+    setDropdownOrderOpen(!dropdownOrderOpen);
+  };
+
+  const toggleDropdownMaklon = () => {
+    if (collapsed) {
+      setCollapsed(false);
+    }
+    setDropdownMaklonOpen(!dropdownMaklonOpen);
+  };
+
   return (
-    <div className="bg-white flex w-48 flex-col items-center p-4">
-      <h2 className="mb-4 mt-12 font-lexend text-lg font-bold text-black"></h2>
-      <ul className="space-y-2">
+    <div
+      id="sidebar"
+      className={`flex flex-col items-center bg-white p-4 transition-all duration-300 ${
+        collapsed ? "w-24" : "w-48"
+      }`}
+    >
+      {/* Header Sidebar */}
+      <div
+        className="flex items-center justify-center w-full mt-12 cursor-pointer"
+        onClick={toggleSidebar}
+      >
+      </div>
+
+      {/* Menu Items */}
+      <ul className="space-y-2 w-full mt-4">
+        {/* Dashboard */}
         <li>
           <Link
             href="/dashboard"
-            onClick={() => setActiveMenu("dashboard")}
+            onClick={(e) => {
+              e.stopPropagation();
+              setActiveMenu("dashboard");
+            }}
             className={`flex items-center rounded-lg p-2 ${
               activeMenu === "dashboard"
-                ? "bg-custom-yellow font-lexend text-black"
-                : "text-gray-600"
-            }`}
+                ? "bg-custom-yellow text-black"
+                : "text-gray-600 hover:bg-gray-100"
+            } transition duration-300`}
           >
             <FaHome className="mr-2" />
-            Dashboard
+            {!collapsed && "Dashboard"}
           </Link>
         </li>
 
@@ -106,25 +189,28 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
         {user.role === "admin" && (
           <li>
             <div
-              onClick={() => setDropdownHomeOpen(!dropdownHomeOpen)}
+              onClick={toggleDropdownHome}
               className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
                 dropdownHomeOpen || activeMenu.startsWith("home-page")
-                  ? "bg-custom-yellow font-lexend text-black"
-                  : "text-gray-600"
-              }`}
+                  ? "bg-custom-yellow text-black"
+                  : "text-gray-600 hover:bg-gray-100"
+              } transition duration-300`}
             >
               <span className="flex items-center">
                 <FaClipboardList className="mr-2" />
-                Home Page Content
+                {!collapsed && "Home Page Content"}
               </span>
-              <FaChevronDown
-                className={`ml-2 transition-transform ${
-                  dropdownHomeOpen ? "rotate-180" : ""
-                }`}
-              />
+              {!collapsed && (
+                <FaChevronDown
+                  className={`ml-2 transition-transform duration-300 ${
+                    dropdownHomeOpen ? "rotate-180" : ""
+                  }`}
+                />
+              )}
             </div>
+
             {/* Submenu (Dropdown Content) */}
-            {dropdownHomeOpen && (
+            {!collapsed && dropdownHomeOpen && (
               <ul className="ml-4 space-y-1">
                 {/* Daftar submenu di sini */}
                 {[
@@ -145,16 +231,16 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
                     <Link
                       href={`/${item}`}
                       onClick={() => setActiveMenu(item)}
-                      className={`flex items-center p-2 text-sm ${
+                      className={`flex items-center p-2 text-sm rounded-lg ${
                         activeMenu === item
-                          ? "bg-custom-yellow font-lexend text-black"
-                          : "text-gray-600"
-                      }`}
+                          ? "bg-indigo-500 text-white"
+                          : "text-gray-600 hover:bg-gray-100"
+                      } transition duration-300`}
                     >
-                      Manage{" "}
-                      {item
-                        .replace(/-/g, " ")
-                        .replace(/\b\w/g, (c) => c.toUpperCase())}
+                      {!collapsed &&
+                        `Manage ${item
+                          .replace(/-/g, " ")
+                          .replace(/\b\w/g, (c) => c.toUpperCase())}`}
                     </Link>
                   </li>
                 ))}
@@ -167,78 +253,53 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
         {user.role === "admin" && (
           <li>
             <div
-              onClick={() => setDropdownAboutUsOpen(!dropdownAboutUsOpen)}
+              onClick={toggleDropdownAboutUs}
               className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
                 dropdownAboutUsOpen || activeMenu.startsWith("about-us")
-                  ? "bg-custom-yellow font-lexend text-black"
-                  : "text-gray-600"
-              }`}
+                  ? "bg-custom-yellow text-black"
+                  : "text-gray-600 hover:bg-gray-100"
+              } transition duration-300`}
             >
               <span className="flex items-center">
                 <FaInfoCircle className="mr-2" />
-                AboutUs Page Content
+                {!collapsed && "About Us Page Content"}
               </span>
-              <FaChevronDown
-                className={`ml-2 transition-transform ${
-                  dropdownAboutUsOpen ? "rotate-180" : ""
-                }`}
-              />
+              {!collapsed && (
+                <FaChevronDown
+                  className={`ml-2 transition-transform duration-300 ${
+                    dropdownAboutUsOpen ? "rotate-180" : ""
+                  }`}
+                />
+              )}
             </div>
+
             {/* Submenu (Dropdown Content) */}
-            {dropdownAboutUsOpen && (
+            {!collapsed && dropdownAboutUsOpen && (
               <ul className="ml-4 space-y-1">
-                <li>
-                  <Link
-                    href="/header-about-us"
-                    onClick={() => setActiveMenu("header-about-us")}
-                    className={`flex items-center p-2 text-sm ${
-                      activeMenu === "header-about-us"
-                        ? "bg-custom-yellow font-lexend text-black"
-                        : "text-gray-600"
-                    }`}
-                  >
-                    Manage Header About Us
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/hero-about-us"
-                    onClick={() => setActiveMenu("hero-about-us")}
-                    className={`flex items-center p-2 text-sm ${
-                      activeMenu === "hero-about-us"
-                        ? "bg-custom-yellow font-lexend text-black"
-                        : "text-gray-600"
-                    }`}
-                  >
-                    Manage Hero About Us
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/hero-vision-mision"
-                    onClick={() => setActiveMenu("hero-vision-mision")}
-                    className={`flex items-center p-2 text-sm ${
-                      activeMenu === "hero-vision-mision"
-                        ? "bg-custom-yellow font-lexend text-black"
-                        : "text-gray-600"
-                    }`}
-                  >
-                    Manage Hero Vision Mision
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/hero-our-gallery"
-                    onClick={() => setActiveMenu("hero-our-gallery")}
-                    className={`flex items-center p-2 text-sm ${
-                      activeMenu === "hero-our-gallery"
-                        ? "bg-custom-yellow font-lexend text-black"
-                        : "text-gray-600"
-                    }`}
-                  >
-                    Manage Hero Our Gallery
-                  </Link>
-                </li>
+                {/* Daftar submenu di sini */}
+                {[
+                  "header-about-us",
+                  "hero-about-us",
+                  "hero-vision-mision",
+                  "hero-our-gallery",
+                ].map((item) => (
+                  <li key={item}>
+                    <Link
+                      href={`/${item}`}
+                      onClick={() => setActiveMenu(item)}
+                      className={`flex items-center p-2 text-sm rounded-lg ${
+                        activeMenu === item
+                          ? "bg-indigo-500 text-white"
+                          : "text-gray-600 hover:bg-gray-100"
+                      } transition duration-300`}
+                    >
+                      {!collapsed &&
+                        `Manage ${item
+                          .replace(/-/g, " ")
+                          .replace(/\b\w/g, (c) => c.toUpperCase())}`}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             )}
           </li>
@@ -248,39 +309,48 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
         {user.role === "admin" && (
           <li>
             <div
-              onClick={() => setDropdownContactOpen(!dropdownContactOpen)}
+              onClick={toggleDropdownContact}
               className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
                 dropdownContactOpen || activeMenu.startsWith("contact")
-                  ? "bg-custom-yellow font-lexend text-black"
-                  : "text-gray-600"
-              }`}
+                  ? "bg-custom-yellow text-black"
+                  : "text-gray-600 hover:bg-gray-100"
+              } transition duration-300`}
             >
               <span className="flex items-center">
                 <FaEnvelope className="mr-2" />
-                Contact Page Content
+                {!collapsed && "Contact Page Content"}
               </span>
-              <FaChevronDown
-                className={`ml-2 transition-transform ${
-                  dropdownContactOpen ? "rotate-180" : ""
-                }`}
-              />
+              {!collapsed && (
+                <FaChevronDown
+                  className={`ml-2 transition-transform duration-300 ${
+                    dropdownContactOpen ? "rotate-180" : ""
+                  }`}
+                />
+              )}
             </div>
+
             {/* Submenu (Dropdown Content) */}
-            {dropdownContactOpen && (
+            {!collapsed && dropdownContactOpen && (
               <ul className="ml-4 space-y-1">
-                <li>
-                  <Link
-                    href="/header-contact"
-                    onClick={() => setActiveMenu("header-contact")}
-                    className={`flex items-center p-2 text-sm ${
-                      activeMenu === "header-contact"
-                        ? "bg-custom-yellow font-lexend text-black"
-                        : "text-gray-600"
-                    }`}
-                  >
-                    Manage Header Contact
-                  </Link>
-                </li>
+                {/* Daftar submenu di sini */}
+                {["header-contact"].map((item) => (
+                  <li key={item}>
+                    <Link
+                      href={`/${item}`}
+                      onClick={() => setActiveMenu(item)}
+                      className={`flex items-center p-2 text-sm rounded-lg ${
+                        activeMenu === item
+                          ? "bg-indigo-500 text-white"
+                          : "text-gray-600 hover:bg-gray-100"
+                      } transition duration-300`}
+                    >
+                      {!collapsed &&
+                        `Manage ${item
+                          .replace(/-/g, " ")
+                          .replace(/\b\w/g, (c) => c.toUpperCase())}`}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             )}
           </li>
@@ -290,65 +360,52 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
         {user.role === "admin" && (
           <li>
             <div
-              onClick={() => setDropdownProductOpen(!dropdownProductOpen)}
+              onClick={toggleDropdownProduct}
               className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
                 dropdownProductOpen || activeMenu.startsWith("product")
-                  ? "bg-custom-yellow font-lexend text-black"
-                  : "text-gray-600"
-              }`}
+                  ? "bg-custom-yellow text-black"
+                  : "text-gray-600 hover:bg-gray-100"
+              } transition duration-300`}
             >
               <span className="flex items-center">
                 <FaBoxOpen className="mr-2" />
-                Product Content
+                {!collapsed && "Product Content"}
               </span>
-              <FaChevronDown
-                className={`ml-2 transition-transform ${
-                  dropdownProductOpen ? "rotate-180" : ""
-                }`}
-              />
+              {!collapsed && (
+                <FaChevronDown
+                  className={`ml-2 transition-transform duration-300 ${
+                    dropdownProductOpen ? "rotate-180" : ""
+                  }`}
+                />
+              )}
             </div>
+
             {/* Submenu (Dropdown Content) */}
-            {dropdownProductOpen && (
+            {!collapsed && dropdownProductOpen && (
               <ul className="ml-4 space-y-1">
-                <li>
-                  <Link
-                    href="/header-product"
-                    onClick={() => setActiveMenu("header-product")}
-                    className={`flex items-center p-2 text-sm ${
-                      activeMenu === "header-product"
-                        ? "bg-custom-yellow font-lexend text-black"
-                        : "text-gray-600"
-                    }`}
-                  >
-                    Manage Header Product
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/hero-categories"
-                    onClick={() => setActiveMenu("hero-categories")}
-                    className={`flex items-center p-2 text-sm ${
-                      activeMenu === "hero-categories"
-                        ? "bg-custom-yellow font-lexend text-black"
-                        : "text-gray-600"
-                    }`}
-                  >
-                    Manage Hero Categories
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/product-list"
-                    onClick={() => setActiveMenu("product-list")}
-                    className={`flex items-center p-2 text-sm ${
-                      activeMenu === "product-list"
-                        ? "bg-custom-yellow font-lexend text-black"
-                        : "text-gray-600"
-                    }`}
-                  >
-                    Manage Product List
-                  </Link>
-                </li>
+                {/* Daftar submenu di sini */}
+                {[
+                  "header-product",
+                  "hero-categories",
+                  "product-list",
+                ].map((item) => (
+                  <li key={item}>
+                    <Link
+                      href={`/${item}`}
+                      onClick={() => setActiveMenu(item)}
+                      className={`flex items-center p-2 text-sm rounded-lg ${
+                        activeMenu === item
+                          ? "bg-indigo-500 text-white"
+                          : "text-gray-600 hover:bg-gray-100"
+                      } transition duration-300`}
+                    >
+                      {!collapsed &&
+                        `Manage ${item
+                          .replace(/-/g, " ")
+                          .replace(/\b\w/g, (c) => c.toUpperCase())}`}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             )}
           </li>
@@ -358,52 +415,51 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
         {user.role === "admin" && (
           <li>
             <div
-              onClick={() => setDropdownOrderOpen(!dropdownOrderOpen)}
+              onClick={toggleDropdownOrder}
               className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
                 dropdownOrderOpen || activeMenu.startsWith("order")
-                  ? "bg-custom-yellow font-lexend text-black"
-                  : "text-gray-600"
-              }`}
+                  ? "bg-custom-yellow text-black"
+                  : "text-gray-600 hover:bg-gray-100"
+              } transition duration-300`}
             >
               <span className="flex items-center">
                 <FaClipboardList className="mr-2" />
-                Order Page Content
+                {!collapsed && "Order Page Content"}
               </span>
-              <FaChevronDown
-                className={`ml-2 transition-transform ${
-                  dropdownOrderOpen ? "rotate-180" : ""
-                }`}
-              />
+              {!collapsed && (
+                <FaChevronDown
+                  className={`ml-2 transition-transform duration-300 ${
+                    dropdownOrderOpen ? "rotate-180" : ""
+                  }`}
+                />
+              )}
             </div>
+
             {/* Submenu (Dropdown Content) */}
-            {dropdownOrderOpen && (
+            {!collapsed && dropdownOrderOpen && (
               <ul className="ml-4 space-y-1">
-                <li>
-                  <Link
-                    href="/header-order"
-                    onClick={() => setActiveMenu("header-order")}
-                    className={`flex items-center p-2 text-sm ${
-                      activeMenu === "header-order"
-                        ? "bg-custom-yellow font-lexend text-black"
-                        : "text-gray-600"
-                    }`}
-                  >
-                    Manage Header Order
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/manage-order-products"
-                    onClick={() => setActiveMenu("manage-order-products")}
-                    className={`flex items-center p-2 text-sm ${
-                      activeMenu === "manage-order-products"
-                        ? "bg-custom-yellow font-lexend text-black"
-                        : "text-gray-600"
-                    }`}
-                  >
-                    Manage Order Products
-                  </Link>
-                </li>
+                {/* Daftar submenu di sini */}
+                {[
+                  "header-order",
+                  "manage-order-products",
+                ].map((item) => (
+                  <li key={item}>
+                    <Link
+                      href={`/${item}`}
+                      onClick={() => setActiveMenu(item)}
+                      className={`flex items-center p-2 text-sm rounded-lg ${
+                        activeMenu === item
+                          ? "bg-indigo-500 text-white"
+                          : "text-gray-600 hover:bg-gray-100"
+                      } transition duration-300`}
+                    >
+                      {!collapsed &&
+                        `Manage ${item
+                          .replace(/-/g, " ")
+                          .replace(/\b\w/g, (c) => c.toUpperCase())}`}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             )}
           </li>
@@ -413,79 +469,91 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
         {user.role === "admin" && (
           <li>
             <div
-              onClick={() => setDropdownMaklonOpen(!dropdownMaklonOpen)}
+              onClick={toggleDropdownMaklon}
               className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
                 dropdownMaklonOpen || activeMenu.startsWith("maklon")
-                  ? "bg-custom-yellow font-lexend text-black"
-                  : "text-gray-600"
-              }`}
+                  ? "bg-custom-yellow text-black"
+                  : "text-gray-600 hover:bg-gray-100"
+              } transition duration-300`}
             >
               <span className="flex items-center">
                 <FaIndustry className="mr-2" />
-                Maklon Page Content
+                {!collapsed && "Maklon Page Content"}
               </span>
-              <FaChevronDown
-                className={`ml-2 transition-transform ${
-                  dropdownMaklonOpen ? "rotate-180" : ""
-                }`}
-              />
+              {!collapsed && (
+                <FaChevronDown
+                  className={`ml-2 transition-transform duration-300 ${
+                    dropdownMaklonOpen ? "rotate-180" : ""
+                  }`}
+                />
+              )}
             </div>
+
             {/* Submenu (Dropdown Content) */}
-            {dropdownMaklonOpen && (
+            {!collapsed && dropdownMaklonOpen && (
               <ul className="ml-4 space-y-1">
-                <li>
-                  <Link
-                    href="/header-maklon"
-                    onClick={() => setActiveMenu("header-maklon")}
-                    className={`flex items-center p-2 text-sm ${
-                      activeMenu === "header-maklon"
-                        ? "bg-custom-yellow font-lexend text-black"
-                        : "text-gray-600"
-                    }`}
-                  >
-                    Manage Header Maklon
-                  </Link>
-                </li>
+                {/* Daftar submenu di sini */}
+                {["header-maklon"].map((item) => (
+                  <li key={item}>
+                    <Link
+                      href={`/${item}`}
+                      onClick={() => setActiveMenu(item)}
+                      className={`flex items-center p-2 text-sm rounded-lg ${
+                        activeMenu === item
+                          ? "bg-indigo-500 text-white"
+                          : "text-gray-600 hover:bg-gray-100"
+                      } transition duration-300`}
+                    >
+                      {!collapsed &&
+                        `Manage ${item
+                          .replace(/-/g, " ")
+                          .replace(/\b\w/g, (c) => c.toUpperCase())}`}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             )}
           </li>
         )}
 
-        {/* Dropdown for My Order Page Content */}
+        {/* Dropdown for My Order Details */}
         {user.role === "user" && (
           <li>
             <div
               onClick={() => setDropdownMyOrderOpen(!dropdownMyOrderOpen)}
-              className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
+              className={`flex cursor-pointer items-center justify-between rounded-lg p-3 ${
                 dropdownMyOrderOpen
-                  ? "bg-custom-yellow font-lexend text-black"
-                  : "text-gray-600"
-              }`}
+                  ? "bg-custom-yellow text-black"
+                  : "text-gray-600 hover:bg-gray-100"
+              } transition duration-300`}
             >
+              {/* Icon and Text */}
               <span className="flex items-center">
-                <FaClipboardList className="mr-2" />
-                My Order Details
+                <FaClipboardList className="mr-3 text-lg" />
+                {!collapsed && "Orders"}
               </span>
-              <FaChevronDown
-                className={`ml-2 transition-transform ${
-                  dropdownMyOrderOpen ? "rotate-180" : ""
-                }`}
-              />
+              {!collapsed && (
+                <FaChevronDown
+                  className={`transition-transform duration-300 ${
+                    dropdownMyOrderOpen ? "rotate-180" : ""
+                  }`}
+                />
+              )}
             </div>
             {/* Submenu (Dropdown Content) */}
             {dropdownMyOrderOpen && (
-              <ul className="ml-4 space-y-1">
+              <ul className="ml-4 mt-2 space-y-1">
                 <li>
                   <Link
                     href="/my-order"
                     onClick={() => setActiveMenu("my-order")}
-                    className={`flex items-center p-2 text-sm ${
+                    className={`flex items-center rounded-lg p-2 text-sm ${
                       activeMenu === "my-order"
-                        ? "bg-custom-yellow font-lexend text-black"
-                        : "text-gray-600"
-                    }`}
+                        ? "bg-indigo-500 text-white"
+                        : "text-gray-600 hover:bg-gray-100"
+                    } transition duration-300`}
                   >
-                    Manage Order Details
+                    {!collapsed && "View Orders"}
                   </Link>
                 </li>
               </ul>

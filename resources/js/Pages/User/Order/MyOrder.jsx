@@ -51,14 +51,31 @@ const MyOrder = ({ orders = [], auth }) => {
         />
       )}
       {/* Main Content */}
-      <div className="flex-1 bg-neutral-50 p-6">
+      <div className="flex-1 bg-neutral-50 p-6 mt-12">
         <Head title="View My Order | PT Ratu Bio Indonesia" />
         <Navbar auth={auth} />
 
+        {/* Action Buttons */}
+        <div className="mt-6 flex justify-end">
+          {/* Payment Button */}
+          <button
+            onClick={() => Inertia.visit(`/payment/${orders[0]?.id}`)}
+            className="ml-4 inline-flex w-20 items-center justify-center rounded-lg bg-custom-yellow px-4 py-2 text-sm font-semibold text-black transition duration-300 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
+          >
+            Payment
+          </button>
+
+          {/* Cancel Button */}
+          <button
+            onClick={handleCancelOrders}
+            className="ml-4 inline-flex w-20 items-center justify-center rounded-lg border border-gray-300 bg-black px-4 py-2 text-sm font-semibold text-white transition duration-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+          >
+            Cancel
+          </button>
+        </div>
+
         {/* Order Summary Table */}
-        <h2 className="mb-4 mt-16 font-lexend text-xl font-bold">
-          Order Details
-        </h2>
+        <h2 className="mb-4 font-lexend text-xl font-bold">Order Summary</h2>
         <div className="overflow-hidden rounded-lg bg-white shadow-md">
           <table className="min-w-full divide-y divide-gray-200">
             <thead>
@@ -240,22 +257,6 @@ const MyOrder = ({ orders = [], auth }) => {
               )}
             </tbody>
           </table>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="mt-6 flex justify-end">
-          <button
-            onClick={() => Inertia.visit(`/payment/${orders[0]?.id}`)}
-            className="ml-4 inline-flex items-center justify-center rounded-md border border-transparent bg-black px-6 py-3 text-base font-semibold text-white shadow-sm transition duration-300 hover:bg-gray-900"
-          >
-            Payment
-          </button>
-          <button
-            onClick={handleCancelOrders}
-            className="ml-4 inline-flex items-center justify-center rounded-md border border-red-600 bg-white px-6 py-3 text-base font-semibold text-red-600 shadow-sm transition duration-300 hover:bg-red-50"
-          >
-            Cancel
-          </button>
         </div>
       </div>
     </div>
