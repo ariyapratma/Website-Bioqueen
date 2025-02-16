@@ -87,15 +87,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/hero-review', [HeroReviewController::class, 'store'])->name('hero-review.store');
     });
 
-    // Rute untuk mengelola review, hanya admin yang bisa mengakses
-    Route::middleware(['auth', 'role:admin'])->group(function () {
-        // Route HeroReview Admin 
-        Route::get('/hero-review', [HeroReviewController::class, 'index'])->name('hero-review.index');
-        Route::get('/hero-review/{heroReview}/edit', [HeroReviewController::class, 'edit'])->name('hero-review.edit');
-        Route::put('/hero-review/{heroReview}', [HeroReviewController::class, 'update'])->name('hero-review.update');
-        Route::delete('/hero-review/{id}', [HeroReviewController::class, 'destroy'])->name('hero-review.destroy');
-    });
-
     // Rute untuk mengelola isi konten web, hanya admin yang bisa mengakses
     Route::middleware(['auth', 'role:admin'])->group(function () {
 
@@ -189,6 +180,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/hero-excellence-value/{heroExcellenceValue}/edit', [HeroExcellenceValueController::class, 'edit'])->name('hero-excellence-value.edit');
         Route::put('/hero-excellence-value/{heroExcellenceValue}', [HeroExcellenceValueController::class, 'update'])->name('hero-excellence-value.update');
         Route::delete('/hero-excellence-value/{id}', [HeroExcellenceValueController::class, 'destroy'])->name('hero-excellence-value.destroy');
+
+        // Route HeroReview Admin
+        Route::get('/hero-review', [HeroReviewController::class, 'index'])->name('hero-review.index');
+        Route::get('/hero-review/{heroReview}/edit', [HeroReviewController::class, 'edit'])->name('hero-review.edit');
+        Route::put('/hero-review/{heroReview}', [HeroReviewController::class, 'update'])->name('hero-review.update');
+        Route::delete('/hero-review/{id}', [HeroReviewController::class, 'destroy'])->name('hero-review.destroy');
 
         // AboutUs Page :
 
