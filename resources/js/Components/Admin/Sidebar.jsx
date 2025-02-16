@@ -8,7 +8,6 @@ import {
   FaClipboardList,
   FaIndustry,
   FaChevronDown,
-  FaBars
 } from "react-icons/fa";
 
 const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
@@ -159,13 +158,12 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
     >
       {/* Header Sidebar */}
       <div
-        className="flex items-center justify-center w-full mt-12 cursor-pointer"
+        className="mt-12 flex w-full cursor-pointer items-center justify-center"
         onClick={toggleSidebar}
-      >
-      </div>
+      ></div>
 
       {/* Menu Items */}
-      <ul className="space-y-2 w-full mt-4">
+      <ul className="mt-4 w-full space-y-2">
         {/* Dashboard */}
         <li>
           <Link
@@ -231,9 +229,9 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
                     <Link
                       href={`/${item}`}
                       onClick={() => setActiveMenu(item)}
-                      className={`flex items-center p-2 text-sm rounded-lg ${
+                      className={`flex items-center rounded-lg p-2 text-sm ${
                         activeMenu === item
-                          ? "bg-indigo-500 text-white"
+                          ? "bg-black text-white"
                           : "text-gray-600 hover:bg-gray-100"
                       } transition duration-300`}
                     >
@@ -287,9 +285,9 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
                     <Link
                       href={`/${item}`}
                       onClick={() => setActiveMenu(item)}
-                      className={`flex items-center p-2 text-sm rounded-lg ${
+                      className={`flex items-center rounded-lg p-2 text-sm ${
                         activeMenu === item
-                          ? "bg-indigo-500 text-white"
+                          ? "bg-black text-white"
                           : "text-gray-600 hover:bg-gray-100"
                       } transition duration-300`}
                     >
@@ -338,9 +336,9 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
                     <Link
                       href={`/${item}`}
                       onClick={() => setActiveMenu(item)}
-                      className={`flex items-center p-2 text-sm rounded-lg ${
+                      className={`flex items-center rounded-lg p-2 text-sm ${
                         activeMenu === item
-                          ? "bg-indigo-500 text-white"
+                          ? "bg-black text-white"
                           : "text-gray-600 hover:bg-gray-100"
                       } transition duration-300`}
                     >
@@ -384,28 +382,26 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
             {!collapsed && dropdownProductOpen && (
               <ul className="ml-4 space-y-1">
                 {/* Daftar submenu di sini */}
-                {[
-                  "header-product",
-                  "hero-categories",
-                  "product-list",
-                ].map((item) => (
-                  <li key={item}>
-                    <Link
-                      href={`/${item}`}
-                      onClick={() => setActiveMenu(item)}
-                      className={`flex items-center p-2 text-sm rounded-lg ${
-                        activeMenu === item
-                          ? "bg-indigo-500 text-white"
-                          : "text-gray-600 hover:bg-gray-100"
-                      } transition duration-300`}
-                    >
-                      {!collapsed &&
-                        `Manage ${item
-                          .replace(/-/g, " ")
-                          .replace(/\b\w/g, (c) => c.toUpperCase())}`}
-                    </Link>
-                  </li>
-                ))}
+                {["header-product", "hero-categories", "product-list"].map(
+                  (item) => (
+                    <li key={item}>
+                      <Link
+                        href={`/${item}`}
+                        onClick={() => setActiveMenu(item)}
+                        className={`flex items-center rounded-lg p-2 text-sm ${
+                          activeMenu === item
+                            ? "bg-black text-white"
+                            : "text-gray-600 hover:bg-gray-100"
+                        } transition duration-300`}
+                      >
+                        {!collapsed &&
+                          `Manage ${item
+                            .replace(/-/g, " ")
+                            .replace(/\b\w/g, (c) => c.toUpperCase())}`}
+                      </Link>
+                    </li>
+                  ),
+                )}
               </ul>
             )}
           </li>
@@ -439,17 +435,14 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
             {!collapsed && dropdownOrderOpen && (
               <ul className="ml-4 space-y-1">
                 {/* Daftar submenu di sini */}
-                {[
-                  "header-order",
-                  "manage-order-products",
-                ].map((item) => (
+                {["header-order", "manage-order-products"].map((item) => (
                   <li key={item}>
                     <Link
                       href={`/${item}`}
                       onClick={() => setActiveMenu(item)}
-                      className={`flex items-center p-2 text-sm rounded-lg ${
+                      className={`flex items-center rounded-lg p-2 text-sm ${
                         activeMenu === item
-                          ? "bg-indigo-500 text-white"
+                          ? "bg-black text-white"
                           : "text-gray-600 hover:bg-gray-100"
                       } transition duration-300`}
                     >
@@ -498,9 +491,9 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
                     <Link
                       href={`/${item}`}
                       onClick={() => setActiveMenu(item)}
-                      className={`flex items-center p-2 text-sm rounded-lg ${
+                      className={`flex items-center rounded-lg p-2 text-sm ${
                         activeMenu === item
-                          ? "bg-indigo-500 text-white"
+                          ? "bg-black text-white"
                           : "text-gray-600 hover:bg-gray-100"
                       } transition duration-300`}
                     >
@@ -549,7 +542,7 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
                     onClick={() => setActiveMenu("my-order")}
                     className={`flex items-center rounded-lg p-2 text-sm ${
                       activeMenu === "my-order"
-                        ? "bg-indigo-500 text-white"
+                        ? "bg-black text-white"
                         : "text-gray-600 hover:bg-gray-100"
                     } transition duration-300`}
                   >
