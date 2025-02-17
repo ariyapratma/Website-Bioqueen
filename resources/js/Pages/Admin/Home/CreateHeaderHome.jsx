@@ -2,7 +2,6 @@ import { Link, Head, useForm } from "@inertiajs/react";
 import Swal from "sweetalert2";
 import { useState } from "react";
 import { Inertia } from "@inertiajs/inertia";
-import { IoChevronBackOutline } from "react-icons/io5";
 import Sidebar from "@/Components/Admin/Sidebar";
 import Navbar from "@/Components/Navbar/Navbar";
 
@@ -18,12 +17,12 @@ const CreateHeaderHome = ({ auth }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("description", data.description);
     formData.append("image_url", data.image_url);
     formData.append("whatsapp_link", data.whatsapp_link);
+
     post("/header-home", {
       data: formData,
       onSuccess: () => {
@@ -63,33 +62,33 @@ const CreateHeaderHome = ({ auth }) => {
           setActiveMenu={setActiveMenu}
         />
       )}
-
       {/* Main Content */}
       <div className="mt-16 flex-1 bg-neutral-50 p-6">
         <Head title="Create Header Home | PT Ratu Bio Indonesia" />
         <Navbar auth={auth} />
-
         {/* Breadcrumb */}
         <nav className="mb-4 flex items-center space-x-2 font-lexend text-sm text-gray-600">
+          <Link href="/dashboard" className="hover:text-black hover:underline">
+            Dashboard
+          </Link>
+          <span className="text-gray-400">/</span>
           <Link
             href="/header-home"
             className="hover:text-black hover:underline"
           >
-            Home Page Content
+            Manage Header Home
           </Link>
           <span className="text-gray-400">/</span>
           <span className="font-bold text-black">Create Header Home</span>
         </nav>
-
         {/* Title */}
-        <h2 className="ont-lexend mb-4 text-xl font-bold">
+        <h2 className="mb-4 font-lexend text-xl font-bold">
           Create Home Page Content
         </h2>
-
         {/* Form */}
         <form
           onSubmit={handleSubmit}
-          className="space-y-4 md:w-1/2"
+          className="mx-auto w-full max-w-screen-lg space-y-4"
           encType="multipart/form-data"
         >
           <div>
@@ -111,7 +110,6 @@ const CreateHeaderHome = ({ auth }) => {
               <span className="text-sm text-red-600">{errors.title}</span>
             )}
           </div>
-
           <div>
             <label
               htmlFor="description"
@@ -131,7 +129,6 @@ const CreateHeaderHome = ({ auth }) => {
               <span className="text-sm text-red-600">{errors.description}</span>
             )}
           </div>
-
           <div>
             <label
               htmlFor="image_url"
@@ -161,7 +158,6 @@ const CreateHeaderHome = ({ auth }) => {
               <span className="text-sm text-red-600">{errors.image_url}</span>
             )}
           </div>
-
           <div>
             <label
               htmlFor="whatsapp_link"
@@ -183,7 +179,6 @@ const CreateHeaderHome = ({ auth }) => {
               </span>
             )}
           </div>
-
           <button
             type="submit"
             disabled={processing}
