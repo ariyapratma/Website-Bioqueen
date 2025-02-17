@@ -7,7 +7,7 @@ import Navbar from "@/Components/Navbar/Navbar";
 
 const ManageHeroReview = ({ dataHeroReview, auth }) => {
   const { delete: deleteRecord } = useForm();
-  const [activeMenu, setActiveMenu] = useState("hero-review");
+  const [activeMenu, setActiveMenu] = useState("admin/hero-review");
   const user = auth.user;
 
   const handleDelete = (id) => {
@@ -23,7 +23,7 @@ const ManageHeroReview = ({ dataHeroReview, auth }) => {
       backdrop: false,
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteRecord(`/hero-review/${id}`, {
+        deleteRecord(`/admin-hero-review/${id}`, {
           method: "DELETE",
         });
         Swal.fire("Deleted!", "Your file has been deleted.", "success");
@@ -61,16 +61,6 @@ const ManageHeroReview = ({ dataHeroReview, auth }) => {
           Home Page Content
         </h2>
 
-        {/* Add Button */}
-        <div className="mb-6 flex justify-end">
-          <Link
-            href="/hero-review/create"
-            className="rounded bg-custom-yellow p-2 text-black hover:bg-yellow-500"
-          >
-            <IoAdd size={24} />
-          </Link>
-        </div>
-
         {/* Table for Desktop */}
         <div className="hidden md:block">
           <table className="min-w-full divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-md">
@@ -103,13 +93,6 @@ const ManageHeroReview = ({ dataHeroReview, auth }) => {
                     {heroReview.comment}
                   </td>
                   <td className="flex flex-col items-center justify-center space-y-2 whitespace-nowrap px-6 py-4 font-lexend text-sm font-medium">
-                    {/* Edit Button */}
-                    <Link
-                      href={`/hero-review/${heroReview.id}/edit`}
-                      className="text-indigo-600 hover:text-indigo-900"
-                    >
-                      <IoPencil size={20} />
-                    </Link>
                     {/* Delete Button */}
                     <button
                       onClick={() => handleDelete(heroReview.id)}
@@ -136,12 +119,6 @@ const ManageHeroReview = ({ dataHeroReview, auth }) => {
                   {heroReview.name}
                 </h3>
                 <div className="flex items-center space-x-2">
-                  <Link
-                    href={`/hero-review/${heroReview.id}/edit`}
-                    className="text-indigo-600 hover:text-indigo-900"
-                  >
-                    <IoPencil size={20} />
-                  </Link>
                   <button
                     onClick={() => handleDelete(heroReview.id)}
                     className="text-red-600 hover:text-red-900"

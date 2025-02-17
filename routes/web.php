@@ -83,8 +83,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('Dashboard');
     })->middleware('role:admin|user')->name('dashboard');
 
-    Route::middleware(['auth', 'role:user|admin'])->group(function () {
-        Route::post('/hero-review', [HeroReviewController::class, 'store'])->name('hero-review.store');
+    Route::middleware(['auth', 'role:user'])->group(function () {
+        Route::post('/user/hero-review', [HeroReviewController::class, 'store'])->name('user.hero-review.store');
     });
 
     // Rute untuk mengelola isi konten web, hanya admin yang bisa mengakses
@@ -182,10 +182,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/hero-excellence-value/{id}', [HeroExcellenceValueController::class, 'destroy'])->name('hero-excellence-value.destroy');
 
         // Route HeroReview Admin
-        Route::get('/hero-review', [HeroReviewController::class, 'index'])->name('hero-review.index');
-        Route::get('/hero-review/{heroReview}/edit', [HeroReviewController::class, 'edit'])->name('hero-review.edit');
-        Route::put('/hero-review/{heroReview}', [HeroReviewController::class, 'update'])->name('hero-review.update');
-        Route::delete('/hero-review/{id}', [HeroReviewController::class, 'destroy'])->name('hero-review.destroy');
+        Route::middleware(['auth', 'role:admin'])->group(function () {
+            Route::get('/admin/hero-review', [HeroReviewController::class, 'index'])->name('admin.hero-review.index');
+            Route::get('/admin/hero-review/{heroReview}/edit', [HeroReviewController::class, 'edit'])->name('admin.hero-review.edit');
+            Route::put('/admin/hero-review/{heroReview}', [HeroReviewController::class, 'update'])->name('admin.hero-review.update');
+            Route::delete('/admin/hero-review/{id}', [HeroReviewController::class, 'destroy'])->name('admin.hero-review.destroy');
+        });
 
         // AboutUs Page :
 

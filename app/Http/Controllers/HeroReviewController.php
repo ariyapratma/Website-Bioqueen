@@ -6,9 +6,6 @@ use Inertia\Inertia;
 use App\Models\HeroReview;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Laravolt\Avatar\Facade as Avatar;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Spatie\Permission\Traits\HasRoles;
 
 class HeroReviewController extends Controller
 {
@@ -19,33 +16,59 @@ class HeroReviewController extends Controller
     {
         $heroReview = HeroReview::all();
 
-        if (Auth::check()) {
-            $user = Auth::user();
-
-            if (!$user->hasRole('user')) {
-                $user->assignRole('user');
-            }
-            if ($user->email === 'adminbioqueen@indonesia.com' && !$user->hasRole('admin')) {
-                $user->assignRole('admin');
-            }
-            if ($user->hasRole('admin')) {
-                return Inertia::render('Admin/Home/ManageHeroReview', [
-                    'dataHeroReview' => $heroReview,
-                ]);
-            }
+        if (!Auth::check() || !Auth::user()->hasRole('admin')) {
+            return redirect('/dashboard');
         }
 
-        return Inertia::render('Home/Index', [
+        return Inertia::render('Admin/Home/ManageHeroReview', [
             'dataHeroReview' => $heroReview,
         ]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for editing the specified resource.
      */
-    public function create()
+    // public function edit(HeroReview $heroReview)
+    // {
+    //     if (!Auth::check() || !Auth::user()->hasRole('admin')) {
+    //         return redirect('/dashboard');
+    //     }
+
+    //     return Inertia::render('Admin/Home/EditHeroReview', [
+    //         'dataHeroReview' => $heroReview,
+    //     ]);
+    // }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    // public function update(Request $request, HeroReview $heroReview)
+    // {
+    //     $request->validate([
+    //         'rating' => 'required|integer|min:1|max:5',
+    //         'comment' => 'required|string|max:255',
+    //     ]);
+
+    //     $heroReview->update([
+    //         'rating' => $request->rating,
+    //         'comment' => $request->comment,
+    //     ]);
+
+    //     return redirect()->route('admin.hero-review.index');
+    // }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(HeroReview $id)
     {
-        //
+        if (!Auth::check() || !Auth::user()->hasRole('admin')) {
+            return redirect('/dashboard');
+        }
+
+        $id->delete();
+
+        return redirect()->route('admin.hero-review.index');
     }
 
     /**
@@ -70,49 +93,5 @@ class HeroReviewController extends Controller
         ]);
 
         return redirect()->route('index');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(HeroReview $heroReview)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(HeroReview $heroReview)
-    {
-        return Inertia::render('Admin/Home/EditHeroReview', [
-            'dataHeroReview' => $heroReview
-        ]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, HeroReview $heroReview)
-    {
-        $request->validate([
-            'rating' => 'required|integer|min:1|max:5',
-            'comment' => 'required|string|max:255',
-        ]);
-
-        $heroReview->update([
-            'rating' => $request->rating,
-            'comment' => $request->comment,
-        ]);
-        return redirect()->route('hero-review.index');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(HeroReview $id)
-    {
-        $id->delete();
-        return redirect()->route('hero-review.index');
     }
 }

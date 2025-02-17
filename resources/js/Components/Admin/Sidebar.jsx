@@ -38,7 +38,7 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
         activeMenu.startsWith("hero-service") ||
         activeMenu.startsWith("hero-video") ||
         activeMenu.startsWith("hero-excellence-value") ||
-        activeMenu.startsWith("hero-review"),
+        activeMenu.startsWith("admin/hero-review"),
     );
 
     setDropdownAboutUsOpen(
@@ -223,7 +223,7 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
                   "hero-service",
                   "hero-video",
                   "hero-excellence-value",
-                  "hero-review",
+                  "admin/hero-review",
                 ].map((item) => (
                   <li key={item}>
                     <Link
