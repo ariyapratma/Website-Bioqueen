@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import {
   FaHome,
   FaInfoCircle,
-  FaEnvelope,
   FaBoxOpen,
   FaClipboardList,
   FaIndustry,
@@ -17,11 +16,9 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
   }
   const [dropdownHomeOpen, setDropdownHomeOpen] = useState(false);
   const [dropdownAboutUsOpen, setDropdownAboutUsOpen] = useState(false);
-  const [dropdownContactOpen, setDropdownContactOpen] = useState(false);
   const [dropdownProductOpen, setDropdownProductOpen] = useState(false);
   const [dropdownOrderOpen, setDropdownOrderOpen] = useState(false);
   const [dropdownMyOrderOpen, setDropdownMyOrderOpen] = useState(false);
-  const [dropdownMaklonOpen, setDropdownMaklonOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
 
   useEffect(() => {
@@ -46,12 +43,9 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
         activeMenu.startsWith("header-about-us") ||
         activeMenu.startsWith("hero-about-us") ||
         activeMenu.startsWith("hero-vision-mision") ||
-        activeMenu.startsWith("hero-our-gallery"),
-    );
-
-    setDropdownContactOpen(
-      activeMenu.startsWith("contact") ||
-        activeMenu.startsWith("header-contact"),
+        activeMenu.startsWith("hero-our-gallery") ||
+        activeMenu.startsWith("header-contact") ||
+        activeMenu.startsWith("header-maklon"),
     );
 
     setDropdownProductOpen(
@@ -71,10 +65,6 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
       activeMenu.startsWith("my-order-details") ||
         activeMenu.startsWith("my-order"),
     );
-
-    setDropdownMaklonOpen(
-      activeMenu.startsWith("maklon") || activeMenu.startsWith("header-maklon"),
-    );
   }, [activeMenu]);
 
   useEffect(() => {
@@ -84,10 +74,8 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
         setCollapsed(true);
         setDropdownHomeOpen(false);
         setDropdownAboutUsOpen(false);
-        setDropdownContactOpen(false);
         setDropdownProductOpen(false);
         setDropdownOrderOpen(false);
-        setDropdownMaklonOpen(false);
       }
     };
 
@@ -101,10 +89,8 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
     setCollapsed(!collapsed);
     setDropdownHomeOpen(false);
     setDropdownAboutUsOpen(false);
-    setDropdownContactOpen(false);
     setDropdownProductOpen(false);
     setDropdownOrderOpen(false);
-    setDropdownMaklonOpen(false);
   };
 
   const toggleDropdownHome = () => {
@@ -121,13 +107,6 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
     setDropdownAboutUsOpen(!dropdownAboutUsOpen);
   };
 
-  const toggleDropdownContact = () => {
-    if (collapsed) {
-      setCollapsed(false);
-    }
-    setDropdownContactOpen(!dropdownContactOpen);
-  };
-
   const toggleDropdownProduct = () => {
     if (collapsed) {
       setCollapsed(false);
@@ -140,13 +119,6 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
       setCollapsed(false);
     }
     setDropdownOrderOpen(!dropdownOrderOpen);
-  };
-
-  const toggleDropdownMaklon = () => {
-    if (collapsed) {
-      setCollapsed(false);
-    }
-    setDropdownMaklonOpen(!dropdownMaklonOpen);
   };
 
   return (
@@ -280,58 +252,9 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
                   "hero-about-us",
                   "hero-vision-mision",
                   "hero-our-gallery",
+                  "header-contact",
+                  "header-maklon",
                 ].map((item) => (
-                  <li key={item}>
-                    <Link
-                      href={`/${item}`}
-                      onClick={() => setActiveMenu(item)}
-                      className={`flex items-center rounded-lg p-2 text-sm ${
-                        activeMenu === item
-                          ? "bg-black text-white"
-                          : "text-gray-600 hover:bg-gray-100"
-                      } transition duration-300`}
-                    >
-                      {!collapsed &&
-                        `Manage ${item
-                          .replace(/-/g, " ")
-                          .replace(/\b\w/g, (c) => c.toUpperCase())}`}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </li>
-        )}
-
-        {/* Dropdown for Contact Page Content */}
-        {user.role === "admin" && (
-          <li>
-            <div
-              onClick={toggleDropdownContact}
-              className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
-                dropdownContactOpen || activeMenu.startsWith("contact")
-                  ? "bg-custom-yellow text-black"
-                  : "text-gray-600 hover:bg-gray-100"
-              } transition duration-300`}
-            >
-              <span className="flex items-center">
-                <FaEnvelope className="mr-2" />
-                {!collapsed && "Contact Page Content"}
-              </span>
-              {!collapsed && (
-                <FaChevronDown
-                  className={`ml-2 transition-transform duration-300 ${
-                    dropdownContactOpen ? "rotate-180" : ""
-                  }`}
-                />
-              )}
-            </div>
-
-            {/* Submenu (Dropdown Content) */}
-            {!collapsed && dropdownContactOpen && (
-              <ul className="ml-4 space-y-1">
-                {/* Daftar submenu di sini */}
-                {["header-contact"].map((item) => (
                   <li key={item}>
                     <Link
                       href={`/${item}`}
@@ -436,57 +359,6 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
               <ul className="ml-4 space-y-1">
                 {/* Daftar submenu di sini */}
                 {["header-order", "manage-order-products"].map((item) => (
-                  <li key={item}>
-                    <Link
-                      href={`/${item}`}
-                      onClick={() => setActiveMenu(item)}
-                      className={`flex items-center rounded-lg p-2 text-sm ${
-                        activeMenu === item
-                          ? "bg-black text-white"
-                          : "text-gray-600 hover:bg-gray-100"
-                      } transition duration-300`}
-                    >
-                      {!collapsed &&
-                        `Manage ${item
-                          .replace(/-/g, " ")
-                          .replace(/\b\w/g, (c) => c.toUpperCase())}`}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </li>
-        )}
-
-        {/* Dropdown for Maklon Page Content */}
-        {user.role === "admin" && (
-          <li>
-            <div
-              onClick={toggleDropdownMaklon}
-              className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
-                dropdownMaklonOpen || activeMenu.startsWith("maklon")
-                  ? "bg-custom-yellow text-black"
-                  : "text-gray-600 hover:bg-gray-100"
-              } transition duration-300`}
-            >
-              <span className="flex items-center">
-                <FaIndustry className="mr-2" />
-                {!collapsed && "Maklon Page Content"}
-              </span>
-              {!collapsed && (
-                <FaChevronDown
-                  className={`ml-2 transition-transform duration-300 ${
-                    dropdownMaklonOpen ? "rotate-180" : ""
-                  }`}
-                />
-              )}
-            </div>
-
-            {/* Submenu (Dropdown Content) */}
-            {!collapsed && dropdownMaklonOpen && (
-              <ul className="ml-4 space-y-1">
-                {/* Daftar submenu di sini */}
-                {["header-maklon"].map((item) => (
                   <li key={item}>
                     <Link
                       href={`/${item}`}

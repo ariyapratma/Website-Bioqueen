@@ -5,10 +5,10 @@ import HeaderAboutUs from "./HeaderAboutUs";
 import HeroAboutUs from "./HeroAboutUs";
 import HeroVisionMision from "./HeroVisionMision";
 import HeroOurGallery from "./HeroOurGallery";
-import HeaderContact from "../Contact/HeaderContact";
-import HeroContact from "../Contact/HeroContact";
 import HeaderMaklon from "../Maklon/HeaderMaklon";
 import HeroMaklon from "@/Components/Maklon/HeroMaklon";
+import HeaderContact from "../Contact/HeaderContact";
+import HeroContact from "../Contact/HeroContact";
 import Footer from "@/Components/Footer/Footer";
 
 const Index = ({ auth }) => {
@@ -28,14 +28,14 @@ const Index = ({ auth }) => {
         <HeroVisionMision />
         {/* HeroOurGallery */}
         <HeroOurGallery />
-        {/* HeeaderContact */}
-        <HeaderContact />
-        {/* HeroContact */}
-        <HeroContact />
         {/* HeaderMaklon */}
         <HeaderMaklon />
         {/* HeroMaklon */}
         <HeroMaklon />
+        {/* HeaderContact */}
+        <HeaderContact />
+        {/* HeroContact */}
+        <HeroContact />
       </main>
       <Footer />
     </div>
