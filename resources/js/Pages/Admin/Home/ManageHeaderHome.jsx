@@ -1,11 +1,7 @@
 import { Link, Head, useForm } from "@inertiajs/react";
 import Swal from "sweetalert2";
 import { useState } from "react";
-import {
-  IoAdd,
-  IoPencil,
-  IoTrash,
-} from "react-icons/io5";
+import { IoAdd, IoPencil, IoTrash } from "react-icons/io5";
 import Sidebar from "@/Components/Admin/Sidebar";
 import Navbar from "@/Components/Navbar/Navbar";
 
@@ -30,7 +26,15 @@ const ManageHeaderHome = ({ dataHeaderHome, auth }) => {
         deleteRecord(`/header-home/${id}`, {
           method: "DELETE",
         });
-        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
+        });
       }
     });
   };
@@ -52,7 +56,7 @@ const ManageHeaderHome = ({ dataHeaderHome, auth }) => {
         <Navbar auth={auth} />
 
         {/* Breadcrumb */}
-        <nav className="mb-4 flex items-center space-x-2 text-sm font-lexend text-gray-600">
+        <nav className="mb-4 flex items-center space-x-2 font-lexend text-sm text-gray-600">
           <Link href="/dashboard" className="hover:text-black hover:underline">
             Dashboard
           </Link>

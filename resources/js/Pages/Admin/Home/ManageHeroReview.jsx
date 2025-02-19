@@ -26,7 +26,15 @@ const ManageHeroReview = ({ dataHeroReview, auth }) => {
         deleteRecord(`/admin-hero-review/${id}`, {
           method: "DELETE",
         });
-        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
+        });
       }
     });
   };
