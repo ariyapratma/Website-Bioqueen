@@ -62,8 +62,7 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
     );
 
     setDropdownMyOrderOpen(
-      activeMenu.startsWith("my-order") ||
-        activeMenu.startsWith("my-order"),
+      activeMenu.startsWith("my-order") || activeMenu.startsWith("my-order"),
     );
   }, [activeMenu]);
 
@@ -169,7 +168,19 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
             <div
               onClick={toggleDropdownHome}
               className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
-                dropdownHomeOpen || activeMenu.startsWith("home-page")
+                dropdownHomeOpen ||
+                activeMenu.startsWith("header-home") ||
+                activeMenu.startsWith("hero-flyer") ||
+                activeMenu.startsWith("hero-company") ||
+                activeMenu.startsWith("hero-why-choose") ||
+                activeMenu.startsWith("hero-maklon-value") ||
+                activeMenu.startsWith("hero-team-value") ||
+                activeMenu.startsWith("hero-facilities-value") ||
+                activeMenu.startsWith("hero-certificate") ||
+                activeMenu.startsWith("hero-service") ||
+                activeMenu.startsWith("hero-video") ||
+                activeMenu.startsWith("hero-excellence-value") ||
+                activeMenu.startsWith("admin/hero-review")
                   ? "bg-custom-yellow text-black"
                   : "text-gray-600 hover:bg-gray-100"
               } transition duration-300`}
@@ -233,7 +244,13 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
             <div
               onClick={toggleDropdownAboutUs}
               className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
-                dropdownAboutUsOpen || activeMenu.startsWith("about-us")
+                dropdownAboutUsOpen ||
+                activeMenu.startsWith("header-about-us") ||
+                activeMenu.startsWith("hero-about-us") ||
+                activeMenu.startsWith("hero-vision-mision") ||
+                activeMenu.startsWith("hero-our-gallery") ||
+                activeMenu.startsWith("header-contact") ||
+                activeMenu.startsWith("header-maklon")
                   ? "bg-custom-yellow text-black"
                   : "text-gray-600 hover:bg-gray-100"
               } transition duration-300`}
@@ -291,7 +308,10 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
             <div
               onClick={toggleDropdownProduct}
               className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
-                dropdownProductOpen || activeMenu.startsWith("product")
+                dropdownProductOpen ||
+                activeMenu.startsWith("header-product") ||
+                activeMenu.startsWith("hero-categories") ||
+                activeMenu.startsWith("product-list")
                   ? "bg-custom-yellow text-black"
                   : "text-gray-600 hover:bg-gray-100"
               } transition duration-300`}
@@ -344,7 +364,9 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
             <div
               onClick={toggleDropdownOrder}
               className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
-                dropdownOrderOpen || activeMenu.startsWith("order")
+                dropdownOrderOpen ||
+                activeMenu.startsWith("header-order") ||
+                activeMenu.startsWith("manage-order-products")
                   ? "bg-custom-yellow text-black"
                   : "text-gray-600 hover:bg-gray-100"
               } transition duration-300`}
@@ -439,7 +461,6 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
             )}
           </li>
         )}
-
       </ul>
     </div>
   );
