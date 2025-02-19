@@ -62,7 +62,7 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
     );
 
     setDropdownMyOrderOpen(
-      activeMenu.startsWith("my-order-details") ||
+      activeMenu.startsWith("my-order") ||
         activeMenu.startsWith("my-order"),
     );
   }, [activeMenu]);
@@ -76,6 +76,7 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
         setDropdownAboutUsOpen(false);
         setDropdownProductOpen(false);
         setDropdownOrderOpen(false);
+        setDropdownMyOrderOpen(false);
       }
     };
 
@@ -119,6 +120,13 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
       setCollapsed(false);
     }
     setDropdownOrderOpen(!dropdownOrderOpen);
+  };
+
+  const toggleDropdownMyOrder = () => {
+    if (collapsed) {
+      setCollapsed(false);
+    }
+    setDropdownMyOrderOpen(!dropdownMyOrderOpen);
   };
 
   return (
@@ -381,50 +389,57 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
           </li>
         )}
 
-        {/* Dropdown for My Order Details */}
+        {/* Dropdown for MyOrder Page Content */}
         {user.role === "user" && (
           <li>
             <div
-              onClick={() => setDropdownMyOrderOpen(!dropdownMyOrderOpen)}
-              className={`flex cursor-pointer items-center justify-between rounded-lg p-3 ${
-                dropdownMyOrderOpen
+              onClick={toggleDropdownMyOrder}
+              className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
+                dropdownMyOrderOpen || activeMenu.startsWith("my-order")
                   ? "bg-custom-yellow text-black"
                   : "text-gray-600 hover:bg-gray-100"
               } transition duration-300`}
             >
-              {/* Icon and Text */}
               <span className="flex items-center">
-                <FaClipboardList className="mr-3 text-lg" />
-                {!collapsed && "Orders"}
+                <FaClipboardList className="mr-2" />
+                {!collapsed && " Order"}
               </span>
               {!collapsed && (
                 <FaChevronDown
-                  className={`transition-transform duration-300 ${
+                  className={`ml-2 transition-transform duration-300 ${
                     dropdownMyOrderOpen ? "rotate-180" : ""
                   }`}
                 />
               )}
             </div>
+
             {/* Submenu (Dropdown Content) */}
-            {dropdownMyOrderOpen && (
-              <ul className="ml-4 mt-2 space-y-1">
-                <li>
-                  <Link
-                    href="/my-order"
-                    onClick={() => setActiveMenu("my-order")}
-                    className={`flex items-center rounded-lg p-2 text-sm ${
-                      activeMenu === "my-order"
-                        ? "bg-black text-white"
-                        : "text-gray-600 hover:bg-gray-100"
-                    } transition duration-300`}
-                  >
-                    {!collapsed && "View Orders"}
-                  </Link>
-                </li>
+            {!collapsed && dropdownMyOrderOpen && (
+              <ul className="ml-4 space-y-1">
+                {/* Daftar submenu di sini */}
+                {["my-order"].map((item) => (
+                  <li key={item}>
+                    <Link
+                      href={`/${item}`}
+                      onClick={() => setActiveMenu(item)}
+                      className={`flex items-center rounded-lg p-2 text-sm ${
+                        activeMenu === item
+                          ? "bg-black text-white"
+                          : "text-gray-600 hover:bg-gray-100"
+                      } transition duration-300`}
+                    >
+                      {!collapsed &&
+                        `${item
+                          .replace(/-/g, " ")
+                          .replace(/\b\w/g, (c) => c.toUpperCase())}`}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             )}
           </li>
         )}
+
       </ul>
     </div>
   );

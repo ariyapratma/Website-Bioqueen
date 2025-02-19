@@ -15,7 +15,7 @@ const MyOrder = ({ orders = [], auth }) => {
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Yes, cancel all orders!",
+      confirmButtonText: "Yes, cancel orders!",
       confirmButtonColor: "#000000",
       cancelButtonColor: "#d33",
     }).then((result) => {
@@ -40,6 +40,18 @@ const MyOrder = ({ orders = [], auth }) => {
     });
   };
 
+  // Fungsi untuk memberikan warna berdasarkan status
+  const getStatusColor = (status) => {
+    switch (status?.toLowerCase()) {
+      case "processing":
+        return "text-blue-500 font-semibold";
+      case "completed":
+        return "text-green-500 font-semibold";
+      case "cancelled":
+        return "text-red-500 font-semibold";
+    }
+  };
+
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
@@ -51,51 +63,57 @@ const MyOrder = ({ orders = [], auth }) => {
         />
       )}
       {/* Main Content */}
-      <div className="flex-1 bg-neutral-50 p-6 mt-12">
-        <Head title="View My Order | PT Ratu Bio Indonesia" />
+      <div className="mt-16 flex-1 bg-neutral-50 p-6">
+        <Head title="My Order | PT Ratu Bio Indonesia" />
         <Navbar auth={auth} />
-
+        {/* Breadcrumb */}
+        <nav className="mb-4 flex items-center space-x-2 font-lexend text-sm text-gray-600">
+          <Link href="/dashboard" className="hover:text-black hover:underline">
+            Dashboard
+          </Link>
+          <span className="text-gray-400">/</span>
+          <span className="font-bold text-black">My Order</span>
+        </nav>
+        {/* Title */}
+        <h2 className="mb-4 font-lexend text-xl font-bold">
+          Order Page Content
+        </h2>
         {/* Action Buttons */}
-        <div className="mt-6 flex justify-end">
+        <div className="mb-6 flex gap-2">
           {/* Payment Button */}
           <button
             onClick={() => Inertia.visit(`/payment/${orders[0]?.id}`)}
-            className="ml-4 inline-flex w-20 items-center justify-center rounded-lg bg-custom-yellow px-4 py-2 text-sm font-semibold text-black transition duration-300 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
+            className="inline-flex w-20 items-center justify-center rounded-lg bg-custom-yellow px-4 py-2 text-sm font-semibold text-black transition duration-300 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
           >
             Payment
           </button>
-
           {/* Cancel Button */}
           <button
             onClick={handleCancelOrders}
-            className="ml-4 inline-flex w-20 items-center justify-center rounded-lg border border-gray-300 bg-black px-4 py-2 text-sm font-semibold text-white transition duration-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+            className="inline-flex w-20 items-center justify-center rounded-lg bg-black px-4 py-2 text-sm font-semibold text-white transition duration-300 hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
           >
             Cancel
           </button>
         </div>
-
-        {/* Order Summary Table */}
-        <h2 className="mb-4 font-lexend text-xl font-bold">Order Summary</h2>
-        <div className="overflow-hidden rounded-lg bg-white shadow-md">
-          <table className="min-w-full divide-y divide-gray-200">
+        {/* Order Summary Table for Desktop */}
+        <div className="hidden md:block">
+          <h3 className="mb-4 font-lexend text-lg font-bold">Order Summary</h3>
+          <table className="min-w-full divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-md">
             <thead>
               <tr>
-                <th className="px-6 py-3 text-center text-xs font-medium tracking-wider text-gray-500">
+                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Product ID
                 </th>
-                <th className="px-6 py-3 text-center text-xs font-medium tracking-wider text-gray-500">
+                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Product Name
                 </th>
-                <th className="px-6 py-3 text-center text-xs font-medium tracking-wider text-gray-500">
-                  Product Image
+                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                  Quantity
                 </th>
-                <th className="px-6 py-3 text-center text-xs font-medium tracking-wider text-gray-500">
-                  Product Quantity
-                </th>
-                <th className="px-6 py-3 text-center text-xs font-medium tracking-wider text-gray-500">
+                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Total Price
                 </th>
-                <th className="px-6 py-3 text-center text-xs font-medium tracking-wider text-gray-500">
+                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Status
                 </th>
               </tr>
@@ -104,8 +122,8 @@ const MyOrder = ({ orders = [], auth }) => {
               {orders.length === 0 ? (
                 <tr>
                   <td
-                    colSpan="4"
-                    className="px-6 py-4 text-center text-gray-500"
+                    colSpan="5"
+                    className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700"
                   >
                     No order summary available.
                   </td>
@@ -119,18 +137,6 @@ const MyOrder = ({ orders = [], auth }) => {
                     <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
                       {order.product?.name || "N/A"}
                     </td>
-                    <td className="flex items-center justify-center whitespace-nowrap px-6 py-4 font-lexend text-sm text-gray-700">
-                      <img
-                        src={
-                          order.product?.image_url
-                            ? `/storage/${order.product.image_url}`
-                            : "/default-image.jpg"
-                        }
-                        alt="Product Image"
-                        className="h-24 w-24 rounded-t-lg object-contain"
-                        style={{ aspectRatio: "1 / 1" }}
-                      />
-                    </td>
                     <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
                       {order?.quantity || "N/A"}
                     </td>
@@ -140,22 +146,12 @@ const MyOrder = ({ orders = [], auth }) => {
                         "id-ID",
                       )}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
-                      <span
-                        className={`inline-flex rounded-full px-3 py-1 text-center text-xs font-medium ${
-                          order.status === "Pending"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : order.status === "Processing"
-                              ? "bg-blue-100 text-blue-800"
-                              : order.status === "Completed"
-                                ? "bg-green-100 text-green-800"
-                                : order.status === "Cancelled"
-                                  ? "bg-red-100 text-red-800"
-                                  : "bg-gray-100 text-gray-800"
-                        }`}
-                      >
-                        {order.status || "N/A"}
-                      </span>
+                    <td
+                      className={`whitespace-nowrap px-6 py-4 text-center font-lexend text-sm ${getStatusColor(
+                        order.status,
+                      )}`}
+                    >
+                      {order.status || "N/A"}
                     </td>
                   </tr>
                 ))
@@ -163,34 +159,71 @@ const MyOrder = ({ orders = [], auth }) => {
             </tbody>
           </table>
         </div>
-
-        {/* Order Details Table */}
-        <h2 className="mb-4 mt-8 font-lexend text-xl font-bold">
-          Order Details
-        </h2>
-        <div className="overflow-hidden rounded-lg bg-white shadow-md">
-          <table className="min-w-full divide-y divide-gray-200">
+        {/* Mobile View */}
+        <div className="block md:hidden">
+          {orders.length === 0 ? (
+            <div className="mb-4 rounded-lg bg-white p-4 shadow-md">
+              <p className="text-center font-lexend text-sm text-gray-600">
+                No order summary available.
+              </p>
+            </div>
+          ) : (
+            orders.map((order) => (
+              <div
+                key={order.id}
+                className="mb-4 rounded-lg bg-white p-4 shadow-md"
+              >
+                <div className="flex justify-between">
+                  <h3 className="font-lexend text-base font-bold text-gray-800">
+                    Product #{order.product?.id || "N/A"}
+                  </h3>
+                </div>
+                <p className="mt-2 font-lexend text-sm text-gray-600">
+                  Product Name: {order.product?.name || "N/A"}
+                </p>
+                <p className="mt-2 font-lexend text-sm text-gray-600">
+                  Quantity: {order?.quantity || "N/A"}
+                </p>
+                <p className="mt-2 font-lexend text-sm text-gray-600">
+                  Total Price: Rp{" "}
+                  {parseFloat(order.total_price || 0).toLocaleString("id-ID")}
+                </p>
+                <p
+                  className={`mt-2 font-lexend text-sm ${getStatusColor(order.status)}`}
+                >
+                  Status: {order.status || "N/A"}
+                </p>
+              </div>
+            ))
+          )}
+        </div>
+        {/* Order Details Table for Desktop */}
+        <div className="hidden md:block">
+          <h3 className="mb-4 mt-4 font-lexend text-lg font-bold">
+            Order Details
+          </h3>
+          <table className="min-w-full divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-md">
             <thead>
               <tr>
-                <th className="text-centertext-xs px-6 py-3 font-medium tracking-wider text-gray-500">
+                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Order Number
                 </th>
-                <th className="px-6 py-3 text-center text-xs font-medium tracking-wider text-gray-500">
+                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Order Date
                 </th>
-                <th className="px-6 py-3 text-center text-xs font-medium tracking-wider text-gray-500">
+                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Recipient Name
                 </th>
-                <th className="px-6 py-3 text-center text-xs font-medium tracking-wider text-gray-500">
+                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Notes
                 </th>
-                <th className="px-6 py-3 text-center text-xs font-medium tracking-wider text-gray-500">
+                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Payment Method
                 </th>
-                <th className="px-6 py-3 text-center text-xs font-medium tracking-wider text-gray-500">
+                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Shipping Method
                 </th>
-                <th className="px-6 py-3 text-center text-xs font-medium tracking-wider text-gray-500">
+                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Status
                 </th>
               </tr>
@@ -199,8 +232,8 @@ const MyOrder = ({ orders = [], auth }) => {
               {orders.length === 0 ? (
                 <tr>
                   <td
-                    colSpan="5"
-                    className="px-6 py-4 text-center text-gray-500"
+                    colSpan="7"
+                    className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700"
                   >
                     No order details available.
                   </td>
@@ -211,7 +244,7 @@ const MyOrder = ({ orders = [], auth }) => {
                     <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
                       {order.id}
                     </td>
-                    <td className="text-centerpx-6 whitespace-nowrap py-4 font-lexend text-sm text-gray-700">
+                    <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
                       {order.created_at
                         ? new Date(order.created_at).toLocaleString("en-US", {
                             day: "2-digit",
@@ -235,28 +268,73 @@ const MyOrder = ({ orders = [], auth }) => {
                     <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
                       {order.informations?.shipping_method?.name || "N/A"}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
-                      <span
-                        className={`inline-flex rounded-full px-3 py-1 text-center text-xs font-medium ${
-                          order.status === "Pending"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : order.status === "Processing"
-                              ? "bg-blue-100 text-blue-800"
-                              : order.status === "Completed"
-                                ? "bg-green-100 text-green-800"
-                                : order.status === "Cancelled"
-                                  ? "bg-red-100 text-red-800"
-                                  : "bg-gray-100 text-gray-800"
-                        }`}
-                      >
-                        {order.status || "N/A"}
-                      </span>
+                    <td
+                      className={`whitespace-nowrap px-6 py-4 text-center font-lexend text-sm ${getStatusColor(
+                        order.status,
+                      )}`}
+                    >
+                      {order.status || "N/A"}
                     </td>
                   </tr>
                 ))
               )}
             </tbody>
           </table>
+        </div>
+        {/* Mobile View */}
+        <div className="block md:hidden">
+          {orders.length === 0 ? (
+            <div className="mb-4 rounded-lg bg-white p-4 shadow-md">
+              <p className="text-center font-lexend text-sm text-gray-600">
+                No order details available.
+              </p>
+            </div>
+          ) : (
+            orders.map((order) => (
+              <div
+                key={order.id}
+                className="mb-4 rounded-lg bg-white p-4 shadow-md"
+              >
+                <div className="flex justify-between">
+                  <h3 className="font-lexend text-base font-bold text-gray-800">
+                    Order #{order.id}
+                  </h3>
+                </div>
+                <p className="mt-2 font-lexend text-sm text-gray-600">
+                  Order Date:{" "}
+                  {order.created_at
+                    ? new Date(order.created_at).toLocaleString("en-US", {
+                        day: "2-digit",
+                        month: "long",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                      })
+                    : "Date not available."}
+                </p>
+                <p className="mt-2 font-lexend text-sm text-gray-600">
+                  Recipient Name: {order.informations?.recipient_name || "N/A"}
+                </p>
+                <p className="mt-2 font-lexend text-sm text-gray-600">
+                  Notes: {order.informations?.notes || "N/A"}
+                </p>
+                <p className="mt-2 font-lexend text-sm text-gray-600">
+                  Payment Method:{" "}
+                  {order.informations?.payment_method?.name || "N/A"}
+                </p>
+                <p className="mt-2 font-lexend text-sm text-gray-600">
+                  Shipping Method:{" "}
+                  {order.informations?.shipping_method?.name || "N/A"}
+                </p>
+                <p
+                  className={`mt-2 font-lexend text-sm ${getStatusColor(order.status)}`}
+                >
+                  Status: {order.status || "N/A"}
+                </p>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>

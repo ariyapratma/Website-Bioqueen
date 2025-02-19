@@ -1,12 +1,9 @@
 import { Link, Head, useForm } from "@inertiajs/react";
 import Swal from "sweetalert2";
 import { useState } from "react";
-import { IoChevronBackOutline } from "react-icons/io5";
-import { FaChevronDown } from "react-icons/fa";
+import { IoAdd, IoPencil, IoTrash } from "react-icons/io5";
 import Sidebar from "@/Components/Admin/Sidebar";
-import Searchbar from "@/Components/Admin/Searchbar";
-import Notification from "@/Components/Admin/Notification";
-import Dropdown from "@/Components/Dropdown";
+import Navbar from "@/Components/Navbar/Navbar";
 
 const ManageHeroVisionMision = ({ dataHeroVisionMision, auth }) => {
   const { delete: deleteRecord } = useForm();
@@ -29,7 +26,15 @@ const ManageHeroVisionMision = ({ dataHeroVisionMision, auth }) => {
         deleteRecord(`/hero-vision-mision/${id}`, {
           method: "DELETE",
         });
-        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
+        });
       }
     });
   };
@@ -44,175 +49,145 @@ const ManageHeroVisionMision = ({ dataHeroVisionMision, auth }) => {
           setActiveMenu={setActiveMenu}
         />
       )}
-
       {/* Main Content */}
-      <div className="flex-1 bg-neutral-50 p-6">
+      <div className="mt-16 flex-1 bg-neutral-50 p-6">
         <Head title="Manage Hero Vision Mision | PT Ratu Bio Indonesia" />
-
-        {/* Header */}
-        <div className="mb-4 flex w-full items-center justify-between">
-          {/* Back Button on the Left */}
-          <Link
-            href="/dashboard"
-            className="rounded bg-custom-yellow px-4 py-2 text-black hover:bg-yellow-500"
-          >
-            <IoChevronBackOutline className="h-4 w-4" />
+        <Navbar auth={auth} />
+        {/* Breadcrumb */}
+        <nav className="mb-4 flex items-center space-x-2 font-lexend text-sm text-gray-600">
+          <Link href="/dashboard" className="hover:text-black hover:underline">
+            Dashboard
           </Link>
-
-          {/* Search Bar */}
-          <Searchbar />
-
-          {/* Admin Notification and Avatar */}
-          <div className="flex items-center">
-            <Notification />
-            <div className="relative ms-3">
-              <Dropdown>
-                <Dropdown.Trigger>
-                  <span className="inline-flex rounded-md">
-                    <button
-                      type="button"
-                      className="inline-flex items-center rounded-md border border-transparent px-3 py-2 font-lexend text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
-                    >
-                      {user?.name}
-                      <img
-                        src={`/storage/avatars/${auth.user.id}.png`}
-                        alt={auth.user.name}
-                        className="mx-2 h-10 w-10 rounded-full border border-custom-yellow"
-                      />
-                      <FaChevronDown
-                        className="ml-2 h-2 w-2"
-                        aria-hidden="true"
-                      />
-                    </button>
-                  </span>
-                </Dropdown.Trigger>
-
-                <Dropdown.Content>
-                  <Dropdown.Link
-                    href={route("profile.edit")}
-                    className="font-lexend"
-                  >
-                    Profile
-                  </Dropdown.Link>
-                  <Dropdown.Link
-                    href={route("logout")}
-                    className="font-lexend"
-                    method="post"
-                    as="button"
-                  >
-                    Log Out
-                  </Dropdown.Link>
-                </Dropdown.Content>
-              </Dropdown>
-            </div>
-          </div>
-        </div>
-
+          <span className="text-gray-400">/</span>
+          <span className="font-bold text-black">
+            Manage Hero Vision Mision
+          </span>
+        </nav>
         {/* Title */}
         <h2 className="mb-4 font-lexend text-xl font-bold">
           Vision Mision Page Content
         </h2>
-
-        {/* Table */}
+        {/* Add Button */}
         <div className="mb-6 flex justify-end">
           <Link
             href="/hero-vision-mision/create"
-            className="rounded bg-custom-yellow px-4 py-2 font-lexend text-black hover:bg-yellow-500"
+            className="rounded bg-custom-yellow p-2 text-black hover:bg-yellow-500"
           >
-            Add New Hero Vision Mision
+            <IoAdd size={24} />
           </Link>
         </div>
-
-        <table className="min-w-full divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-md">
-          <thead>
-            <tr>
-              <th className="px-4 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
-                Title
-              </th>
-              <th className="px-4 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
-                Subtitle
-              </th>
-              <th className="px-5 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
-                Description <br /> 1
-              </th>
-              <th className="px-5 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
-                Description <br /> 2
-              </th>
-              <th className="px-5 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
-                Description <br /> 3
-              </th>
-              <th className="px-5 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
-                Description <br /> 4
-              </th>
-              <th className="px-5 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
-                Description <br /> 5
-              </th>
-              <th className="px-5 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
-                Description <br /> 6
-              </th>
-              <th className="px-5 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
-                Image URL
-              </th>
-              <th className="px-5 py-3 text-left font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200 bg-white">
-            {dataHeroVisionMision.map((heroVisionMision) => (
-              <tr key={heroVisionMision.id}>
-                <td className="w-1/6 px-6 py-3 font-lexend text-sm tracking-wider text-gray-700">
+        {/* Table for Desktop */}
+        <div className="hidden md:block">
+          <table className="min-w-full divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-md">
+            <thead>
+              <tr>
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                  Title
+                </th>
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                  Subtitle
+                </th>
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                  Description
+                </th>
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                  Image URL
+                </th>
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200 bg-white">
+              {dataHeroVisionMision.map((heroVisionMision) => (
+                <tr key={heroVisionMision.id}>
+                  <td className="max-w-[150px] truncate whitespace-nowrap px-4 py-4 text-center font-lexend text-sm text-gray-700">
+                    {heroVisionMision.title}
+                  </td>
+                  <td className="max-w-[150px] truncate whitespace-nowrap px-4 py-4 text-center font-lexend text-sm text-gray-700">
+                    {heroVisionMision.subtitle}
+                  </td>
+                  <td className="max-w-[200px] truncate whitespace-nowrap px-4 py-4 text-center font-lexend text-sm text-gray-700">
+                    {`${heroVisionMision.description1} ${heroVisionMision.description2} ${heroVisionMision.description3} ${heroVisionMision.description4} ${heroVisionMision.description5} ${heroVisionMision.description6}`}
+                  </td>
+                  <td className="max-w-[150px] truncate whitespace-nowrap px-4 py-4 text-center font-lexend text-sm text-gray-700">
+                    <a
+                      href={heroVisionMision.image_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline"
+                    >
+                      View Image
+                    </a>
+                  </td>
+                  <td className="flex flex-col items-center justify-center space-y-2 whitespace-nowrap px-4 py-4 font-lexend text-sm font-medium">
+                    {/* Edit Button with Icon */}
+                    <Link
+                      href={`/hero-vision-mision/${heroVisionMision.id}/edit`}
+                      className="text-indigo-600 hover:text-indigo-900"
+                    >
+                      <IoPencil size={20} />
+                    </Link>
+                    {/* Delete Button with Icon */}
+                    <button
+                      onClick={() => handleDelete(heroVisionMision.id)}
+                      className="text-red-600 hover:text-red-900"
+                    >
+                      <IoTrash size={20} />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {/* Mobile View */}
+        <div className="block md:hidden">
+          {dataHeroVisionMision.map((heroVisionMision) => (
+            <div
+              key={heroVisionMision.id}
+              className="mb-4 rounded-lg bg-white p-4 shadow-md"
+            >
+              <div className="flex justify-between">
+                <h3 className="font-lexend text-base font-bold text-gray-800">
                   {heroVisionMision.title}
-                </td>
-                <td className="w-1/6 px-6 py-3 font-lexend text-sm tracking-wider text-gray-700">
-                  {heroVisionMision.subtitle}
-                </td>
-                <td className="w-1/6 px-6 py-3 font-lexend text-sm tracking-wider text-gray-700">
-                  {heroVisionMision.description1}
-                </td>
-                <td className="w-1/6 px-6 py-3 font-lexend text-sm tracking-wider text-gray-700">
-                  {heroVisionMision.description2}
-                </td>
-                <td className="w-1/6 px-6 py-3 font-lexend text-sm tracking-wider text-gray-700">
-                  {heroVisionMision.description3}
-                </td>
-                <td className="w-1/6 px-6 py-3 font-lexend text-sm tracking-wider text-gray-700">
-                  {heroVisionMision.description4}
-                </td>
-                <td className="w-1/6 px-6 py-3 font-lexend text-sm tracking-wider text-gray-700">
-                  {heroVisionMision.description5}
-                </td>
-                <td className="w-1/6 px-6 py-3 font-lexend text-sm tracking-wider text-gray-700">
-                  {heroVisionMision.description6}
-                </td>
-                <td className="w-1/6 px-6 py-3 font-lexend text-sm tracking-wider text-gray-700">
-                  <a
-                    href={heroVisionMision.image_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline"
-                  >
-                    View Image
-                  </a>
-                </td>
-                <td className="whitespace-nowrap px-6 py-4 font-lexend text-sm font-medium">
+                </h3>
+                <div className="flex items-center space-x-2">
+                  {/* Edit Button with Icon */}
                   <Link
                     href={`/hero-vision-mision/${heroVisionMision.id}/edit`}
                     className="text-indigo-600 hover:text-indigo-900"
                   >
-                    Edit
+                    <IoPencil size={20} />
                   </Link>
+                  {/* Delete Button with Icon */}
                   <button
                     onClick={() => handleDelete(heroVisionMision.id)}
-                    className="ml-4 text-red-600 hover:text-red-900"
+                    className="text-red-600 hover:text-red-900"
                   >
-                    Delete
+                    <IoTrash size={20} />
                   </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                </div>
+              </div>
+              <p className="mt-2 font-lexend text-sm text-gray-600">
+                {heroVisionMision.subtitle}
+              </p>
+              <p className="mt-2 font-lexend text-sm text-gray-600">
+                {`${heroVisionMision.description1} ${heroVisionMision.description2} ${heroVisionMision.description3} ${heroVisionMision.description4} ${heroVisionMision.description5} ${heroVisionMision.description6}`}
+              </p>
+              <div className="mt-2 flex space-x-4">
+                <a
+                  href={heroVisionMision.image_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  View Image
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
