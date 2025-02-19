@@ -115,13 +115,13 @@ const ManageHeroFacilitiesValue = ({ dataHeroFacilitiesValue, auth }) => {
             <tbody className="divide-y divide-gray-200 bg-white">
               {dataHeroFacilitiesValue.map((heroFacilitiesValue) => (
                 <tr key={heroFacilitiesValue.id}>
-                  <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                  <td className="max-w-[150px] truncate whitespace-nowrap px-4 py-4 text-center font-lexend text-sm text-gray-700">
                     {heroFacilitiesValue.title}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                  <td className="max-w-[150px] truncate whitespace-nowrap px-4 py-4 text-center font-lexend text-sm text-gray-700">
                     {heroFacilitiesValue.heading1}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                  <td className="max-w-[150px] truncate whitespace-nowrap px-4 py-4 text-center font-lexend text-sm text-gray-700">
                     {heroFacilitiesValue.content1}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
@@ -134,10 +134,10 @@ const ManageHeroFacilitiesValue = ({ dataHeroFacilitiesValue, auth }) => {
                       Image 1
                     </a>
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                  <td className="max-w-[150px] truncate whitespace-nowrap px-4 py-4 text-center font-lexend text-sm text-gray-700">
                     {heroFacilitiesValue.heading2}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                  <td className="max-w-[150px] truncate whitespace-nowrap px-4 py-4 text-center font-lexend text-sm text-gray-700">
                     {heroFacilitiesValue.content2}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">

@@ -6,7 +6,7 @@ export default function HeroCompany() {
     youtubeLink: "https://www.youtube.com/@ratubioindonesia1684",
     title: "PT Ratu Bio Indonesia",
     description:
-      "Hadir sebagai solusi sanitasi dan higiene yang berkualitas tinggi, bersama BioQueen. Kami, bersama BioQueen, berkomitmen untuk membantu masyarakat Indonesia dalam memperoleh produk perawatan kulit yang efikasi tinggi dan aman untuk jangka panjang. Mitra Aesthetic Medic juga telah memberikan kontribusi signifikan terhadap kesehatan kulit masyarakat Indonesia.",
+      "Hadir sebagai solusi sanitasi dan higiene yang berkualitas tinggi, bersama BioQueen. Kami, bersama BioQueen, berkomitmen untuk membantu masyarakat Indonesia dalam memperoleh produk perawatan kulit yang efikasi tinggi dan aman untuk jangka panjang.",
   };
 
   return (

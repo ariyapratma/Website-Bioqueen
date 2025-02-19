@@ -117,7 +117,7 @@ const ManageHeaderHome = ({ dataHeaderHome, auth }) => {
                       rel="noopener noreferrer"
                       className="text-blue-600 hover:underline"
                     >
-                      Image
+                      View Image
                     </a>
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
@@ -188,7 +188,7 @@ const ManageHeaderHome = ({ dataHeaderHome, auth }) => {
                   rel="noopener noreferrer"
                   className="text-blue-600 hover:underline"
                 >
-                  Image
+                  View Image
                 </a>
                 <a
                   href={headerHome.whatsapp_link}

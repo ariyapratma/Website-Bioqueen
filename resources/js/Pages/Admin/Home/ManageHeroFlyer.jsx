@@ -102,7 +102,7 @@ const ManageHeroFlyer = ({ dataHeroFlyer, auth }) => {
                       rel="noopener noreferrer"
                       className="text-blue-600 hover:underline"
                     >
-                      Image
+                      View Image
                     </a>
                   </td>
                   <td className="flex flex-col items-center justify-center space-y-2 whitespace-nowrap px-6 py-4 font-lexend text-sm font-medium">
@@ -160,7 +160,7 @@ const ManageHeroFlyer = ({ dataHeroFlyer, auth }) => {
                   rel="noopener noreferrer"
                   className="text-blue-600 hover:underline"
                 >
-                  Image
+                  View Image
                 </a>
               </p>
             </div>

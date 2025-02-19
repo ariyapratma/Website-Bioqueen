@@ -84,28 +84,28 @@ const ManageHeroMaklonValue = ({ dataHeroMaklonValue, auth }) => {
           <table className="min-w-full divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-md">
             <thead>
               <tr>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Title
                 </th>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Heading 1
                 </th>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Content 1
                 </th>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Image URL 1
                 </th>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Heading 2
                 </th>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Content 2
                 </th>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Image URL 2
                 </th>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Actions
                 </th>
               </tr>
@@ -113,13 +113,13 @@ const ManageHeroMaklonValue = ({ dataHeroMaklonValue, auth }) => {
             <tbody className="divide-y divide-gray-200 bg-white">
               {dataHeroMaklonValue.map((heroMaklonValue) => (
                 <tr key={heroMaklonValue.id}>
-                  <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                  <td className="max-w-[150px] truncate whitespace-nowrap px-4 py-4 text-center font-lexend text-sm text-gray-700">
                     {heroMaklonValue.title}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                  <td className="max-w-[150px] truncate whitespace-nowrap px-4 py-4 text-center font-lexend text-sm text-gray-700">
                     {heroMaklonValue.heading1}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                  <td className="max-w-[150px] truncate whitespace-nowrap px-4 py-4 text-center font-lexend text-sm text-gray-700">
                     {heroMaklonValue.content1}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
@@ -132,10 +132,10 @@ const ManageHeroMaklonValue = ({ dataHeroMaklonValue, auth }) => {
                       Image 1
                     </a>
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                  <td className="max-w-[150px] truncate whitespace-nowrap px-4 py-4 text-center font-lexend text-sm text-gray-700">
                     {heroMaklonValue.heading2}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                  <td className="max-w-[150px] truncate whitespace-nowrap px-4 py-4 text-center font-lexend text-sm text-gray-700">
                     {heroMaklonValue.content2}
                   </td>
                   <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
