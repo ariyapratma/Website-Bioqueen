@@ -1,7 +1,7 @@
 import { Link, Head, useForm } from "@inertiajs/react";
 import Swal from "sweetalert2";
 import { useState } from "react";
-import { IoAdd, IoPencil, IoTrash } from "react-icons/io5";
+import { IoPencil, IoTrash } from "react-icons/io5";
 import Sidebar from "@/Components/Admin/Sidebar";
 import Navbar from "@/Components/Navbar/Navbar";
 
@@ -65,15 +65,6 @@ const ManageOrderProducts = ({ orders = [], auth }) => {
         <h2 className="mb-4 font-lexend text-xl font-bold">
           Order Page Content
         </h2>
-        {/* Add Button */}
-        <div className="mb-6 flex justify-end">
-          <Link
-            href="/orders/create"
-            className="rounded bg-custom-yellow p-2 text-black hover:bg-yellow-500"
-          >
-            <IoAdd size={24} />
-          </Link>
-        </div>
         {/* Table for Desktop */}
         <div className="hidden md:block">
           <h3 className="mb-4 font-lexend text-lg font-bold">Order Summary</h3>
