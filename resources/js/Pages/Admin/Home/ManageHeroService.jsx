@@ -84,31 +84,31 @@ const ManageHeroService = ({ dataHeroService, auth }) => {
           <table className="min-w-full divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-md">
             <thead>
               <tr>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Title
                 </th>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Image URL
                 </th>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Heading 1
                 </th>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Content 1
                 </th>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Heading 2
                 </th>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Content 2
                 </th>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Heading 3
                 </th>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Content 3
                 </th>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Actions
                 </th>
               </tr>
@@ -129,22 +129,22 @@ const ManageHeroService = ({ dataHeroService, auth }) => {
                       Image
                     </a>
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                  <td className="max-w-[150px] truncate whitespace-nowrap px-4 py-4 text-center font-lexend text-sm text-gray-700">
                     {heroService.heading1}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                  <td className="max-w-[150px] truncate whitespace-nowrap px-4 py-4 text-center font-lexend text-sm text-gray-700">
                     {heroService.content1}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                  <td className="max-w-[150px] truncate whitespace-nowrap px-4 py-4 text-center font-lexend text-sm text-gray-700">
                     {heroService.heading2}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                  <td className="max-w-[150px] truncate whitespace-nowrap px-4 py-4 text-center font-lexend text-sm text-gray-700">
                     {heroService.content2}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                  <td className="max-w-[150px] truncate whitespace-nowrap px-4 py-4 text-center font-lexend text-sm text-gray-700">
                     {heroService.heading3}
                   </td>
-                  <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                  <td className="max-w-[150px] truncate whitespace-nowrap px-4 py-4 text-center font-lexend text-sm text-gray-700">
                     {heroService.content3}
                   </td>
                   <td className="flex flex-col items-center justify-center space-y-2 whitespace-nowrap px-6 py-4 font-lexend text-sm font-medium">
