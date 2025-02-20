@@ -32,7 +32,7 @@ export default function HeroAddReview() {
       return;
     }
 
-    post(route("hero-review.store"), {
+    post(route("user.hero-review.store"), {
       onSuccess: () => {
         Swal.fire({
           title: "Success!",
@@ -86,7 +86,7 @@ export default function HeroAddReview() {
               }}
               className={`w-full rounded-md border ${
                 errors.name ? "border-red-500" : "border-gray-300"
-              } p-4 focus:outline-none focus:ring-0`}
+              } p-4  focus:border-black focus:ring-black`}
             />
             {errors.name && (
               <p className="mt-1 text-xs text-red-500">{errors.name}</p>
@@ -105,7 +105,7 @@ export default function HeroAddReview() {
               }}
               className={`w-full rounded-md border ${
                 errors.comment ? "border-red-500" : "border-gray-300"
-              } p-4 focus:outline-none focus:ring-0`}
+              } p-4 focus:border-black focus:ring-black`}
               rows="4"
             ></textarea>
             {errors.comment && (

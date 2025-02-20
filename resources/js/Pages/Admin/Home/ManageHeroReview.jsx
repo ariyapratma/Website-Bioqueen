@@ -23,7 +23,7 @@ const ManageHeroReview = ({ dataHeroReview, auth }) => {
       backdrop: false,
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteRecord(`/admin-hero-review/${id}`, {
+        deleteRecord(`/admin/hero-review/${id}`, {
           method: "DELETE",
         });
         Swal.fire({
