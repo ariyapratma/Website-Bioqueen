@@ -285,7 +285,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     // Route Payment
-    Route::middleware(['auth', 'verified', 'role:user'])->group(function () {
+    Route::middleware(['auth', 'verified', 'role:user|admin'])->group(function () {
         Route::get('/payment/{orderId}', [PaymentController::class, 'index'])->name('payment.index');
         Route::post('/payment/{orderId}', [PaymentController::class, 'store'])->name('payment.store');
     });

@@ -29,17 +29,24 @@ export default function Dashboard({ auth }) {
           setActiveMenu={setActiveMenu}
         />
       )}
-
       {/* Main Content */}
-      <div className="h-screen flex-1 overflow-y-auto bg-neutral-50 p-6">
+      <div className="mt-16 flex-1 bg-neutral-50 p-6">
         <Head title="Dashboard | PT Ratu Bio Indonesia" />
         <Navbar auth={auth} />
-
+        {/* Breadcrumb */}
+        <nav className="mb-4 flex items-center space-x-2 font-lexend text-sm text-gray-600">
+          <Link href="/dashboard" className="hover:text-black hover:underline">
+            Dashboard
+          </Link>
+          <span className="text-gray-400">/</span>
+          <span className="font-bold text-black">
+            {user.role.charAt(0).toUpperCase() + user.role.slice(1)} Dashboard
+          </span>
+        </nav>
         {/* Title Dashboard */}
-        <h2 className="mb-4 mt-16 font-lexend text-xl font-bold">
+        <h2 className="mb-4 font-lexend text-xl font-bold">
           Dashboard {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
         </h2>
-
         {/* Dashboard Content */}
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {/* Admin Cards */}
@@ -50,14 +57,13 @@ export default function Dashboard({ auth }) {
                 <h3 className="font-lexend text-lg font-semibold">
                   User Information
                 </h3>
-                <div className="mt-4">
-                  <p>Name: {user.name}</p>
-                  <p>Email: {user.email}</p>
+                <div className="mt-4 space-y-2">
+                  <p className="text-gray-700">Name: {user.name}</p>
+                  <p className="text-gray-700">Email: {user.email}</p>
                 </div>
               </div>
             </>
           )}
-
           {/* User Cards */}
           {user.role === "user" && (
             <>
@@ -66,9 +72,9 @@ export default function Dashboard({ auth }) {
                 <h3 className="font-lexend text-lg font-semibold">
                   User Information
                 </h3>
-                <div className="mt-4">
-                  <p>Name: {user.name}</p>
-                  <p>Email: {user.email}</p>
+                <div className="mt-4 space-y-2">
+                  <p className="text-gray-700">Name: {user.name}</p>
+                  <p className="text-gray-700">Email: {user.email}</p>
                 </div>
               </div>
             </>
