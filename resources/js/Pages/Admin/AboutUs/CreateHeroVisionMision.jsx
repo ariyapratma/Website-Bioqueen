@@ -99,7 +99,7 @@ const CreateHeroVisionMision = ({ auth }) => {
         </nav>
         {/* Title */}
         <h2 className="mb-4 font-lexend text-xl font-bold">
-          Create Vision Mision Page Content
+          Create AboutUs Page Content
         </h2>
         {/* Form */}
         <form

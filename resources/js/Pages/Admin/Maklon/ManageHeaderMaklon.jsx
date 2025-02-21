@@ -63,7 +63,7 @@ const ManageHeaderMaklon = ({ dataHeaderMaklon, auth }) => {
         </nav>
         {/* Title */}
         <h2 className="mb-4 font-lexend text-xl font-bold">
-          About Us Page Content
+          AboutUs Page Content
         </h2>
         {/* Add Button */}
         <div className="mb-6 flex justify-end">

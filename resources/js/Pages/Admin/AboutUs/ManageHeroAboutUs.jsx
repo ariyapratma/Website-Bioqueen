@@ -51,7 +51,7 @@ const ManageHeroAboutUs = ({ dataHeroAboutUs, auth }) => {
       )}
       {/* Main Content */}
       <div className="mt-16 flex-1 bg-neutral-50 p-6">
-        <Head title="Manage Hero About Us | PT Ratu Bio Indonesia" />
+        <Head title="Manage Hero AboutUs | PT Ratu Bio Indonesia" />
         <Navbar auth={auth} />
         {/* Breadcrumb */}
         <nav className="mb-4 flex items-center space-x-2 font-lexend text-sm text-gray-600">
@@ -59,11 +59,11 @@ const ManageHeroAboutUs = ({ dataHeroAboutUs, auth }) => {
             Dashboard
           </Link>
           <span className="text-gray-400">/</span>
-          <span className="font-bold text-black">Manage Hero About Us</span>
+          <span className="font-bold text-black">Manage Hero AboutUs</span>
         </nav>
         {/* Title */}
         <h2 className="mb-4 font-lexend text-xl font-bold">
-          About Us Page Content
+          AboutUs Page Content
         </h2>
         {/* Add Button */}
         <div className="mb-6 flex justify-end">

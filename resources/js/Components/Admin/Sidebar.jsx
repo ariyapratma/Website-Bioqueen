@@ -5,7 +5,6 @@ import {
   FaInfoCircle,
   FaBoxOpen,
   FaClipboardList,
-  FaIndustry,
   FaChevronDown,
 } from "react-icons/fa";
 
@@ -257,7 +256,7 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
             >
               <span className="flex items-center">
                 <FaInfoCircle className="mr-2" />
-                {!collapsed && "About Us Page Content"}
+                {!collapsed && "AboutUs Page Content"}
               </span>
               {!collapsed && (
                 <FaChevronDown

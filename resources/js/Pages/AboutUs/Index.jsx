@@ -17,7 +17,7 @@ const Index = ({ auth }) => {
 
   return (
     <div className="flex min-h-screen flex-col overflow-x-hidden">
-      <Head title="About Us | PT Ratu Bio Indonesia" />
+      <Head title="AboutUs | PT Ratu Bio Indonesia" />
       <Navbar auth={auth} />
       <main className="flex-grow">
         {/* HeaderAboutUs */}

@@ -26,7 +26,7 @@ const CreateHeaderAboutUs = ({ auth }) => {
       onSuccess: () => {
         Swal.fire({
           title: "Success!",
-          text: "Header About Us has been added successfully.",
+          text: "Header AboutUs has been added successfully.",
           icon: "success",
           confirmButtonText: "OK",
           confirmButtonColor: "#000000",
@@ -39,7 +39,7 @@ const CreateHeaderAboutUs = ({ auth }) => {
       onError: () => {
         Swal.fire({
           title: "Error!",
-          text: "There was an error adding the Header About Us.",
+          text: "There was an error adding the Header AboutUs.",
           icon: "error",
           confirmButtonText: "OK",
           confirmButtonColor: "#000000",
@@ -62,7 +62,7 @@ const CreateHeaderAboutUs = ({ auth }) => {
       )}
       {/* Main Content */}
       <div className="mt-16 flex-1 bg-neutral-50 p-6">
-        <Head title="Create Header About Us | PT Ratu Bio Indonesia" />
+        <Head title="Create Header AboutUs | PT Ratu Bio Indonesia" />
         <Navbar auth={auth} />
         {/* Breadcrumb */}
         <nav className="mb-4 flex items-center space-x-2 font-lexend text-sm text-gray-600">
@@ -74,14 +74,14 @@ const CreateHeaderAboutUs = ({ auth }) => {
             href="/header-about-us"
             className="hover:text-black hover:underline"
           >
-            Manage Header About Us
+            Manage Header AboutUs
           </Link>
           <span className="text-gray-400">/</span>
-          <span className="font-bold text-black">Create Header About Us</span>
+          <span className="font-bold text-black">Create Header AboutUs</span>
         </nav>
         {/* Title */}
         <h2 className="mb-4 font-lexend text-xl font-bold">
-          Create About Us Page Content
+          Create AboutUs Page Content
         </h2>
         {/* Form */}
         <form
@@ -161,7 +161,7 @@ const CreateHeaderAboutUs = ({ auth }) => {
             disabled={processing}
             className="w-full rounded-md bg-custom-yellow px-6 py-2 font-lexend font-semibold text-black hover:bg-yellow-600 sm:w-auto"
           >
-            {processing ? "Saving..." : "Save Header About Us"}
+            {processing ? "Saving..." : "Save Header AboutUs"}
           </button>
         </form>
       </div>

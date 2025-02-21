@@ -95,7 +95,7 @@ const CreateHeroOurGallery = ({ auth }) => {
         </nav>
         {/* Title */}
         <h2 className="mb-4 font-lexend text-xl font-bold">
-          Create Our Gallery Page Content
+          Create AboutUs Page Content
         </h2>
         {/* Form */}
         <form

@@ -52,7 +52,7 @@ const ManageHeaderAboutUs = ({ dataHeaderAboutUs, auth }) => {
 
       {/* Main Content */}
       <div className="mt-16 flex-1 bg-neutral-50 p-6">
-        <Head title="Manage Header About Us | PT Ratu Bio Indonesia" />
+        <Head title="Manage Header AboutUs | PT Ratu Bio Indonesia" />
         <Navbar auth={auth} />
 
         {/* Breadcrumb */}
@@ -61,12 +61,12 @@ const ManageHeaderAboutUs = ({ dataHeaderAboutUs, auth }) => {
             Dashboard
           </Link>
           <span className="text-gray-400">/</span>
-          <span className="font-bold text-black">Manage Header About Us</span>
+          <span className="font-bold text-black">Manage Header AboutUs</span>
         </nav>
 
         {/* Title */}
         <h2 className="mb-4 font-lexend text-xl font-bold">
-          About Us Page Content
+          AboutUs Page Content
         </h2>
 
         {/* Add Button */}
