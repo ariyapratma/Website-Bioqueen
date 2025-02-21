@@ -12,16 +12,21 @@ const EditHeaderHome = ({ dataHeaderHome, auth }) => {
     image_url: null,
     whatsapp_link: dataHeaderHome.whatsapp_link || "",
   });
+
   const [activeMenu, setActiveMenu] = useState("header-home");
+
   const user = auth.user;
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // Using FormData to handle file upload
     const formData = new FormData();
     formData.append("title", data.title);
     formData.append("description", data.description);
     formData.append("image_url", data.image_url);
     formData.append("whatsapp_link", data.whatsapp_link);
+
     put(`/header-home/${dataHeaderHome.id}`, {
       data: formData,
       onSuccess: () => {
@@ -61,33 +66,33 @@ const EditHeaderHome = ({ dataHeaderHome, auth }) => {
           setActiveMenu={setActiveMenu}
         />
       )}
-
       {/* Main Content */}
       <div className="mt-16 flex-1 bg-neutral-50 p-6">
         <Head title="Edit Header Home | PT Ratu Bio Indonesia" />
         <Navbar auth={auth} />
-
         {/* Breadcrumb */}
         <nav className="mb-4 flex items-center space-x-2 font-lexend text-sm text-gray-600">
+          <Link href="/dashboard" className="hover:text-black hover:underline">
+            Dashboard
+          </Link>
+          <span className="text-gray-400">/</span>
           <Link
             href="/header-home"
             className="hover:text-black hover:underline"
           >
-            Home Page Content
+            Manage Header Home
           </Link>
           <span className="text-gray-400">/</span>
           <span className="font-bold text-black">Edit Header Home</span>
         </nav>
-
         {/* Title */}
         <h2 className="mb-4 font-lexend text-xl font-bold">
           Edit Home Page Content
         </h2>
-
         {/* Form */}
         <form
           onSubmit={handleSubmit}
-          className="space-y-4 md:w-1/2"
+          className="mx-auto w-full max-w-screen-lg space-y-4"
           encType="multipart/form-data"
         >
           <div>
@@ -109,7 +114,6 @@ const EditHeaderHome = ({ dataHeaderHome, auth }) => {
               <span className="text-sm text-red-600">{errors.title}</span>
             )}
           </div>
-
           <div>
             <label
               htmlFor="description"
@@ -129,7 +133,6 @@ const EditHeaderHome = ({ dataHeaderHome, auth }) => {
               <span className="text-sm text-red-600">{errors.description}</span>
             )}
           </div>
-
           <div>
             <label
               htmlFor="image_url"
@@ -158,7 +161,6 @@ const EditHeaderHome = ({ dataHeaderHome, auth }) => {
               <span className="text-sm text-red-600">{errors.image_url}</span>
             )}
           </div>
-
           <div>
             <label
               htmlFor="whatsapp_link"
@@ -180,7 +182,6 @@ const EditHeaderHome = ({ dataHeaderHome, auth }) => {
               </span>
             )}
           </div>
-
           <button
             type="submit"
             disabled={processing}

@@ -2,10 +2,8 @@ import { Link, Head, useForm } from "@inertiajs/react";
 import Swal from "sweetalert2";
 import { useState } from "react";
 import { Inertia } from "@inertiajs/inertia";
-import { IoChevronBackOutline } from "react-icons/io5";
-import { FaChevronDown } from "react-icons/fa";
 import Sidebar from "@/Components/Admin/Sidebar";
-import Dropdown from "@/Components/Dropdown";
+import Navbar from "@/Components/Navbar/Navbar";
 
 const EditHeroCompany = ({ dataHeroCompany, auth }) => {
   const { data, setData, put, processing, errors } = useForm({
@@ -60,6 +58,7 @@ const EditHeroCompany = ({ dataHeroCompany, auth }) => {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
+      {/* Sidebar */}
       {auth && (
         <Sidebar
           auth={auth}
@@ -67,70 +66,33 @@ const EditHeroCompany = ({ dataHeroCompany, auth }) => {
           setActiveMenu={setActiveMenu}
         />
       )}
-
-      <div className="flex-1 bg-neutral-50 p-6">
+      {/* Main Content */}
+      <div className="mt-16 flex-1 bg-neutral-50 p-6">
         <Head title="Edit Hero Company | PT Ratu Bio Indonesia" />
-
-        <div className="mb-4 flex w-full items-center justify-between">
+        <Navbar auth={auth} />
+        {/* Breadcrumb */}
+        <nav className="mb-4 flex items-center space-x-2 font-lexend text-sm text-gray-600">
+          <Link href="/dashboard" className="hover:text-black hover:underline">
+            Dashboard
+          </Link>
+          <span className="text-gray-400">/</span>
           <Link
             href="/hero-company"
-            className="rounded bg-custom-yellow px-4 py-2 text-black hover:bg-yellow-500"
+            className="hover:text-black hover:underline"
           >
-            <IoChevronBackOutline className="h-4 w-4" />
+            Manage Hero Company
           </Link>
-
-          {/* Admin and Avatar */}
-          <div className="flex items-center">
-            <div className="relative ms-3">
-              <Dropdown>
-                <Dropdown.Trigger>
-                  <span className="inline-flex rounded-md">
-                    <button
-                      type="button"
-                      className="inline-flex items-center rounded-md border border-transparent px-3 py-2 font-lexend text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
-                    >
-                      {user?.name}
-                      <img
-                        src={`/storage/avatars/${auth.user.id}.png`}
-                        alt={auth.user.name}
-                        className="mx-2 h-10 w-10 rounded-full border border-custom-yellow"
-                      />
-                      <FaChevronDown
-                        className="ml-2 h-2 w-2"
-                        aria-hidden="true"
-                      />
-                    </button>
-                  </span>
-                </Dropdown.Trigger>
-
-                <Dropdown.Content>
-                  <Dropdown.Link
-                    href={route("profile.edit")}
-                    className="font-lexend"
-                  >
-                    Profile
-                  </Dropdown.Link>
-                  <Dropdown.Link
-                    href={route("logout")}
-                    className="font-lexend"
-                    method="post"
-                    as="button"
-                  >
-                    Log Out
-                  </Dropdown.Link>
-                </Dropdown.Content>
-              </Dropdown>
-            </div>
-          </div>
-        </div>
-
+          <span className="text-gray-400">/</span>
+          <span className="font-bold text-black">Edit Hero Company</span>
+        </nav>
+        {/* Title */}
         <h2 className="mb-4 font-lexend text-xl font-bold">
           Edit Home Page Content
         </h2>
-
+        {/* Form */}
         <form
           onSubmit={handleSubmit}
-          className="space-y-4"
+          className="mx-auto w-full max-w-screen-lg space-y-4"
           encType="multipart/form-data"
         >
           <div>
@@ -140,17 +102,27 @@ const EditHeroCompany = ({ dataHeroCompany, auth }) => {
             >
               Image
             </label>
-            <input
-              id="image_url"
-              type="file"
-              onChange={(e) => setData("image_url", e.target.files[0])}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-            />
+            <div className="mt-1 flex items-center">
+              <label
+                htmlFor="file-upload"
+                className="cursor-pointer rounded-md bg-custom-yellow px-4 py-2 font-lexend text-black hover:bg-yellow-600"
+              >
+                Choose File
+              </label>
+              <input
+                id="file-upload"
+                type="file"
+                onChange={(e) => setData("image_url", e.target.files[0])}
+                className="hidden"
+              />
+              <span className="ml-3 text-sm text-gray-500">
+                {data.image_url ? data.image_url.name : "No file chosen"}
+              </span>
+            </div>
             {errors.image_url && (
               <span className="text-sm text-red-600">{errors.image_url}</span>
             )}
           </div>
-
           <div>
             <label
               htmlFor="youtube_link"
@@ -163,7 +135,7 @@ const EditHeroCompany = ({ dataHeroCompany, auth }) => {
               type="text"
               value={data.youtube_link}
               onChange={(e) => setData("youtube_link", e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
               required
             />
             {errors.youtube_link && (
@@ -172,7 +144,6 @@ const EditHeroCompany = ({ dataHeroCompany, auth }) => {
               </span>
             )}
           </div>
-
           <div>
             <label
               htmlFor="title"
@@ -185,14 +156,13 @@ const EditHeroCompany = ({ dataHeroCompany, auth }) => {
               type="text"
               value={data.title}
               onChange={(e) => setData("title", e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
               required
             />
             {errors.title && (
               <span className="text-sm text-red-600">{errors.title}</span>
             )}
           </div>
-
           <div>
             <label
               htmlFor="description"
@@ -204,7 +174,7 @@ const EditHeroCompany = ({ dataHeroCompany, auth }) => {
               id="description"
               value={data.description}
               onChange={(e) => setData("description", e.target.value)}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black sm:text-sm"
               rows="4"
               required
             />
@@ -212,11 +182,10 @@ const EditHeroCompany = ({ dataHeroCompany, auth }) => {
               <span className="text-sm text-red-600">{errors.description}</span>
             )}
           </div>
-
           <button
             type="submit"
             disabled={processing}
-            className="w-full rounded-md bg-custom-yellow py-2 font-lexend font-semibold text-black hover:bg-yellow-600"
+            className="w-full rounded-md bg-custom-yellow px-6 py-2 font-lexend font-semibold text-black hover:bg-yellow-600 sm:w-auto"
           >
             {processing ? "Saving..." : "Update Hero Company"}
           </button>
