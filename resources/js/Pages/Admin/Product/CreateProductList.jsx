@@ -113,7 +113,7 @@ const CreateProductList = ({ auth }) => {
         </nav>
         {/* Title */}
         <h2 className="mb-4 font-lexend text-xl font-bold">
-          Create Product List
+          Create Product Page Content
         </h2>
         {/* Form */}
         <form

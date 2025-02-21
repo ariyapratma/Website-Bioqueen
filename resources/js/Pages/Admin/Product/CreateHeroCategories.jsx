@@ -86,7 +86,7 @@ const CreateHeroCategories = ({ auth }) => {
         </nav>
         {/* Title */}
         <h2 className="mb-4 font-lexend text-xl font-bold">
-          Create Hero Categories
+          Create Product Page Content
         </h2>
         {/* Form */}
         <form
