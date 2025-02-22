@@ -11,34 +11,31 @@ const MyOrder = ({ orders = [], auth }) => {
 
   const handleCancelOrders = () => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, cancel orders!",
-      confirmButtonColor: "#000000",
-      cancelButtonColor: "#d33",
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, cancel orders!",
+        confirmButtonColor: "#000000",
+        cancelButtonColor: "#d33",
     }).then((result) => {
-      if (result.isConfirmed) {
-        Inertia.patch(
-          "/my-order/cancel",
-          {},
-          {
-            onSuccess: () => {
-              Swal.fire(
-                "Cancelled!",
-                "Your order has been cancelled.",
-                "success",
-              );
-            },
-            onError: () => {
-              Swal.fire("Error!", "Failed to cancel orders.", "error");
-            },
-          },
-        );
-      }
+        if (result.isConfirmed) {
+            Inertia.patch(
+                "/my-order/cancel",
+                {},
+                {
+                    onSuccess: () => {
+                        Swal.fire("Cancelled!", "Your order has been cancelled.", "success");
+                    },
+                    onError: (errors) => {
+                        // Handle error jika pembatalan gagal
+                        Swal.fire("Error!", errors?.error || "Failed to cancel orders.", "error");
+                    },
+                }
+            );
+        }
     });
-  };
+};
 
   // Fungsi untuk memberikan warna berdasarkan status
   const getStatusColor = (status) => {

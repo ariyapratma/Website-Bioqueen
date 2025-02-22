@@ -138,13 +138,6 @@ const ManageOrderProducts = ({ orders = [], auth }) => {
                       {order.status || "N/A"}
                     </td>
                     <td className="flex flex-col items-center justify-center space-y-2 whitespace-nowrap px-6 py-4 font-lexend text-sm font-medium">
-                      {/* Edit Button with Icon */}
-                      <Link
-                        href={`/orders/${order.id}/edit`}
-                        className="text-indigo-600 hover:text-indigo-900"
-                      >
-                        <IoPencil size={20} />
-                      </Link>
                       {/* Delete Button with Icon */}
                       <button
                         onClick={() => handleDelete(order.id)}
@@ -179,13 +172,6 @@ const ManageOrderProducts = ({ orders = [], auth }) => {
                     Order #{order.id}
                   </h3>
                   <div className="flex items-center space-x-2">
-                    {/* Edit Button with Icon */}
-                    <Link
-                      href={`/orders/${order.id}/edit`}
-                      className="text-indigo-600 hover:text-indigo-900"
-                    >
-                      <IoPencil size={20} />
-                    </Link>
                     {/* Delete Button with Icon */}
                     <button
                       onClick={() => handleDelete(order.id)}

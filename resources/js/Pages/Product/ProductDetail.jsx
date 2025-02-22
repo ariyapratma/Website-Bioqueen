@@ -7,8 +7,8 @@ import { useState, useEffect } from "react";
 const ProductDetail = () => {
   const { props } = usePage();
   const { product, auth, category } = props;
-  const [quantity, setQuantity] = useState(1);
-  const [totalPrice, setTotalPrice] = useState(product.price);
+  const [quantity, setQuantity] = useState(200);
+  const [totalPrice, setTotalPrice] = useState(product.price * 200);
   const [cartItems, setCartItems] = useState(0);
   const fetchCartItems = async () => {
     try {
@@ -108,11 +108,21 @@ const ProductDetail = () => {
   };
 
   const decreaseQuantity = () => {
-    if (quantity > 1) {
+    if (quantity > 200) {
       setQuantity((prevQuantity) => {
         const newQuantity = prevQuantity - 1;
         updateTotalPrice(newQuantity);
         return newQuantity;
+      });
+    } else {
+      Swal.fire({
+        title: "Minimum Quantity Reached!",
+        text: "The minimum quantity allowed is 200.",
+        icon: "warning",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#000000",
+        scrollbarPadding: false,
+        backdrop: false,
       });
     }
   };
@@ -190,6 +200,12 @@ const ProductDetail = () => {
                   +
                 </button>
               </div>
+
+              {/* Informasi Minimum Order */}
+              <p className="mt-2 text-sm text-gray-500">
+                Minimum order quantity is 200.
+              </p>
+
               {/* Tombol Add to Cart */}
               <div className="mt-6 flex space-x-4 font-lexend font-semibold">
                 <button

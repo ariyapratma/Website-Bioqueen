@@ -44,6 +44,19 @@ const Index = ({ auth, cartItems }) => {
       return;
     }
 
+    if (quantity < 200) {
+      Swal.fire({
+        title: "Minimum Quantity Reached!",
+        text: "The minimum quantity allowed is 200.",
+        icon: "warning",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#000000",
+        scrollbarPadding: false,
+        backdrop: false,
+      });
+      return;
+    }
+
     const newUpdatedItems = updatedItems.map((item) =>
       item.id === itemId
         ? {
@@ -228,7 +241,7 @@ const Index = ({ auth, cartItems }) => {
       <Navbar auth={auth} />
       <main className="flex-grow px-4 py-16 md:px-4 md:py-32">
         <div className="container mx-auto mb-16 px-4">
-          <h1 className="mb-8 text-center font-lexend text-2xl font-bold text-gray-800 sm:text-4xl">
+          <h1 className="mb-8 mt-12 text-center font-lexend text-2xl font-bold text-gray-800 sm:text-4xl">
             Your Cart
           </h1>
 
@@ -329,7 +342,7 @@ const Index = ({ auth, cartItems }) => {
                                 Math.max(1, e.target.value),
                               )
                             }
-                            className="w-16 rounded-md border p-2 text-center text-lg font-medium text-gray-800 focus:ring-2 focus:ring-custom-yellow"
+                            className="w-16 rounded-md border p-2 text-center text-sm font-medium text-gray-800 focus:ring-2 focus:ring-custom-yellow"
                           />
 
                           <button
@@ -341,6 +354,10 @@ const Index = ({ auth, cartItems }) => {
                             +
                           </button>
                         </div>
+                        {/* Keterangan Minimum Order */}
+                        <p className="text-center text-sm text-gray-500">
+                          Minimum order quantity is 200.
+                        </p>
                       </td>
 
                       <td className="px-6 py-4 text-center text-sm font-medium text-gray-800">

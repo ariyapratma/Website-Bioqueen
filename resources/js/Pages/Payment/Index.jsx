@@ -10,7 +10,6 @@ const Index = ({ order, orderInformation, auth }) => {
   useEffect(() => {
     const fetchSnapToken = async () => {
       if (!order || !order.id) return;
-
       setIsLoading(true);
 
       try {
@@ -31,6 +30,18 @@ const Index = ({ order, orderInformation, auth }) => {
         if (!response.ok) {
           const errorData = await response.json();
           console.error("Error response:", errorData);
+
+          // Handle pesanan yang dibatalkan
+          if (errorData.error === "This order has been cancelled") {
+            Swal.fire({
+              title: "Order Cancelled",
+              text: "This order has been cancelled and cannot be paid.",
+              icon: "error",
+              confirmButtonText: "OK",
+              confirmButtonColor: "#d33",
+            });
+          }
+
           throw new Error("Failed to fetch SnapToken");
         }
 
@@ -48,22 +59,74 @@ const Index = ({ order, orderInformation, auth }) => {
   }, [order]);
 
   // Fungsi untuk memproses pembayaran
-  const handlePayment = () => {
+  // const handlePayment = () => {
+  //   if (!snapToken) {
+  //     alert("SnapToken belum tersedia. Silakan coba lagi.");
+  //     return;
+  //   }
+
+  //   window.snap.pay(snapToken, {
+  //     onSuccess: (result) => console.log("Payment success", result),
+  //     onPending: (result) => console.log("Payment pending", result),
+  //     onError: (result) => console.error("Payment error", result),
+  //   });
+  // };
+
+  // const formatPrice = (price) => {
+  //   const validPrice = price && !isNaN(price) ? price : 0;
+  //   return validPrice.toLocaleString("id-ID");
+  // };
+
+  const handlePayment = async () => {
     if (!snapToken) {
       alert("SnapToken belum tersedia. Silakan coba lagi.");
       return;
     }
 
-    window.snap.pay(snapToken, {
-      onSuccess: (result) => console.log("Payment success", result),
-      onPending: (result) => console.log("Payment pending", result),
-      onError: (result) => console.error("Payment error", result),
-    });
-  };
+    try {
+      // Periksa apakah token masih valid
+      const response = await fetch(`/payment/validate-token`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "X-CSRF-TOKEN": document
+            .querySelector('meta[name="csrf-token"]')
+            .getAttribute("content"),
+        },
+        body: JSON.stringify({ snap_token: snapToken }),
+      });
 
-  const formatPrice = (price) => {
-    const validPrice = price && !isNaN(price) ? price : 0;
-    return validPrice.toLocaleString("id-ID");
+      const data = await response.json();
+      if (!data.valid) {
+        // Token hangus, regenerasi token baru
+        const newResponse = await fetch(`/payment/${order.id}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "X-CSRF-TOKEN": document
+              .querySelector('meta[name="csrf-token"]')
+              .getAttribute("content"),
+          },
+          body: JSON.stringify({
+            total_price: order.total_price,
+          }),
+        });
+
+        const newData = await newResponse.json();
+        setSnapToken(newData.snap_token);
+      }
+
+      // Proses pembayaran
+      window.snap.pay(snapToken, {
+        onSuccess: (result) => console.log("Payment success", result),
+        onPending: (result) => console.log("Payment pending", result),
+        onError: (result) => console.error("Payment error", result),
+      });
+    } catch (error) {
+      console.error("Error processing payment:", error);
+    }
   };
 
   return (

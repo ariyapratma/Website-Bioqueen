@@ -105,9 +105,48 @@ class OrderController extends Controller
         }
     }
 
+    // public function myOrder()
+    // {
+    //     $orders = Order::with('product')->where('user_id', auth()->id())->get();
+    //     $OrderInformations = OrderInformation::with(['paymentMethod', 'shippingMethod'])
+    //         ->whereIn('order_id', $orders->pluck('id'))
+    //         ->get()
+    //         ->keyBy('order_id');
+
+    //     return Inertia::render('User/Order/MyOrder', [
+    //         'orders' => $orders->map(function ($order) use ($OrderInformations) {
+    //             $info = optional($OrderInformations->get($order->id));
+    //             return [
+    //                 'id' => $order->id,
+    //                 'created_at' => $order->created_at->format('Y-m-d H:i:s'),
+    //                 'status' => $order->status,
+    //                 'product' => optional($order->product)->only(['id', 'name', 'image_url']),
+    //                 'total_price' => $order->total_price,
+    //                 'quantity' => $order->quantity,
+    //                 'informations' => [
+    //                     'recipient_name' => $info?->recipient_name,
+    //                     'email' => $info?->email,
+    //                     'notes' => $info?->notes,
+    //                     'address' => $info?->address,
+    //                     'postal_code' => $info?->postal_code,
+    //                     'payment_method' => optional($info?->paymentMethod)->only(['id', 'name']),
+    //                     'shipping_method' => optional($info?->shippingMethod)->only(['id', 'name']),
+    //                 ],
+    //             ];
+    //         }),
+    //     ]);
+    // }
+
     public function myOrder()
     {
         $orders = Order::with('product')->where('user_id', auth()->id())->get();
+
+        if ($orders->isEmpty()) {
+            return Inertia::render('User/Order/MyOrder', [
+                'orders' => [],
+            ]);
+        }
+
         $OrderInformations = OrderInformation::with(['paymentMethod', 'shippingMethod'])
             ->whereIn('order_id', $orders->pluck('id'))
             ->get()
@@ -137,9 +176,24 @@ class OrderController extends Controller
         ]);
     }
 
+    // public function cancel()
+    // {
+    //     $orders = Order::where('user_id', auth()->id())->get();
+
+    //     if ($orders->isEmpty()) {
+    //         return back()->with('error', 'No orders found to cancel.');
+    //     }
+
+    //     $orders->each->update(['status' => 'Cancelled']);
+
+    //     return back()->with('success', 'All orders have been successfully cancelled!');
+    // }
+
     public function cancel()
     {
-        $orders = Order::where('user_id', auth()->id())->get();
+        $orders = Order::where('user_id', auth()->id())
+            ->whereIn('status', ['Processing'])
+            ->get();
 
         if ($orders->isEmpty()) {
             return back()->with('error', 'No orders found to cancel.');
