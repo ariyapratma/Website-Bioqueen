@@ -57,12 +57,12 @@ Route::get('/product/{slug}', [ProductController::class, 'showCategory'])->name(
 Route::get('/product/{category}/{product}', [ProductController::class, 'showProduct'])->name('product.detail');
 
 // Route Notification
-Route::middleware(['auth', 'verified', 'role:admin|user'])->group(function () {
-    // Endpoint untuk mendapatkan semua notifikasi
-    Route::get('/notification', [NotificationController::class, 'index'])->name('notifications.index');
-
-    // Endpoint untuk menandai notifikasi sebagai "dibaca"
+Route::middleware(['auth', 'verified', 'role:user|admin'])->group(function () {
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+    Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
+    Route::delete('/notifications', [NotificationController::class, 'destroyAll'])->name('notifications.destroyAll');
 });
 
 // Cart Page : 

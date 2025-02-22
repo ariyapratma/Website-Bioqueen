@@ -16,11 +16,9 @@ export default function Navbar({ auth }) {
     if (user) {
       fetchCartItems();
     }
-
     const handleCartUpdate = () => {
       fetchCartItems();
     };
-
     window.addEventListener("cartUpdated", handleCartUpdate);
     return () => {
       window.removeEventListener("cartUpdated", handleCartUpdate);
@@ -74,7 +72,7 @@ export default function Navbar({ auth }) {
         />
 
         {/* Navigation Links */}
-        <div className="absolute left-1/2 hidden -translate-x-1/2 transform items-center gap-2 text-sm md:flex md:text-base">
+        <div className="hidden md:flex md:gap-4">
           {menuItems.map(({ name, path }) => (
             <Link
               key={path}
@@ -91,12 +89,14 @@ export default function Navbar({ auth }) {
           ))}
         </div>
 
-        {/* Notification dan Cart tetap tampil untuk semua user */}
+        {/* Right Section (Icons and Profile) */}
         <div className="flex items-center gap-4">
           {/* Notification Icon */}
           <div
-            className={`relative flex items-center justify-center rounded-full transition-all duration-300 ${
-              url === "/notifications" ? "text-black" : "hover:bg-gray-100"
+            className={`relative flex items-center justify-center rounded-full p-1 transition-all duration-300 ${
+              url === "/notifications"
+                ? "bg-gray-100 text-black"
+                : "hover:bg-gray-100"
             }`}
           >
             <Notification />
@@ -105,17 +105,13 @@ export default function Navbar({ auth }) {
           {/* Cart Icon */}
           <Link
             href="/cart"
-            className={`relative flex items-center justify-center rounded-full transition-all duration-300 ${
-              url === "/cart" ? "text-black" : "hover:bg-gray-100"
+            className={`relative flex items-center justify-center rounded-full p-1 transition-all duration-300 ${
+              url === "/cart" ? "bg-gray-100 text-black" : "hover:bg-gray-100"
             }`}
           >
-            <BsCart
-              className={`h-5 w-5 transition-colors duration-300 ${
-                url === "/cart" ? "text-black" : "text-gray-700"
-              }`}
-            />
+            <BsCart className="h-6 w-6 text-gray-700" />
             {cartItems > 0 && (
-              <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
+              <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
                 {cartItems}
               </span>
             )}
@@ -123,7 +119,7 @@ export default function Navbar({ auth }) {
 
           {/* Jika user belum login, tampilkan Register & Login */}
           {!user && url !== "/cart" && (
-            <div className="flex items-center gap-2">
+            <div className="hidden md:flex md:items-center md:gap-2">
               <Link
                 href="/register"
                 className="px-3 py-1 font-lexend text-sm text-gray-700 transition-all duration-300 hover:text-black"
@@ -160,7 +156,6 @@ export default function Navbar({ auth }) {
                     />
                   </button>
                 </Dropdown.Trigger>
-
                 <Dropdown.Content>
                   <Dropdown.Link href="/dashboard" className="font-lexend">
                     Dashboard
@@ -184,6 +179,7 @@ export default function Navbar({ auth }) {
             </div>
           )}
         </div>
+
         {/* Mobile Menu Button */}
         <div className="flex items-center md:hidden">
           <button
@@ -209,7 +205,7 @@ export default function Navbar({ auth }) {
 
         {/* Mobile Menu */}
         {menuOpen && (
-          <ul className="absolute left-0 right-0 top-14 z-50 mt-2 rounded-md bg-white p-4 text-gray-800 md:hidden">
+          <ul className="absolute left-0 right-0 top-14 z-50 mt-2 rounded-md bg-white p-4 text-gray-800 shadow-lg md:hidden">
             {menuItems.map(({ name, path }) => (
               <li key={path}>
                 <Link

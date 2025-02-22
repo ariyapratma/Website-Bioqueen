@@ -123,16 +123,20 @@ const Index = ({ auth, cartItems }) => {
         icon: "error",
         confirmButtonText: "OK",
         confirmButtonColor: "#000000",
+        scrollbarPadding: false,
+        backdrop: false,
       });
       return;
     }
 
+    // Persiapkan data pesanan
     const orderData = updatedItems.map((item) => ({
       product_id: item.product?.id,
       quantity: item.quantity,
       price: item.product?.price,
     }));
 
+    // Validasi data
     if (!orderData.every((item) => item.product_id && item.quantity >= 1)) {
       Swal.fire({
         title: "Error!",
@@ -144,33 +148,47 @@ const Index = ({ auth, cartItems }) => {
       return;
     }
 
+    // Hitung total harga
     const totalPrice = orderData.reduce(
       (sum, item) => sum + item.price * item.quantity,
       0,
     );
 
     try {
-      await Inertia.post("/order", {
-        orderItems: orderData,
-        total_price: totalPrice,
+      // Kirim data ke backend
+      const response = await fetch("/order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": document
+            .querySelector('meta[name="csrf-token"]')
+            ?.getAttribute("content"),
+        },
+        body: JSON.stringify({
+          orderItems: orderData,
+          total_price: totalPrice,
+        }),
       });
 
-      Swal.fire({
-        title: "Success!",
-        text: "Your order has been placed successfully.",
-        icon: "success",
-        confirmButtonText: "OK",
-        confirmButtonColor: "#000000",
-      }).then(() => {
-        Inertia.visit("/order");
-      });
+      const result = await response.json();
 
-      setCompletedStep((prev) => Math.max(prev, activeMenu + 1));
-      setActiveMenu((prev) => prev + 1);
+      if (response.ok) {
+        Swal.fire({
+          title: "Success!",
+          text: "Your order has been placed successfully.",
+          icon: "success",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+        }).then(() => {
+          window.location.href = "/order";
+        });
+      } else {
+        throw new Error(result.error || "Failed to process your order.");
+      }
     } catch (error) {
       Swal.fire({
         title: "Error!",
-        text: "There was an error processing your order.",
+        text: error.message || "There was an error processing your order.",
         icon: "error",
         confirmButtonText: "OK",
         confirmButtonColor: "#000000",

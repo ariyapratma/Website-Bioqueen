@@ -52,144 +52,39 @@ class OrderController extends Controller
         }
     }
 
-    // public function store(Request $request)
-    // {
-    //     $validated = $request->validate([
-    //         'orderItems' => 'required|array',
-    //         'orderItems.*.product_id' => 'required|exists:products,id',
-    //         'orderItems.*.quantity' => 'required|integer|min:1',
-    //         'orderItems.*.price' => 'required|numeric|min:0',
-    //         'total_price' => 'required|numeric|min:0',
-    //     ]);
-
-    //     foreach ($validated['orderItems'] as $item) {
-    //         Order::create([
-    //             'id' => uniqid(),
-    //             'user_id' => auth()->id(),
-    //             'product_id' => $item['product_id'],
-    //             'quantity' => $item['quantity'],
-    //             'total_price' => $item['price'] * $item['quantity'],
-    //             'status' => 'Processing',
-    //         ]);
-    //     }
-
-    //     return redirect()->route('order.index')->with('success', 'Order successfully placed!');
-    // }
-
     public function store(Request $request)
-{
-    // Validasi data input
-    $validated = $request->validate([
-        'orderItems' => 'required|array',
-        'orderItems.*.product_id' => 'required|exists:products,id',
-        'orderItems.*.quantity' => 'required|integer|min:1',
-        'orderItems.*.price' => 'required|numeric|min:0',
-        'total_price' => 'required|numeric|min:0',
-    ]);
-
-    // Variabel untuk menyimpan detail pesanan
-    $orderDetails = [];
-    $user = auth()->user();
-
-    // Simpan setiap item pesanan ke tabel orders
-    foreach ($validated['orderItems'] as $item) {
-        Order::create([
-            'id' => uniqid(),
-            'user_id' => auth()->id(),
-            'product_id' => $item['product_id'],
-            'quantity' => $item['quantity'],
-            'total_price' => $item['price'] * $item['quantity'],
-            'status' => 'Processing',
+    {
+        // Validasi data input
+        $validated = $request->validate([
+            'orderItems' => 'required|array',
+            'orderItems.*.product_id' => 'required|exists:products,id',
+            'orderItems.*.quantity' => 'required|integer|min:1',
+            'orderItems.*.price' => 'required|numeric|min:0',
+            'total_price' => 'required|numeric|min:0',
         ]);
 
-        // Tambahkan detail produk ke array untuk notifikasi
-        $productName = Product::find($item['product_id'])->name;
-        $orderDetails[] = "{$productName} (Qty: {$item['quantity']})";
-    }
+        // Simpan data pesanan
+        foreach ($validated['orderItems'] as $item) {
+            Order::create([
+                'id' => uniqid(),
+                'user_id' => auth()->id(),
+                'product_id' => $item['product_id'],
+                'quantity' => $item['quantity'],
+                'total_price' => $item['price'] * $item['quantity'],
+                'status' => 'Processing',
+            ]);
+        }
 
-    // Buat pesan notifikasi
-    $message = "Checkout successful! User: " . $user->name . ". Products: " . implode(", ", $orderDetails);
-
-    // Debugging: Cek apakah pesan notifikasi berhasil dibuat
-    \Log::info('Notification message:', ['message' => $message]);
-
-    // Simpan notifikasi ke database
-    try {
+        // Simpan notifikasi
         Notification::create([
             'user_id' => auth()->id(),
-            'message' => $message,
-            'read' => false, // Notifikasi belum dibaca
-        ]);
-    } catch (\Exception $e) {
-        \Log::error('Error saving notification:', ['error' => $e->getMessage()]);
-        return redirect()->route('order.index')->with('error', 'Failed to save notification.');
-    }
-
-    // Redirect dengan pesan sukses
-    return redirect()->route('order.index')->with('success', 'Order successfully placed!');
-}
-
-    public function storeInformations(Request $request)
-    {
-        $validated = $request->validate([
-            'recipient_name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'notes' => 'nullable|string',
-            'address' => 'required|string',
-            'postal_code' => 'required|integer',
-            'payment_method_id' => 'required|exists:payment_methods,id',
-            'shipping_method_id' => 'required|exists:shipping_methods,id',
+            'message' => 'Checkout successful!',
+            'read' => false,
         ]);
 
-        $existingOrder = Order::where('user_id', auth()->id())->where('status', 'Processing')->first();
-        if (!$existingOrder) {
-            return response()->json(['error' => 'No active order found.'], 400);
-        }
-
-        try {
-            $orderInformation = $existingOrder->OrderInformations()->create($validated);
-
-            return response()->json([
-                'message' => 'Order information submitted successfully!',
-                'orderInformation' => $orderInformation,
-            ]);
-        } catch (\Exception $e) {
-            \Log::error('Error saving order information:', ['error' => $e->getMessage()]);
-            return response()->json(['error' => 'Failed to save order information.'], 500);
-        }
+        // Kembalikan respons JSON
+        return response()->json(['success' => 'Order successfully placed!']);
     }
-
-    // public function myOrder()
-    // {
-    //     $orders = Order::with('product')->where('user_id', auth()->id())->get();
-    //     $OrderInformations = OrderInformation::with(['paymentMethod', 'shippingMethod'])
-    //         ->whereIn('order_id', $orders->pluck('id'))
-    //         ->get()
-    //         ->keyBy('order_id');
-
-    //     return Inertia::render('User/Order/MyOrder', [
-    //         'orders' => $orders->map(function ($order) use ($OrderInformations) {
-    //             $info = optional($OrderInformations->get($order->id));
-    //             return [
-    //                 'id' => $order->id,
-    //                 'created_at' => $order->created_at->format('Y-m-d H:i:s'),
-    //                 'status' => $order->status,
-    //                 'product' => optional($order->product)->only(['id', 'name', 'image_url']),
-    //                 'total_price' => $order->total_price,
-    //                 'quantity' => $order->quantity,
-    //                 'informations' => [
-    //                     'recipient_name' => $info?->recipient_name,
-    //                     'email' => $info?->email,
-    //                     'notes' => $info?->notes,
-    //                     'address' => $info?->address,
-    //                     'postal_code' => $info?->postal_code,
-    //                     'payment_method' => optional($info?->paymentMethod)->only(['id', 'name']),
-    //                     'shipping_method' => optional($info?->shippingMethod)->only(['id', 'name']),
-    //                 ],
-    //             ];
-    //         }),
-    //     ]);
-    // }
 
     public function myOrder()
     {

@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import { RiNotification4Line } from "react-icons/ri";
 
-const Notification = ({ auth }) => {
+const Notification = () => {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
-  const [isOpen, setIsOpen] = useState(false); // State untuk mengontrol dropdown
+  const [isOpen, setIsOpen] = useState(false);
 
   // Fungsi untuk mengambil data notifikasi dari backend
   const fetchNotifications = async () => {
     try {
-      const response = await fetch("/notification", {
+      const response = await fetch("/notifications", {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -17,20 +17,16 @@ const Notification = ({ auth }) => {
         },
         credentials: "include",
       });
-
       if (!response.ok) {
         throw new Error("Failed to fetch notifications");
       }
-
       const data = await response.json();
-      console.log(data);
       setNotifications(data);
-
       // Hitung jumlah notifikasi yang belum dibaca
       const unread = data.filter((notif) => !notif.read).length;
       setUnreadCount(unread);
     } catch (error) {
-      console.error("Error fetching notifications:", error);
+      console.error("Error fetching notifications:", error.message);
     }
   };
 
@@ -39,61 +35,107 @@ const Notification = ({ auth }) => {
     fetchNotifications();
   }, []);
 
-  // Handler untuk menutup dropdown saat klik di luar
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      const notificationIcon = document.querySelector(".notification-icon");
-      if (notificationIcon && !notificationIcon.contains(event.target)) {
-        setIsOpen(false);
+  // Handler untuk menandai semua notifikasi sebagai dibaca
+  const markAllAsRead = async () => {
+    try {
+      const response = await fetch("/notifications/mark-all-as-read", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+      if (!response.ok) {
+        throw new Error("Failed to mark notifications as read");
       }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+      // Perbarui state notifikasi setelah berhasil
+      fetchNotifications();
+    } catch (error) {
+      console.error("Error marking all notifications as read:", error.message);
+    }
+  };
 
   return (
-    <div className="relative inline-block">
+    <div className="relative flex items-center justify-center p-1">
       {/* Ikon Notifikasi */}
-      <div
-        className="notification-icon relative cursor-pointer"
+      <RiNotification4Line
+        className="h-6 w-6 text-gray-700 cursor-pointer"
         onClick={() => setIsOpen(!isOpen)} // Toggle dropdown
-      >
-        <RiNotification4Line className="h-5 w-5 text-gray-700 transition-colors duration-300" />
-        {/* Badge untuk notifikasi yang belum dibaca */}
-        {unreadCount > 0 && (
-          <span className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
-            {unreadCount}
-          </span>
-        )}
-      </div>
+      />
+      {/* Badge untuk notifikasi yang belum dibaca */}
+      {unreadCount > 0 && (
+        <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
+          {unreadCount}
+        </span>
+      )}
 
       {/* Dropdown untuk menampilkan daftar notifikasi */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-64 rounded-md bg-white shadow-lg z-50">
-          <div className="p-4 border-b">
-            <p className="text-sm font-semibold text-gray-800">
-              Notifications for {auth?.user?.name}
-            </p>
+        <div className="absolute right-0 z-50 mt-2 w-72 rounded-lg bg-white shadow-xl ring-1 ring-black ring-opacity-5">
+          <div className="p-4">
+            <h3 className="text-sm font-semibold text-gray-800">
+              Notifications
+            </h3>
           </div>
-          {notifications.length === 0 ? (
-            <p className="p-4 text-center text-gray-500">No notifications</p>
-          ) : (
-            <ul>
-              {notifications.map((notif) => (
+          <ul className="max-h-64 overflow-y-auto">
+            {notifications.length === 0 ? (
+              <li className="p-4 text-center text-sm text-gray-500">
+                No notifications
+              </li>
+            ) : (
+              notifications.map((notif) => (
                 <li
                   key={notif.id}
-                  className={`border-b p-3 ${
-                    notif.read ? "bg-gray-100" : "bg-white"
+                  className={`flex items-start gap-3 p-4 ${
+                    notif.read
+                      ? "bg-gray-50 hover:bg-gray-100"
+                      : "bg-white hover:bg-gray-100"
                   }`}
                 >
-                  <p>{notif.message}</p>
+                  {/* Icon */}
+                  <div className="flex-shrink-0">
+                    <svg
+                      className={`h-5 w-5 ${notif.read ? "text-gray-400" : "text-black"}`}
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                      />
+                    </svg>
+                  </div>
+                  {/* Konten Notifikasi */}
+                  <div className="flex-grow">
+                    <p
+                      className={`text-sm font-medium ${
+                        notif.read ? "text-gray-600" : "text-black"
+                      }`}
+                    >
+                      {notif.message}
+                    </p>
+                    <p className="mt-1 text-xs text-gray-500">
+                      {new Date(notif.created_at).toLocaleString()}
+                    </p>
+                  </div>
                 </li>
-              ))}
-            </ul>
-          )}
+              ))
+            )}
+          </ul>
+          {/* Footer Dropdown */}
+          <div className="border-t border-gray-200">
+            <button
+              className="block w-full px-4 py-2 text-left text-sm text-black hover:bg-gray-100"
+              onClick={markAllAsRead}
+            >
+              Mark all as read
+            </button>
+          </div>
         </div>
       )}
     </div>
