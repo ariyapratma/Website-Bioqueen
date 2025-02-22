@@ -62,6 +62,7 @@ const ProductDetail = () => {
         }),
         credentials: "same-origin",
       });
+      console.log(response);
       const result = await response.json();
       if (response.ok) {
         Swal.fire({

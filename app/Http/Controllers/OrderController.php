@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\PaymentMethod;
 use App\Models\ShippingMethod;
 use App\Models\OrderInformation;
+use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -51,29 +52,82 @@ class OrderController extends Controller
         }
     }
 
+    // public function store(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'orderItems' => 'required|array',
+    //         'orderItems.*.product_id' => 'required|exists:products,id',
+    //         'orderItems.*.quantity' => 'required|integer|min:1',
+    //         'orderItems.*.price' => 'required|numeric|min:0',
+    //         'total_price' => 'required|numeric|min:0',
+    //     ]);
+
+    //     foreach ($validated['orderItems'] as $item) {
+    //         Order::create([
+    //             'id' => uniqid(),
+    //             'user_id' => auth()->id(),
+    //             'product_id' => $item['product_id'],
+    //             'quantity' => $item['quantity'],
+    //             'total_price' => $item['price'] * $item['quantity'],
+    //             'status' => 'Processing',
+    //         ]);
+    //     }
+
+    //     return redirect()->route('order.index')->with('success', 'Order successfully placed!');
+    // }
+
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'orderItems' => 'required|array',
-            'orderItems.*.product_id' => 'required|exists:products,id',
-            'orderItems.*.quantity' => 'required|integer|min:1',
-            'orderItems.*.price' => 'required|numeric|min:0',
-            'total_price' => 'required|numeric|min:0',
+{
+    // Validasi data input
+    $validated = $request->validate([
+        'orderItems' => 'required|array',
+        'orderItems.*.product_id' => 'required|exists:products,id',
+        'orderItems.*.quantity' => 'required|integer|min:1',
+        'orderItems.*.price' => 'required|numeric|min:0',
+        'total_price' => 'required|numeric|min:0',
+    ]);
+
+    // Variabel untuk menyimpan detail pesanan
+    $orderDetails = [];
+    $user = auth()->user();
+
+    // Simpan setiap item pesanan ke tabel orders
+    foreach ($validated['orderItems'] as $item) {
+        Order::create([
+            'id' => uniqid(),
+            'user_id' => auth()->id(),
+            'product_id' => $item['product_id'],
+            'quantity' => $item['quantity'],
+            'total_price' => $item['price'] * $item['quantity'],
+            'status' => 'Processing',
         ]);
 
-        foreach ($validated['orderItems'] as $item) {
-            Order::create([
-                'id' => uniqid(),
-                'user_id' => auth()->id(),
-                'product_id' => $item['product_id'],
-                'quantity' => $item['quantity'],
-                'total_price' => $item['price'] * $item['quantity'],
-                'status' => 'Processing',
-            ]);
-        }
-
-        return redirect()->route('order.index')->with('success', 'Order successfully placed!');
+        // Tambahkan detail produk ke array untuk notifikasi
+        $productName = Product::find($item['product_id'])->name;
+        $orderDetails[] = "{$productName} (Qty: {$item['quantity']})";
     }
+
+    // Buat pesan notifikasi
+    $message = "Checkout successful! User: " . $user->name . ". Products: " . implode(", ", $orderDetails);
+
+    // Debugging: Cek apakah pesan notifikasi berhasil dibuat
+    \Log::info('Notification message:', ['message' => $message]);
+
+    // Simpan notifikasi ke database
+    try {
+        Notification::create([
+            'user_id' => auth()->id(),
+            'message' => $message,
+            'read' => false, // Notifikasi belum dibaca
+        ]);
+    } catch (\Exception $e) {
+        \Log::error('Error saving notification:', ['error' => $e->getMessage()]);
+        return redirect()->route('order.index')->with('error', 'Failed to save notification.');
+    }
+
+    // Redirect dengan pesan sukses
+    return redirect()->route('order.index')->with('success', 'Order successfully placed!');
+}
 
     public function storeInformations(Request $request)
     {

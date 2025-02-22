@@ -6,6 +6,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\AboutUsController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HeroFlyerController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\HeroCompanyController;
 use App\Http\Controllers\HeroServiceController;
 use App\Http\Controllers\ProductListController;
 use App\Http\Controllers\HeaderMaklonController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\HeaderAboutUsController;
 use App\Http\Controllers\HeaderContactController;
 use App\Http\Controllers\HeaderProductController;
@@ -30,7 +32,6 @@ use App\Http\Controllers\HeroMaklonValueController;
 use App\Http\Controllers\HeroVisionMisionController;
 use App\Http\Controllers\HeroExcellenceValueController;
 use App\Http\Controllers\HeroFacilitiesValueController;
-use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,6 +55,15 @@ Route::get('/product', [ProductController::class, 'index'])->name('product');
 Route::get('/product/{slug}', [ProductController::class, 'showCategory'])->name('products.category');
 // Route ProductDetail User
 Route::get('/product/{category}/{product}', [ProductController::class, 'showProduct'])->name('product.detail');
+
+// Route Notification
+Route::middleware(['auth', 'verified', 'role:admin|user'])->group(function () {
+    // Endpoint untuk mendapatkan semua notifikasi
+    Route::get('/notification', [NotificationController::class, 'index'])->name('notifications.index');
+
+    // Endpoint untuk menandai notifikasi sebagai "dibaca"
+    Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+});
 
 // Cart Page : 
 Route::middleware(['auth', 'verified', 'role:admin|user'])->group(function () {
