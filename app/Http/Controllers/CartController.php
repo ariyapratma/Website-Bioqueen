@@ -24,14 +24,6 @@ class CartController extends Controller
 
         ]);
     }
-    // public function index()
-    // {
-    //     $cartItems = Cart::where('user_id', Auth::id())->with('product')->get();
-    //     return Inertia::render('Cart/Index', [
-    //         'cartItems' => $cartItems,
-    //         'auth' => ['user' => Auth::user()],
-    //     ]);
-    // }
 
     /**
      * Store a new cart item or update an existing one.
