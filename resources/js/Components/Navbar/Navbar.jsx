@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, usePage } from "@inertiajs/react";
 import Dropdown from "@/Components/Dropdown";
 import { FaChevronDown } from "react-icons/fa";
-import { BsCart } from "react-icons/bs";
+import { RiShoppingBagLine } from "react-icons/ri"
 import Notification from "../Admin/Notification";
 
 export default function Navbar({ auth }) {
@@ -72,7 +72,7 @@ export default function Navbar({ auth }) {
         />
 
         {/* Navigation Links */}
-        <div className="hidden md:flex md:gap-4">
+        <div className="hidden md:flex md:gap-2">
           {menuItems.map(({ name, path }) => (
             <Link
               key={path}
@@ -90,7 +90,7 @@ export default function Navbar({ auth }) {
         </div>
 
         {/* Right Section (Icons and Profile) */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
           {/* Notification Icon */}
           <div
             className={`relative flex items-center justify-center rounded-full p-1 transition-all duration-300 ${
@@ -99,7 +99,7 @@ export default function Navbar({ auth }) {
                 : "hover:bg-gray-100"
             }`}
           >
-            <Notification />
+            <Notification className="h-6 w-6 text-gray-700" />
           </div>
 
           {/* Cart Icon */}
@@ -109,7 +109,7 @@ export default function Navbar({ auth }) {
               url === "/cart" ? "bg-gray-100 text-black" : "hover:bg-gray-100"
             }`}
           >
-            <BsCart className="h-6 w-6 text-gray-700" />
+            <RiShoppingBagLine className="h-6 w-6 font-lexend text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none" />
             {cartItems > 0 && (
               <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs text-white">
                 {cartItems}
@@ -118,7 +118,7 @@ export default function Navbar({ auth }) {
           </Link>
 
           {/* Jika user belum login, tampilkan Register & Login */}
-          {!user && url !== "/cart" && (
+          {!user && url !== "" && (
             <div className="hidden md:flex md:items-center md:gap-2">
               <Link
                 href="/register"

@@ -74,7 +74,7 @@ const ProductDetail = () => {
           scrollbarPadding: false,
           backdrop: false,
         });
-        window.dispatchEvent(new Event("cartUpdated")); // Picu event untuk memperbarui jumlah item
+        window.dispatchEvent(new Event("cartUpdated"));
       } else {
         Swal.fire({
           title: "Error!",
@@ -138,12 +138,6 @@ const ProductDetail = () => {
           <nav className="mb-8 text-sm text-gray-500">
             <ul className="flex space-x-2 font-lexend font-medium">
               <li>
-                <Link href="/" className="text-gray-600">
-                  Home
-                </Link>
-              </li>
-              <li>/</li>
-              <li>
                 <Link href="/product" className="text-gray-600">
                   Product Category
                 </Link>
@@ -166,18 +160,18 @@ const ProductDetail = () => {
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             {/* Gambar produk */}
             <div className="flex justify-center">
-              <div className="rounded-lg p-4 shadow-lg">
+              <div className="bg-white p-4">
                 <img
                   src={`/storage/${product.image_url}`}
                   alt={product.name}
-                  className="w-full max-w-md rounded-lg object-cover transition-transform duration-300 hover:scale-105"
+                  className="w-full max-w-md rounded-lg object-cover transition-transform duration-300"
                   style={{ aspectRatio: "1 / 1" }}
                 />
               </div>
             </div>
             {/* Detail produk */}
-            <div className="flex flex-col justify-center rounded-lg bg-white p-6 shadow-md">
-              <h1 className="text-4xl font-bold text-gray-800">
+            <div className="flex flex-col justify-center rounded-lg bg-white p-4">
+              <h1 className="text-4xl font-bold text-black">
                 {product.name}
               </h1>
               <p className="mt-4 text-gray-600">{product.description}</p>
@@ -189,14 +183,14 @@ const ProductDetail = () => {
               <div className="mt-6 flex items-center space-x-4">
                 <button
                   onClick={decreaseQuantity}
-                  className="rounded-lg bg-gray-200 px-4 py-2 text-lg font-bold text-gray-700 hover:bg-gray-300"
+                  className="bg-whitetext-black rounded-lg px-3 py-1 text-lg font-bold text-gray-700 shadow-md hover:bg-gray-300 focus:outline-none"
                 >
                   -
                 </button>
                 <span className="text-2xl font-medium">{quantity}</span>
                 <button
                   onClick={increaseQuantity}
-                  className="rounded-lg bg-gray-200 px-4 py-2 text-lg font-bold text-gray-700 hover:bg-gray-300"
+                  className="bg-whitetext-black rounded-lg px-3 py-1 text-lg font-bold text-gray-700 shadow-md hover:bg-gray-300 focus:outline-none"
                 >
                   +
                 </button>
@@ -211,7 +205,7 @@ const ProductDetail = () => {
               <div className="mt-6 flex space-x-4 font-lexend font-semibold">
                 <button
                   onClick={addToCart}
-                  className="w-full rounded-lg bg-custom-yellow py-3 font-semibold text-black transition hover:bg-yellow-600"
+                  className="mt-6 w-full rounded-full bg-black py-3 font-bold text-white transition duration-300 hover:bg-gray-800"
                 >
                   Add to Cart
                 </button>

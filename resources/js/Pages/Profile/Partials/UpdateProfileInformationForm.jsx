@@ -92,11 +92,11 @@ export default function UpdateProfileInformation({
 
           <label
             htmlFor="avatar"
-            className="btn btn-primary absolute left-1/2 top-6 flex -translate-x-1/2 cursor-pointer items-center justify-center rounded-full bg-blue-500 p-2 text-white"
+            className="btn btn-primary absolute left-1/2 top-6 flex -translate-x-1/2 cursor-pointer items-center justify-center rounded-full bg-black p-2 text-white"
             tabIndex={0}
             style={{ zIndex: 10 }}
           >
-            <FaCamera />
+            <FaCamera className="h-6 w-6 font-lexend text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none" />
             <input
               type="file"
               onChange={ChangeAvatar}

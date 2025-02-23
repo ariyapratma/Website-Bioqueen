@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { RiNotification4Line } from "react-icons/ri";
+import { RiNotificationLine } from "react-icons/ri";
 
 const Notification = () => {
   const [notifications, setNotifications] = useState([]);
@@ -59,9 +59,9 @@ const Notification = () => {
   return (
     <div className="relative flex items-center justify-center p-1">
       {/* Ikon Notifikasi */}
-      <RiNotification4Line
-        className="h-6 w-6 text-gray-700 cursor-pointer"
-        onClick={() => setIsOpen(!isOpen)} // Toggle dropdown
+      <RiNotificationLine
+        className="h-6 w-6 cursor-pointer font-lexend text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
+        onClick={() => setIsOpen(!isOpen)}
       />
       {/* Badge untuk notifikasi yang belum dibaca */}
       {unreadCount > 0 && (
@@ -69,15 +69,38 @@ const Notification = () => {
           {unreadCount}
         </span>
       )}
-
       {/* Dropdown untuk menampilkan daftar notifikasi */}
       {isOpen && (
-        <div className="absolute right-0 z-50 mt-2 w-72 rounded-lg bg-white shadow-xl ring-1 ring-black ring-opacity-5">
-          <div className="p-4">
+        <div className="absolute right-0 z-50 mt-16 w-72 translate-x-52 rounded-lg bg-white shadow-xl ring-1 ring-black ring-opacity-5">
+          {/* Header Dropdown dengan tombol close */}
+          <div className="flex items-center justify-between p-4">
             <h3 className="text-sm font-semibold text-gray-800">
               Notifications
             </h3>
+            <button
+              className="mt-20 text-gray-500 hover:text-gray-700"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsOpen(false);
+              }}
+            >
+              <svg
+                className="h-5 w-5"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
           </div>
+          {/* Daftar Notifikasi */}
           <ul className="max-h-64 overflow-y-auto">
             {notifications.length === 0 ? (
               <li className="p-4 text-center text-sm text-gray-500">

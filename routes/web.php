@@ -300,10 +300,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/payment/{orderId}', [PaymentController::class, 'store'])->name('payment.store');
     });
 
-    // Profil pengguna, hanya untuk pengguna yang sudah login
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Profil pengguna, hanya untuk pengguna yang sudah login (Route Profile)
+    Route::middleware(['auth', 'verified', 'role:user|admin'])->group(function () {
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    });
 });
 
 // Route untuk autentikasi (Login, Register)
