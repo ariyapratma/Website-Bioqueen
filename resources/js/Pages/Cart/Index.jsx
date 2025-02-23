@@ -311,7 +311,7 @@ const Index = ({ auth, cartItems }) => {
                 {updatedItems.map((item) => (
                   <div
                     key={item.id}
-                    className="flex items-center justify-between rounded-lg bg-white p-4 shadow-sm"
+                    className="flex items-center justify-between rounded-lg bg-white p-4 shadow-md"
                   >
                     {/* Product Name */}
                     <div className="flex-1">
@@ -338,7 +338,7 @@ const Index = ({ auth, cartItems }) => {
                             Math.max(1, item.quantity - 1),
                           )
                         }
-                        className="bg-whitetext-black rounded-lg px-3 py-1 text-lg font-bold text-gray-700 shadow-sm hover:bg-gray-300 focus:outline-none"
+                        className="bg-whitetext-black rounded-lg px-3 py-1 text-lg font-bold text-gray-700 shadow-md hover:bg-gray-300 focus:outline-none"
                       >
                         -
                       </button>
@@ -349,7 +349,7 @@ const Index = ({ auth, cartItems }) => {
                         onClick={() =>
                           updateQuantity(item.id, item.quantity + 1)
                         }
-                        className="bg-whitetext-black rounded-lg px-3 py-1 text-lg font-bold text-gray-700 shadow-sm hover:bg-gray-300 focus:outline-none"
+                        className="bg-whitetext-black rounded-lg px-3 py-1 text-lg font-bold text-gray-700 shadow-md hover:bg-gray-300 focus:outline-none"
                       >
                         +
                       </button>
@@ -367,7 +367,7 @@ const Index = ({ auth, cartItems }) => {
               </div>
 
               {/* Total Price */}
-              <div className="mt-6 rounded-lg bg-white p-4 shadow-sm">
+              <div className="mt-6 rounded-lg bg-white p-4 shadow-md">
                 <p className="text-sm font-bold">
                   Total Price: Rp {totalPrice.toLocaleString("id-ID")}
                 </p>
