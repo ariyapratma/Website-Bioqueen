@@ -364,13 +364,12 @@ const Index = ({ auth, cartItems }) => {
                     </button>
                   </div>
                 ))}
-              </div>
-
-              {/* Total Price */}
+                {/* Total Price */}
               <div className="mt-6 rounded-lg bg-white p-4 shadow-md">
                 <p className="text-sm font-bold">
                   Total Price: Rp {totalPrice.toLocaleString("id-ID")}
                 </p>
+              </div>
               </div>
 
               {/* Checkout Button */}

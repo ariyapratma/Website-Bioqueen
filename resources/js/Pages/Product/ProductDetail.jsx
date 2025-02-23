@@ -10,6 +10,7 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(200);
   const [totalPrice, setTotalPrice] = useState(product.price * 200);
   const [cartItems, setCartItems] = useState(0);
+
   const fetchCartItems = async () => {
     try {
       const response = await fetch("/cart/items", {
@@ -62,7 +63,7 @@ const ProductDetail = () => {
         }),
         credentials: "same-origin",
       });
-      console.log(response);
+
       const result = await response.json();
       if (response.ok) {
         Swal.fire({
@@ -129,65 +130,64 @@ const ProductDetail = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col overflow-x-hidden">
+    <div className="flex min-h-screen flex-col bg-white">
       <Head title={`${product.name} | PT Ratu Bio Indonesia`} />
       <Navbar auth={auth} />
-      <main className="mb-24 mt-32 flex-grow">
-        <div className="container mx-auto p-6 md:p-10 lg:p-14">
-          {/* Breadcrumb */}
-          <nav className="mb-8 text-sm text-gray-500">
-            <ul className="flex space-x-2 font-lexend font-medium">
-              <li>
-                <Link href="/product" className="text-gray-600">
-                  Product Category
-                </Link>
-              </li>
-              <li>/</li>
-              <li>
-                <Link
-                  href={`/product/${category.slug}`}
-                  className="text-gray-600"
-                >
-                  Product List
-                </Link>
-              </li>
-              <li>/</li>
-              <li>
-                <span className="font-bold text-black">Product Detail</span>
-              </li>
-            </ul>
-          </nav>
+      <main className="container mx-auto mt-24 mb-24 px-6 md:px-10 lg:px-14">
+
+        {/* Single Card Layout */}
+        <div className="rounded-lg -6 md:p-8 lg:p-10">
+           {/* Breadcrumb */}
+        <nav className="mb-8 flex justify-center space-x-2 text-sm font-medium text-gray-600">
+          <Link href="/" className="transition duration-200 hover:text-gray-900">
+            Home
+          </Link>
+          <span>/</span>
+          <Link href="/product" className="transition duration-200 hover:text-gray-900">
+            Product Category
+          </Link>
+          <span>/</span>
+          <Link
+            href={`/product/${category.slug}`}
+            className="transition duration-200 hover:text-gray-900"
+          >
+            Product List
+          </Link>
+          <span>/</span>
+          <span className="font-bold text-black">Product Detail</span>
+        </nav>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            {/* Gambar produk */}
+            {/* Gambar Produk */}
             <div className="flex justify-center">
-              <div className="bg-white p-4 shadow-md">
+              <div className="overflow-hidden rounded-lg">
                 <img
                   src={`/storage/${product.image_url}`}
                   alt={product.name}
-                  className="w-full max-w-md rounded-lg object-cover transition-transform duration-300"
+                  className="w-full max-w-md rounded-lg object-cover transition-transform duration-300 hover:scale-105"
                   style={{ aspectRatio: "1 / 1" }}
                 />
               </div>
             </div>
-            {/* Detail produk */}
-            <div className="flex flex-col justify-center rounded-lg bg-white p-4 shadow-md">
-              <h1 className="text-4xl font-bold text-black">
-                {product.name}
-              </h1>
-              <p className="mt-4 text-gray-600">{product.description}</p>
-              {/* Harga total */}
-              <p className="mt-4 text-2xl font-bold text-gray-800">
+
+            {/* Detail Produk */}
+            <div className="flex flex-col justify-center space-y-6">
+              <h1 className="text-3xl font-bold text-gray-900">{product.name}</h1>
+              <p className="text-gray-600">{product.description}</p>
+
+              {/* Harga Total */}
+              <p className="text-2xl font-bold text-gray-900">
                 Rp {parseFloat(totalPrice).toLocaleString("id-ID")}
               </p>
+
               {/* Kontrol Jumlah Barang */}
-              <div className="mt-6 flex items-center space-x-4">
+              <div className="flex items-center space-x-4">
                 <button
                   onClick={decreaseQuantity}
                   className="bg-whitetext-black rounded-lg px-3 py-1 text-lg font-bold text-gray-700 shadow-md hover:bg-gray-300 focus:outline-none"
                 >
                   -
                 </button>
-                <span className="text-2xl font-medium">{quantity}</span>
+                <span className="text-2xl font-medium text-gray-900">{quantity}</span>
                 <button
                   onClick={increaseQuantity}
                   className="bg-whitetext-black rounded-lg px-3 py-1 text-lg font-bold text-gray-700 shadow-md hover:bg-gray-300 focus:outline-none"
@@ -197,19 +197,15 @@ const ProductDetail = () => {
               </div>
 
               {/* Informasi Minimum Order */}
-              <p className="mt-2 text-sm text-gray-500">
-                Minimum order quantity is 200.
-              </p>
+              <p className="text-sm text-red-500 font-semibold">Minimum order quantity is 200.</p>
 
               {/* Tombol Add to Cart */}
-              <div className="mt-6 flex space-x-4 font-lexend font-semibold">
-                <button
-                  onClick={addToCart}
-                  className="mt-6 w-full rounded-full bg-black py-3 font-bold text-white transition duration-300 hover:bg-gray-800"
-                >
-                  Add to Cart
-                </button>
-              </div>
+              <button
+                onClick={addToCart}
+                className="w-full rounded-lg bg-black px-6 py-3 text-center text-lg font-bold text-white transition hover:bg-gray-800 focus:outline-none md:w-48"
+              >
+                Add to Cart
+              </button>
             </div>
           </div>
         </div>
