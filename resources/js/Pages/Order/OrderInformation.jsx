@@ -29,12 +29,11 @@ const OrderInformation = ({ auth }) => {
       .then((data) => {
         setPaymentMethods(data.payment_methods);
         setShippingMethods(data.shipping_methods);
-      })
+      });
   }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     try {
       const csrfToken = document
         .querySelector('meta[name="csrf-token"]')
@@ -158,11 +157,13 @@ const OrderInformation = ({ auth }) => {
 
         {/* Payment Method Dropdown */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Payment Method</label>
+          <label className="mb-2 block text-sm font-medium text-gray-700">
+            Payment Method
+          </label>
           <select
             value={paymentMethod}
             onChange={(e) => setPaymentMethod(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-black focus:border-black"
+            className="w-full rounded-md border border-gray-300 px-4 py-2 focus:border-black focus:ring-black"
             required
           >
             <option value="">Select Payment Method</option>
@@ -176,11 +177,13 @@ const OrderInformation = ({ auth }) => {
 
         {/* Shipping Method Dropdown */}
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Shipping Method</label>
+          <label className="mb-2 block text-sm font-medium text-gray-700">
+            Shipping Method
+          </label>
           <select
             value={shippingMethod}
             onChange={(e) => setShippingMethod(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-black focus:border-black"
+            className="w-full rounded-md border border-gray-300 px-4 py-2 focus:border-black focus:ring-black"
             required
           >
             <option value="">Select Shipping Method</option>

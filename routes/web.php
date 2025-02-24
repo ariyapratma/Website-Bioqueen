@@ -77,6 +77,7 @@ Route::middleware(['auth', 'verified', 'role:admin|user'])->group(function () {
 // Order Page : 
 Route::middleware(['auth', 'verified', 'role:admin|user'])->group(function () {
     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
+    Route::post('/order/{id}/approve', [OrderController::class, 'approveOrder'])->name('order.approve');
     Route::get('/api/methods', [OrderController::class, 'getMethods']);
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
     Route::post('/order-informations', [OrderController::class, 'storeInformations'])->name('order.storeInformations');

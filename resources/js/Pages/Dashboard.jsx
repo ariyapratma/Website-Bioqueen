@@ -53,13 +53,13 @@ export default function Dashboard({ auth }) {
           {user.role === "admin" && (
             <>
               {/* Card 1: User Information */}
-              <div className="rounded-lg bg-white p-6 shadow-md">
+              <div className="rounded-lg bg-white p-1 w-full shadow-md">
                 <h3 className="font-lexend text-lg font-semibold">
                   User Information
                 </h3>
                 <div className="mt-4 space-y-2">
-                  <p className="text-gray-700">Name: {user.name}</p>
-                  <p className="text-gray-700">Email: {user.email}</p>
+                  <p className="text-gray-700 text-sm">Name: {user.name}</p>
+                  <p className="text-gray-700 text-sm">Email: {user.email}</p>
                 </div>
               </div>
             </>
@@ -68,13 +68,13 @@ export default function Dashboard({ auth }) {
           {user.role === "user" && (
             <>
               {/* Card 1: User Information */}
-              <div className="rounded-lg bg-white p-6 shadow-md">
+              <div className="rounded-lg bg-white p-1 w-full shadow-md">
                 <h3 className="font-lexend text-lg font-semibold">
                   User Information
                 </h3>
                 <div className="mt-4 space-y-2">
-                  <p className="text-gray-700">Name: {user.name}</p>
-                  <p className="text-gray-700">Email: {user.email}</p>
+                  <p className="text-gray-700 text-sm">Name: {user.name}</p>
+                  <p className="text-gray-700 text-sm">Email: {user.email}</p>
                 </div>
               </div>
             </>

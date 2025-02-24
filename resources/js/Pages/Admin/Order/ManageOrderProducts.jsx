@@ -1,7 +1,7 @@
 import { Link, Head, useForm } from "@inertiajs/react";
 import Swal from "sweetalert2";
 import { useState } from "react";
-import { IoPencil, IoTrash } from "react-icons/io5";
+import { IoTrash, IoCheckmarkCircle } from "react-icons/io5";
 import Sidebar from "@/Components/Admin/Sidebar";
 import Navbar from "@/Components/Navbar/Navbar";
 
@@ -9,6 +9,49 @@ const ManageOrderProducts = ({ orders = [], auth }) => {
   const { delete: deleteRecord } = useForm();
   const [activeMenu, setActiveMenu] = useState("manage-order-products");
   const user = auth.user;
+
+  const handleApprove = (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to approve this order?",
+      icon: "question",
+      showCancelButton: true,
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, approve it!",
+      confirmButtonColor: "#000000",
+      scrollbarPadding: false,
+      backdrop: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .post(`/order/${id}/approve`)
+          .then(() => {
+            Swal.fire({
+              title: "Approved!",
+              text: "Order has been approved.",
+              icon: "success",
+              confirmButtonText: "OK",
+              confirmButtonColor: "#000000",
+              scrollbarPadding: false,
+              backdrop: false,
+            });
+            // Refresh halaman atau update state
+            window.location.reload();
+          })
+          .catch((error) => {
+            Swal.fire({
+              title: "Error!",
+              text: error.response?.data?.error || "Failed to approve order.",
+              icon: "error",
+              confirmButtonText: "OK",
+              confirmButtonColor: "#000000",
+              scrollbarPadding: false,
+              backdrop: false,
+            });
+          });
+      }
+    });
+  };
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -37,6 +80,20 @@ const ManageOrderProducts = ({ orders = [], auth }) => {
         });
       }
     });
+  };
+
+  // Fungsi untuk memberikan warna berdasarkan status
+  const getStatusColor = (status) => {
+    switch (status?.toLowerCase()) {
+      case "processing":
+        return "text-blue-500 font-semibold";
+      case "approved":
+        return "text-green-500 font-semibold";
+      case "completed":
+        return "text-green-500 font-semibold";
+      case "cancelled":
+        return "text-red-500 font-semibold";
+    }
   };
 
   return (
@@ -134,10 +191,23 @@ const ManageOrderProducts = ({ orders = [], auth }) => {
                         "id-ID",
                       )}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                    <td
+                      className={`whitespace-nowrap px-6 py-4 text-center font-lexend text-sm ${getStatusColor(
+                        order.status,
+                      )}`}
+                    >
                       {order.status || "N/A"}
                     </td>
                     <td className="flex flex-col items-center justify-center space-y-2 whitespace-nowrap px-6 py-4 font-lexend text-sm font-medium">
+                      {/* Approve Button */}
+                      {order.can_approve && (
+                        <button
+                          onClick={() => handleApprove(order.id)}
+                          className="text-green-600 hover:text-green-900"
+                        >
+                          <IoCheckmarkCircle size={20} />
+                        </button>
+                      )}
                       {/* Delete Button with Icon */}
                       <button
                         onClick={() => handleDelete(order.id)}
@@ -154,7 +224,7 @@ const ManageOrderProducts = ({ orders = [], auth }) => {
         </div>
         {/* Mobile View */}
         <div className="block md:hidden">
-        <h3 className="mb-4 font-lexend text-lg font-bold">Order Summary</h3>
+          <h3 className="mb-4 font-lexend text-lg font-bold">Order Summary</h3>
           {orders.length === 0 ? (
             <div className="mb-4 rounded-lg bg-white p-4 shadow-md">
               <p className="text-center font-lexend text-sm text-gray-600">
