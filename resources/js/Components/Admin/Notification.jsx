@@ -1,14 +1,20 @@
 import { useState, useEffect } from "react";
 import { RiNotificationLine } from "react-icons/ri";
 
-const Notification = () => {
+const Notification = (auth) => {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
 
-  // Fungsi untuk mengambil data notifikasi dari backend
+  // Fungsi untuk mengambil notifikasi
   const fetchNotifications = async () => {
     try {
+      // Periksa apakah pengguna sudah login
+      if (!auth?.user) {
+        console.log("User is not logged in. Skipping notification fetch.");
+        return;
+      }
+
       const response = await fetch("/notifications", {
         method: "GET",
         headers: {
@@ -17,11 +23,14 @@ const Notification = () => {
         },
         credentials: "include",
       });
+
       if (!response.ok) {
         throw new Error("Failed to fetch notifications");
       }
+
       const data = await response.json();
       setNotifications(data);
+
       // Hitung jumlah notifikasi yang belum dibaca
       const unread = data.filter((notif) => !notif.read).length;
       setUnreadCount(unread);
@@ -33,7 +42,7 @@ const Notification = () => {
   // Panggil fungsi fetchNotifications saat komponen dimuat
   useEffect(() => {
     fetchNotifications();
-  }, []);
+  }, [auth]);
 
   // Handler untuk menandai semua notifikasi sebagai dibaca
   const markAllAsRead = async () => {
@@ -51,9 +60,7 @@ const Notification = () => {
       }
       // Perbarui state notifikasi setelah berhasil
       fetchNotifications();
-    } catch (error) {
-      console.error("Error marking all notifications as read:", error.message);
-    }
+    } catch (error) {}
   };
 
   return (

@@ -14,7 +14,6 @@ class NotificationController extends Controller
     public function index()
     {
         if (!auth()->check()) {
-            Log::error('User not authenticated');
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 

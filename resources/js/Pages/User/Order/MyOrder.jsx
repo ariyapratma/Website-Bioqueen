@@ -9,7 +9,6 @@ const MyOrder = ({ orders = [], auth }) => {
   const [activeMenu, setActiveMenu] = useState("my-order");
   const user = auth?.user;
 
-  // Fungsi untuk memeriksa apakah pengguna telah menyelesaikan tahap store dan storeInformations
   const handlePaymentClick = async () => {
     try {
       // Lakukan permintaan ke backend untuk memeriksa status pesanan
@@ -28,7 +27,22 @@ const MyOrder = ({ orders = [], auth }) => {
       if (response.ok) {
         // Jika semua tahap sudah selesai, lanjutkan ke halaman pembayaran
         if (data.isOrderComplete) {
-          Inertia.visit(`/payment/${orders[0]?.id}`);
+          // Ambil order ID pertama yang valid dari daftar pesanan
+          const orderId = orders[0]?.id;
+
+          if (!orderId) {
+            Swal.fire({
+              title: "Error!",
+              text: "No valid order found for payment.",
+              icon: "error",
+              confirmButtonText: "OK",
+              confirmButtonColor: "#000000",
+            });
+            return;
+          }
+
+          // Arahkan pengguna ke halaman pembayaran dengan order ID
+          Inertia.visit(`/payment/${orderId}`);
         } else {
           // Jika belum, berikan peringatan
           Swal.fire({
@@ -37,8 +51,6 @@ const MyOrder = ({ orders = [], auth }) => {
             icon: "warning",
             confirmButtonText: "OK",
             confirmButtonColor: "#000000",
-            scrollbarPadding: false,
-            backdrop: false,
           });
         }
       } else {
@@ -49,8 +61,6 @@ const MyOrder = ({ orders = [], auth }) => {
           icon: "error",
           confirmButtonText: "OK",
           confirmButtonColor: "#000000",
-          scrollbarPadding: false,
-          backdrop: false,
         });
       }
     } catch (error) {
@@ -61,8 +71,6 @@ const MyOrder = ({ orders = [], auth }) => {
         icon: "error",
         confirmButtonText: "OK",
         confirmButtonColor: "#000000",
-        scrollbarPadding: false,
-        backdrop: false,
       });
     }
   };
@@ -108,6 +116,8 @@ const MyOrder = ({ orders = [], auth }) => {
     switch (status?.toLowerCase()) {
       case "processing":
         return "text-blue-500 font-semibold";
+      case "approved":
+        return "text-green-500 font-semibold";
       case "completed":
         return "text-green-500 font-semibold";
       case "cancelled":

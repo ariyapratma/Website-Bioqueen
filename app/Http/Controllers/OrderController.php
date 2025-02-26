@@ -88,6 +88,7 @@ class OrderController extends Controller
 
     public function storeInformations(Request $request)
     {
+        // Validasi input dari request
         $validated = $request->validate([
             'recipient_name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
@@ -96,14 +97,28 @@ class OrderController extends Controller
             'postal_code' => 'required|integer',
             'payment_method_id' => 'required|exists:payment_methods,id',
             'shipping_method_id' => 'required|exists:shipping_methods,id',
+            'user_id' => 'nullable|exists:users,id', // Tambahkan validasi user_id opsional
         ]);
 
-        $existingOrder = Order::where('user_id', auth()->id())->where('status', 'Processing')->first();
+        // Ambil user_id dari request jika ada, atau gunakan auth()->id()
+        $userId = $request->input('user_id') ?? auth()->id();
+
+        // Pastikan user_id valid
+        if (!$userId) {
+            return response()->json(['error' => 'User not authenticated or invalid user ID.'], 401);
+        }
+
+        // Cari pesanan aktif berdasarkan user_id
+        $existingOrder = Order::where('user_id', $userId)
+            ->where('status', 'Processing')
+            ->first();
+
         if (!$existingOrder) {
-            return response()->json(['error' => 'No active order found.'], 400);
+            return response()->json(['error' => 'No active order found for the user.'], 400);
         }
 
         try {
+            // Simpan informasi pesanan
             $orderInformation = $existingOrder->OrderInformations()->create($validated);
 
             return response()->json([
@@ -118,8 +133,7 @@ class OrderController extends Controller
 
     public function myOrder()
     {
-        $orders = Order::with('product')->where('user_id', auth()->id())
-            ->whereNotIn('status', ['Approved'])->get();
+        $orders = Order::with('product')->where('user_id', auth()->id())->get();
 
         if ($orders->isEmpty()) {
             return Inertia::render('User/Order/MyOrder', [
@@ -158,12 +172,25 @@ class OrderController extends Controller
 
     public function checkOrderStatus(Request $request)
     {
-        // Ambil pengguna yang sedang login
-        $user = auth()->user();
+        // Validasi input dari request
+        $validated = $request->validate([
+            'user_id' => 'nullable|exists:users,id', // user_id opsional, tetapi harus valid jika dikirim
+        ]);
 
-        // Periksa apakah ada pesanan dengan status 'Processing'
-        $existingOrder = Order::where('user_id', $user->id)
-            ->where('status', 'Processing')
+        // Ambil user_id dari request jika ada, atau gunakan auth()->id() sebagai fallback
+        $userId = $request->input('user_id') ?? auth()->id();
+
+        // Pastikan user_id valid
+        if (!$userId) {
+            return response()->json([
+                'isOrderComplete' => false,
+                'message' => 'User not authenticated or invalid user ID.',
+            ], 401);
+        }
+
+        // Periksa apakah ada pesanan dengan status 'Processing' atau 'Approved'
+        $existingOrder = Order::where('user_id', $userId)
+            ->whereIn('status', ['Processing', 'Approved']) // Gunakan whereIn untuk memeriksa beberapa status
             ->first();
 
         if (!$existingOrder) {
@@ -193,7 +220,7 @@ class OrderController extends Controller
     public function cancel()
     {
         $orders = Order::where('user_id', auth()->id())
-            ->whereIn('status', ['Processing'])
+            ->whereIn('status', ['Processing', 'Approved'])
             ->get();
 
         if ($orders->isEmpty()) {
@@ -204,27 +231,6 @@ class OrderController extends Controller
 
         return back()->with('success', 'All orders have been successfully cancelled!');
     }
-
-    // public function manageOrders()
-    // {
-    //     $orders = Order::with('product')->get();
-    //     $OrderInformations = OrderInformation::all()->keyBy('order_id');
-
-    //     return Inertia::render('Admin/Order/ManageOrderProducts', [
-    //         'orders' => $orders->map(fn($order) => [
-    //             'id' => $order->id,
-    //             'recipient_name' => optional($OrderInformations->get($order->id))->recipient_name,
-    //             'email' => optional($OrderInformations->get($order->id))->email,
-    //             'address' => optional($OrderInformations->get($order->id))->address,
-    //             'postal_code' => optional($OrderInformations->get($order->id))->postal_code,
-    //             'notes' => optional($OrderInformations->get($order->id))->notes,
-    //             'total_price' => $order->total_price,
-    //             'created_at' => $order->created_at->format('Y-m-d H:i:s'),
-    //             'status' => $order->status,
-    //             'product' => optional($order->product)->only(['id', 'name', 'image_url']),
-    //         ]),
-    //     ]);
-    // }
 
     public function manageOrders()
     {
