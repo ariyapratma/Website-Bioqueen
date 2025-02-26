@@ -156,6 +156,40 @@ class OrderController extends Controller
         ]);
     }
 
+    public function checkOrderStatus(Request $request)
+    {
+        // Ambil pengguna yang sedang login
+        $user = auth()->user();
+
+        // Periksa apakah ada pesanan dengan status 'Processing'
+        $existingOrder = Order::where('user_id', $user->id)
+            ->where('status', 'Processing')
+            ->first();
+
+        if (!$existingOrder) {
+            return response()->json([
+                'isOrderComplete' => false,
+                'message' => 'No active order found.',
+            ], 400);
+        }
+
+        // Periksa apakah informasi pesanan sudah diisi
+        $orderInformation = $existingOrder->OrderInformations()->exists();
+
+        if (!$orderInformation) {
+            return response()->json([
+                'isOrderComplete' => false,
+                'message' => 'Please complete your order information before proceeding to payment.',
+            ], 400);
+        }
+
+        // Jika semua tahap sudah selesai
+        return response()->json([
+            'isOrderComplete' => true,
+            'message' => 'Order is ready for payment.',
+        ]);
+    }
+
     public function cancel()
     {
         $orders = Order::where('user_id', auth()->id())

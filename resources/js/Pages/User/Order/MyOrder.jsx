@@ -9,6 +9,64 @@ const MyOrder = ({ orders = [], auth }) => {
   const [activeMenu, setActiveMenu] = useState("my-order");
   const user = auth?.user;
 
+  // Fungsi untuk memeriksa apakah pengguna telah menyelesaikan tahap store dan storeInformations
+  const handlePaymentClick = async () => {
+    try {
+      // Lakukan permintaan ke backend untuk memeriksa status pesanan
+      const response = await fetch("/check-order-status", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-TOKEN": document
+            .querySelector('meta[name="csrf-token"]')
+            .getAttribute("content"), // CSRF Token untuk Laravel
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Jika semua tahap sudah selesai, lanjutkan ke halaman pembayaran
+        if (data.isOrderComplete) {
+          Inertia.visit(`/payment/${orders[0]?.id}`);
+        } else {
+          // Jika belum, berikan peringatan
+          Swal.fire({
+            title: "Incomplete Order!",
+            text: "Please complete your order and fill in the required information before proceeding to payment.",
+            icon: "warning",
+            confirmButtonText: "OK",
+            confirmButtonColor: "#000000",
+            scrollbarPadding: false,
+            backdrop: false,
+          });
+        }
+      } else {
+        // Tangani error jika ada masalah dengan permintaan
+        Swal.fire({
+          title: "Error!",
+          text: data.message || "Failed to check order status.",
+          icon: "error",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+          scrollbarPadding: false,
+          backdrop: false,
+        });
+      }
+    } catch (error) {
+      console.error("Error checking order status:", error);
+      Swal.fire({
+        title: "Error!",
+        text: "An unexpected error occurred. Please try again later.",
+        icon: "error",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#000000",
+        scrollbarPadding: false,
+        backdrop: false,
+      });
+    }
+  };
+
   const handleCancelOrders = () => {
     Swal.fire({
       title: "Are you sure?",
@@ -87,7 +145,7 @@ const MyOrder = ({ orders = [], auth }) => {
         <div className="mb-6 flex gap-2">
           {/* Payment Button */}
           <button
-            onClick={() => Inertia.visit(`/payment/${orders[0]?.id}`)}
+            onClick={handlePaymentClick}
             className="inline-flex w-20 items-center justify-center rounded-lg bg-custom-yellow px-4 py-2 text-sm font-semibold text-black transition duration-300 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
           >
             Payment
