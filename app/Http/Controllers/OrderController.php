@@ -54,36 +54,33 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
-        // Validasi data input
-        $validated = $request->validate([
-            'orderItems' => 'required|array',
-            'orderItems.*.product_id' => 'required|exists:products,id',
-            'orderItems.*.quantity' => 'required|integer|min:1',
-            'orderItems.*.price' => 'required|numeric|min:0',
-            'total_price' => 'required|numeric|min:0',
-        ]);
-
-        // Simpan data pesanan
-        foreach ($validated['orderItems'] as $item) {
-            Order::create([
-                'id' => uniqid(),
-                'user_id' => auth()->id(),
-                'product_id' => $item['product_id'],
-                'quantity' => $item['quantity'],
-                'total_price' => $item['price'] * $item['quantity'],
-                'status' => 'Processing',
+        try {
+            // Validasi data input
+            $validated = $request->validate([
+                'orderItems' => 'required|array',
+                'orderItems.*.product_id' => 'required|exists:products,id',
+                'orderItems.*.quantity' => 'required|integer|min:1',
+                'orderItems.*.price' => 'required|numeric|min:0',
+                'total_price' => 'required|numeric|min:0',
             ]);
+
+            // Simpan data pesanan
+            foreach ($validated['orderItems'] as $item) {
+                Order::create([
+                    'id' => uniqid(),
+                    'user_id' => auth()->id(),
+                    'product_id' => $item['product_id'],
+                    'quantity' => $item['quantity'],
+                    'total_price' => $item['price'] * $item['quantity'],
+                    'status' => 'Processing',
+                ]);
+            }
+
+            return response()->json(['success' => 'Order successfully placed!']);
+        } catch (\Exception $e) {
+            \Log::error('Error storing order:', ['error' => $e->getMessage()]);
+            return response()->json(['error' => $e->getMessage()], 500);
         }
-
-        // Simpan notifikasi
-        Notification::create([
-            'user_id' => auth()->id(),
-            'message' => 'Checkout successful!',
-            'read' => false,
-        ]);
-
-        // Kembalikan respons JSON
-        return response()->json(['success' => 'Order successfully placed!']);
     }
 
     public function storeInformations(Request $request)
@@ -97,7 +94,7 @@ class OrderController extends Controller
             'postal_code' => 'required|integer',
             'payment_method_id' => 'required|exists:payment_methods,id',
             'shipping_method_id' => 'required|exists:shipping_methods,id',
-            'user_id' => 'nullable|exists:users,id', // Tambahkan validasi user_id opsional
+            'user_id' => 'nullable|exists:users,id',
         ]);
 
         // Ambil user_id dari request jika ada, atau gunakan auth()->id()
@@ -120,6 +117,13 @@ class OrderController extends Controller
         try {
             // Simpan informasi pesanan
             $orderInformation = $existingOrder->OrderInformations()->create($validated);
+
+            // Simpan notifikasi
+            Notification::create([
+                'user_id' => $userId,
+                'message' => 'Checkout successful!',
+                'read' => false,
+            ]);
 
             return response()->json([
                 'message' => 'Order information submitted successfully!',
@@ -149,10 +153,24 @@ class OrderController extends Controller
         return Inertia::render('User/Order/MyOrder', [
             'orders' => $orders->map(function ($order) use ($OrderInformations) {
                 $info = optional($OrderInformations->get($order->id));
+
+                // Periksa apakah semua informasi telah lengkap
+                $isCompleted = !empty($info?->recipient_name) &&
+                    !empty($info?->email) &&
+                    !empty($info?->address) &&
+                    !empty($info?->postal_code) &&
+                    !empty($info?->payment_method_id) &&
+                    !empty($info?->shipping_method_id);
+
+                // Perbarui status jika semua kondisi terpenuhi
+                if ($isCompleted && $order->status === 'Processing') {
+                    $order->update(['status' => 'Completed']);
+                }
+
                 return [
                     'id' => $order->id,
                     'created_at' => $order->created_at->format('Y-m-d H:i:s'),
-                    'status' => $order->status,
+                    'status' => $isCompleted ? 'Completed' : $order->status, // Tampilkan status terbaru
                     'product' => optional($order->product)->only(['id', 'name', 'image_url']),
                     'total_price' => $order->total_price,
                     'quantity' => $order->quantity,
@@ -170,51 +188,50 @@ class OrderController extends Controller
         ]);
     }
 
-    public function checkOrderStatus(Request $request)
+    public function checkOrderStatus()
     {
-        // Validasi input dari request
-        $validated = $request->validate([
-            'user_id' => 'nullable|exists:users,id', // user_id opsional, tetapi harus valid jika dikirim
-        ]);
+        try {
+            $user = auth()->user();
+            if (!$user) {
+                return response()->json([
+                    'isOrderComplete' => false,
+                    'message' => 'User not authenticated.',
+                ], 401);
+            }
 
-        // Ambil user_id dari request jika ada, atau gunakan auth()->id() sebagai fallback
-        $userId = $request->input('user_id') ?? auth()->id();
+            $orders = Order::with('orderInformation.paymentMethod', 'orderInformation.shippingMethod')
+                ->where('user_id', $user->id)
+                ->get();
 
-        // Pastikan user_id valid
-        if (!$userId) {
+            foreach ($orders as $order) {
+                $info = $order->orderInformation;
+
+                // Periksa apakah semua informasi telah lengkap
+                $isCompleted = !empty($info?->recipient_name) &&
+                    !empty($info?->email) &&
+                    !empty($info?->address) &&
+                    !empty($info?->postal_code) &&
+                    !empty($info?->payment_method_id) &&
+                    !empty($info?->shipping_method_id);
+
+                if (!$isCompleted) {
+                    return response()->json([
+                        'isOrderComplete' => false,
+                        'message' => 'Please complete your order information before proceeding to payment.',
+                    ], 400);
+                }
+            }
+
+            return response()->json([
+                'isOrderComplete' => true,
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error checking order status:', ['error' => $e->getMessage()]);
             return response()->json([
                 'isOrderComplete' => false,
-                'message' => 'User not authenticated or invalid user ID.',
-            ], 401);
+                'message' => 'An unexpected error occurred. Please try again later.',
+            ], 500);
         }
-
-        // Periksa apakah ada pesanan dengan status 'Processing' atau 'Approved'
-        $existingOrder = Order::where('user_id', $userId)
-            ->whereIn('status', ['Processing', 'Approved']) // Gunakan whereIn untuk memeriksa beberapa status
-            ->first();
-
-        if (!$existingOrder) {
-            return response()->json([
-                'isOrderComplete' => false,
-                'message' => 'No active order found.',
-            ], 400);
-        }
-
-        // Periksa apakah informasi pesanan sudah diisi
-        $orderInformation = $existingOrder->OrderInformations()->exists();
-
-        if (!$orderInformation) {
-            return response()->json([
-                'isOrderComplete' => false,
-                'message' => 'Please complete your order information before proceeding to payment.',
-            ], 400);
-        }
-
-        // Jika semua tahap sudah selesai
-        return response()->json([
-            'isOrderComplete' => true,
-            'message' => 'Order is ready for payment.',
-        ]);
     }
 
     public function cancel()
@@ -240,6 +257,19 @@ class OrderController extends Controller
         return Inertia::render('Admin/Order/ManageOrderProducts', [
             'orders' => $orders->map(function ($order) use ($OrderInformations) {
                 $info = optional($OrderInformations->get($order->id));
+
+                // Periksa apakah semua informasi telah lengkap
+                $isCompleted = !empty($info?->recipient_name) &&
+                    !empty($info?->email) &&
+                    !empty($info?->address) &&
+                    !empty($info?->postal_code) &&
+                    $order->status === 'Processing'; // Pastikan status sebelumnya adalah "Processing"
+
+                // Perbarui status jika semua kondisi terpenuhi
+                if ($isCompleted) {
+                    $order->update(['status' => 'Completed']);
+                }
+
                 return [
                     'id' => $order->id,
                     'recipient_name' => $info?->recipient_name,
@@ -249,7 +279,7 @@ class OrderController extends Controller
                     'notes' => $info?->notes,
                     'total_price' => $order->total_price,
                     'created_at' => $order->created_at->format('Y-m-d H:i:s'),
-                    'status' => $order->status,
+                    'status' => $isCompleted ? 'Completed' : $order->status, // Tampilkan status terbaru
                     'product' => optional($order->product)->only(['id', 'name', 'image_url']),
                     'can_approve' => !empty($info?->recipient_name) && !empty($info?->email) && !empty($info?->address) && !empty($info?->postal_code),
                 ];

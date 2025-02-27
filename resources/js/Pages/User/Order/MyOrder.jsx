@@ -11,54 +11,46 @@ const MyOrder = ({ orders = [], auth }) => {
 
   const handlePaymentClick = async () => {
     try {
-      // Lakukan permintaan ke backend untuk memeriksa status pesanan
       const response = await fetch("/check-order-status", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
           "X-CSRF-TOKEN": document
             .querySelector('meta[name="csrf-token"]')
-            .getAttribute("content"), // CSRF Token untuk Laravel
+            ?.getAttribute("content"),
         },
       });
 
+      if (!response.ok) {
+        const errorData = await response.text(); // Baca respons sebagai teks
+        console.error("Server returned an error:", errorData);
+        throw new Error("Failed to check order status.");
+      }
+
       const data = await response.json();
 
-      if (response.ok) {
-        // Jika semua tahap sudah selesai, lanjutkan ke halaman pembayaran
-        if (data.isOrderComplete) {
-          // Ambil order ID pertama yang valid dari daftar pesanan
-          const orderId = orders[0]?.id;
+      if (data.isOrderComplete) {
+        const orderId = orders[0]?.id;
 
-          if (!orderId) {
-            Swal.fire({
-              title: "Error!",
-              text: "No valid order found for payment.",
-              icon: "error",
-              confirmButtonText: "OK",
-              confirmButtonColor: "#000000",
-            });
-            return;
-          }
-
-          // Arahkan pengguna ke halaman pembayaran dengan order ID
-          Inertia.visit(`/payment/${orderId}`);
-        } else {
-          // Jika belum, berikan peringatan
+        if (!orderId) {
           Swal.fire({
-            title: "Incomplete Order!",
-            text: "Please complete your order and fill in the required information before proceeding to payment.",
-            icon: "warning",
+            title: "Error!",
+            text: "No valid order found for payment.",
+            icon: "error",
             confirmButtonText: "OK",
             confirmButtonColor: "#000000",
           });
+          return;
         }
+
+        Inertia.visit(`/payment/${orderId}`);
       } else {
-        // Tangani error jika ada masalah dengan permintaan
         Swal.fire({
-          title: "Error!",
-          text: data.message || "Failed to check order status.",
-          icon: "error",
+          title: "Incomplete Order!",
+          text:
+            data.message ||
+            "Please complete your order and fill in the required information before proceeding to payment.",
+          icon: "warning",
           confirmButtonText: "OK",
           confirmButtonColor: "#000000",
         });
@@ -67,7 +59,9 @@ const MyOrder = ({ orders = [], auth }) => {
       console.error("Error checking order status:", error);
       Swal.fire({
         title: "Error!",
-        text: "An unexpected error occurred. Please try again later.",
+        text:
+          error.message ||
+          "An unexpected error occurred. Please try again later.",
         icon: "error",
         confirmButtonText: "OK",
         confirmButtonColor: "#000000",

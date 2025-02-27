@@ -155,7 +155,6 @@ const Index = ({ auth, cartItems }) => {
     );
 
     try {
-      // Kirim data ke backend
       const response = await fetch("/order", {
         method: "POST",
         headers: {
@@ -183,7 +182,7 @@ const Index = ({ auth, cartItems }) => {
           window.location.href = "/order";
         });
       } else {
-        throw new Error(result.error || "Failed to process your order.");
+        throw new Error(result.message || "Failed to process your order.");
       }
     } catch (error) {
       Swal.fire({
@@ -365,11 +364,11 @@ const Index = ({ auth, cartItems }) => {
                   </div>
                 ))}
                 {/* Total Price */}
-              <div className="mt-6 rounded-lg bg-white p-4 shadow-md">
-                <p className="text-sm font-bold">
-                  Total Price: Rp {totalPrice.toLocaleString("id-ID")}
-                </p>
-              </div>
+                <div className="mt-6 rounded-lg bg-white p-4 shadow-md">
+                  <p className="text-sm font-bold">
+                    Total Price: Rp {totalPrice.toLocaleString("id-ID")}
+                  </p>
+                </div>
               </div>
 
               {/* Checkout Button */}

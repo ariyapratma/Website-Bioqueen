@@ -66,7 +66,7 @@ const ManageOrderProducts = ({ orders = [], auth }) => {
       backdrop: false,
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteRecord(`/orders/${id}`, {
+        deleteRecord(`/order/${id}`, {
           method: "DELETE",
         });
         Swal.fire({
