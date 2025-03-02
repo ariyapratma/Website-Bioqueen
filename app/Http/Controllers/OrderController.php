@@ -97,7 +97,6 @@ class OrderController extends Controller
             'user_id' => 'nullable|exists:users,id',
         ]);
 
-        // Ambil user_id dari request jika ada, atau gunakan auth()->id()
         $userId = $request->input('user_id') ?? auth()->id();
 
         // Pastikan user_id valid
@@ -115,7 +114,6 @@ class OrderController extends Controller
         }
 
         try {
-            // Simpan informasi pesanan
             $orderInformation = $existingOrder->OrderInformations()->create($validated);
 
             // Simpan notifikasi
@@ -154,7 +152,6 @@ class OrderController extends Controller
             'orders' => $orders->map(function ($order) use ($OrderInformations) {
                 $info = optional($OrderInformations->get($order->id));
 
-                // Periksa apakah semua informasi telah lengkap
                 $isCompleted = !empty($info?->recipient_name) &&
                     !empty($info?->email) &&
                     !empty($info?->address) &&
@@ -162,15 +159,10 @@ class OrderController extends Controller
                     !empty($info?->payment_method_id) &&
                     !empty($info?->shipping_method_id);
 
-                // Perbarui status jika semua kondisi terpenuhi
-                if ($isCompleted && $order->status === 'Processing') {
-                    $order->update(['status' => 'Completed']);
-                }
-
                 return [
                     'id' => $order->id,
                     'created_at' => $order->created_at->format('Y-m-d H:i:s'),
-                    'status' => $isCompleted ? 'Completed' : $order->status, // Tampilkan status terbaru
+                    'status' => $order->status,
                     'product' => optional($order->product)->only(['id', 'name', 'image_url']),
                     'total_price' => $order->total_price,
                     'quantity' => $order->quantity,
@@ -188,56 +180,10 @@ class OrderController extends Controller
         ]);
     }
 
-    public function checkOrderStatus()
-    {
-        try {
-            $user = auth()->user();
-            if (!$user) {
-                return response()->json([
-                    'isOrderComplete' => false,
-                    'message' => 'User not authenticated.',
-                ], 401);
-            }
-
-            $orders = Order::with('orderInformation.paymentMethod', 'orderInformation.shippingMethod')
-                ->where('user_id', $user->id)
-                ->get();
-
-            foreach ($orders as $order) {
-                $info = $order->orderInformation;
-
-                // Periksa apakah semua informasi telah lengkap
-                $isCompleted = !empty($info?->recipient_name) &&
-                    !empty($info?->email) &&
-                    !empty($info?->address) &&
-                    !empty($info?->postal_code) &&
-                    !empty($info?->payment_method_id) &&
-                    !empty($info?->shipping_method_id);
-
-                if (!$isCompleted) {
-                    return response()->json([
-                        'isOrderComplete' => false,
-                        'message' => 'Please complete your order information before proceeding to payment.',
-                    ], 400);
-                }
-            }
-
-            return response()->json([
-                'isOrderComplete' => true,
-            ]);
-        } catch (\Exception $e) {
-            \Log::error('Error checking order status:', ['error' => $e->getMessage()]);
-            return response()->json([
-                'isOrderComplete' => false,
-                'message' => 'An unexpected error occurred. Please try again later.',
-            ], 500);
-        }
-    }
-
     public function cancel()
     {
         $orders = Order::where('user_id', auth()->id())
-            ->whereIn('status', ['Processing', 'Approved'])
+            ->whereIn('status', ['Processing'])
             ->get();
 
         if ($orders->isEmpty()) {
@@ -263,12 +209,7 @@ class OrderController extends Controller
                     !empty($info?->email) &&
                     !empty($info?->address) &&
                     !empty($info?->postal_code) &&
-                    $order->status === 'Processing'; // Pastikan status sebelumnya adalah "Processing"
-
-                // Perbarui status jika semua kondisi terpenuhi
-                if ($isCompleted) {
-                    $order->update(['status' => 'Completed']);
-                }
+                    $order->status;
 
                 return [
                     'id' => $order->id,
@@ -279,7 +220,7 @@ class OrderController extends Controller
                     'notes' => $info?->notes,
                     'total_price' => $order->total_price,
                     'created_at' => $order->created_at->format('Y-m-d H:i:s'),
-                    'status' => $isCompleted ? 'Completed' : $order->status, // Tampilkan status terbaru
+                    'status' => $order->status,
                     'product' => optional($order->product)->only(['id', 'name', 'image_url']),
                     'can_approve' => !empty($info?->recipient_name) && !empty($info?->email) && !empty($info?->address) && !empty($info?->postal_code),
                 ];
@@ -289,17 +230,19 @@ class OrderController extends Controller
 
     public function approveOrder($id)
     {
-        $order = Order::findOrFail($id);
+        try {
+            $order = Order::findOrFail($id);
+            $orderInfo = OrderInformation::where('order_id', $order->id)->first();
 
-        // Pastikan semua data telah terisi sebelum approve
-        $orderInfo = OrderInformation::where('order_id', $order->id)->first();
-        if (!$orderInfo || !$orderInfo->recipient_name || !$orderInfo->email || !$orderInfo->address || !$orderInfo->postal_code) {
-            return response()->json(['error' => 'Cannot approve order. Missing required information.'], 400);
+            if (!$orderInfo || !$orderInfo->recipient_name || !$orderInfo->email || !$orderInfo->address || !$orderInfo->postal_code) {
+                return response()->json(['error' => 'Cannot approve order. Missing required information.'], 400);
+            }
+
+            $order->update(['status' => 'Approved']);
+
+            return response()->json(['success' => 'Order successfully approved!', 'status' => 'approved']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Something went wrong: ' . $e->getMessage()], 500);
         }
-
-        // Ubah status pesanan menjadi "Approved"
-        $order->update(['status' => 'Approved']);
-
-        return response()->json(['success' => 'Order successfully approved!']);
     }
 }

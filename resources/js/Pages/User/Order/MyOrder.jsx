@@ -9,9 +9,29 @@ const MyOrder = ({ orders = [], auth }) => {
   const [activeMenu, setActiveMenu] = useState("my-order");
   const user = auth?.user;
 
-  const handlePaymentClick = async () => {
+  const handlePayment = async () => {
     try {
-      const response = await fetch("/check-order-status", {
+      // Filter pesanan untuk mendapatkan yang bukan "Completed"
+      const validOrders = orders.filter(
+        (order) => order.status !== "Completed",
+      );
+
+      // Ambil ID pesanan pertama yang valid (bukan "Completed")
+      const orderId = validOrders[0]?.id;
+
+      if (!orderId) {
+        Swal.fire({
+          title: "Error!",
+          text: "No valid order found for payment.",
+          icon: "error",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+        });
+        return;
+      }
+
+      // Lakukan permintaan ke backend untuk memeriksa status pesanan
+      const response = await fetch(`/check-order-status/${orderId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -22,35 +42,30 @@ const MyOrder = ({ orders = [], auth }) => {
       });
 
       if (!response.ok) {
-        const errorData = await response.text(); // Baca respons sebagai teks
+        const errorData = await response.json();
         console.error("Server returned an error:", errorData);
-        throw new Error("Failed to check order status.");
+        throw new Error(errorData.message || "Failed to check order status.");
       }
 
       const data = await response.json();
 
-      if (data.isOrderComplete) {
-        const orderId = orders[0]?.id;
-
-        if (!orderId) {
-          Swal.fire({
-            title: "Error!",
-            text: "No valid order found for payment.",
-            icon: "error",
-            confirmButtonText: "OK",
-            confirmButtonColor: "#000000",
-          });
-          return;
-        }
-
+      // Tangani status pesanan
+      if (data.status === "Processing") {
+        Swal.fire({
+          title: "Incomplete Order!",
+          text: "Please complete your order information before proceeding to payment.",
+          icon: "warning",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
+        });
+      } else if (data.status === "Approved") {
+        // Arahkan pengguna ke halaman pembayaran jika statusnya Approved
         Inertia.visit(`/payment/${orderId}`);
       } else {
         Swal.fire({
-          title: "Incomplete Order!",
-          text:
-            data.message ||
-            "Please complete your order and fill in the required information before proceeding to payment.",
-          icon: "warning",
+          title: "Error!",
+          text: "Your order cannot be processed at this time.",
+          icon: "error",
           confirmButtonText: "OK",
           confirmButtonColor: "#000000",
         });
@@ -69,19 +84,19 @@ const MyOrder = ({ orders = [], auth }) => {
     }
   };
 
-  const handleCancelOrders = () => {
+  const handleCancelOrders = (orderId) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Yes, cancel orders!",
+      confirmButtonText: "Yes, cancel this order!",
       confirmButtonColor: "#000000",
       cancelButtonColor: "#d33",
     }).then((result) => {
       if (result.isConfirmed) {
         Inertia.patch(
-          "/my-order/cancel",
+          `/order/${orderId}/cancel`,
           {},
           {
             onSuccess: () => {
@@ -92,10 +107,9 @@ const MyOrder = ({ orders = [], auth }) => {
               );
             },
             onError: (errors) => {
-              // Handle error jika pembatalan gagal
               Swal.fire(
                 "Error!",
-                errors?.error || "Failed to cancel orders.",
+                errors?.error || "Failed to cancel the order.",
                 "error",
               );
             },
@@ -107,16 +121,29 @@ const MyOrder = ({ orders = [], auth }) => {
 
   // Fungsi untuk memberikan warna berdasarkan status
   const getStatusColor = (status) => {
-    switch (status?.toLowerCase()) {
-      case "processing":
-        return "text-blue-500 font-semibold";
-      case "approved":
-        return "text-green-500 font-semibold";
-      case "completed":
-        return "text-green-500 font-semibold";
-      case "cancelled":
-        return "text-red-500 font-semibold";
-    }
+    const statusMapping = {
+      processing: "text-blue-500 font-semibold",
+      approved: "text-green-500 font-semibold",
+      completed: "text-green-500 font-semibold",
+      cancelled: "text-red-500 font-semibold",
+      pending: "text-yellow-500 font-semibold",
+      failed: "text-gray-500 font-semibold",
+    };
+    return (
+      statusMapping[status?.toLowerCase()] || "text-gray-500 font-semibold"
+    );
+  };
+
+  const getStatusLabel = (status) => {
+    const statusLabels = {
+      processing: "Processing",
+      approved: "Approved",
+      completed: "Completed",
+      cancelled: "Cancelled",
+      pending: "Pending",
+      failed: "Failed",
+    };
+    return statusLabels[status?.toLowerCase()];
   };
 
   return (
@@ -149,7 +176,7 @@ const MyOrder = ({ orders = [], auth }) => {
         <div className="mb-6 flex gap-2">
           {/* Payment Button */}
           <button
-            onClick={handlePaymentClick}
+            onClick={handlePayment}
             className="inline-flex w-20 items-center justify-center rounded-lg bg-custom-yellow px-4 py-2 text-sm font-semibold text-black transition duration-300 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
           >
             Payment
@@ -214,11 +241,9 @@ const MyOrder = ({ orders = [], auth }) => {
                       )}
                     </td>
                     <td
-                      className={`whitespace-nowrap px-6 py-4 text-center font-lexend text-sm ${getStatusColor(
-                        order.status,
-                      )}`}
+                      className={`whitespace-nowrap px-6 py-4 text-center font-lexend text-sm ${getStatusColor(order.status)}`}
                     >
-                      {order.status || "N/A"}
+                      {getStatusLabel(order.status)}
                     </td>
                   </tr>
                 ))
@@ -256,9 +281,9 @@ const MyOrder = ({ orders = [], auth }) => {
                   {parseFloat(order.total_price || 0).toLocaleString("id-ID")}
                 </p>
                 <p
-                  className={`mt-2 font-lexend text-sm ${getStatusColor(order.status)}`}
+                  className={`mt-2 font-lexend text-sm text-gray-600 ${getStatusColor(order.status)}`}
                 >
-                  Status: {order.status || "N/A"}
+                  Status: {getStatusLabel(order.status)}
                 </p>
               </div>
             ))

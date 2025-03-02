@@ -17,9 +17,8 @@ class PaymentController extends Controller
     public function index()
     {
         try {
-            // Cari order yang sedang diproses oleh user yang sedang login
             $order = Order::where('user_id', Auth::id())
-                ->whereIn('status', ['Processing', 'Approved']) // Hanya izinkan "Processing" atau "Approved"
+                ->whereIn('status', ['Approved'])
                 ->firstOrFail();
 
             // Pastikan pesanan tidak dibatalkan
@@ -27,8 +26,13 @@ class PaymentController extends Controller
                 return redirect()->back()->with('error', 'This order has been cancelled.');
             }
 
-            // Ambil informasi order terkait
-            $orderInformation = OrderInformation::where('order_id', $order->id)->firstOrFail();
+            // Ambil informasi order terkait dari tabel order_informations
+            $orderInformation = OrderInformation::where('order_id', $order->id)->first();
+
+            // Jika informasi pesanan belum ada, arahkan pengguna untuk melengkapi informasi
+            if (!$orderInformation) {
+                return redirect()->route('order.storeInformations')->with('error', 'Please complete your order information before proceeding to payment.');
+            }
 
             // Validasi kelengkapan informasi pesanan
             if (
@@ -59,7 +63,7 @@ class PaymentController extends Controller
         try {
             // Cari order yang sedang diproses oleh user yang sedang login
             $order = Order::where('user_id', Auth::id())
-                ->whereIn('status', ['Processing', 'Approved']) // Pastikan status valid
+                ->whereIn('status', ['Approved']) // Pastikan status valid
                 ->firstOrFail();
 
             // Pastikan pesanan tidak dibatalkan
@@ -121,6 +125,24 @@ class PaymentController extends Controller
             return response()->json([
                 'error' => 'Failed to generate Snap Token',
                 'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function checkOrderStatus($orderId)
+    {
+        try {
+            $order = Order::where('id', $orderId)
+                ->whereIn('status', ['Processing', 'Approved'])
+                ->firstOrFail();
+
+            return response()->json([
+                'status' => $order->status,
+            ]);
+        } catch (\Exception $e) {
+            Log::error("Error checking order status for order ID {$orderId}: " . $e->getMessage());
+            return response()->json([
+                'error' => 'Failed to check order status.',
             ], 500);
         }
     }

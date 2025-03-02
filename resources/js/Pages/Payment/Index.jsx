@@ -18,13 +18,9 @@ const Index = ({ order, orderInformation, auth }) => {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
-            "X-CSRF-TOKEN": document
-              .querySelector('meta[name="csrf-token"]')
-              .getAttribute("content"),
+            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')?.getAttribute("content"),
           },
-          body: JSON.stringify({
-            total_price: order.total_price,
-          }),
+          body: JSON.stringify({ total_price: order.total_price }),
         });
 
         if (!response.ok) {
@@ -66,9 +62,18 @@ const Index = ({ order, orderInformation, auth }) => {
 
     try {
       window.snap.pay(snapToken, {
-        onSuccess: (result) => console.log("Payment success", result),
-        onPending: (result) => console.log("Payment pending", result),
-        onError: (result) => console.error("Payment error", result),
+        onSuccess: (result) => {
+          console.log("Payment success", result);
+          alert("Payment successful!");
+        },
+        onPending: (result) => {
+          console.log("Payment pending", result);
+          alert("Payment is pending. Please complete the payment process.");
+        },
+        onError: (result) => {
+          console.error("Payment error", result);
+          alert("Payment failed. Please try again later.");
+        },
       });
     } catch (error) {
       console.error("Error processing payment:", error);
@@ -87,36 +92,26 @@ const Index = ({ order, orderInformation, auth }) => {
           <table className="w-full table-auto border-collapse">
             <tbody>
               <tr>
-                <td className="p-2 font-medium text-gray-600">
-                  Recipient Name:
-                </td>
-                <td className="p-2 text-gray-800">
-                  {orderInformation.recipient_name}
-                </td>
+                <td className="p-2 font-medium text-gray-600">Recipient Name:</td>
+                <td className="p-2 text-gray-800">{orderInformation?.recipient_name || "N/A"}</td>
               </tr>
               <tr className="bg-gray-50">
                 <td className="p-2 font-medium text-gray-600">Email:</td>
-                <td className="p-2 text-gray-800">{orderInformation.email}</td>
+                <td className="p-2 text-gray-800">{orderInformation?.email || "N/A"}</td>
               </tr>
               <tr>
                 <td className="p-2 font-medium text-gray-600">Address:</td>
-                <td className="p-2 text-gray-800">
-                  {orderInformation.address}
-                </td>
-              </tr>
-              <tr>
-                <td className="p-2 font-medium text-gray-600">Postal Code:</td>
-                <td className="p-2 text-gray-800">
-                  {orderInformation.postal_code}
-                </td>
+                <td className="p-2 text-gray-800">{orderInformation?.address || "N/A"}</td>
               </tr>
               <tr className="bg-gray-50">
-                <td className="p-2 font-medium text-gray-600">Notes:</td>
-                <td className="p-2 text-gray-800">
-                  {orderInformation.notes || "No notes provided"}
-                </td>
+                <td className="p-2 font-medium text-gray-600">Postal Code:</td>
+                <td className="p-2 text-gray-800">{orderInformation?.postal_code || "N/A"}</td>
               </tr>
               <tr>
+                <td className="p-2 font-medium text-gray-600">Notes:</td>
+                <td className="p-2 text-gray-800">{orderInformation?.notes || "No notes provided"}</td>
+              </tr>
+              <tr className="bg-gray-50">
                 <td className="p-2 font-medium text-gray-600">Total Price:</td>
                 <td className="p-2 text-gray-800">
                   Rp {formatPrice(parseFloat(order.total_price))}

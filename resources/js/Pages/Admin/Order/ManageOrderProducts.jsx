@@ -84,16 +84,29 @@ const ManageOrderProducts = ({ orders = [], auth }) => {
 
   // Fungsi untuk memberikan warna berdasarkan status
   const getStatusColor = (status) => {
-    switch (status?.toLowerCase()) {
-      case "processing":
-        return "text-blue-500 font-semibold";
-      case "approved":
-        return "text-green-500 font-semibold";
-      case "completed":
-        return "text-green-500 font-semibold";
-      case "cancelled":
-        return "text-red-500 font-semibold";
-    }
+    const statusMapping = {
+      processing: "text-blue-500 font-semibold",
+      approved: "text-green-500 font-semibold",
+      completed: "text-green-500 font-semibold",
+      cancelled: "text-red-500 font-semibold",
+      pending: "text-yellow-500 font-semibold",
+      failed: "text-gray-500 font-semibold",
+    };
+    return (
+      statusMapping[status?.toLowerCase()] || "text-gray-500 font-semibold"
+    );
+  };
+
+  const getStatusLabel = (status) => {
+    const statusLabels = {
+      processing: "Processing",
+      approved: "Approved",
+      completed: "Completed",
+      cancelled: "Cancelled",
+      pending: "Pending",
+      failed: "Failed",
+    };
+    return statusLabels[status?.toLowerCase()];
   };
 
   return (
@@ -192,11 +205,9 @@ const ManageOrderProducts = ({ orders = [], auth }) => {
                       )}
                     </td>
                     <td
-                      className={`whitespace-nowrap px-6 py-4 text-center font-lexend text-sm ${getStatusColor(
-                        order.status,
-                      )}`}
+                      className={`whitespace-nowrap px-6 py-4 text-center font-lexend text-sm ${getStatusColor(order.status)}`}
                     >
-                      {order.status || "N/A"}
+                      {getStatusLabel(order.status)}
                     </td>
                     <td className="flex flex-col items-center justify-center space-y-2 whitespace-nowrap px-6 py-4 font-lexend text-sm font-medium">
                       {/* Approve Button */}
@@ -242,6 +253,15 @@ const ManageOrderProducts = ({ orders = [], auth }) => {
                     Order #{order.id}
                   </h3>
                   <div className="flex items-center space-x-2">
+                    {/* Approve Button */}
+                    {order.can_approve && (
+                      <button
+                        onClick={() => handleApprove(order.id)}
+                        className="text-green-600 hover:text-green-900"
+                      >
+                        <IoCheckmarkCircle size={20} />
+                      </button>
+                    )}
                     {/* Delete Button with Icon */}
                     <button
                       onClick={() => handleDelete(order.id)}
@@ -275,8 +295,10 @@ const ManageOrderProducts = ({ orders = [], auth }) => {
                   Total Price: Rp{" "}
                   {parseFloat(order.total_price || 0).toLocaleString("id-ID")}
                 </p>
-                <p className="mt-2 font-lexend text-sm text-gray-600">
-                  Status: {order.status || "N/A"}
+                <p
+                  className={`mt-2 font-lexend text-sm text-gray-600 ${getStatusColor(order.status)}`}
+                >
+                  Status: {getStatusLabel(order.status)}
                 </p>
               </div>
             ))
