@@ -3,120 +3,235 @@ import { useState } from "react";
 import Sidebar from "@/Components/Admin/Sidebar";
 import Navbar from "@/Components/Navbar/Navbar";
 import Swal from "sweetalert2";
+import { IoTrash } from "react-icons/io5";
+import { MdOutlinePayment } from "react-icons/md";
 import { Inertia } from "@inertiajs/inertia";
 
 const MyOrder = ({ orders = [], auth }) => {
   const [activeMenu, setActiveMenu] = useState("my-order");
   const user = auth?.user;
 
-  const handlePayment = async () => {
+  // const handlePayment = async () => {
+  //   try {
+  //     // Filter pesanan untuk mendapatkan yang bukan "Completed"
+  //     const validOrders = orders.filter(
+  //       (order) => order.status !== "Completed",
+  //     );
+
+  //     // Ambil ID pesanan pertama yang valid (bukan "Completed")
+  //     const orderId = validOrders[0]?.id;
+
+  //     if (!orderId) {
+  //       Swal.fire({
+  //         title: "Error!",
+  //         text: "No valid order found for payment.",
+  //         icon: "error",
+  //         confirmButtonText: "OK",
+  //         confirmButtonColor: "#000000",
+  //       });
+  //       return;
+  //     }
+
+  //     // Lakukan permintaan ke backend untuk memeriksa status pesanan
+  //     const response = await fetch(`/check-order-status/${orderId}`, {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "X-CSRF-TOKEN": document
+  //           .querySelector('meta[name="csrf-token"]')
+  //           ?.getAttribute("content"),
+  //       },
+  //     });
+
+  //     if (!response.ok) {
+  //       const errorData = await response.json();
+  //       console.error("Server returned an error:", errorData);
+  //       throw new Error(errorData.message || "Failed to check order status.");
+  //     }
+
+  //     const data = await response.json();
+
+  //     // Tangani status pesanan
+  //     if (data.status === "Processing") {
+  //       Swal.fire({
+  //         title: "Incomplete Order!",
+  //         text: "Please complete your order information before proceeding to payment.",
+  //         icon: "warning",
+  //         confirmButtonText: "OK",
+  //         confirmButtonColor: "#000000",
+  //       });
+  //     } else if (data.status === "Approved") {
+  //       // Arahkan pengguna ke halaman pembayaran jika statusnya Approved
+  //       Inertia.visit(`/payment/${orderId}`);
+  //     } else {
+  //       Swal.fire({
+  //         title: "Error!",
+  //         text: "Your order cannot be processed at this time.",
+  //         icon: "error",
+  //         confirmButtonText: "OK",
+  //         confirmButtonColor: "#000000",
+  //       });
+  //     }
+  //   } catch (error) {
+  //     console.error("Error checking order status:", error);
+  //     Swal.fire({
+  //       title: "Error!",
+  //       text:
+  //         error.message ||
+  //         "An unexpected error occurred. Please try again later.",
+  //       icon: "error",
+  //       confirmButtonText: "OK",
+  //       confirmButtonColor: "#000000",
+  //     });
+  //   }
+  // };
+
+  // const handlePayment = async (orderId) => {
+  //   if (typeof orderId !== "string" && typeof orderId !== "number") {
+  //     console.error("Invalid orderId:", orderId);
+  //     return;
+  //   }
+
+  //   const response = await fetch(`/payment/${orderId}`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "X-CSRF-TOKEN": document
+  //         .querySelector('meta[name="csrf-token"]')
+  //         .getAttribute("content"),
+  //     },
+  //   });
+
+  //   if (!response.ok) {
+  //     const errorData = await response.json();
+  //     throw new Error(errorData.message || "Failed to process payment.");
+  //   }
+
+  //   const data = await response.json();
+
+  //   if (data.snap_token) {
+  //     window.snap.pay(data.snap_token, {
+  //       onSuccess: () => alert("Payment successful!"),
+  //       onPending: () =>
+  //         alert("Payment pending. Please complete the payment process."),
+  //       onError: () => alert("Payment failed. Please try again."),
+  //     });
+  //   }
+  // };
+
+  // const handleCancelOrders = (orderId) => {
+  //   Swal.fire({
+  //     title: "Are you sure?",
+  //     text: "You won't be able to revert this!",
+  //     icon: "warning",
+  //     showCancelButton: true,
+  //     confirmButtonText: "Yes, cancel this order!",
+  //     confirmButtonColor: "#000000",
+  //     cancelButtonColor: "#d33",
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       Inertia.patch(
+  //         `/order/${orderId}/cancel`,
+  //         {},
+  //         {
+  //           onSuccess: () => {
+  //             Swal.fire(
+  //               "Cancelled!",
+  //               "Your order has been cancelled.",
+  //               "success",
+  //             );
+  //           },
+  //           onError: (errors) => {
+  //             Swal.fire(
+  //               "Error!",
+  //               errors?.error || "Failed to cancel the order.",
+  //               "error",
+  //             );
+  //           },
+  //         },
+  //       );
+  //     }
+  //   });
+  // };
+
+  const handlePayment = async (orderId) => {
     try {
-      // Filter pesanan untuk mendapatkan yang bukan "Completed"
-      const validOrders = orders.filter(
-        (order) => order.status !== "Completed",
-      );
-
-      // Ambil ID pesanan pertama yang valid (bukan "Completed")
-      const orderId = validOrders[0]?.id;
-
-      if (!orderId) {
-        Swal.fire({
-          title: "Error!",
-          text: "No valid order found for payment.",
-          icon: "error",
-          confirmButtonText: "OK",
-          confirmButtonColor: "#000000",
-        });
+      // Validasi orderId
+      if (typeof orderId !== "string" && typeof orderId !== "number") {
+        console.error("Invalid orderId:", orderId);
         return;
       }
-
-      // Lakukan permintaan ke backend untuk memeriksa status pesanan
-      const response = await fetch(`/check-order-status/${orderId}`, {
-        method: "GET",
+  
+      // Kirim permintaan ke backend untuk memproses pembayaran
+      const response = await fetch(`/payment/${orderId}`, {
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           "X-CSRF-TOKEN": document
             .querySelector('meta[name="csrf-token"]')
-            ?.getAttribute("content"),
+            .getAttribute("content"),
         },
       });
-
+  
+      // Tangani jika respons tidak OK
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Server returned an error:", errorData);
-        throw new Error(errorData.message || "Failed to check order status.");
+        throw new Error(errorData.message || "Failed to process payment.");
       }
-
+  
       const data = await response.json();
-
-      // Tangani status pesanan
-      if (data.status === "Processing") {
-        Swal.fire({
-          title: "Incomplete Order!",
-          text: "Please complete your order information before proceeding to payment.",
-          icon: "warning",
-          confirmButtonText: "OK",
-          confirmButtonColor: "#000000",
-        });
-      } else if (data.status === "Approved") {
-        // Arahkan pengguna ke halaman pembayaran jika statusnya Approved
-        Inertia.visit(`/payment/${orderId}`);
-      } else {
-        Swal.fire({
-          title: "Error!",
-          text: "Your order cannot be processed at this time.",
-          icon: "error",
-          confirmButtonText: "OK",
-          confirmButtonColor: "#000000",
+  
+      // Jika snap_token tersedia, proses pembayaran menggunakan Midtrans Snap
+      if (data.snap_token) {
+        window.snap.pay(data.snap_token, {
+          onSuccess: async () => {
+            // Tampilkan notifikasi sukses menggunakan Swal.fire
+            await Swal.fire({
+              title: "Success!",
+              text: "Payment successful!",
+              icon: "success",
+              confirmButtonText: "OK",
+              confirmButtonColor: "#000000",
+            });
+  
+            // Perbarui status pesanan di frontend
+            Inertia.reload(); // Muat ulang halaman untuk mendapatkan data terbaru
+          },
+          onPending: async () => {
+            // Tampilkan notifikasi pending menggunakan Swal.fire
+            await Swal.fire({
+              title: "Pending!",
+              text: "Payment pending. Please complete the payment process.",
+              icon: "warning",
+              confirmButtonText: "OK",
+              confirmButtonColor: "#000000",
+            });
+          },
+          onError: async () => {
+            // Tampilkan notifikasi gagal menggunakan Swal.fire
+            await Swal.fire({
+              title: "Error!",
+              text: "Payment failed. Please try again.",
+              icon: "error",
+              confirmButtonText: "OK",
+              confirmButtonColor: "#000000",
+            });
+          },
         });
       }
     } catch (error) {
-      console.error("Error checking order status:", error);
-      Swal.fire({
+      // Tangani error secara umum
+      console.error("Error processing payment:", error);
+  
+      // Tampilkan notifikasi error menggunakan Swal.fire
+      await Swal.fire({
         title: "Error!",
-        text:
-          error.message ||
-          "An unexpected error occurred. Please try again later.",
+        text: error.message || "An unexpected error occurred. Please try again later.",
         icon: "error",
         confirmButtonText: "OK",
         confirmButtonColor: "#000000",
       });
     }
-  };
-
-  const handleCancelOrders = (orderId) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, cancel this order!",
-      confirmButtonColor: "#000000",
-      cancelButtonColor: "#d33",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Inertia.patch(
-          `/order/${orderId}/cancel`,
-          {},
-          {
-            onSuccess: () => {
-              Swal.fire(
-                "Cancelled!",
-                "Your order has been cancelled.",
-                "success",
-              );
-            },
-            onError: (errors) => {
-              Swal.fire(
-                "Error!",
-                errors?.error || "Failed to cancel the order.",
-                "error",
-              );
-            },
-          },
-        );
-      }
-    });
   };
 
   // Fungsi untuk memberikan warna berdasarkan status
@@ -130,7 +245,7 @@ const MyOrder = ({ orders = [], auth }) => {
       failed: "text-gray-500 font-semibold",
     };
     return (
-      statusMapping[status?.toLowerCase()] || "text-gray-500 font-semibold"
+      statusMapping[status?.toLowerCase()]
     );
   };
 
@@ -172,42 +287,25 @@ const MyOrder = ({ orders = [], auth }) => {
         <h2 className="mb-4 font-lexend text-xl font-bold">
           Order Page Content
         </h2>
-        {/* Action Buttons */}
-        <div className="mb-6 flex gap-2">
-          {/* Payment Button */}
-          <button
-            onClick={handlePayment}
-            className="inline-flex w-20 items-center justify-center rounded-lg bg-custom-yellow px-4 py-2 text-sm font-semibold text-black transition duration-300 hover:bg-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:ring-offset-2"
-          >
-            Payment
-          </button>
-          {/* Cancel Button */}
-          <button
-            onClick={handleCancelOrders}
-            className="inline-flex w-20 items-center justify-center rounded-lg bg-black px-4 py-2 text-sm font-semibold text-white transition duration-300 hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2"
-          >
-            Cancel
-          </button>
-        </div>
         {/* Order Summary Table for Desktop */}
         <div className="hidden md:block">
           <h3 className="mb-4 font-lexend text-lg font-bold">Order Summary</h3>
           <table className="min-w-full divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-md">
             <thead>
               <tr>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Product ID
                 </th>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Product Name
                 </th>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Quantity
                 </th>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Total Price
                 </th>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Status
                 </th>
               </tr>
@@ -225,23 +323,23 @@ const MyOrder = ({ orders = [], auth }) => {
               ) : (
                 orders.map((order) => (
                   <tr key={order.id}>
-                    <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                    <td className="max-w-[150px] whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
                       {order.product?.id || "N/A"}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                    <td className="max-w-[150px] whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
                       {order.product?.name || "N/A"}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                    <td className="max-w-[150px] whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
                       {order?.quantity || "N/A"}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                    <td className="max-w-[150px] whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
                       Rp{" "}
                       {parseFloat(order.total_price || 0).toLocaleString(
                         "id-ID",
                       )}
                     </td>
                     <td
-                      className={`whitespace-nowrap px-6 py-4 text-center font-lexend text-sm ${getStatusColor(order.status)}`}
+                      className={`max-w-[150px] whitespace-nowrap px-6 py-4 text-center font-lexend text-sm ${getStatusColor(order.status)}`}
                     >
                       {getStatusLabel(order.status)}
                     </td>
@@ -297,25 +395,28 @@ const MyOrder = ({ orders = [], auth }) => {
           <table className="min-w-full divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow-md">
             <thead>
               <tr>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Order Number
                 </th>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Order Date
                 </th>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Recipient Name
                 </th>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Notes
                 </th>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Payment Method
                 </th>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Shipping Method
                 </th>
-                <th className="px-6 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
+                  Action
+                </th>
+                <th className="px-4 py-3 text-center font-lexend text-xs font-medium uppercase tracking-wider text-gray-500">
                   Status
                 </th>
               </tr>
@@ -359,6 +460,23 @@ const MyOrder = ({ orders = [], auth }) => {
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
                       {order.informations?.shipping_method?.name || "N/A"}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                      {/* Action Buttons */}
+                      {/* Payment Button */}
+                      <button
+                        onClick={() => handlePayment(order.id)}
+                        className="text-indigo-600 hover:text-indigo-900"
+                      >
+                        <MdOutlinePayment size={20} />
+                      </button>
+                      {/* Cancel Button */}
+                      <button
+                        onClick={() => handleCancelOrders(order.id)}
+                        className="text-red-600 hover:text-red-900"
+                      >
+                        <IoTrash size={20} />
+                      </button>
                     </td>
                     <td
                       className={`whitespace-nowrap px-6 py-4 text-center font-lexend text-sm ${getStatusColor(

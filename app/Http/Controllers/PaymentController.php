@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Log;
 
 class PaymentController extends Controller
 {
-
     public function index()
     {
         try {
@@ -23,7 +22,7 @@ class PaymentController extends Controller
 
             // Pastikan pesanan tidak dibatalkan
             if ($order->status === 'Cancelled') {
-                return redirect()->back()->with('error', 'This order has been cancelled.');
+                return response()->json(['error' => 'This order has been cancelled'], 400);
             }
 
             // Ambil informasi order terkait dari tabel order_informations
@@ -31,7 +30,7 @@ class PaymentController extends Controller
 
             // Jika informasi pesanan belum ada, arahkan pengguna untuk melengkapi informasi
             if (!$orderInformation) {
-                return redirect()->route('order.storeInformations')->with('error', 'Please complete your order information before proceeding to payment.');
+                return response()->json(['error' => 'Please complete your order information before proceeding to payment.'], 400);
             }
 
             // Validasi kelengkapan informasi pesanan
@@ -41,20 +40,39 @@ class PaymentController extends Controller
                 empty($orderInformation->address) ||
                 empty($orderInformation->postal_code)
             ) {
-                return redirect()->back()->with('error', 'Please complete your order information before proceeding to payment.');
+                return response()->json(['error' => 'Please complete your order information before proceeding to payment.'], 400);
             }
 
             // Render halaman pembayaran
-            return Inertia::render('Payment/Index', [
+            return response()->json([
                 'order' => $order,
                 'orderInformation' => $orderInformation,
                 'auth' => [
                     'user' => Auth::user(),
                 ],
-            ])->withViewData(['layout' => 'layouts.app']);
+            ]);
         } catch (\Exception $e) {
             Log::error("Payment Index Error: " . $e->getMessage());
-            return redirect()->back()->with('error', 'Failed to load payment page. Please try again later.');
+            return response()->json(['error' => 'Failed to load payment page. Please try again later.'], 500);
+        }
+    }
+
+    public function checkOrderStatus($orderId)
+    {
+        try {
+            // Cari pesanan berdasarkan ID
+            $order = Order::where('id', $orderId)
+                ->whereIn('status', ['Processing', 'Approved']) // Pastikan status valid
+                ->firstOrFail(); // Gunakan firstOrFail untuk melempar exception jika tidak ditemukan
+
+            return response()->json([
+                'status' => $order->status,
+            ]);
+        } catch (\Exception $e) {
+            Log::error("Error checking order status for order ID {$orderId}: " . $e->getMessage());
+            return response()->json([
+                'error' => 'Order not found.',
+            ], 404); // Kembalikan respons 404 jika pesanan tidak ditemukan
         }
     }
 
@@ -125,24 +143,6 @@ class PaymentController extends Controller
             return response()->json([
                 'error' => 'Failed to generate Snap Token',
                 'message' => $e->getMessage(),
-            ], 500);
-        }
-    }
-
-    public function checkOrderStatus($orderId)
-    {
-        try {
-            $order = Order::where('id', $orderId)
-                ->whereIn('status', ['Processing', 'Approved'])
-                ->firstOrFail();
-
-            return response()->json([
-                'status' => $order->status,
-            ]);
-        } catch (\Exception $e) {
-            Log::error("Error checking order status for order ID {$orderId}: " . $e->getMessage());
-            return response()->json([
-                'error' => 'Failed to check order status.',
             ], 500);
         }
     }
