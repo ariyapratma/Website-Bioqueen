@@ -11,10 +11,10 @@ const MyOrder = ({ orders = [], auth }) => {
   const [activeMenu, setActiveMenu] = useState("my-order");
   const user = auth?.user;
 
-  const handlePayment = async () => {
+  const handlePayment = async (orderId) => {
     try {
       // Lakukan permintaan ke backend untuk memeriksa status pesanan
-      const response = await fetch("/check-order-status", {
+      const response = await fetch(`/check-order-status/${orderId}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -104,59 +104,47 @@ const MyOrder = ({ orders = [], auth }) => {
     }
   };
 
-  const handleCancelOrders = async () => {
-    try {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, cancel it!",
-        confirmButtonColor: "#000000",
-        scrollbarPadding: false,
-        backdrop: false,
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          try {
-            // Kirim permintaan PATCH ke backend untuk membatalkan pesanan
-            const response = await fetch(`/order/${orderId}/cancel`, {
-              method: "PATCH", // Gunakan metode PATCH sesuai route
-              headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"), // CSRF Token untuk Laravel
-              },
+  const handleCancelOrders = async (orderId) => {
+  try {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, cancel it!",
+      confirmButtonColor: "#000000",
+      scrollbarPadding: false,
+      backdrop: false,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          // Kirim permintaan PATCH ke backend untuk membatalkan pesanan
+          const response = await fetch(`/order/${orderId}/cancel`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"),
+            },
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            Swal.fire({
+              title: "Cancelled!",
+              text: "Order has been successfully cancelled.",
+              icon: "success",
+              confirmButtonText: "OK",
+              confirmButtonColor: "#000000",
+              scrollbarPadding: false,
+              backdrop: false,
             });
-  
-            const data = await response.json();
-  
-            if (response.ok) {
-              Swal.fire({
-                title: "Cancelled!",
-                text: "Order has been successfully cancelled.",
-                icon: "success",
-                confirmButtonText: "OK",
-                confirmButtonColor: "#000000",
-                scrollbarPadding: false,
-                backdrop: false,
-              });
-            } else {
-              // Tangani error jika ada masalah dengan permintaan
-              Swal.fire({
-                title: "Error!",
-                text: data.message || "Failed to cancel the order.",
-                icon: "error",
-                confirmButtonText: "OK",
-                confirmButtonColor: "#000000",
-                scrollbarPadding: false,
-                backdrop: false,
-              });
-            }
-          } catch (error) {
-            console.error("Error cancelling order:", error);
+          } else {
+            // Tangani error jika ada masalah dengan permintaan
             Swal.fire({
               title: "Error!",
-              text: "An unexpected error occurred. Please try again later.",
+              text: data.message || "Failed to cancel the order.",
               icon: "error",
               confirmButtonText: "OK",
               confirmButtonColor: "#000000",
@@ -164,21 +152,33 @@ const MyOrder = ({ orders = [], auth }) => {
               backdrop: false,
             });
           }
+        } catch (error) {
+          console.error("Error cancelling order:", error);
+          Swal.fire({
+            title: "Error!",
+            text: "An unexpected error occurred. Please try again later.",
+            icon: "error",
+            confirmButtonText: "OK",
+            confirmButtonColor: "#000000",
+            scrollbarPadding: false,
+            backdrop: false,
+          });
         }
-      });
-    } catch (error) {
-      console.error("Error in handleCancelOrders:", error);
-      Swal.fire({
-        title: "Error!",
-        text: "An unexpected error occurred. Please try again later.",
-        icon: "error",
-        confirmButtonText: "OK",
-        confirmButtonColor: "#000000",
-        scrollbarPadding: false,
-        backdrop: false,
-      });
-    }
-  };
+      }
+    });
+  } catch (error) {
+    console.error("Error in handleCancelOrders:", error);
+    Swal.fire({
+      title: "Error!",
+      text: "An unexpected error occurred. Please try again later.",
+      icon: "error",
+      confirmButtonText: "OK",
+      confirmButtonColor: "#000000",
+      scrollbarPadding: false,
+      backdrop: false,
+    });
+  }
+};
   
   // Fungsi untuk memberikan warna berdasarkan status
   const getStatusColor = (status) => {
