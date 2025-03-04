@@ -133,133 +133,21 @@ class OrderController extends Controller
         }
     }
 
-    // myOrder Lama
-    // public function myOrder()
-    // {
-    //     $orders = Order::with('product')->where('user_id', auth()->id())->get();
-
-    //     if ($orders->isEmpty()) {
-    //         return Inertia::render('User/Order/MyOrder', [
-    //             'orders' => [],
-    //         ]);
-    //     }
-
-    //     $OrderInformations = OrderInformation::with(['paymentMethod', 'shippingMethod'])
-    //         ->whereIn('order_id', $orders->pluck('id'))
-    //         ->get()
-    //         ->keyBy('order_id');
-
-    //     return Inertia::render('User/Order/MyOrder', [
-    //         'orders' => $orders->map(function ($order) use ($OrderInformations) {
-    //             $info = optional($OrderInformations->get($order->id));
-
-    //             $isCompleted = !empty($info?->recipient_name) &&
-    //                 !empty($info?->email) &&
-    //                 !empty($info?->address) &&
-    //                 !empty($info?->postal_code) &&
-    //                 !empty($info?->payment_method_id) &&
-    //                 !empty($info?->shipping_method_id);
-
-    //             if ($order->status === 'Approved' && $isCompleted) {
-    //                 $order->update(['status' => 'Completed']);
-    //             }
-
-    //             return [
-    //                 'id' => $order->id,
-    //                 'created_at' => $order->created_at->format('Y-m-d H:i:s'),
-    //                 'status' => $order->status,
-    //                 'product' => optional($order->product)->only(['id', 'name', 'image_url']),
-    //                 'total_price' => $order->total_price,
-    //                 'quantity' => $order->quantity,
-    //                 'informations' => [
-    //                     'recipient_name' => $info?->recipient_name,
-    //                     'email' => $info?->email,
-    //                     'notes' => $info?->notes,
-    //                     'address' => $info?->address,
-    //                     'postal_code' => $info?->postal_code,
-    //                     'payment_method' => optional($info?->paymentMethod)->only(['id', 'name']),
-    //                     'shipping_method' => optional($info?->shippingMethod)->only(['id', 'name']),
-    //                 ],
-    //             ];
-    //         }),
-    //     ]);
-    // }
-
     public function cancel($id)
     {
-        // Cari pesanan berdasarkan ID dan pastikan milik pengguna yang sedang login
         $order = Order::where('id', $id)
             ->where('user_id', auth()->id())
-            ->whereIn('status', ['Processing', 'Approved']) // Pastikan status valid
+            ->whereIn('status', ['Processing', 'Approved'])
             ->first();
-    
+
         if (!$order) {
-            return back()->with('error', 'Order not found or cannot be cancelled.');
+            return response()->json(['message' => 'Order not found or cannot be cancelled.'], 404);
         }
-    
-        // Update status pesanan menjadi "Cancelled"
+
         $order->update(['status' => 'Cancelled']);
-    
-        return back()->with('success', 'Order has been successfully cancelled!');
+
+        return response()->json(['message' => 'Order has been successfully cancelled!']);
     }
-    
-    // manageOrders Lama
-
-    // public function manageOrders()
-    // {
-    //     $orders = Order::with('product')->get();
-    //     $OrderInformations = OrderInformation::all()->keyBy('order_id');
-
-    //     return Inertia::render('Admin/Order/ManageOrderProducts', [
-    //         'orders' => $orders->map(function ($order) use ($OrderInformations) {
-    //             $info = optional($OrderInformations->get($order->id));
-
-    //             // Periksa apakah semua informasi telah lengkap
-    //             $isCompleted = !empty($info?->recipient_name) &&
-    //                 !empty($info?->email) &&
-    //                 !empty($info?->address) &&
-    //                 !empty($info?->postal_code) &&
-    //                 $order->status;
-
-    //             // Perbarui status ke 'Completed' jika pembayaran sukses
-    //             if ($order->status === 'Approved' && $isCompleted) {
-    //                 $order->update(['status' => 'Completed']);
-    //             }
-    //             return [
-    //                 'id' => $order->id,
-    //                 'recipient_name' => $info?->recipient_name,
-    //                 'email' => $info?->email,
-    //                 'address' => $info?->address,
-    //                 'postal_code' => $info?->postal_code,
-    //                 'notes' => $info?->notes,
-    //                 'total_price' => $order->total_price,
-    //                 'created_at' => $order->created_at->format('Y-m-d H:i:s'),
-    //                 'status' => $order->status,
-    //                 'product' => optional($order->product)->only(['id', 'name', 'image_url']),
-    //                 'can_approve' => !empty($info?->recipient_name) && !empty($info?->email) && !empty($info?->address) && !empty($info?->postal_code),
-    //             ];
-    //         }),
-    //     ]);
-    // }
-
-    // approveOrder Lama
-    // public function approveOrder($id)
-    // {
-    //     try {
-    //         $order = Order::findOrFail($id);
-    //         $orderInfo = OrderInformation::where('order_id', $order->id)->first();
-
-    //         if (!$orderInfo || !$orderInfo->recipient_name || !$orderInfo->email || !$orderInfo->address || !$orderInfo->postal_code) {
-    //             return response()->json(['error' => 'Cannot approve order. Missing required information.'], 400);
-    //         }
-
-    //         $order->update(['status' => 'Approved']);
-
-    //         return response()->json(['success' => 'Order successfully approved!', 'status' => 'approved']);
-    //     } catch (\Exception $e) {
-    //         return response()->json(['error' => 'Something went wrong: ' . $e->getMessage()], 500);
-    //     }
-    // }
 
     public function myOrder()
     {
@@ -349,22 +237,6 @@ class OrderController extends Controller
             return response()->json(['error' => 'Something went wrong: ' . $e->getMessage()], 500);
         }
     }
-
-    // public function updatePaymentStatus($id)
-    // {
-    //     try {
-    //         $order = Order::findOrFail($id);
-
-    //         if ($order->status === 'Approved') {
-    //             $order->update(['status' => 'Completed']);
-    //             return response()->json(['success' => 'Payment confirmed, order completed!', 'status' => 'Completed']);
-    //         }
-
-    //         return response()->json(['error' => 'Order must be approved before completing payment.'], 400);
-    //     } catch (\Exception $e) {
-    //         return response()->json(['error' => 'Something went wrong: ' . $e->getMessage()], 500);
-    //     }
-    // }
 
     public function updatePaymentStatus($id)
     {
