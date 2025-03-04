@@ -82,7 +82,7 @@ Route::middleware(['auth', 'verified', 'role:admin|user'])->group(function () {
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
     Route::post('/order-informations', [OrderController::class, 'storeInformations'])->name('order.storeInformations');
     Route::get('/my-order', [OrderController::class, 'myOrder'])->name('order.myorder');
-    Route::patch('/order/{id}/cancel', [OrderController::class, 'cancel'])->name('order.cancel');
+    Route::patch('/order/{orderId}/cancel', [OrderController::class, 'cancel'])->name('order.cancel');
 });
 
 // Route khusus untuk pengguna yang terautentikasi (auth) dan terverifikasi

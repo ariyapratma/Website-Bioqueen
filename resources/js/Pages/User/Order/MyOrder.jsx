@@ -11,222 +11,92 @@ const MyOrder = ({ orders = [], auth }) => {
   const [activeMenu, setActiveMenu] = useState("my-order");
   const user = auth?.user;
 
-  // const handlePayment = async () => {
-  //   try {
-  //     // Filter pesanan untuk mendapatkan yang bukan "Completed"
-  //     const validOrders = orders.filter(
-  //       (order) => order.status !== "Completed",
-  //     );
-
-  //     // Ambil ID pesanan pertama yang valid (bukan "Completed")
-  //     const orderId = validOrders[0]?.id;
-
-  //     if (!orderId) {
-  //       Swal.fire({
-  //         title: "Error!",
-  //         text: "No valid order found for payment.",
-  //         icon: "error",
-  //         confirmButtonText: "OK",
-  //         confirmButtonColor: "#000000",
-  //       });
-  //       return;
-  //     }
-
-  //     // Lakukan permintaan ke backend untuk memeriksa status pesanan
-  //     const response = await fetch(`/check-order-status/${orderId}`, {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "X-CSRF-TOKEN": document
-  //           .querySelector('meta[name="csrf-token"]')
-  //           ?.getAttribute("content"),
-  //       },
-  //     });
-
-  //     if (!response.ok) {
-  //       const errorData = await response.json();
-  //       console.error("Server returned an error:", errorData);
-  //       throw new Error(errorData.message || "Failed to check order status.");
-  //     }
-
-  //     const data = await response.json();
-
-  //     // Tangani status pesanan
-  //     if (data.status === "Processing") {
-  //       Swal.fire({
-  //         title: "Incomplete Order!",
-  //         text: "Please complete your order information before proceeding to payment.",
-  //         icon: "warning",
-  //         confirmButtonText: "OK",
-  //         confirmButtonColor: "#000000",
-  //       });
-  //     } else if (data.status === "Approved") {
-  //       // Arahkan pengguna ke halaman pembayaran jika statusnya Approved
-  //       Inertia.visit(`/payment/${orderId}`);
-  //     } else {
-  //       Swal.fire({
-  //         title: "Error!",
-  //         text: "Your order cannot be processed at this time.",
-  //         icon: "error",
-  //         confirmButtonText: "OK",
-  //         confirmButtonColor: "#000000",
-  //       });
-  //     }
-  //   } catch (error) {
-  //     console.error("Error checking order status:", error);
-  //     Swal.fire({
-  //       title: "Error!",
-  //       text:
-  //         error.message ||
-  //         "An unexpected error occurred. Please try again later.",
-  //       icon: "error",
-  //       confirmButtonText: "OK",
-  //       confirmButtonColor: "#000000",
-  //     });
-  //   }
-  // };
-
-  // const handlePayment = async (orderId) => {
-  //   if (typeof orderId !== "string" && typeof orderId !== "number") {
-  //     console.error("Invalid orderId:", orderId);
-  //     return;
-  //   }
-
-  //   const response = await fetch(`/payment/${orderId}`, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       "X-CSRF-TOKEN": document
-  //         .querySelector('meta[name="csrf-token"]')
-  //         .getAttribute("content"),
-  //     },
-  //   });
-
-  //   if (!response.ok) {
-  //     const errorData = await response.json();
-  //     throw new Error(errorData.message || "Failed to process payment.");
-  //   }
-
-  //   const data = await response.json();
-
-  //   if (data.snap_token) {
-  //     window.snap.pay(data.snap_token, {
-  //       onSuccess: () => alert("Payment successful!"),
-  //       onPending: () =>
-  //         alert("Payment pending. Please complete the payment process."),
-  //       onError: () => alert("Payment failed. Please try again."),
-  //     });
-  //   }
-  // };
-
-  // const handleCancelOrders = (orderId) => {
-  //   Swal.fire({
-  //     title: "Are you sure?",
-  //     text: "You won't be able to revert this!",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonText: "Yes, cancel this order!",
-  //     confirmButtonColor: "#000000",
-  //     cancelButtonColor: "#d33",
-  //   }).then((result) => {
-  //     if (result.isConfirmed) {
-  //       Inertia.patch(
-  //         `/order/${orderId}/cancel`,
-  //         {},
-  //         {
-  //           onSuccess: () => {
-  //             Swal.fire(
-  //               "Cancelled!",
-  //               "Your order has been cancelled.",
-  //               "success",
-  //             );
-  //           },
-  //           onError: (errors) => {
-  //             Swal.fire(
-  //               "Error!",
-  //               errors?.error || "Failed to cancel the order.",
-  //               "error",
-  //             );
-  //           },
-  //         },
-  //       );
-  //     }
-  //   });
-  // };
-
-  const handlePayment = async (orderId) => {
+  const handlePayment = async () => {
     try {
-      // Validasi orderId
-      if (typeof orderId !== "string" && typeof orderId !== "number") {
-        console.error("Invalid orderId:", orderId);
-        return;
-      }
-  
-      // Kirim permintaan ke backend untuk memproses pembayaran
-      const response = await fetch(`/payment/${orderId}`, {
-        method: "POST",
+      // Lakukan permintaan ke backend untuk memeriksa status pesanan
+      const response = await fetch("/check-order-status", {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           "X-CSRF-TOKEN": document
             .querySelector('meta[name="csrf-token"]')
-            .getAttribute("content"),
+            .getAttribute("content"), // CSRF Token untuk Laravel
         },
       });
   
-      // Tangani jika respons tidak OK
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to process payment.");
-      }
-  
       const data = await response.json();
   
-      // Jika snap_token tersedia, proses pembayaran menggunakan Midtrans Snap
-      if (data.snap_token) {
-        window.snap.pay(data.snap_token, {
-          onSuccess: async () => {
-            // Tampilkan notifikasi sukses menggunakan Swal.fire
-            await Swal.fire({
-              title: "Success!",
-              text: "Payment successful!",
-              icon: "success",
-              confirmButtonText: "OK",
-              confirmButtonColor: "#000000",
-            });
+      if (response.ok) {
+        // Jika status Processing tetapi data OrderInformation belum lengkap
+        if (data.status === "Processing" && !data.is_complete) {
+          Swal.fire({
+            title: "Incomplete Order Information",
+            text: "You need to complete your order details before proceeding to payment. Please fill in recipient name, email, address, and postal code.",
+            icon: "warning",
+            confirmButtonText: "OK",
+            confirmButtonColor: "#000000",
+          });
+          return;
+        }
   
-            // Perbarui status pesanan di frontend
-            Inertia.reload(); // Muat ulang halaman untuk mendapatkan data terbaru
-          },
-          onPending: async () => {
-            // Tampilkan notifikasi pending menggunakan Swal.fire
-            await Swal.fire({
-              title: "Pending!",
-              text: "Payment pending. Please complete the payment process.",
-              icon: "warning",
-              confirmButtonText: "OK",
-              confirmButtonColor: "#000000",
-            });
-          },
-          onError: async () => {
-            // Tampilkan notifikasi gagal menggunakan Swal.fire
-            await Swal.fire({
+        // Jika status Processing dan semua data OrderInformation sudah lengkap
+        if (data.status === "Processing" && data.is_complete) {
+          Swal.fire({
+            title: "Order Pending Approval",
+            text: "Your order is complete but must wait for approval before proceeding to payment. Approval may take up to 1 working day.",
+            icon: "info",
+            confirmButtonText: "OK",
+            confirmButtonColor: "#000000",
+          });
+          return;
+        }
+  
+        // Jika status bukan Processing atau Approved, tampilkan pesan error
+        if (data.status !== "Processing" && data.status !== "Approved") {
+          Swal.fire({
+            title: "Invalid Order Status",
+            text: "Your order is not ready for payment.",
+            icon: "warning",
+            confirmButtonText: "OK",
+            confirmButtonColor: "#000000",
+          });
+          return;
+        }
+  
+        // Jika status Approved, lanjutkan ke halaman pembayaran
+        if (data.status === "Approved") {
+          // Ambil order ID pertama yang valid dari daftar pesanan
+          const orderId = orders[0]?.id;
+  
+          if (!orderId) {
+            Swal.fire({
               title: "Error!",
-              text: "Payment failed. Please try again.",
+              text: "No valid order found for payment.",
               icon: "error",
               confirmButtonText: "OK",
               confirmButtonColor: "#000000",
             });
-          },
+            return;
+          }
+  
+          // Arahkan pengguna ke halaman pembayaran dengan order ID
+          Inertia.visit(`/payment/${orderId}`);
+        }
+      } else {
+        // Tangani error jika ada masalah dengan permintaan
+        Swal.fire({
+          title: "Error!",
+          text: data.message || "Failed to check order status.",
+          icon: "error",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#000000",
         });
       }
     } catch (error) {
-      // Tangani error secara umum
-      console.error("Error processing payment:", error);
-  
-      // Tampilkan notifikasi error menggunakan Swal.fire
-      await Swal.fire({
+      console.error("Error checking order status:", error);
+      Swal.fire({
         title: "Error!",
-        text: error.message || "An unexpected error occurred. Please try again later.",
+        text: "An unexpected error occurred. Please try again later.",
         icon: "error",
         confirmButtonText: "OK",
         confirmButtonColor: "#000000",
@@ -234,6 +104,82 @@ const MyOrder = ({ orders = [], auth }) => {
     }
   };
 
+  const handleCancelOrders = async () => {
+    try {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, cancel it!",
+        confirmButtonColor: "#000000",
+        scrollbarPadding: false,
+        backdrop: false,
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            // Kirim permintaan PATCH ke backend untuk membatalkan pesanan
+            const response = await fetch(`/order/${orderId}/cancel`, {
+              method: "PATCH", // Gunakan metode PATCH sesuai route
+              headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute("content"), // CSRF Token untuk Laravel
+              },
+            });
+  
+            const data = await response.json();
+  
+            if (response.ok) {
+              Swal.fire({
+                title: "Cancelled!",
+                text: "Order has been successfully cancelled.",
+                icon: "success",
+                confirmButtonText: "OK",
+                confirmButtonColor: "#000000",
+                scrollbarPadding: false,
+                backdrop: false,
+              });
+            } else {
+              // Tangani error jika ada masalah dengan permintaan
+              Swal.fire({
+                title: "Error!",
+                text: data.message || "Failed to cancel the order.",
+                icon: "error",
+                confirmButtonText: "OK",
+                confirmButtonColor: "#000000",
+                scrollbarPadding: false,
+                backdrop: false,
+              });
+            }
+          } catch (error) {
+            console.error("Error cancelling order:", error);
+            Swal.fire({
+              title: "Error!",
+              text: "An unexpected error occurred. Please try again later.",
+              icon: "error",
+              confirmButtonText: "OK",
+              confirmButtonColor: "#000000",
+              scrollbarPadding: false,
+              backdrop: false,
+            });
+          }
+        }
+      });
+    } catch (error) {
+      console.error("Error in handleCancelOrders:", error);
+      Swal.fire({
+        title: "Error!",
+        text: "An unexpected error occurred. Please try again later.",
+        icon: "error",
+        confirmButtonText: "OK",
+        confirmButtonColor: "#000000",
+        scrollbarPadding: false,
+        backdrop: false,
+      });
+    }
+  };
+  
   // Fungsi untuk memberikan warna berdasarkan status
   const getStatusColor = (status) => {
     const statusMapping = {
@@ -244,9 +190,7 @@ const MyOrder = ({ orders = [], auth }) => {
       pending: "text-yellow-500 font-semibold",
       failed: "text-gray-500 font-semibold",
     };
-    return (
-      statusMapping[status?.toLowerCase()]
-    );
+    return statusMapping[status?.toLowerCase()];
   };
 
   const getStatusLabel = (status) => {

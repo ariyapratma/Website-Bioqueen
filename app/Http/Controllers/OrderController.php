@@ -185,21 +185,24 @@ class OrderController extends Controller
     //     ]);
     // }
 
-    public function cancel()
+    public function cancel($id)
     {
-        $orders = Order::where('user_id', auth()->id())
-            ->whereIn('status', ['Processing'])
-            ->get();
-
-        if ($orders->isEmpty()) {
-            return back()->with('error', 'No orders found to cancel.');
+        // Cari pesanan berdasarkan ID dan pastikan milik pengguna yang sedang login
+        $order = Order::where('id', $id)
+            ->where('user_id', auth()->id())
+            ->whereIn('status', ['Processing', 'Approved']) // Pastikan status valid
+            ->first();
+    
+        if (!$order) {
+            return back()->with('error', 'Order not found or cannot be cancelled.');
         }
-
-        $orders->each->update(['status' => 'Cancelled']);
-
-        return back()->with('success', 'All orders have been successfully cancelled!');
+    
+        // Update status pesanan menjadi "Cancelled"
+        $order->update(['status' => 'Cancelled']);
+    
+        return back()->with('success', 'Order has been successfully cancelled!');
     }
-
+    
     // manageOrders Lama
 
     // public function manageOrders()
