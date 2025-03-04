@@ -71,7 +71,7 @@ Route::middleware(['auth', 'verified', 'role:admin|user'])->group(function () {
     Route::get('/cart/items', [CartController::class, 'getCartItems'])->name('cart.items');
     Route::post('/cart/add', [CartController::class, 'store'])->name('cart.add');
     Route::put('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
-    Route::delete('/cart/remove/{id}', [CartController::class, 'removeFromCart'])->name('cart.remove');
+    Route::delete('/cart/remove/{id}', [CartController::class, 'removeFromCart'])->name('cart.remove');;
 });
 
 // Order Page : 
@@ -84,7 +84,6 @@ Route::middleware(['auth', 'verified', 'role:admin|user'])->group(function () {
     Route::get('/my-order', [OrderController::class, 'myOrder'])->name('order.myorder');
     // Route::patch('/order/{orderId}/cancel', [OrderController::class, 'cancel'])->name('order.cancel');
     Route::post('/order/{id}/cancel', [OrderController::class, 'cancel'])->name('order.cancel');
-    
 });
 
 // Route khusus untuk pengguna yang terautentikasi (auth) dan terverifikasi

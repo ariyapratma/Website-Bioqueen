@@ -20,9 +20,17 @@ export default function Login({ status, canResetPassword }) {
     };
   }, []);
 
+  // const submit = (e) => {
+  //   e.preventDefault();
+  //   post(route("login"));
+  // };
   const submit = (e) => {
     e.preventDefault();
-    post(route("login"));
+    post(route("login"), {
+      onSuccess: () => {
+        window.location.reload(); // Perbarui token CSRF setelah login
+      },
+    });
   };
 
   return (
@@ -33,7 +41,7 @@ export default function Login({ status, canResetPassword }) {
       <Head title="Log in" />
 
       {status && (
-        <div className="mb-4 font-medium text-sm text-green-600">{status}</div>
+        <div className="mb-4 text-sm font-medium text-green-600">{status}</div>
       )}
 
       <form onSubmit={submit} className="space-y-4">
@@ -77,7 +85,7 @@ export default function Login({ status, canResetPassword }) {
               checked={data.remember}
               onChange={(e) => setData("remember", e.target.checked)}
             />
-            <span className="ms-2 font-lexend-medium text-black text-sm">
+            <span className="font-lexend-medium ms-2 text-sm text-black">
               Remember Me
             </span>
           </label>
@@ -85,7 +93,7 @@ export default function Login({ status, canResetPassword }) {
           {canResetPassword && (
             <Link
               href={route("password.request")}
-              className="font-lexend-medium text-black text-sm"
+              className="font-lexend-medium text-sm text-black"
             >
               Forgot Your Password?
             </Link>
@@ -98,11 +106,11 @@ export default function Login({ status, canResetPassword }) {
           </PrimaryButton>
         </div>
         <div className="flex justify-center">
-          <p className="font-lexend text-sm flex justify-center text-gray-500">
+          <p className="flex justify-center font-lexend text-sm text-gray-500">
             Need an account?
             <Link
               href={route("register")}
-              className="font-lexend text-sm text-blue-500 ml-1"
+              className="ml-1 font-lexend text-sm text-blue-500"
             >
               Register
             </Link>

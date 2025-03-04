@@ -237,29 +237,4 @@ class OrderController extends Controller
             return response()->json(['error' => 'Something went wrong: ' . $e->getMessage()], 500);
         }
     }
-
-    public function updatePaymentStatus($id)
-    {
-        try {
-            // Cari pesanan berdasarkan ID
-            $order = Order::findOrFail($id);
-
-            // Pastikan pesanan sudah disetujui sebelum menyelesaikan pembayaran
-            if ($order->status !== 'Approved') {
-                return response()->json(['error' => 'Order must be approved before completing payment.'], 400);
-            }
-
-            // Perbarui status pesanan menjadi "Completed"
-            $order->update(['status' => 'Completed']);
-
-            // Kembalikan respons sukses
-            return response()->json([
-                'success' => 'Payment confirmed, order completed!',
-                'status' => 'Completed',
-            ]);
-        } catch (\Exception $e) {
-            // Tangani error jika terjadi masalah
-            return response()->json(['error' => 'Something went wrong: ' . $e->getMessage()], 500);
-        }
-    }
 }

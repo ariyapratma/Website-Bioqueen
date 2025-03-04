@@ -23,9 +23,9 @@ const MyOrder = ({ orders = [], auth }) => {
             .getAttribute("content"),
         },
       });
-  
+
       const data = await response.json();
-  
+
       if (response.ok && data.status === "Approved") {
         // Dapatkan snap_token dari backend
         const paymentResponse = await fetch(`/payment/${orderId}`, {
@@ -37,9 +37,9 @@ const MyOrder = ({ orders = [], auth }) => {
               .getAttribute("content"),
           },
         });
-  
+
         const paymentData = await paymentResponse.json();
-  
+
         if (paymentResponse.ok && paymentData.snap_token) {
           // Gunakan Midtrans Snap.js untuk membuka pop-up pembayaran
           window.snap.pay(paymentData.snap_token, {
@@ -113,7 +113,6 @@ const MyOrder = ({ orders = [], auth }) => {
       });
     }
   };
-  
 
   const handleCancelOrders = async (orderId) => {
     try {
@@ -128,7 +127,7 @@ const MyOrder = ({ orders = [], auth }) => {
         scrollbarPadding: false,
         backdrop: false,
       });
-  
+
       if (result.isConfirmed) {
         const response = await fetch(`/order/${orderId}/cancel`, {
           method: "POST", // Ubah dari PATCH ke POST
@@ -139,15 +138,15 @@ const MyOrder = ({ orders = [], auth }) => {
               .getAttribute("content"),
           },
         });
-  
+
         // Cek jika respons bukan JSON (untuk menangani redirect/error)
         const contentType = response.headers.get("content-type");
         if (!contentType || !contentType.includes("application/json")) {
           throw new Error("Invalid response format");
         }
-  
+
         const data = await response.json();
-  
+
         if (response.ok) {
           Swal.fire({
             title: "Cancelled!",
@@ -166,15 +165,16 @@ const MyOrder = ({ orders = [], auth }) => {
       console.error("Error cancelling order:", error);
       Swal.fire({
         title: "Error!",
-        text: error.message || "An unexpected error occurred. Please try again later.",
+        text:
+          error.message ||
+          "An unexpected error occurred. Please try again later.",
         icon: "error",
         confirmButtonText: "OK",
         confirmButtonColor: "#000000",
       });
     }
   };
-  
-  
+
   // Fungsi untuk memberikan warna berdasarkan status
   const getStatusColor = (status) => {
     const statusMapping = {

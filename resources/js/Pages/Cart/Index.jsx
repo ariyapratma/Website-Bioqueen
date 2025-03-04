@@ -78,6 +78,7 @@ const Index = ({ auth, cartItems }) => {
             .querySelector('meta[name="csrf-token"]')
             .getAttribute("content"),
         },
+        credentials: "include",
         body: JSON.stringify({
           quantity: itemToUpdate.quantity,
         }),
@@ -90,15 +91,15 @@ const Index = ({ auth, cartItems }) => {
         })
         .then((data) => {
           if (data.success) {
-            Swal.fire({
-              title: "Updated!",
-              text: "Quantity updated successfully.",
-              icon: "success",
-              confirmButtonText: "OK",
-              confirmButtonColor: "#000000",
-              scrollbarPadding: false,
-              backdrop: false,
-            });
+            // Swal.fire({
+            //   title: "Updated!",
+            //   text: "Quantity updated successfully.",
+            //   icon: "success",
+            //   confirmButtonText: "OK",
+            //   confirmButtonColor: "#000000",
+            //   scrollbarPadding: false,
+            //   backdrop: false,
+            // });
           }
         })
         .catch((error) => {
@@ -163,6 +164,7 @@ const Index = ({ auth, cartItems }) => {
             .querySelector('meta[name="csrf-token"]')
             ?.getAttribute("content"),
         },
+        credentials: "include",
         body: JSON.stringify({
           orderItems: orderData,
           total_price: totalPrice,
@@ -216,6 +218,7 @@ const Index = ({ auth, cartItems }) => {
               .querySelector('meta[name="csrf-token"]')
               .getAttribute("content"),
           },
+          credentials: "include",
         })
           .then((response) => {
             if (!response.ok) {
