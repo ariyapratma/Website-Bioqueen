@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { RiNotificationLine } from "react-icons/ri";
 
-const Notification = (auth) => {
+const Notification = ({ auth }) => {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
@@ -9,12 +9,6 @@ const Notification = (auth) => {
   // Fungsi untuk mengambil notifikasi
   const fetchNotifications = async () => {
     try {
-      // Periksa apakah pengguna sudah login
-      if (!auth?.user) {
-        console.log("User is not logged in. Skipping notification fetch.");
-        return;
-      }
-
       const response = await fetch("/notifications", {
         method: "GET",
         headers: {
@@ -78,10 +72,10 @@ const Notification = (auth) => {
       )}
       {/* Dropdown untuk menampilkan daftar notifikasi */}
       {isOpen && (
-        <div className="absolute right-0 z-50 mt-16 w-72 translate-x-52 rounded-lg bg-white shadow-xl ring-1 ring-black ring-opacity-5">
+        <div className="absolute right-0 z-50 mt-4 w-72 translate-x-52 rounded-lg bg-white shadow-xl ring-1 ring-black ring-opacity-5">
           {/* Header Dropdown dengan tombol close */}
           <div className="flex items-center justify-between p-4">
-            <h3 className="text-sm font-semibold text-gray-800">
+            <h3 className="mt-12 text-sm font-semibold text-gray-800">
               Notifications
             </h3>
             <button
