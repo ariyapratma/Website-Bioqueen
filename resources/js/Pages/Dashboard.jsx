@@ -38,10 +38,6 @@ export default function Dashboard({ auth }) {
           <h2 className="text-lg font-bold text-gray-800">
             Selamat Datang, {user?.name}!
           </h2>
-          <p className="text-sm text-gray-600">
-            Anda login sebagai{" "}
-            {user.role.charAt(0).toUpperCase() + user.role.slice(1)}.
-          </p>
         </div>
 
         {/* Title Dashboard */}

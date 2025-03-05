@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, usePage } from "@inertiajs/react";
 import Dropdown from "@/Components/Dropdown";
 import { FaChevronDown } from "react-icons/fa";
-import { RiShoppingBagLine } from "react-icons/ri"
+import { RiShoppingBagLine } from "react-icons/ri";
 import Notification from "../Admin/Notification";
 
 export default function Navbar({ auth }) {
@@ -144,7 +144,8 @@ export default function Navbar({ auth }) {
                     type="button"
                     className="inline-flex items-center rounded-md border border-transparent px-3 py-2 font-lexend text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
                   >
-                    {user?.name}
+                    {/* {user?.name} */}
+                    {user.name.split(" ").slice(0, 2).join(" ")} 
                     <img
                       src={`/storage/avatars/${auth.user.id}.png`}
                       alt={auth.user.name}
@@ -222,20 +223,6 @@ export default function Navbar({ auth }) {
                 </Link>
               </li>
             ))}
-            {/* Dashboard Link in Mobile Menu */}
-            {user && (
-              <li>
-                <Link
-                  href="/dashboard"
-                  className={`block px-4 py-2 ${
-                    url === "/dashboard" ? "font-bold" : "font-regular"
-                  } font-lexend hover:bg-gray-100`}
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Dashboard
-                </Link>
-              </li>
-            )}
           </ul>
         )}
       </div>

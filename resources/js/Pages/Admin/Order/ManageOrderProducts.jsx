@@ -1,12 +1,11 @@
 import { Link, Head, useForm } from "@inertiajs/react";
 import Swal from "sweetalert2";
 import { useState } from "react";
-import { IoTrash, IoCheckmarkCircle } from "react-icons/io5";
+import { IoCheckmarkCircle } from "react-icons/io5";
 import Sidebar from "@/Components/Admin/Sidebar";
 import Navbar from "@/Components/Navbar/Navbar";
 
 const ManageOrderProducts = ({ orders = [], auth }) => {
-  const { delete: deleteRecord } = useForm();
   const [activeMenu, setActiveMenu] = useState("manage-order-products");
   const user = auth.user;
 
@@ -35,7 +34,6 @@ const ManageOrderProducts = ({ orders = [], auth }) => {
               scrollbarPadding: false,
               backdrop: false,
             });
-            // Refresh halaman atau update state
             window.location.reload();
           })
           .catch((error) => {
@@ -49,35 +47,6 @@ const ManageOrderProducts = ({ orders = [], auth }) => {
               backdrop: false,
             });
           });
-      }
-    });
-  };
-
-  const handleDelete = (id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-      confirmButtonColor: "#000000",
-      scrollbarPadding: false,
-      backdrop: false,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        deleteRecord(`/order/${id}`, {
-          method: "DELETE",
-        });
-        Swal.fire({
-          title: "Deleted!",
-          text: "Order has been deleted.",
-          icon: "success",
-          confirmButtonText: "OK",
-          confirmButtonColor: "#000000",
-          scrollbarPadding: false,
-          backdrop: false,
-        });
       }
     });
   };
@@ -219,13 +188,6 @@ const ManageOrderProducts = ({ orders = [], auth }) => {
                           <IoCheckmarkCircle size={20} />
                         </button>
                       )}
-                      {/* Delete Button with Icon */}
-                      <button
-                        onClick={() => handleDelete(order.id)}
-                        className="text-red-600 hover:text-red-900"
-                      >
-                        <IoTrash size={20} />
-                      </button>
                     </td>
                   </tr>
                 ))
@@ -262,13 +224,6 @@ const ManageOrderProducts = ({ orders = [], auth }) => {
                         <IoCheckmarkCircle size={20} />
                       </button>
                     )}
-                    {/* Delete Button with Icon */}
-                    <button
-                      onClick={() => handleDelete(order.id)}
-                      className="text-red-600 hover:text-red-900"
-                    >
-                      <IoTrash size={20} />
-                    </button>
                   </div>
                 </div>
                 <p className="mt-2 font-lexend text-sm text-gray-600">

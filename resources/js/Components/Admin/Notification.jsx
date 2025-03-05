@@ -155,7 +155,7 @@ const Notification = ({ auth }) => {
           <div className="border-t border-gray-200">
             <button
               className="block w-full px-4 py-2 text-left text-sm text-black hover:bg-gray-100"
-              onClick={markAllAsRead}
+              // onClick={markAllAsRead}
             >
               Mark all as read
             </button>

@@ -155,7 +155,7 @@ const MyOrder = ({ orders = [], auth }) => {
             confirmButtonText: "OK",
             confirmButtonColor: "#000000",
           }).then(() => {
-            location.reload(); // Refresh halaman setelah pembatalan sukses
+            location.reload();
           });
         } else {
           throw new Error(data.message || "Failed to cancel the order.");
@@ -263,13 +263,13 @@ const MyOrder = ({ orders = [], auth }) => {
                 orders.map((order) => (
                   <tr key={order.id}>
                     <td className="max-w-[150px] whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
-                      {order.product?.id || "N/A"}
+                      {order.product?.id || "No Product ID available."}
                     </td>
                     <td className="max-w-[150px] whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
-                      {order.product?.name || "N/A"}
+                      {order.product?.name || "No Product Name available."}
                     </td>
                     <td className="max-w-[150px] whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
-                      {order?.quantity || "N/A"}
+                      {order?.quantity || "No Quantity available."}
                     </td>
                     <td className="max-w-[150px] whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
                       Rp{" "}
@@ -304,14 +304,30 @@ const MyOrder = ({ orders = [], auth }) => {
               >
                 <div className="flex justify-between">
                   <h3 className="font-lexend text-base font-bold text-gray-800">
-                    Product #{order.product?.id || "N/A"}
+                    Product #{order.product?.id || "No Product ID available"} 
                   </h3>
+                  <div className="flex items-center space-x-2">
+                    {/* Payment Button */}
+                    <button
+                      onClick={() => handlePayment(order.id)}
+                      className="text-indigo-600 hover:text-indigo-900"
+                    >
+                      <MdOutlinePayment size={20} />
+                    </button>
+                    {/* Cancel Button */}
+                    <button
+                      onClick={() => handleCancelOrders(order.id)}
+                      className="text-red-600 hover:text-red-900"
+                    >
+                      <IoTrash size={20} />
+                    </button>
+                  </div>
                 </div>
                 <p className="mt-2 font-lexend text-sm text-gray-600">
-                  Product Name: {order.product?.name || "N/A"}
+                  Product Name: {order.product?.name || "No Product Name available."}
                 </p>
                 <p className="mt-2 font-lexend text-sm text-gray-600">
-                  Quantity: {order?.quantity || "N/A"}
+                  Quantity: {order?.quantity || "No Quantity available."}
                 </p>
                 <p className="mt-2 font-lexend text-sm text-gray-600">
                   Total Price: Rp{" "}
@@ -389,16 +405,16 @@ const MyOrder = ({ orders = [], auth }) => {
                         : "Date not available."}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
-                      {order.informations?.recipient_name || "N/A"}
+                      {order.informations?.recipient_name || "No Recipient Name available."}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
-                      {order.informations?.notes || "N/A"}
+                      {order.informations?.notes || "No Notes available."}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
-                      {order.informations?.payment_method?.name || "N/A"}
+                      {order.informations?.payment_method?.name || "No Payment Method available."}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
-                      {order.informations?.shipping_method?.name || "N/A"}
+                      {order.informations?.shipping_method?.name || "No Shipping Method available."}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
                       {/* Action Buttons */}
@@ -422,7 +438,7 @@ const MyOrder = ({ orders = [], auth }) => {
                         order.status,
                       )}`}
                     >
-                      {order.status || "N/A"}
+                      {order.status || "No Status available."}
                     </td>
                   </tr>
                 ))
@@ -463,23 +479,23 @@ const MyOrder = ({ orders = [], auth }) => {
                     : "Date not available."}
                 </p>
                 <p className="mt-2 font-lexend text-sm text-gray-600">
-                  Recipient Name: {order.informations?.recipient_name || "N/A"}
+                  Recipient Name: {order.informations?.recipient_name || "No Recipient Name available."}
                 </p>
                 <p className="mt-2 font-lexend text-sm text-gray-600">
-                  Notes: {order.informations?.notes || "N/A"}
+                  Notes: {order.informations?.notes || "No Notes available."}
                 </p>
                 <p className="mt-2 font-lexend text-sm text-gray-600">
                   Payment Method:{" "}
-                  {order.informations?.payment_method?.name || "N/A"}
+                  {order.informations?.payment_method?.name || "No Payment Method available."}
                 </p>
                 <p className="mt-2 font-lexend text-sm text-gray-600">
                   Shipping Method:{" "}
-                  {order.informations?.shipping_method?.name || "N/A"}
+                  {order.informations?.shipping_method?.name || "No Shipping Method available."}
                 </p>
                 <p
                   className={`mt-2 font-lexend text-sm ${getStatusColor(order.status)}`}
                 >
-                  Status: {order.status || "N/A"}
+                  Status: {order.status || "No Status available."}
                 </p>
               </div>
             ))
