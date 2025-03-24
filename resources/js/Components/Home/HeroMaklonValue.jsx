@@ -11,7 +11,7 @@ export default function HeroMaklonValue() {
       {
         heading: "Jaminan Aman dan Berkualitas",
         content:
-          "Produk maklon kami diproduksi dengan standar Kemenkes RI untuk memastikan keamanan dan kualitasnya. Kami menyediakan berbagai pilihan bahan baku dan kemasan dengan anggaran yang fleksibel dan dapat disesuaikan, membantu Anda memulai bisnis produk home care, cleaning, dan aromaterapi dengan percaya diri",
+          "Produk maklon kami diproduksi dengan standar Kemenkes RI untuk memastikan keamanan dan kualitasnya. Kami menyediakan berbagai pilihan bahan baku dan kemasan dengan anggaran yang fleksibel dan dapat disesuaikan, membantu Anda memulai bisnis produk home care, cleaning, dan aromaterapi dengan percaya diri.",
         images: "/Home/HeroMaklonValue/HeroMaklonValue2.jpg",
       },
     ],

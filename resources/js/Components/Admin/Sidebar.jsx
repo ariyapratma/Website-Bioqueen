@@ -23,41 +23,41 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
   useEffect(() => {
     setDropdownHomeOpen(
       activeMenu.startsWith("home-page") ||
-        activeMenu.startsWith("header-home") ||
-        activeMenu.startsWith("hero-flyer") ||
-        activeMenu.startsWith("hero-company") ||
-        activeMenu.startsWith("hero-why-choose") ||
-        activeMenu.startsWith("hero-maklon-value") ||
-        activeMenu.startsWith("hero-team-value") ||
-        activeMenu.startsWith("hero-facilities-value") ||
-        activeMenu.startsWith("hero-certificate") ||
-        activeMenu.startsWith("hero-service") ||
-        activeMenu.startsWith("hero-video") ||
-        activeMenu.startsWith("hero-excellence-value") ||
-        activeMenu.startsWith("admin/hero-review"),
+      activeMenu.startsWith("header-home") ||
+      activeMenu.startsWith("hero-flyer") ||
+      activeMenu.startsWith("hero-company") ||
+      activeMenu.startsWith("hero-why-choose") ||
+      activeMenu.startsWith("hero-maklon-value") ||
+      activeMenu.startsWith("hero-team-value") ||
+      activeMenu.startsWith("hero-facilities-value") ||
+      activeMenu.startsWith("hero-certificate") ||
+      activeMenu.startsWith("hero-service") ||
+      activeMenu.startsWith("hero-video") ||
+      activeMenu.startsWith("hero-excellence-value") ||
+      activeMenu.startsWith("admin/hero-review"),
     );
 
     setDropdownAboutUsOpen(
       activeMenu.startsWith("about-us") ||
-        activeMenu.startsWith("header-about-us") ||
-        activeMenu.startsWith("hero-about-us") ||
-        activeMenu.startsWith("hero-vision-mision") ||
-        activeMenu.startsWith("hero-our-gallery") ||
-        activeMenu.startsWith("header-contact") ||
-        activeMenu.startsWith("header-maklon"),
+      activeMenu.startsWith("header-about-us") ||
+      activeMenu.startsWith("hero-about-us") ||
+      activeMenu.startsWith("hero-vision-mision") ||
+      activeMenu.startsWith("hero-our-gallery") ||
+      activeMenu.startsWith("header-maklon") ||
+      activeMenu.startsWith("header-contact"),
     );
 
     setDropdownProductOpen(
       activeMenu.startsWith("product") ||
-        activeMenu.startsWith("header-product") ||
-        activeMenu.startsWith("hero-categories") ||
-        activeMenu.startsWith("product-list"),
+      activeMenu.startsWith("header-product") ||
+      activeMenu.startsWith("hero-categories") ||
+      activeMenu.startsWith("product-list"),
     );
 
     setDropdownOrderOpen(
       activeMenu.startsWith("order") ||
-        activeMenu.startsWith("header-order") ||
-        activeMenu.startsWith("manage-order-products"),
+      activeMenu.startsWith("header-order") ||
+      activeMenu.startsWith("manage-order-products"),
     );
 
     setDropdownMyOrderOpen(
@@ -130,9 +130,8 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
   return (
     <div
       id="sidebar"
-      className={`flex flex-col items-center bg-white p-4 transition-all duration-300 ${
-        collapsed ? "w-24" : "w-48"
-      }`}
+      className={`flex flex-col items-center bg-white p-4 transition-all duration-300 ${collapsed ? "w-24" : "w-48"
+        }`}
     >
       {/* Header Sidebar */}
       <div
@@ -150,11 +149,10 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
               e.stopPropagation();
               setActiveMenu("dashboard");
             }}
-            className={`flex items-center rounded-lg p-2 ${
-              activeMenu === "dashboard"
-                ? "bg-custom-yellow text-black"
-                : "text-gray-600 hover:bg-gray-100"
-            } transition duration-300`}
+            className={`flex items-center rounded-lg p-2 ${activeMenu === "dashboard"
+              ? "bg-custom-yellow text-black"
+              : "text-gray-600 hover:bg-gray-100"
+              } transition duration-300`}
           >
             <FaHome className="mr-2" />
             {!collapsed && "Dashboard"}
@@ -166,8 +164,7 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
           <li>
             <div
               onClick={toggleDropdownHome}
-              className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
-                dropdownHomeOpen ||
+              className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${dropdownHomeOpen ||
                 activeMenu.startsWith("header-home") ||
                 activeMenu.startsWith("hero-flyer") ||
                 activeMenu.startsWith("hero-company") ||
@@ -180,9 +177,9 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
                 activeMenu.startsWith("hero-video") ||
                 activeMenu.startsWith("hero-excellence-value") ||
                 activeMenu.startsWith("admin/hero-review")
-                  ? "bg-custom-yellow text-black"
-                  : "text-gray-600 hover:bg-gray-100"
-              } transition duration-300`}
+                ? "bg-custom-yellow text-black"
+                : "text-gray-600 hover:bg-gray-100"
+                } transition duration-300`}
             >
               <span className="flex items-center">
                 <FaClipboardList className="mr-2" />
@@ -190,9 +187,8 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
               </span>
               {!collapsed && (
                 <FaChevronDown
-                  className={`ml-2 transition-transform duration-300 ${
-                    dropdownHomeOpen ? "rotate-180" : ""
-                  }`}
+                  className={`ml-2 transition-transform duration-300 ${dropdownHomeOpen ? "rotate-180" : ""
+                    }`}
                 />
               )}
             </div>
@@ -219,11 +215,10 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
                     <Link
                       href={`/${item}`}
                       onClick={() => setActiveMenu(item)}
-                      className={`flex items-center rounded-lg p-2 text-sm ${
-                        activeMenu === item
-                          ? "bg-black text-white"
-                          : "text-gray-600 hover:bg-gray-100"
-                      } transition duration-300`}
+                      className={`flex items-center rounded-lg p-2 text-sm ${activeMenu === item
+                        ? "bg-black text-white"
+                        : "text-gray-600 hover:bg-gray-100"
+                        } transition duration-300`}
                     >
                       {!collapsed &&
                         `Manage ${item
@@ -242,17 +237,16 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
           <li>
             <div
               onClick={toggleDropdownAboutUs}
-              className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
-                dropdownAboutUsOpen ||
+              className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${dropdownAboutUsOpen ||
                 activeMenu.startsWith("header-about-us") ||
                 activeMenu.startsWith("hero-about-us") ||
                 activeMenu.startsWith("hero-vision-mision") ||
                 activeMenu.startsWith("hero-our-gallery") ||
-                activeMenu.startsWith("header-contact") ||
-                activeMenu.startsWith("header-maklon")
-                  ? "bg-custom-yellow text-black"
-                  : "text-gray-600 hover:bg-gray-100"
-              } transition duration-300`}
+                activeMenu.startsWith("header-maklon") ||
+                activeMenu.startsWith("header-contact")
+                ? "bg-custom-yellow text-black"
+                : "text-gray-600 hover:bg-gray-100"
+                } transition duration-300`}
             >
               <span className="flex items-center">
                 <FaInfoCircle className="mr-2" />
@@ -260,9 +254,8 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
               </span>
               {!collapsed && (
                 <FaChevronDown
-                  className={`ml-2 transition-transform duration-300 ${
-                    dropdownAboutUsOpen ? "rotate-180" : ""
-                  }`}
+                  className={`ml-2 transition-transform duration-300 ${dropdownAboutUsOpen ? "rotate-180" : ""
+                    }`}
                 />
               )}
             </div>
@@ -276,18 +269,17 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
                   "hero-about-us",
                   "hero-vision-mision",
                   "hero-our-gallery",
-                  "header-contact",
                   "header-maklon",
+                  "header-contact",
                 ].map((item) => (
                   <li key={item}>
                     <Link
                       href={`/${item}`}
                       onClick={() => setActiveMenu(item)}
-                      className={`flex items-center rounded-lg p-2 text-sm ${
-                        activeMenu === item
-                          ? "bg-black text-white"
-                          : "text-gray-600 hover:bg-gray-100"
-                      } transition duration-300`}
+                      className={`flex items-center rounded-lg p-2 text-sm ${activeMenu === item
+                        ? "bg-black text-white"
+                        : "text-gray-600 hover:bg-gray-100"
+                        } transition duration-300`}
                     >
                       {!collapsed &&
                         `Manage ${item
@@ -306,14 +298,13 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
           <li>
             <div
               onClick={toggleDropdownProduct}
-              className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
-                dropdownProductOpen ||
+              className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${dropdownProductOpen ||
                 activeMenu.startsWith("header-product") ||
                 activeMenu.startsWith("hero-categories") ||
                 activeMenu.startsWith("product-list")
-                  ? "bg-custom-yellow text-black"
-                  : "text-gray-600 hover:bg-gray-100"
-              } transition duration-300`}
+                ? "bg-custom-yellow text-black"
+                : "text-gray-600 hover:bg-gray-100"
+                } transition duration-300`}
             >
               <span className="flex items-center">
                 <FaBoxOpen className="mr-2" />
@@ -321,9 +312,8 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
               </span>
               {!collapsed && (
                 <FaChevronDown
-                  className={`ml-2 transition-transform duration-300 ${
-                    dropdownProductOpen ? "rotate-180" : ""
-                  }`}
+                  className={`ml-2 transition-transform duration-300 ${dropdownProductOpen ? "rotate-180" : ""
+                    }`}
                 />
               )}
             </div>
@@ -338,11 +328,10 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
                       <Link
                         href={`/${item}`}
                         onClick={() => setActiveMenu(item)}
-                        className={`flex items-center rounded-lg p-2 text-sm ${
-                          activeMenu === item
-                            ? "bg-black text-white"
-                            : "text-gray-600 hover:bg-gray-100"
-                        } transition duration-300`}
+                        className={`flex items-center rounded-lg p-2 text-sm ${activeMenu === item
+                          ? "bg-black text-white"
+                          : "text-gray-600 hover:bg-gray-100"
+                          } transition duration-300`}
                       >
                         {!collapsed &&
                           `Manage ${item
@@ -362,13 +351,12 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
           <li>
             <div
               onClick={toggleDropdownOrder}
-              className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
-                dropdownOrderOpen ||
+              className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${dropdownOrderOpen ||
                 activeMenu.startsWith("header-order") ||
                 activeMenu.startsWith("manage-order-products")
-                  ? "bg-custom-yellow text-black"
-                  : "text-gray-600 hover:bg-gray-100"
-              } transition duration-300`}
+                ? "bg-custom-yellow text-black"
+                : "text-gray-600 hover:bg-gray-100"
+                } transition duration-300`}
             >
               <span className="flex items-center">
                 <FaClipboardList className="mr-2" />
@@ -376,9 +364,8 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
               </span>
               {!collapsed && (
                 <FaChevronDown
-                  className={`ml-2 transition-transform duration-300 ${
-                    dropdownOrderOpen ? "rotate-180" : ""
-                  }`}
+                  className={`ml-2 transition-transform duration-300 ${dropdownOrderOpen ? "rotate-180" : ""
+                    }`}
                 />
               )}
             </div>
@@ -392,11 +379,10 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
                     <Link
                       href={`/${item}`}
                       onClick={() => setActiveMenu(item)}
-                      className={`flex items-center rounded-lg p-2 text-sm ${
-                        activeMenu === item
-                          ? "bg-black text-white"
-                          : "text-gray-600 hover:bg-gray-100"
-                      } transition duration-300`}
+                      className={`flex items-center rounded-lg p-2 text-sm ${activeMenu === item
+                        ? "bg-black text-white"
+                        : "text-gray-600 hover:bg-gray-100"
+                        } transition duration-300`}
                     >
                       {!collapsed &&
                         `Manage ${item
@@ -415,11 +401,10 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
           <li>
             <div
               onClick={toggleDropdownMyOrder}
-              className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${
-                dropdownMyOrderOpen || activeMenu.startsWith("my-order")
-                  ? "bg-custom-yellow text-black"
-                  : "text-gray-600 hover:bg-gray-100"
-              } transition duration-300`}
+              className={`flex cursor-pointer items-center justify-between rounded-lg p-2 ${dropdownMyOrderOpen || activeMenu.startsWith("my-order")
+                ? "bg-custom-yellow text-black"
+                : "text-gray-600 hover:bg-gray-100"
+                } transition duration-300`}
             >
               <span className="flex items-center">
                 <FaClipboardList className="mr-2" />
@@ -427,9 +412,8 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
               </span>
               {!collapsed && (
                 <FaChevronDown
-                  className={`ml-2 transition-transform duration-300 ${
-                    dropdownMyOrderOpen ? "rotate-180" : ""
-                  }`}
+                  className={`ml-2 transition-transform duration-300 ${dropdownMyOrderOpen ? "rotate-180" : ""
+                    }`}
                 />
               )}
             </div>
@@ -443,11 +427,10 @@ const Sidebar = ({ activeMenu, setActiveMenu, auth }) => {
                     <Link
                       href={`/${item}`}
                       onClick={() => setActiveMenu(item)}
-                      className={`flex items-center rounded-lg p-2 text-sm ${
-                        activeMenu === item
-                          ? "bg-black text-white"
-                          : "text-gray-600 hover:bg-gray-100"
-                      } transition duration-300`}
+                      className={`flex items-center rounded-lg p-2 text-sm ${activeMenu === item
+                        ? "bg-black text-white"
+                        : "text-gray-600 hover:bg-gray-100"
+                        } transition duration-300`}
                     >
                       {!collapsed &&
                         `${item

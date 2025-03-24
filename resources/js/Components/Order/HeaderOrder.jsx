@@ -3,7 +3,7 @@ export default function HeaderOrder() {
     title: "Order",
     description:
       "Kustomisasi Produk Maklon Anda.",
-    imageUrl: "/Maklon Main Content Fix.jpg",
+    imageUrl: "public/Order/HeaderOrder/HeaderOrder.png",
   };
 
   return (
