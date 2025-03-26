@@ -19,9 +19,8 @@ return new class extends Migration
         });
 
         DB::table('shipping_methods')->insert([
-            ['name' => 'JNE', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'J&T', 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'GoSend', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'JNE Cargo', 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'J&T Cargo', 'created_at' => now(), 'updated_at' => now()],
         ]);
     }
 
