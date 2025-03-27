@@ -51,6 +51,9 @@ const MyOrder = ({ orders = [], auth }) => {
                 icon: "success",
                 confirmButtonText: "OK",
                 confirmButtonColor: "#000000",
+                backdrop: false,
+              }).then(() => {
+                window.location.reload();
               });
             },
             onPending: function (result) {
@@ -61,6 +64,9 @@ const MyOrder = ({ orders = [], auth }) => {
                 icon: "info",
                 confirmButtonText: "OK",
                 confirmButtonColor: "#000000",
+                backdrop: false,
+              }).then(() => {
+                window.location.reload();
               });
             },
             onError: function (error) {
@@ -71,6 +77,9 @@ const MyOrder = ({ orders = [], auth }) => {
                 icon: "error",
                 confirmButtonText: "OK",
                 confirmButtonColor: "#000000",
+                backdrop: false,
+              }).then(() => {
+                window.location.reload();
               });
             },
             onClose: function () {
@@ -81,6 +90,9 @@ const MyOrder = ({ orders = [], auth }) => {
                 icon: "warning",
                 confirmButtonText: "OK",
                 confirmButtonColor: "#000000",
+                backdrop: false,
+              }).then(() => {
+                window.location.reload();
               });
             },
           });
@@ -91,6 +103,9 @@ const MyOrder = ({ orders = [], auth }) => {
             icon: "error",
             confirmButtonText: "OK",
             confirmButtonColor: "#000000",
+            backdrop: false,
+          }).then(() => {
+            window.location.reload();
           });
         }
       } else {
@@ -100,6 +115,7 @@ const MyOrder = ({ orders = [], auth }) => {
           icon: "warning",
           confirmButtonText: "OK",
           confirmButtonColor: "#000000",
+          backdrop: false,
         });
       }
     } catch (error) {
@@ -110,6 +126,7 @@ const MyOrder = ({ orders = [], auth }) => {
         icon: "error",
         confirmButtonText: "OK",
         confirmButtonColor: "#000000",
+        backdrop: false,
       });
     }
   };
@@ -155,7 +172,7 @@ const MyOrder = ({ orders = [], auth }) => {
             confirmButtonText: "OK",
             confirmButtonColor: "#000000",
           }).then(() => {
-            location.reload();
+            window.location.reload();
           });
         } else {
           throw new Error(data.message || "Failed to cancel the order.");
@@ -304,13 +321,13 @@ const MyOrder = ({ orders = [], auth }) => {
               >
                 <div className="flex justify-between">
                   <h3 className="font-lexend text-base font-bold text-gray-800">
-                    Product #{order.product?.id || "No Product ID available"} 
+                    Product #{order.product?.id || "No Product ID available"}
                   </h3>
                   <div className="flex items-center space-x-2">
                     {/* Payment Button */}
                     <button
                       onClick={() => handlePayment(order.id)}
-                      className="text-indigo-600 hover:text-indigo-900"
+                      className="text-black"
                     >
                       <MdOutlinePayment size={20} />
                     </button>
@@ -395,13 +412,13 @@ const MyOrder = ({ orders = [], auth }) => {
                     <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
                       {order.created_at
                         ? new Date(order.created_at).toLocaleString("en-US", {
-                            day: "2-digit",
-                            month: "long",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            hour12: true,
-                          })
+                          day: "2-digit",
+                          month: "long",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: true,
+                        })
                         : "Date not available."}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
@@ -421,7 +438,7 @@ const MyOrder = ({ orders = [], auth }) => {
                       {/* Payment Button */}
                       <button
                         onClick={() => handlePayment(order.id)}
-                        className="text-indigo-600 hover:text-indigo-900"
+                        className="text-black"
                       >
                         <MdOutlinePayment size={20} />
                       </button>
@@ -469,13 +486,13 @@ const MyOrder = ({ orders = [], auth }) => {
                   Order Date:{" "}
                   {order.created_at
                     ? new Date(order.created_at).toLocaleString("en-US", {
-                        day: "2-digit",
-                        month: "long",
-                        year: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: true,
-                      })
+                      day: "2-digit",
+                      month: "long",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    })
                     : "Date not available."}
                 </p>
                 <p className="mt-2 font-lexend text-sm text-gray-600">

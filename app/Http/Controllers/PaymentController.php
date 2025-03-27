@@ -71,11 +71,11 @@ class PaymentController extends Controller
             ];
 
             $snapToken = Snap::getSnapToken($transactionData);
-            $order->update(['status' => 'Processing']);
+            $order->update(['status' => 'Completed']);
 
             return response()->json([
                 'snap_token' => $snapToken,
-                'status' => 'Processing'
+                'status' => 'Completed'
             ]);
         } catch (\Exception $e) {
             Log::error("Payment Store Error: " . $e->getMessage());
@@ -85,7 +85,6 @@ class PaymentController extends Controller
             ], 500);
         }
     }
-
 
     public function checkOrderStatus($orderId)
     {
