@@ -271,7 +271,7 @@ const MyOrder = ({ orders = [], auth }) => {
                 <tr>
                   <td
                     colSpan="5"
-                    className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700"
+                    className="whitespace-nowrap px-4 py-3 text-center font-lexend text-sm text-gray-700"
                   >
                     No order summary available.
                   </td>
@@ -279,23 +279,23 @@ const MyOrder = ({ orders = [], auth }) => {
               ) : (
                 orders.map((order) => (
                   <tr key={order.id}>
-                    <td className="max-w-[150px] whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                    <td className="max-w-[150px] whitespace-nowrap px-4 py-3 text-center font-lexend text-sm text-gray-700">
                       {order.product?.id || "No Product ID available."}
                     </td>
-                    <td className="max-w-[150px] whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                    <td className="max-w-[150px] whitespace-nowrap px-4 py-3 text-center font-lexend text-sm text-gray-700">
                       {order.product?.name || "No Product Name available."}
                     </td>
-                    <td className="max-w-[150px] whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                    <td className="max-w-[150px] whitespace-nowrap px-4 py-3 text-center font-lexend text-sm text-gray-700">
                       {order?.quantity || "No Quantity available."}
                     </td>
-                    <td className="max-w-[150px] whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                    <td className="max-w-[150px] whitespace-nowrap px-4 py-3 text-center font-lexend text-sm text-gray-700">
                       Rp{" "}
                       {parseFloat(order.total_price || 0).toLocaleString(
                         "id-ID",
                       )}
                     </td>
                     <td
-                      className={`max-w-[150px] whitespace-nowrap px-6 py-4 text-center font-lexend text-sm ${getStatusColor(order.status)}`}
+                      className={`max-w-[150px] whitespace-nowrap px-4 py-3 text-center font-lexend text-sm ${getStatusColor(order.status)}`}
                     >
                       {getStatusLabel(order.status)}
                     </td>
@@ -398,7 +398,7 @@ const MyOrder = ({ orders = [], auth }) => {
                 <tr>
                   <td
                     colSpan="7"
-                    className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700"
+                    className="whitespace-nowrap px-4 py-3 text-center font-lexend text-sm text-gray-700"
                   >
                     No order details available.
                   </td>
@@ -406,10 +406,10 @@ const MyOrder = ({ orders = [], auth }) => {
               ) : (
                 orders.map((order) => (
                   <tr key={order.id}>
-                    <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                    <td className="whitespace-nowrap px-4 py-3 text-center font-lexend text-sm text-gray-700">
                       {order.id}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                    <td className="whitespace-nowrap px-4 py-3text-center font-lexend text-sm text-gray-700">
                       {order.created_at
                         ? new Date(order.created_at).toLocaleString("en-US", {
                           day: "2-digit",
@@ -421,19 +421,19 @@ const MyOrder = ({ orders = [], auth }) => {
                         })
                         : "Date not available."}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                    <td className="whitespace-nowrap px-4 py-3 text-center font-lexend text-sm text-gray-700">
                       {order.informations?.recipient_name || "No Recipient Name available."}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                    <td className="whitespace-nowrap px-4 py-3 text-center font-lexend text-sm text-gray-700">
                       {order.informations?.notes || "No Notes available."}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                    <td className="whitespace-nowrap px-4 py-3 text-center font-lexend text-sm text-gray-700">
                       {order.informations?.payment_method?.name || "No Payment Method available."}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                    <td className="whitespace-nowrap px-4 py-3 text-center font-lexend text-sm text-gray-700">
                       {order.informations?.shipping_method?.name || "No Shipping Method available."}
                     </td>
-                    <td className="whitespace-nowrap px-6 py-4 text-center font-lexend text-sm text-gray-700">
+                    <td className="whitespace-nowrap px-4 py-3 text-center font-lexend text-sm text-gray-700">
                       {/* Action Buttons */}
                       {/* Payment Button */}
                       <button
@@ -451,7 +451,7 @@ const MyOrder = ({ orders = [], auth }) => {
                       </button>
                     </td>
                     <td
-                      className={`whitespace-nowrap px-6 py-4 text-center font-lexend text-sm ${getStatusColor(
+                      className={`whitespace-nowrap px-4 py-3 text-center font-lexend text-sm ${getStatusColor(
                         order.status,
                       )}`}
                     >
