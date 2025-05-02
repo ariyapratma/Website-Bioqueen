@@ -39,22 +39,48 @@ const Notification = ({ auth }) => {
   }, [auth]);
 
   // Handler untuk menandai semua notifikasi sebagai dibaca
+  // const markAllAsRead = async () => {
+  //   try {
+  //     const response = await fetch("/notifications/mark-all-as-read", {
+  //       method: "POST",
+  //       headers: {
+  //         Accept: "application/json",
+  //         "Content-Type": "application/json",
+  //         "X-CSRF-TOKEN": csrfToken,
+  //       },
+  //       credentials: "include",
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error("Failed to mark notifications as read");
+  //     }
+  //     // Perbarui state notifikasi setelah berhasil
+  //     fetchNotifications();
+  //   } catch (error) {}
+  // };
+
+  const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
   const markAllAsRead = async () => {
     try {
-      const response = await fetch("/notifications/mark-all-as-read", {
-        method: "POST",
+      const response = await fetch("/notifications", {
+        method: "DELETE",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+          "X-CSRF-TOKEN": csrfToken,
         },
         credentials: "include",
       });
+
       if (!response.ok) {
-        throw new Error("Failed to mark notifications as read");
+        throw new Error("Failed to delete notifications");
       }
-      // Perbarui state notifikasi setelah berhasil
-      fetchNotifications();
-    } catch (error) {}
+
+      // Kosongkan notifikasi di state
+      setNotifications([]);
+      setUnreadCount(0);
+    } catch (error) {
+      console.error("Error deleting notifications:", error.message);
+    }
   };
 
   return (
@@ -111,11 +137,10 @@ const Notification = ({ auth }) => {
               notifications.map((notif) => (
                 <li
                   key={notif.id}
-                  className={`flex items-start gap-3 p-4 ${
-                    notif.read
-                      ? "bg-gray-50 hover:bg-gray-100"
-                      : "bg-white hover:bg-gray-100"
-                  }`}
+                  className={`flex items-start gap-3 p-4 ${notif.read
+                    ? "bg-gray-50 hover:bg-gray-100"
+                    : "bg-white hover:bg-gray-100"
+                    }`}
                 >
                   {/* Icon */}
                   <div className="flex-shrink-0">
@@ -137,9 +162,8 @@ const Notification = ({ auth }) => {
                   {/* Konten Notifikasi */}
                   <div className="flex-grow">
                     <p
-                      className={`text-sm font-medium ${
-                        notif.read ? "text-gray-600" : "text-black"
-                      }`}
+                      className={`text-sm font-medium ${notif.read ? "text-gray-600" : "text-black"
+                        }`}
                     >
                       {notif.message}
                     </p>
@@ -155,7 +179,7 @@ const Notification = ({ auth }) => {
           <div className="border-t border-gray-200">
             <button
               className="block w-full px-4 py-2 text-left text-sm text-black hover:bg-gray-100"
-              // onClick={markAllAsRead}
+              onClick={markAllAsRead}
             >
               Mark all as read
             </button>

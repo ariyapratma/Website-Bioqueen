@@ -32,56 +32,56 @@ class NotificationController extends Controller
     /**
      * Mark a single notification as read.
      */
-    public function markAsRead($id)
-    {
-        try {
-            $notification = Notification::where('user_id', auth()->id())->findOrFail($id);
-            $notification->update(['read' => true]);
+    // public function markAsRead($id)
+    // {
+    //     try {
+    //         $notification = Notification::where('user_id', auth()->id())->findOrFail($id);
+    //         $notification->update(['read' => true]);
 
-            Log::info('Marked notification as read:', ['notification_id' => $id, 'user_id' => auth()->id()]);
+    //         Log::info('Marked notification as read:', ['notification_id' => $id, 'user_id' => auth()->id()]);
 
-            return response()->json(['success' => true]);
-        } catch (\Exception $e) {
-            Log::error('Error marking notification as read:', ['error' => $e->getMessage()]);
-            return response()->json(['error' => 'Failed to mark notification as read.'], 500);
-        }
-    }
+    //         return response()->json(['success' => true]);
+    //     } catch (\Exception $e) {
+    //         Log::error('Error marking notification as read:', ['error' => $e->getMessage()]);
+    //         return response()->json(['error' => 'Failed to mark notification as read.'], 500);
+    //     }
+    // }
 
     /**
      * Mark all notifications as read for the authenticated user.
      */
-    public function markAllAsRead()
-    {
-        try {
-            Notification::where('user_id', auth()->id())
-                ->where('read', false)
-                ->update(['read' => true]);
+    // public function markAllAsRead()
+    // {
+    //     try {
+    //         Notification::where('user_id', auth()->id())
+    //             ->where('read', false)
+    //             ->update(['read' => true]);
 
-            return response()->json(['success' => true]);
-        } catch (\Exception $e) {
-            Log::error('Error marking all notifications as read:', ['error' => $e->getMessage()]);
-            return response()->json(['error' => 'Failed to mark all notifications as read.'], 500);
-        }
-    }
+    //         return response()->json(['success' => true]);
+    //     } catch (\Exception $e) {
+    //         Log::error('Error marking all notifications as read:', ['error' => $e->getMessage()]);
+    //         return response()->json(['error' => 'Failed to mark all notifications as read.'], 500);
+    //     }
+    // }
 
     /**
      * Delete a single notification.
      */
-    public function destroy($id)
-    {
-        try {
-            $notification = Notification::where('user_id', auth()->id())->findOrFail($id);
+    // public function destroy($id)
+    // {
+    //     try {
+    //         $notification = Notification::where('user_id', auth()->id())->findOrFail($id);
 
-            $notification->delete();
+    //         $notification->delete();
 
-            Log::info('Deleted notification:', ['notification_id' => $id, 'user_id' => auth()->id()]);
+    //         Log::info('Deleted notification:', ['notification_id' => $id, 'user_id' => auth()->id()]);
 
-            return response()->json(['success' => true]);
-        } catch (\Exception $e) {
-            Log::error('Error deleting notification:', ['error' => $e->getMessage()]);
-            return response()->json(['error' => 'Failed to delete notification.'], 500);
-        }
-    }
+    //         return response()->json(['success' => true]);
+    //     } catch (\Exception $e) {
+    //         Log::error('Error deleting notification:', ['error' => $e->getMessage()]);
+    //         return response()->json(['error' => 'Failed to delete notification.'], 500);
+    //     }
+    // }
 
     /**
      * Delete all notifications for the authenticated user.
